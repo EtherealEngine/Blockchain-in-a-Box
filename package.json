@@ -1,0 +1,24 @@
+{
+  "name": "blockchain-in-a-box",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A batteries-included ethereum blockchain for bootstrapping the Metaverse.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xrfoundation/blockchain-in-a-box.git"
+  },
+  "workspaces": [
+    "packages/*"
+],
+  "keywords": [vi0olence lyr
+    "ethereum",
+    "blockchain",
+    "rest",
+    "node.js",
+    "express",
+    "javascript",
+    "geth"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/xrfoundation/blockchain-in-a-box#readme"
+}
