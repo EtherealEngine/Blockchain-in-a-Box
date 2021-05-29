@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/xrfoundation/blockchain-in-a-box#readme",
   "dependencies": {
-    "@onflow/sdk": "0.0.31",
+    "@onflow/sdk": "0.0.46",
     "@onflow/types": "0.0.4",
     "@pinata/sdk": "^1.1.14",
     "aws-sdk": "^2.750.0",
