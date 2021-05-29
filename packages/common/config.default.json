@@ -1,0 +1,20 @@
+{
+  "AWS_ACCESS_KEY_ID": "",
+  "AWS_SECRET_ACCESS_KEY": "",
+  "githubClientId": "",
+  "githubClientSecret": "",
+  "discordClientId": "",
+  "discordClientSecret": "",
+  "INFURA_PROJECT_ID": "",
+  "POLYGON_VIGIL_KEY": "",
+  "infuraProjectSecret": "",
+  "MAINNET_MNEMONIC": "",
+  "POLYGON_MNEMONIC": "",
+  "TESTNET_MNEMONIC": "",
+  "TESTNET_POLYGON_MNEMONIC": "",
+  "network": "kovan",
+  "infuraNetwork": "rinkeby",
+  "githubPagesDomain": "exokit.dev",
+  "publicIp": "13.57.56.187",
+  "privateIp": "172.31.18.137"
+}
