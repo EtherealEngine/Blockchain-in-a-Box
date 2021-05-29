@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/webaverse/contracts#readme",
   "dependencies": {
-    "@truffle/hdwallet-provider": "1.2.3",
+    "@truffle/hdwallet-provider": "1.4.0",
     "dotenv": "^8.2.0",
     "truffle": "^5.2.5",
     "web3": "^1.3.4"
