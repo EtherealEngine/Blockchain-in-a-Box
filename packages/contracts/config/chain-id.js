@@ -1,32 +1,26 @@
 export default {
   "mainnet": {
     "FT": 1,
-    "NFT": 2,
-    "LAND": 3
+    "NFT": 2
   },
   "mainnetsidechain": {
-    "FT": 4,
-    "NFT": 5,
-    "LAND": 6
+    "FT": 2,
+    "NFT": 5
   },
   "testnet": {
     "FT": 1,
-    "NFT": 2,
-    "LAND": 3
+    "NFT": 2
   },
   "testnetsidechain": {
     "FT": 4,
-    "NFT": 5,
-    "LAND": 6
+    "NFT": 5
   },
   "polygon": {
     "FT": 1,
-    "NFT": 2,
-    "LAND": 3
+    "NFT": 2
   },
   "testnetpolygon": {
     "FT": 4,
-    "NFT": 5,
-    "LAND": 6
+    "NFT": 5
   }
 }

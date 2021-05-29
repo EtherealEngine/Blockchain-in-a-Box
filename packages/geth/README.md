@@ -1,26 +1,17 @@
-# ethereum-backend
+# Go-Ethereum Server
 
-The Webaverse Ethereum backend consists of a side chain that we mine using Proof-of-Stake.
+Run your own proof-of-stake ethereum-based blockchain nodes!
 
 To start a mining node, you must be an authorized miner address with a certificate installed in the `geth` data directory -- ask Avaer for the keys.
 
 To validate/replicate/sync you don't need any keys.
 
-## commands
+## Connecting To An Existing Network
 
-Here is how to bootstrap a mainnet validation node:
+### XRFoundation
+TODO
 
-```bash
-geth --datadir mainnet init genesis-mainnet.json
-cp ./static-nodes-mainnet.json ./mainnet/static-nodes.json
-cp account-mainnet.json ./mainnet/keystore/UTC--2021-02-17T10-32-36.272770958Z--bb0827ee9b0b459e1b5dd6dbea0f55bf578dbbd2
-geth --datadir mainnet --http --http.addr 172.31.2.5 --http.corsdomain '*' --syncmode full --networkid 1338
-```
-
-`static-nodes-mainnet.json`` has some bootstrap nodes listed so you should be able to start syncing from those. Your chain will be "reorganized" a lot while you sync up, which is normal.
-
-## blockchains
-
+### Webaverse
 There are currently 4 chains that we use:
 
 - `mainnet` (ETH mainnet)
@@ -40,17 +31,29 @@ https://rinkebysidechain.exokit.org
 
 Note that the port on these is the standard HTTPS port, `443`.
 
-## contracts
+## Creating Your Own Blockchain
+TODO
 
-The contracts we deploy onto all chains are available at https://github.com/webaverse/contracts.
+## Setting Up a Mainnet Validation Node
 
-## note on atomic saves
+Here is how to bootstrap a mainnet validation node:
+
+```bash
+geth --datadir mainnet init genesis-mainnet.json
+cp ./static-nodes-mainnet.json ./mainnet/static-nodes.json
+cp account-mainnet.json ./mainnet/keystore/UTC--2021-02-17T10-32-36.272770958Z--bb0827ee9b0b459e1b5dd6dbea0f55bf578dbbd2
+geth --datadir mainnet --http --http.addr 172.31.2.5 --http.corsdomain '*' --syncmode full --networkid 1338
+```
+
+`static-nodes-mainnet.json`` has some bootstrap nodes listed so you should be able to start syncing from those. Your chain will be "reorganized" a lot while you sync up, which is normal.
+
+## Note on Saving Data
 
 Replication is accomplished by having multiple nodes mine on that address at the same time.
 
 `geth` does _not_ stream blocks to disk eagerly. A system crash will lose blocks on that node, though other miners will not be affected.
 
-## restarting geth servers
+## Restarting Geth Nodes (Where You Control the Master Node)
 
 Therefore it is important that any restart of these nodes follows the correct order:
 
@@ -62,7 +65,7 @@ for (i in [2, 3, 1]) { // order matters
 4. ensure node i is replicating and synced and do not proceed unless it is
 ```
 
-## how transfers work
+## Cross-chain transfers
 
 There are two parallel blockchains for each Ethereum source of truth. There are two sources of truth (mainnet and rinkeby) and they do not interact. Therefore there are 4 chains.
 

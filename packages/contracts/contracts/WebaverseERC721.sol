@@ -437,7 +437,7 @@ contract WebaverseERC721 is ERC721 {
     }
 
     /**
-     * @dev Check if this address is a collaborator on a single issue token (like land)
+     * @dev Check if this address is a collaborator on a single issue token
      * @param tokenId ID of the token
      * @param a Address to check
      * @return Returns true if the address is a collaborator on the token
@@ -465,7 +465,7 @@ contract WebaverseERC721 is ERC721 {
     }
 
     /**
-     * @dev Add a collaborator to a single token (like land)
+     * @dev Add a collaborator to a single token
      * @param tokenId ID of the token
      * @param a Address to whitelist
      */
@@ -484,7 +484,7 @@ contract WebaverseERC721 is ERC721 {
     }
 
     /**
-     * @dev Remove a collaborator from a single token (like land)
+     * @dev Remove a collaborator from a single token
      * @param tokenId ID of the token
      * @param a Address to remove from whitelist
      */

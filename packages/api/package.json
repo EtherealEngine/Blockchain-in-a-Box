@@ -1,7 +1,7 @@
 {
   "name": "@blockchain-in-a-box/api",
   "version": "0.1.0",
-  "description": "",
+  "description": "API Server for Blockchain-in-a-Box",
   "main": "index.js",
   "scripts": {
     "start": "HTTP_PORT=8080 HTTPS_PORT=8443 node index.js",

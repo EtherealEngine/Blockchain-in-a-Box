@@ -1,14 +1,11 @@
 {
-  "name": "contracts",
-  "version": "1.0.0",
-  "description": "Webaverse Contracts",
+  "name": "@blockchain-in-a-box/contracts",
+  "version": "0.1.0",
+  "description": "Smart Contracts for Blockchain-in-a-Box",
   "main": "truffle-config.js",
-  "directories": {
-    "test": "test"
-  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/webaverse/contracts.git"
+    "url": "git+https://github.com/xrfoundation/blockchain-in-a-box.git"
   },
   "scripts": {
     "deploy-dev": "truffle migrate --network development",
@@ -25,11 +22,11 @@
     "deploy-polygon-reset": "truffle migrate --network polygon --reset"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/webaverse/contracts/issues"
+    "url": "https://github.com/xrfoundation/blockchain-in-a-box/issues"
   },
-  "homepage": "https://github.com/webaverse/contracts#readme",
+  "homepage": "https://github.com/xrfoundation/blockchain-in-a-box#readme",
   "dependencies": {
     "@truffle/hdwallet-provider": "1.2.3",
     "dotenv": "^8.2.0",

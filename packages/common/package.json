@@ -1,7 +1,7 @@
 {
   "name": "@blockchain-in-a-box/common",
   "version": "0.1.0",
-  "description": "",
+  "description": "Common scripts and files for Blockchain-in-a-Box",
   "main": "index.js",
   "repository": {
     "type": "git",
