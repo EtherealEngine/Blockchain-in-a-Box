@@ -5833,10 +5833,10 @@ form-data@~2.3.2:
     combined-stream "^1.0.6"
     mime-types "^2.1.12"
 
-form-urlencoded@^4.2.1:
-  version "4.5.1"
-  resolved "https://registry.yarnpkg.com/form-urlencoded/-/form-urlencoded-4.5.1.tgz#922da1f0f6846ba85e3d2977b808d9809cb60946"
-  integrity sha512-Rkd/RdMaprsMJEGzEbxolwacp78WupH7u369KEyIY3pEZ1fhL6HtyQ1FX+4HSfA1VVhET18UwCUcr5DVaDIaqg==
+form-urlencoded@^6.0.0:
+  version "6.0.4"
+  resolved "https://registry.yarnpkg.com/form-urlencoded/-/form-urlencoded-6.0.4.tgz#62305ea704bb86e1c8b946d1aae5a34e02b6634f"
+  integrity sha512-39GnqmnZkThJBXiKhBCrBGPKiwFHDgi3lcGO3SfURjXoz9x8quxNRTiIWViYN+QzQXxxl/uyKm+i+0PCj7Aqbw==
 
 forwarded@~0.1.2:
   version "0.1.2"
