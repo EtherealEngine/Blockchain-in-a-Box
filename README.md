@@ -24,6 +24,9 @@ This package was created by the architects at XRFoundation to make a simple, str
 How to Code a Crypto Collectible: ERC-721 NFT Tutorial (Ethereum)
 https://www.youtube.com/watch?v=YPbgjPPC1d0
 
+Build Your First Blockchain App Using Ethereum Smart Contracts and Solidity
+https://www.youtube.com/watch?v=coQ5dg8wM2o
+
 Node.js and Express.js - Full Course
 https://www.youtube.com/watch?v=Oe421EPjeBE
 
