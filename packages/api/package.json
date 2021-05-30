@@ -29,8 +29,13 @@
     "express": "^4.17.1",
     "express-fileupload": "^1.2.1",
     "express-jsdoc-swagger": "^1.6.0",
+<<<<<<< HEAD
     "form-data": "^3.0.0",
     "form-urlencoded": "^6.0.0",
+=======
+    "form-data": "^4.0.0",
+    "form-urlencoded": "^4.2.1",
+>>>>>>> origin/renovate/form-data-4.x
     "http-proxy": "^1.18.1",
     "jsonwebtoken": "^8.5.1",
     "lru": "^3.1.0",
