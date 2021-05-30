@@ -5,13 +5,7 @@ const jsonParse = (s, d = null) => {
     return d;
   }
 };
-const _setCorsHeaders = res => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', '*');
-    res.setHeader('Access-Control-Allow-Methods', '*');
-    res.setHeader('Access-Control-Expose-Headers', '*');
-    return res;
-};
+
 function getExt(fileName) {
   const match = fileName.match(/\.([^\.]+)$/);
   return match && match[1].toLowerCase();
@@ -26,9 +20,19 @@ const makePromise = () => {
   p.reject = reject;
   return p;
 };
+
+const readStorageHashAsBuffer = async hash => {
+  const req = await fetch(`${storageHost}/${hash}`);
+  if (!req.ok) return null;
+
+  const arrayBuffer = await req.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
+  return buffer;
+};
+
 module.exports = {
   jsonParse,
-  _setCorsHeaders,
   getExt,
   makePromise,
+  readStorageHashAsBuffer
 }

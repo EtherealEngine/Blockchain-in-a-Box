@@ -78,5 +78,11 @@ module.exports = {
   codeTestRegex,
   discordIdTestRegex,
   twitterIdTestRegex,
-  zeroAddress
+  zeroAddress,
+  // TODO: Clean up
+  usersTableName: 'users',
+  prefix: '.',
+  previewExt: 'png',
+  treasurerRoleName: 'Treasurer'
 };
+

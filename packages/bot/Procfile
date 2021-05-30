@@ -1,0 +1,1 @@
+web: npm install && HTTP_PORT=8080 HTTPS_PORT=8443 node ./index.js
