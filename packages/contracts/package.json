@@ -28,13 +28,8 @@
   },
   "homepage": "https://github.com/xrfoundation/blockchain-in-a-box#readme",
   "dependencies": {
-<<<<<<< HEAD
     "@truffle/hdwallet-provider": "1.4.0",
-    "dotenv": "^8.2.0",
-=======
-    "@truffle/hdwallet-provider": "1.2.3",
     "dotenv": "^10.0.0",
->>>>>>> origin/renovate/dotenv-10.x
     "truffle": "^5.2.5",
     "web3": "^1.3.4"
   }
