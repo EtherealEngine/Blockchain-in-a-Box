@@ -4,8 +4,8 @@
   "description": "API Server for Blockchain-in-a-Box",
   "main": "index.js",
   "scripts": {
-    "start": "HTTP_PORT=8080 HTTPS_PORT=8443 node index.js",
-    "dev": "sudo $(which node) index.js"
+    "start": "HTTP_PORT=8080 HTTPS_PORT=8443 node src/index.js",
+    "dev": "sudo $(which node) src/index.js"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,7 @@
   "homepage": "https://github.com/xrfoundation/blockchain-in-a-box#readme",
   "dependencies": {
     "@pinata/sdk": "^1.1.14",
+    "app-root-path": "^3.0.0",
     "aws-sdk": "^2.750.0",
     "bip39": "^3.0.2",
     "discord.js": "^12.2.0",
@@ -27,8 +28,8 @@
     "express": "^4.17.1",
     "express-fileupload": "^1.2.1",
     "express-jsdoc-swagger": "^1.6.0",
-    "form-urlencoded": "^6.0.0",
     "form-data": "^4.0.0",
+    "form-urlencoded": "^6.0.0",
     "http-proxy": "^1.18.1",
     "jsonwebtoken": "^8.5.1",
     "lru": "^3.1.0",

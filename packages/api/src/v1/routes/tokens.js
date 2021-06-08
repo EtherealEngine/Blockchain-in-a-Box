@@ -15,18 +15,19 @@ const {
     burnAddress,
     zeroAddress
 } = require('@blockchain-in-a-box/common/src/constants.js');
-const {
-    ENCRYPTION_MNEMONIC,
-    MINTING_FEE,
-    IPFS_HOST,
-    MAINNET_MNEMONIC,
-    PINATA_API_KEY,
-    PINATA_SECRET_API_KEY,
-    DEFAULT_TOKEN_DESCRIPTION
-} = require('@blockchain-in-a-box/common/src/config.js');
 const {ResponseStatus} = require("../enums.js");
 const {runSidechainTransaction} = require("@blockchain-in-a-box/common/src/tokens.js");
-const {production, development} = require("../environment.js");
+const {
+  PRODUCTION,
+  DEVELOPMENT,
+  PINATA_API_KEY,
+  PINATA_SECRET_API_KEY,
+  MINTING_FEE,
+  DEFAULT_TOKEN_DESCRIPTION,
+  IPFS_HOST,
+  ENCRYPTION_MNEMONIC,
+  MAINNET_MNEMONIC,
+} = require("@blockchain-in-a-box/common/src/environment.js");
 
 const {jsonParse} = require('@blockchain-in-a-box/common/src/utils.js');
 
@@ -54,7 +55,7 @@ const pinataOptions = {
 
 const redisClient = getRedisClient();
 
-const network = production ? 'mainnet' : 'testnet';
+const network = PRODUCTION ? 'mainnet' : 'testnet';
 
 const {Readable} = require('stream');
 
@@ -71,7 +72,7 @@ let web3, contracts;
 async function listTokens(req, res, web3) {
     const {address, mainnetAddress} = req.params;
 
-    if (development) setCorsHeaders(res);
+    if (DEVELOPMENT) setCorsHeaders(res);
     try {
         const [
             mainnetTokens,
@@ -264,7 +265,7 @@ async function readToken(req, res) {
     let o = await getRedisItem(tokenId, redisPrefixes.mainnetsidechainNft);
     let token = o.Item;
 
-    if (development) setCorsHeaders(res);
+    if (DEVELOPMENT) setCorsHeaders(res);
     if (token) {
         return res.json({status: ResponseStatus.Success, token, error: null})
     } else {
@@ -278,7 +279,7 @@ async function readTokenWithUnlockable(req, res) {
     let o = await getRedisItem(tokenId, redisPrefixes.mainnetsidechainNft);
     let token = o.Item;
 
-    if (development) setCorsHeaders(res);
+    if (DEVELOPMENT) setCorsHeaders(res);
     if (token) {
         if(token[unlockableMetadataKey] !== undefined && token[unlockableMetadataKey] !== ""){
             let value = token[unlockableMetadataKey];
@@ -302,7 +303,7 @@ async function readTokenWithUnlockable(req, res) {
 //     let o = await getRedisItem(tokenId, redisPrefixes.mainnetsidechainNft);
 //     let token = o.Item;
 //     let value = "";
-//     if (development) setCorsHeaders(res);
+//     if (DEVELOPMENT) setCorsHeaders(res);
 //     if (token) {
 //         if(token[unlockableMetadataKey] !== undefined && token[unlockableMetadataKey] !== ""){
 //             value = token[unlockableMetadataKey];
@@ -327,7 +328,7 @@ async function readTokenWithUnlockable(req, res) {
 //     const {tokenId} = req.params;
 //     let o = await getRedisItem(tokenId, redisPrefixes.mainnetsidechainNft);
 //     let token = o.Item;
-//     if (development) setCorsHeaders(res);
+//     if (DEVELOPMENT) setCorsHeaders(res);
 //     if (token) {
 //         if(token[encryptedMetadataKey] !== undefined && token[encryptedMetadataKey] !== ""){
 //             const url = token[encryptedMetadataKey];
@@ -341,7 +342,7 @@ async function readTokenWithUnlockable(req, res) {
 // }
 
 async function readTokenRange(req, res) {
-    if (development) setCorsHeaders(res);
+    if (DEVELOPMENT) setCorsHeaders(res);
     try {
         const {tokenStartId, tokenEndId} = req.params;
 

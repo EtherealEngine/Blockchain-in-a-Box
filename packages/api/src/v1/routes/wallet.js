@@ -2,11 +2,11 @@ const bip39 = require('bip39');
 const {hdkey} = require('ethereumjs-wallet');
 const {setCorsHeaders} = require("@blockchain-in-a-box/common/src/utils.js");
 const {ResponseStatus} = require("../enums.js");
-const {development} = require("../environment.js");
+const {DEVELOPMENT} = require("@blockchain-in-a-box/common/src/environment.js");
 
 // Generates a new mnemonic, private key and public address and hands the mnemonic back
 async function createWallet(req, res) {
-    if (development) setCorsHeaders(res);
+    if (DEVELOPMENT) setCorsHeaders(res);
     try {
         const userMnemonic = bip39.generateMnemonic();
         const wallet = hdkey.fromMasterSeed(bip39.mnemonicToSeedSync(userMnemonic)).derivePath(`m/44'/60'/0'/0/0`).getWallet();
