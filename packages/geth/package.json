@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/xrfoundation/blockchain-in-a-box#readme",
   "dependencies": {
-    "forever": "^3.0.4",
+    "forever": "^4.0.0",
     "node-fetch": "^2.6.1",
     "redis": "^3.1.1",
     "redis-redisearch": "^1.0.1",
