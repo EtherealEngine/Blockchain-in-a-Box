@@ -1,6 +1,7 @@
 const { accountKeys, zeroAddress, defaultAvatarPreview } = require('./constants.js');
 const { getBlockchain, getPastEvents } = require('./blockchain.js');
-const { STORAGE_HOST } = require('./config.js');
+const { STORAGE_HOST } = require("@blockchain-in-a-box/common/src/environment.js");
+
 const _log = async (text, p) => {
   try {
     const r = await p;

@@ -1,21 +1,62 @@
-require('dotenv').config();
+const dotenv = require("dotenv");
 
-const fs = require('fs');
+dotenv.config({
+  path: `./../../.env`,
+});
 
-const config = fs.existsSync(__dirname + '/config.json') ? require('./config.json') : null;
+const INFURA_PROJECT_ID = process.env.INFURA_PROJECT_ID;
+const INFURA_API_KEY = process.env.INFURA_API_KEY;
+const POLYGON_VIGIL_KEY = process.env.POLYGON_VIGIL_KEY;
+const MAINNET_MNEMONIC = process.env.MAINNET_MNEMONIC;
+const ENCRYPTION_MNEMONIC = process.env.ENCRYPTION_MNEMONIC;
+const DEFAULT_TOKEN_DESCRIPTION = process.env.DEFAULT_TOKEN_DESCRIPTION;
+const MINTING_FEE = process.env.MINTING_FEE;
+const AUTH_TOKEN_SECRET = process.env.AUTH_TOKEN_SECRET;
+const AUTH_SECRET_KEY = process.env.AUTH_SECRET_KEY;
+const HTTP_PORT = process.env.HTTP_PORT;
+const HTTPS_PORT = process.env.HTTPS_PORT;
 
-const redisKey = (config && config.redisKey) ?? process.env.REDIS_KEY ?? "default";
-const polygonVigilKey = (config && config.polygonVigilKey) ?? process.env.POLYGON_VIGIL_KEY ?? `1bdde9289621d9d420488a9804254f4a958e128b`;
-const infuraProjectId = (config && config.infuraProjectId) ?? process.env.infuraProjectId;
-const ethereumHost = (config && config.ethereumHost) ?? process.env.ETHEREUM_HOST ?? 'ethereum.exokit.org';
-const storageHost = (config && config.storageHost) ?? process.env.STORAGE_HOST ?? 'https://ipfs.exokit.org';
+const IPFS_HOST_PORT = process.env.IPFS_HOST_PORT;
+const IPFS_HOST = process.env.IPFS_HOST;
+const ETHEREUM_HOST = process.env.ETHEREUM_HOST;
+const STORAGE_HOST = process.env.STORAGE_HOST;
 
-if(!redisKey) console.warn("Environment vars not set successfully, do you have config.json or env vars set up?");
+const PINATA_API_KEY = process.env.PINATA_API_KEY;
+const PINATA_SECRET_API_KEY = process.env.PINATA_SECRET_API_KEY;
+
+const REDIS_HOST = process.env.REDIS_HOST;
+const REDIS_PORT = process.env.REDIS_PORT;
+const REDIS_KEY = process.env.REDIS_KEY;
+
+const DEVELOPMENT = !process.env.PRODUCTION;
+const PRODUCTION = process != undefined && process.env.PRODUCTION;
+
+if (!REDIS_KEY)
+  console.warn(
+    "Environment vars not set successfully, do you have env vars set up?"
+  );
 
 module.exports = {
-    redisKey,
-    polygonVigilKey,
-    infuraProjectId,
-    ethereumHost,
-    storageHost
-}
+  INFURA_PROJECT_ID,
+  INFURA_API_KEY,
+  POLYGON_VIGIL_KEY,
+  MAINNET_MNEMONIC,
+  ENCRYPTION_MNEMONIC,
+  DEFAULT_TOKEN_DESCRIPTION,
+  MINTING_FEE,
+  AUTH_TOKEN_SECRET,
+  AUTH_SECRET_KEY,
+  HTTP_PORT,
+  HTTPS_PORT,
+  IPFS_HOST_PORT,
+  IPFS_HOST,
+  ETHEREUM_HOST,
+  STORAGE_HOST,
+  PINATA_API_KEY,
+  PINATA_SECRET_API_KEY,
+  REDIS_HOST,
+  REDIS_PORT,
+  REDIS_KEY,
+  DEVELOPMENT,
+  PRODUCTION,
+};

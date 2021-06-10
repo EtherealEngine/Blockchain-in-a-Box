@@ -1,24 +1,16 @@
-// TODO: Remove me
+// TODO: Remove me. IF REMOVING THIS FILE: Also remove the env variables used in this file.
 
-const { accessKeyId, secretAccessKey, tradeMnemonic, treasuryMnemonic, discordApiToken } = 
-require('fs').existsSync('./config.json') ? require('./config.json') : {
-    accessKeyId: process.env.accessKeyId,
-    secretAccessKey: process.env.secretAccessKey,
-    tradeMnemonic: process.env.tradeMnemonic,
-    treasuryMnemonic: process.env.treasuryMnemonic,
-    discordApiToken: process.env.discordApiToken
-  }
-
-exports.devMode = accessKeyId === undefined ||
-    secretAccessKey === undefined ||
+rts.devMode = 
+    process.env.accessKeyId === undefined ||
+    process.env.secretAccessKey === undefined ||
     // tradeMnemonic === undefined ||
     // treasuryMnemonic === undefined ||
-    accessKeyId === null ||
-    secretAccessKey === null ||
+    process.env.accessKeyId === null ||
+    process.env.secretAccessKey === null ||
     // tradeMnemonic === null ||
     // treasuryMnemonic === null ||
-    accessKeyId === "" ||
-    secretAccessKey === "" ||
-    discordApiToken === "";
+    process.env.accessKeyId === "" ||
+    process.env.secretAccessKey === "" ||
+    process.env.discordApiToken === "";
     // tradeMnemonic === "" ||
     // treasuryMnemonic === "";

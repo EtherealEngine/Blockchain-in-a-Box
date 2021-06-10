@@ -1,13 +1,13 @@
 const fs = require('fs');
 const child_process = require('child_process');
-const {redisKey} = require('@blockchain-in-a-box/common/src/environment.js');
+const {REDIS_KEY} = require('@blockchain-in-a-box/common/src/environment.js');
 const {getChainNft, getChainAccount, getAllWithdrawsDeposits} = require('@blockchain-in-a-box/common/src/tokens.js');
 const {nftKeys, nftPropertiesKeys, ids, redisPrefixes} = require('@blockchain-in-a-box/common/src/constants.js');
 const {getBlockchain, getPastEvents, makeWeb3WebsocketContract} = require('@blockchain-in-a-box/common/src/blockchain.js');
 const {connect, getRedisAllItems, getRedisItem, putRedisItem} = require('@blockchain-in-a-box/common/src/redis.js');
 
 let redisConfTxt = fs.readFileSync('../bin/redis.conf.template', 'utf8');
-redisConfTxt = redisConfTxt.replace(/# requirepass foobared/, `requirepass ${redisKey}`);
+redisConfTxt = redisConfTxt.replace(/# requirepass foobared/, `requirepass ${REDIS_KEY}`);
 fs.writeFileSync('../bin/redis.conf', redisConfTxt);
 
 const cp = child_process.spawn('../bin/redis-server', [

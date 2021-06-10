@@ -4,7 +4,11 @@ const dns = require('dns');
 const https = require('https');
 const fetch = require('node-fetch');
 const Web3 = require('web3');
-const {INFURA_PROJECT_ID, POLYGON_VIGIL_KEY, ETHEREUM_HOST} = require('./config.js')
+const {
+  INFURA_PROJECT_ID,
+  POLYGON_VIGIL_KEY,
+  ETHEREUM_HOST,
+} = require("@blockchain-in-a-box/common/src/environment.js");
 
 let addresses,
   abis,

@@ -3,7 +3,7 @@ const redisearch = require('redis-redisearch');
 redisearch(redis);
 const {makePromise} = require('./utils.js');
 const {ids} = require('./constants.js');
-const {REDIS_KEY} = require('./config.js');
+const {REDIS_KEY} = require("@blockchain-in-a-box/common/src/environment.js");
 
 let redisClient = null;
 let loadPromise = null;

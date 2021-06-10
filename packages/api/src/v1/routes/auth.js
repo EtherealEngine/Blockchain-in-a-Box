@@ -1,7 +1,6 @@
 const {setCorsHeaders} = require("@blockchain-in-a-box/common/src/utils.js");
 const {ResponseStatus} = require("../enums.js");
-const {development} = require("../environment.js");
-const {AUTH_SECRET_KEY, AUTH_TOKEN_SECRET} = require('@blockchain-in-a-box/common/src/config.js');
+const {DEVELOPMENT, AUTH_TOKEN_SECRET, AUTH_SECRET_KEY} = require("@blockchain-in-a-box/common/src/environment.js");
 const jwt = require('jsonwebtoken');
 
 function authenticateToken(req, res, next) {
@@ -25,7 +24,7 @@ function authenticateToken(req, res, next) {
 
 // Compares a shared secret key and
 async function handleServerSideAuth(req, res) {
-    if (development) setCorsHeaders(res);
+    if (DEVELOPMENT) setCorsHeaders(res);
     const {authSecretKey} = req.body;
 
     if (!authSecretKey)
