@@ -200,9 +200,9 @@ function addV1Routes(app) {
    * @param {string} resourceHash.optional - IPFS resource hash or other URI
    * @param {number} quantity.optional; - Number of tokens to mint
    */
-  app.post("/api/v1/token", authenticateToken, async (req, res) => {
-    return await createToken(req, res, blockchain);
-  });
+  // app.post("/api/v1/token", authenticateToken, async (req, res) => {
+  //   return await createToken(req, res, blockchain);
+  // });
 
   /**
    * DELETE /api/v1/token
