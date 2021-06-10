@@ -21,7 +21,7 @@ const makePromise = () => {
   return p;
 };
 
-const readStorageHashAsBuffer = async hash => {
+const readStorageHashAsBuffer = async (hash) => {
   const req = await fetch(`${storageHost}/${hash}`);
   if (!req.ok) return null;
 
@@ -34,5 +34,5 @@ module.exports = {
   jsonParse,
   getExt,
   makePromise,
-  readStorageHashAsBuffer
-}
+  readStorageHashAsBuffer,
+};

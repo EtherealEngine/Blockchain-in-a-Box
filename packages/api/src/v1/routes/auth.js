@@ -1,44 +1,53 @@
-const {setCorsHeaders} = require("@blockchain-in-a-box/common/src/utils.js");
-const {ResponseStatus} = require("../enums.js");
-const {DEVELOPMENT, AUTH_TOKEN_SECRET, AUTH_SECRET_KEY} = require("@blockchain-in-a-box/common/src/environment.js");
-const jwt = require('jsonwebtoken');
+const { setCorsHeaders } = require("@blockchain-in-a-box/common/src/utils.js");
+const { ResponseStatus } = require("../enums.js");
+const {
+  DEVELOPMENT,
+  AUTH_TOKEN_SECRET,
+  AUTH_SECRET_KEY,
+} = require("@blockchain-in-a-box/common/src/environment.js");
+const jwt = require("jsonwebtoken");
 
 function authenticateToken(req, res, next) {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
 
-    if (!token)
-        return res.status(401).send()
+  if (!token) return res.status(401).send();
 
-    jwt.verify(token, AUTH_TOKEN_SECRET, (error, data) => {
-        if (error)
-            return res.sendStatus(403);
+  jwt.verify(token, AUTH_TOKEN_SECRET, (error, data) => {
+    if (error) return res.sendStatus(403);
 
-        const {authSecretKey} = data;
-        if (AUTH_SECRET_KEY !== authSecretKey)
-            return res.sendStatus(403);
+    const { authSecretKey } = data;
+    if (AUTH_SECRET_KEY !== authSecretKey) return res.sendStatus(403);
 
-        next()
-    });
+    next();
+  });
 }
 
 // Compares a shared secret key and
 async function handleServerSideAuth(req, res) {
-    if (DEVELOPMENT) setCorsHeaders(res);
-    const {authSecretKey} = req.body;
+  if (DEVELOPMENT) setCorsHeaders(res);
+  const { authSecretKey } = req.body;
 
-    if (!authSecretKey)
-        return res.json({status: ResponseStatus.Error, accessToken: null, error: "authSecretKey value was not found"});
+  if (!authSecretKey)
+    return res.json({
+      status: ResponseStatus.Error,
+      accessToken: null,
+      error: "authSecretKey value was not found",
+    });
 
-    if (authSecretKey != AUTH_SECRET_KEY)
-        return res.json({status: ResponseStatus.Error, accessToken: null, error: "authSecretKey value was invalid"})
+  if (authSecretKey != AUTH_SECRET_KEY)
+    return res.json({
+      status: ResponseStatus.Error,
+      accessToken: null,
+      error: "authSecretKey value was invalid",
+    });
 
-    const accessToken = jwt.sign({authSecretKey}, AUTH_TOKEN_SECRET);
+  const accessToken = jwt.sign({ authSecretKey }, AUTH_TOKEN_SECRET);
 
-    return res.json({status: ResponseStatus.Success, accessToken, error: null})
+  return res.json({ status: ResponseStatus.Success, accessToken, error: null });
 }
 
 module.exports = {
-    handleServerSideAuth,
-    authenticateToken
-}
+  handleServerSideAuth,
+  authenticateToken,
+};
