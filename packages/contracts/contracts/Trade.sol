@@ -2,13 +2,13 @@
 pragma solidity ^0.6.0;
 pragma experimental ABIEncoderV2;
 
-import "./WebaverseERC20.sol";
-import "./WebaverseERC721.sol";
+import "./Coin.sol";
+import "./Asset.sol";
 
-/** @title Webaverse Trade Contract
+/** @title Trade Contract
  * @dev Trade contract to manage user to user trading of fungible and non-fungible tokens
  */
-contract WebaverseTrade {
+contract Trade {
     struct Store {
         uint256 id;
         address seller;
@@ -25,8 +25,8 @@ contract WebaverseTrade {
     event Unsell(uint256 indexed id);
     event Buy(uint256 indexed id);
 
-    WebaverseERC20 parentERC20; // managed ERC20 contract
-    WebaverseERC721 parentERC721; // managed ERC721 contract
+    Coin parentERC20; // managed ERC20 contract
+    Asset parentERC721; // managed ERC721 contract
     address signer; // signer oracle address
     uint256 nextBuyId; // next buy id
     mapping(uint256 => Store) stores;
@@ -46,8 +46,8 @@ contract WebaverseTrade {
         address parentERC721Address,
         address signerAddress
     ) public {
-        parentERC20 = WebaverseERC20(parentERC20Address);
-        parentERC721 = WebaverseERC721(parentERC721Address);
+        parentERC20 = Coin(parentERC20Address);
+        parentERC721 = Asset(parentERC721Address);
         signer = signerAddress;
         nextBuyId = 0;
     }
@@ -64,19 +64,19 @@ contract WebaverseTrade {
     }
 
     /** @dev Set the parent ERC20 contract that this contract manages
-     * @param newParentERC20 Address of parent contract
+     * @param parentContract Address of parent contract
      */
-    function setERC20Parent(address newParentERC20) public {
+    function setCoinParent(address parentContract) public {
         require(msg.sender == signer, "must be signer");
-        parentERC20 = WebaverseERC20(newParentERC20);
+        parentERC20 = Coin(parentContract);
     }
 
     /** @dev Set the ERC721 contract that this contract manages
      * @param newParentERC721Address Address of parent contract
      */
-    function setERC721Parent(address newParentERC721Address) public {
+    function setAssetParent(address newParentERC721Address) public {
         require(msg.sender == signer, "must be signer");
-        parentERC721 = WebaverseERC721(newParentERC721Address);
+        parentERC721 = Asset(newParentERC721Address);
     }
 
     /** @dev Add a non-fungible token to the store to be sold

@@ -1,17 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.0;
 
-import "./ERC20Capped.sol";
+import "./standard/ERC20Capped.sol";
 
 /** @title Extension of {ERC20} that adds a cap to the supply of tokens. */
-contract WebaverseERC20 is ERC20Capped {
+contract Coin is ERC20Capped {
     mapping(address => bool) internal allowedMinters; // whether anyone can mint tokens (should be sidechain only)
     uint256 internal numAllowedMinters;
 
     /**
      * @dev Create a new fungible token
-     * @param name Name of the token (default is FT)
-     * @param symbol Token identifier (default is SILK)
+     * @param name Name of the token (default is COIN)
+     * @param symbol Token identifier (default is COIN)
      * @param cap Sets the token market cap. This value is immutable, it can only be
      * set once during construction.
      * Default cap: 2147483648000000000000000000 or (2**31) + '000000000000000000'

@@ -1,25 +1,24 @@
 /* eslint-disable no-undef */
-const Account = artifacts.require("WebaverseAccount");
-const ERC20 = artifacts.require("WebaverseERC20");
-const ERC20Proxy = artifacts.require("WebaverseERC20Proxy");
-const ERC721 = artifacts.require("WebaverseERC721");
-const ERC721Proxy = artifacts.require("WebaverseERC721Proxy");
-const Trade = artifacts.require("WebaverseTrade");
+const Identity = artifacts.require("Identity");
+const CoinContract = artifacts.require("Coin");
+const CoinProxyContract = artifacts.require("CoinProxy");
+const Asset = artifacts.require("Asset");
+const AssetProxy = artifacts.require("AssetProxy");
+const Trade = artifacts.require("Trade");
 
 const chainId = require("../config/chainIds.js");
 
-// FT
-const ERC20ContractName = "SILK";
-const ERC20Symbol = "SILK";
-const ERC20MarketCap = "2147483648000000000000000000";
+// COIN
+const CoinContractName = process.env.CoinContractName;
+const CoinContractSymbol = process.env.CoinContractSymbol;
+const CoinMarketCap = process.env.CoinMarketCap;
 
-// NFTs
-const ERC721TokenContractName = "ASSET";
-const ERC721TokenContractSymbol = "ASSET";
-const tokenIsSingleIssue = false;
-const tokenIsPublicallyMintable = true;
-const tokenBaseUri = "https://tokens.webaverse.com/";
-const mintFee = 10;
+// ASSETS
+const assetContractName = process.env.ASSET_CONTRACT_NAME;
+const assetContractSymbol = process.env.ASSET_CONTRACT_SYMBOL;
+const assetsAreMintable = process.env.ASSETS_ARE_MINTABLE;
+const assetBaseUri = process.env.ASSET_BASE_URI;
+const mintFee = process.env.ASSET_CREATION_FEE;
 
 const NetworkTypes = {
   mainnet: "mainnet",
@@ -69,74 +68,72 @@ module.exports = async function (deployer) {
     return console.error("Treasury address not valid");
 
   console.log("Deploying on the " + networkType + " networkType");
-  await deployer.deploy(Account);
-  let account = await Account.deployed();
-  console.log("Account address is " + account.address);
+  await deployer.deploy(Identity);
+  let identity = await Identity.deployed();
+  console.log("Identity address is " + identity.address);
 
-  await deployer.deploy(ERC20, ERC20ContractName, ERC20Symbol, ERC20MarketCap);
-  let erc20 = await ERC20.deployed();
-  const ERC20Address = erc20.address;
+  await deployer.deploy(CoinContract, CoinContractName, CoinContractSymbol, CoinMarketCap);
+  let coin = await CoinContract.deployed();
+  const coinAddress = coin.address;
 
-  console.log("ERC20 address is " + ERC20Address);
+  console.log("Coin contract address is " + coinAddress);
   /** parentAddress, signerAddress, _chainId */
   await deployer.deploy(
-    ERC20Proxy,
-    ERC20Address,
+    CoinProxyContract,
+    coinAddress,
     signer[networkType],
-    chainId[networkType][ERC20ContractName]
+    chainId[networkType][CoinContractName]
   );
-  let erc20Proxy = await ERC20Proxy.deployed();
-  const ERC20ProxyAddress = erc20Proxy.address;
+  let coinProxy = await CoinProxyContract.deployed();
+  const coinProxyAddress = coinProxy.address;
 
-  console.log("ERC20Proxy address is " + ERC20ProxyAddress);
+  console.log("Coin proxy contract address is " + coinProxyAddress);
 
-  console.log("Attempting to deploy ERC721 contract with these variables");
+  console.log("Attempting to deploy Asset contract with these variables");
   console.log(
-    ERC721TokenContractName,
-    ERC721TokenContractSymbol,
-    tokenBaseUri,
-    ERC20Address,
+    assetContractName,
+    assetContractSymbol,
+    assetBaseUri,
+    coinAddress,
     mintFee,
     treasurer[networkType],
-    tokenIsSingleIssue,
-    tokenIsPublicallyMintable
+    assetsAreMintable
   );
-  /** name, symbol, baseUri, _erc20Contract, _mintFee, _treasuryAddress, _isSingleIssue, _isPublicallyMintable */
+  /** name, symbol, baseUri, _erc20Contract, _mintFee, _treasuryAddress, _isPublicallyMintable */
   await deployer.deploy(
-    ERC721,
-    ERC721TokenContractName,
-    ERC721TokenContractSymbol,
-    tokenBaseUri,
-    ERC20Address,
+    Asset,
+    assetContractName,
+    assetContractSymbol,
+    assetBaseUri,
+    coinAddress,
     mintFee,
     treasurer[networkType],
-    tokenIsSingleIssue,
-    tokenIsPublicallyMintable
+    assetsAreMintable
   );
 
-  let erc721 = await ERC721.deployed();
-  const ERC721Address = erc721.address;
+  let asset = await Asset.deployed();
+  const assetAddress = asset.address;
 
-  console.log("ERC721 Token address is " + ERC721Address);
+  console.log("Asset Token address is " + assetAddress);
 
   /** parentAddress, signerAddress, _chainId */
   await deployer.deploy(
-    ERC721Proxy,
-    ERC721Address,
+    AssetProxy,
+    assetAddress,
     signer[networkType],
-    chainId[networkType][ERC721TokenContractName]
+    chainId[networkType][assetContractName]
   );
-  let erc721Proxy = await ERC721Proxy.deployed();
+  let erc721Proxy = await AssetProxy.deployed();
 
-  const ERC721ProxyAddress = erc721Proxy.address;
+  const assetProxyAddress = erc721Proxy.address;
 
-  console.log("ERC721Proxy address is " + ERC721ProxyAddress);
+  console.log("AssetProxy address is " + assetProxyAddress);
 
   /** parentERC20Address, parentERC721Address, signerAddress */
   await deployer.deploy(
     Trade,
-    ERC20Address,
-    ERC721Address,
+    coinAddress,
+    assetAddress,
     signer[networkType]
   );
   let trade = await Trade.deployed();
@@ -148,11 +145,11 @@ module.exports = async function (deployer) {
   console.log("Deploying on the " + networkType + " networkType");
   console.log("*******************************");
   console.log('"' + networkType + '": {');
-  console.log(' "Account": ' + '"' + account.address + '",');
-  console.log(' "FT": ' + '"' + ERC20Address + '",');
-  console.log(' "FTProxy": ' + '"' + ERC20ProxyAddress + '",');
-  console.log(' "NFT": ' + '"' + ERC721Address + '",');
-  console.log(' "NFTProxy": ' + '"' + ERC721ProxyAddress + '",');
+  console.log(' "Identity": ' + '"' + identity.address + '",');
+  console.log(' "COIN": ' + '"' + coinAddress + '",');
+  console.log(' "COINProxy": ' + '"' + coinProxyAddress + '",');
+  console.log(' "ASSET": ' + '"' + assetAddress + '",');
+  console.log(' "ASSETProxy": ' + '"' + assetProxyAddress + '",');
   console.log("}");
   console.log("*******************************");
 };

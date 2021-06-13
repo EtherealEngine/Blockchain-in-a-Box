@@ -1,1 +1,0 @@
-web: bash ./setup-chromium.sh && npm install && npm run start-proxied

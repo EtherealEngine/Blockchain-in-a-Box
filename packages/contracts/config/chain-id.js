@@ -1,26 +1,26 @@
 export default {
   mainnet: {
-    FT: 1,
-    NFT: 2,
+    COIN: 1,
+    ASSET: 2,
   },
   mainnetsidechain: {
-    FT: 2,
-    NFT: 5,
+    COIN: 2,
+    ASSET: 5,
   },
   testnet: {
-    FT: 1,
-    NFT: 2,
+    COIN: 1,
+    ASSET: 2,
   },
   testnetsidechain: {
-    FT: 4,
-    NFT: 5,
+    COIN: 4,
+    ASSET: 5,
   },
   polygon: {
-    FT: 1,
-    NFT: 2,
+    COIN: 1,
+    ASSET: 2,
   },
   testnetpolygon: {
-    FT: 4,
-    NFT: 5,
+    COIN: 4,
+    ASSET: 5,
   },
 };

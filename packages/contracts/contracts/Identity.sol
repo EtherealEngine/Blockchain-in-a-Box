@@ -2,8 +2,8 @@
 pragma solidity ^0.6.0;
 pragma experimental ABIEncoderV2;
 
-/** @title Webaverse account contract. */
-contract WebaverseAccount {
+/** @title Identity Contract. */
+contract Identity {
     /** @dev Event called when owner changes metadata value. */
     event MetadataSet(address owner, string key, string value);
 

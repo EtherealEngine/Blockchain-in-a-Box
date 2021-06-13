@@ -10,9 +10,12 @@ const {
   ETHEREUM_HOST,
 } = require("@blockchain-in-a-box/common/src/environment.js");
 
-let addresses,
-  abis,
-  web3,
+const addresses = require("@blockchain-in-a-box/contracts/config/addresses.js");
+const abis = require("@blockchain-in-a-box/contracts/config/abi.js");
+const ports = require("@blockchain-in-a-box/contracts/config/ports.js");
+const ethereumHostAddress = require("@blockchain-in-a-box/contracts/config/abi.js");
+
+let web3,
   // web3socketProviders,
   web3sockets,
   contracts,
@@ -25,68 +28,25 @@ const BlockchainNetworks = [
   "mainnet",
   "mainnetsidechain",
   "polygon",
-  // "testnet",
-  // "testnetsidechain",
-  // "testnetpolygon",
+  "testnet",
+  "testnetsidechain",
+  "testnetpolygon",
 ];
 
-const loadPromise = (async () => {
-  const [newAddresses, newAbis, ethereumHostAddress, newPorts] =
-    await Promise.all([
-      // TODO: Pull from monorepo
-      fetch("https://contracts.webaverse.com/config/addresses.js")
-        .then((res) => res.text())
-        .then((s) => JSON.parse(s.replace(/^\s*export\s*default\s*/, ""))),
-      fetch("https://contracts.webaverse.com/config/abi.js")
-        .then((res) => res.text())
-        .then((s) => JSON.parse(s.replace(/^\s*export\s*default\s*/, ""))),
-      new Promise((accept, reject) => {
-        dns.resolve4(ETHEREUM_HOST, (err, addresses) => {
-          if (!err) {
-            if (addresses.length > 0) {
-              accept(addresses[0]);
-            } else {
-              reject(new Error("no addresses resolved for " + ETHEREUM_HOST));
-            }
+(async () => {
+  const ethereumHostAddress =  await new Promise((accept, reject) => {
+      dns.resolve4(ETHEREUM_HOST, (err, addresses) => {
+        if (!err) {
+          if (addresses.length > 0) {
+            accept(addresses[0]);
           } else {
-            reject(err);
+            reject(new Error("no addresses resolved for " + ETHEREUM_HOST));
           }
-        });
-      }),
-      (async () => {
-        const j = await new Promise((accept, reject) => {
-          const proxyReq = https.request(
-            "https://contracts.webaverse.com/config/ports.js",
-            (proxyRes) => {
-              const bs = [];
-              proxyRes.on("data", (b) => {
-                bs.push(b);
-              });
-              proxyRes.on("end", () => {
-                accept(
-                  JSON.parse(
-                    Buffer.concat(bs)
-                      .toString("utf8")
-                      .slice("export default".length)
-                  )
-                );
-              });
-              proxyRes.on("error", (err) => {
-                reject(err);
-              });
-            }
-          );
-          proxyReq.end();
-        });
-        return j;
-      })(),
-    ]);
-  addresses = newAddresses;
-  abis = newAbis;
-
-  // console.log('ports', {ethereumHostAddress, newPorts});
-
-  const ports = newPorts;
+        } else {
+          reject(err);
+        }
+      });
+    }),
   gethNodeUrl = `http://${ethereumHostAddress}`;
   gethNodeWSUrl = `ws://${ethereumHostAddress}`;
 
@@ -102,44 +62,45 @@ const loadPromise = (async () => {
       )
     ),
 
-    /* testnet: new Web3(new Web3.providers.HttpProvider(
+    testnet: new Web3(new Web3.providers.HttpProvider(
       `https://rinkeby.infura.io/v3/${INFURA_PROJECT_ID}`
     )),
+
     testnetsidechain: new Web3(new Web3.providers.HttpProvider(
       `${gethNodeUrl}:${ports.testnetsidechain}`
-    )), */
+    )),
 
     polygon: new Web3(
       new Web3.providers.HttpProvider(
         `https://rpc-mainnet.maticvigil.com/v1/${POLYGON_VIGIL_KEY}`
       )
     ),
-    /* testnetpolygon: new Web3(new Web3.providers.HttpProvider(
+    testnetpolygon: new Web3(new Web3.providers.HttpProvider(
       `https://rpc-mumbai.maticvigil.com/v1/${POLYGON_VIGIL_KEY}`
-    )), */
+    ))
   };
 
-  web3socketProviderUrls = {
-    mainnet: `wss://mainnet.infura.io/ws/v3/${INFURA_PROJECT_ID}`,
-    mainnetsidechain: `${gethNodeWSUrl}:${ports.mainnetsidechainWs}`,
-    polygon: `wss://rpc-webverse-mainnet.maticvigil.com/v1/${POLYGON_VIGIL_KEY}`,
-  };
+  // web3socketProviderUrls = {
+  //   mainnet: `wss://mainnet.infura.io/ws/v3/${INFURA_PROJECT_ID}`,
+  //   mainnetsidechain: `${gethNodeWSUrl}:${ports.mainnetsidechainWs}`,
+  //   polygon: `wss://rpc-webverse-mainnet.maticvigil.com/v1/${POLYGON_VIGIL_KEY}`,
+  // };
   contracts = {};
   BlockchainNetworks.forEach((network) => {
     contracts[network] = {
-      Account: new web3[network].eth.Contract(
-        abis.Account,
-        addresses[network].Account
+      Identity: new web3[network].eth.Contract(
+        abis.Identity,
+        addresses[network].Identity
       ),
-      FT: new web3[network].eth.Contract(abis.FT, addresses[network].FT),
-      FTProxy: new web3[network].eth.Contract(
-        abis.FTProxy,
-        addresses[network].FTProxy
+      COIN: new web3[network].eth.Contract(abis.COIN, addresses[network].COIN),
+      COINProxy: new web3[network].eth.Contract(
+        abis.COINProxy,
+        addresses[network].COINProxy
       ),
-      NFT: new web3[network].eth.Contract(abis.NFT, addresses[network].NFT),
-      NFTProxy: new web3[network].eth.Contract(
-        abis.NFTProxy,
-        addresses[network].NFTProxy
+      ASSET: new web3[network].eth.Contract(abis.ASSET, addresses[network].ASSET),
+      ASSETProxy: new web3[network].eth.Contract(
+        abis.ASSETProxy,
+        addresses[network].ASSETProxy
       ),
       Trade: new web3[network].eth.Contract(
         abis.Trade,

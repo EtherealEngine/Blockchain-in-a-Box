@@ -1,5 +1,5 @@
 const {
-  accountKeys,
+  identityKeys,
   zeroAddress,
   defaultAvatarPreview,
 } = require("./constants.js");
@@ -19,7 +19,7 @@ const _log = async (text, p) => {
 
 const _fetchAccountForMinter = async (tokenId, chainName) => {
   const { contracts } = await getBlockchain();
-  const address = await contracts[chainName].NFT.methods
+  const address = await contracts[chainName].ASSET.methods
     .getMinter(tokenId)
     .call();
   if (address !== zeroAddress) {
@@ -30,7 +30,7 @@ const _fetchAccountForMinter = async (tokenId, chainName) => {
 };
 const _fetchAccountForOwner = async (tokenId, chainName) => {
   const { contracts } = await getBlockchain();
-  const address = await contracts[chainName].NFT.methods
+  const address = await contracts[chainName].ASSET.methods
     .ownerOf(tokenId)
     .call();
   if (address !== zeroAddress) {
@@ -44,7 +44,7 @@ const _fetchAccount = async (address, chainName) => {
 
   const [username, avatarPreview, monetizationPointer] = await Promise.all([
     (async () => {
-      let username = await contracts[chainName].Account.methods
+      let username = await contracts[chainName].Identity.methods
         .getMetadata(address, "name")
         .call();
       if (!username) {
@@ -53,7 +53,7 @@ const _fetchAccount = async (address, chainName) => {
       return username;
     })(),
     (async () => {
-      let avatarPreview = await contracts[chainName].Account.methods
+      let avatarPreview = await contracts[chainName].Identity.methods
         .getMetadata(address, "avatarPreview")
         .call();
       if (!avatarPreview) {
@@ -62,7 +62,7 @@ const _fetchAccount = async (address, chainName) => {
       return avatarPreview;
     })(),
     (async () => {
-      let monetizationPointer = await contracts[chainName].Account.methods
+      let monetizationPointer = await contracts[chainName].Identity.methods
         .getMetadata(address, "monetizationPointer")
         .call();
       if (!monetizationPointer) {
@@ -547,11 +547,11 @@ const formatToken =
         ),
         _log(
           "formatToken 3" + JSON.stringify({ id: token.id }),
-          contracts[sidechainChainName].NFT.methods
+          contracts[sidechainChainName].ASSET.methods
             .getMetadata(token.hash, "description")
             .call()
         ),
-        contracts[sidechainChainName].NFT.methods.getMinter(tokenId).call(),
+        contracts[sidechainChainName].ASSET.methods.getMinter(tokenId).call(),
       ]);
 
     const _filterByTokenIdLocal = _filterByTokenId(tokenId);
@@ -681,7 +681,7 @@ const getChainNft =
           .call();
         const token = _copy(tokenSrc);
         const { hash } = token;
-        token.unlockable = await contracts[chainName].NFT.methods
+        token.unlockable = await contracts[chainName].ASSET.methods
           .getMetadata(hash, "unlockable")
           .call();
         if (!token.unlockable) {
@@ -693,7 +693,7 @@ const getChainNft =
 
     try {
       if (_isValidToken(token)) {
-        if (contractName === "NFT") {
+        if (contractName === "ASSET") {
           const r = await formatToken(chainName)(
             token,
             storeEntries,
@@ -716,7 +716,7 @@ const getChainNft =
       return null;
     }
   };
-const getChainToken = getChainNft("NFT");
+const getChainToken = getChainNft("ASSET");
 const getChainOwnerNft =
   (contractName) =>
   (chainName) =>
@@ -766,7 +766,7 @@ const getChainOwnerNft =
     }
 
     try {
-      if (contractName === "NFT") {
+      if (contractName === "ASSET") {
         return await formatToken(chainName)(
           token,
           storeEntries,
@@ -794,11 +794,11 @@ async function getChainAccount({ address, chainName } = {}) {
   };
 
   await Promise.all(
-    accountKeys.map(async (accountKey) => {
-      const accountValue = await contract.Account.methods
-        .getMetadata(address, accountKey)
+    identityKeys.map(async (key) => {
+      const accountValue = await contract.Identity.methods
+        .getMetadata(address, key)
         .call();
-      account[accountKey] = accountValue;
+      account[key] = accountValue;
     })
   );
 

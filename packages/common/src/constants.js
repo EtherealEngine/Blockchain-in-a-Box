@@ -1,16 +1,5 @@
-const accountKeys = [
-  "name",
-  "avatarId",
-  "avatarName",
-  "avatarExt",
-  "avatarPreview",
-  "loadout",
-  "homeSpaceId",
-  "homeSpaceName",
-  "homeSpaceExt",
-  "homeSpacePreview",
-  "ftu",
-  "addressProofs",
+const identityKeys = [
+  "name"
 ];
 
 const ids = {
@@ -70,7 +59,7 @@ module.exports = {
   unlockableMetadataKey,
   encryptedMetadataKey,
   proofOfAddressMessage,
-  accountKeys,
+  identityKeys,
   ids,
   tableNames,
   redisPrefixes,

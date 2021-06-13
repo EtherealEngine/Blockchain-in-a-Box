@@ -2,16 +2,16 @@
 pragma solidity ^0.6.0;
 pragma experimental ABIEncoderV2;
 
-import "./WebaverseERC20.sol";
-import "./IERC721Receiver.sol";
+import "./Coin.sol";
+import "./standard/IERC721Receiver.sol";
 
 /** @title ERC20 Proxy contract.
- * @dev Manages ERC20 tokens using the Webaverse signing oracle for validation and cross-chain transfer
+ * @dev Manages ERC20 tokens using the chain owner as a signing oracle for validation and cross-chain transfer
  */
-contract WebaverseERC20Proxy {
+contract CoinProxy {
     address internal signer; // signer oracle address
     uint256 internal chainId; // unique chain id
-    WebaverseERC20 internal parent; // managed ERC20 contract
+    Coin internal parent; // managed ERC20 contract
     uint256 internal deposits; // amount deposited in this contract
     mapping(bytes32 => bool) internal usedWithdrawHashes; // deposit hashes that have been used up (replay protection)
 
@@ -32,7 +32,7 @@ contract WebaverseERC20Proxy {
     ) public {
         signer = signerAddress;
         chainId = _chainId;
-        parent = WebaverseERC20(parentAddress);
+        parent = Coin(parentAddress);
     }
 
     /** @dev Log the fact that we withdrew oracle-signed fungible tokens
@@ -66,9 +66,9 @@ contract WebaverseERC20Proxy {
     /** @dev Set the parent contract that this proxy manages
      * @param newParent Address of parent contract
      */
-    function setERC20Parent(address newParent) public {
+    function setCoinParent(address newParent) public {
         require(msg.sender == signer, "must be signer");
-        parent = WebaverseERC20(newParent);
+        parent = Coin(newParent);
     }
 
     /** @dev Withdraw ERC20 tokens to an address

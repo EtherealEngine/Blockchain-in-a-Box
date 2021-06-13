@@ -1,5 +1,5 @@
 export default {
-  FT: [
+  COIN: [
     {
       inputs: [
         {
@@ -368,7 +368,7 @@ export default {
       type: "function",
     },
   ],
-  NFT: [
+  ASSET: [
     {
       inputs: [
         {
@@ -387,7 +387,7 @@ export default {
           type: "string",
         },
         {
-          internalType: "contract WebaverseERC20",
+          internalType: "contract Coin",
           name: "_erc20Contract",
           type: "address",
         },
@@ -400,11 +400,6 @@ export default {
           internalType: "address",
           name: "_treasuryAddress",
           type: "address",
-        },
-        {
-          internalType: "bool",
-          name: "_isSingleIssue",
-          type: "bool",
         },
         {
           internalType: "bool",
@@ -770,25 +765,6 @@ export default {
           name: "tokenId",
           type: "uint256",
         },
-      ],
-      name: "getPackedBalance",
-      outputs: [
-        {
-          internalType: "uint256",
-          name: "",
-          type: "uint256",
-        },
-      ],
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      inputs: [
-        {
-          internalType: "uint256",
-          name: "tokenId",
-          type: "uint256",
-        },
         {
           internalType: "string",
           name: "key",
@@ -1020,29 +996,6 @@ export default {
         },
       ],
       stateMutability: "view",
-      type: "function",
-    },
-    {
-      inputs: [
-        {
-          internalType: "address",
-          name: "from",
-          type: "address",
-        },
-        {
-          internalType: "uint256",
-          name: "tokenId",
-          type: "uint256",
-        },
-        {
-          internalType: "uint256",
-          name: "amount",
-          type: "uint256",
-        },
-      ],
-      name: "pack",
-      outputs: [],
-      stateMutability: "nonpayable",
       type: "function",
     },
     {
@@ -1346,7 +1299,7 @@ export default {
               type: "uint256",
             },
           ],
-          internalType: "struct WebaverseERC721.Token",
+          internalType: "struct Asset.Token",
           name: "",
           type: "tuple",
         },
@@ -1474,7 +1427,7 @@ export default {
               type: "uint256",
             },
           ],
-          internalType: "struct WebaverseERC721.Token",
+          internalType: "struct Asset.Token",
           name: "",
           type: "tuple",
         },
@@ -1559,29 +1512,6 @@ export default {
     {
       inputs: [
         {
-          internalType: "address",
-          name: "to",
-          type: "address",
-        },
-        {
-          internalType: "uint256",
-          name: "tokenId",
-          type: "uint256",
-        },
-        {
-          internalType: "uint256",
-          name: "amount",
-          type: "uint256",
-        },
-      ],
-      name: "unpack",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      inputs: [
-        {
           internalType: "string",
           name: "oldHash",
           type: "string",
@@ -1598,7 +1528,7 @@ export default {
       type: "function",
     },
   ],
-  Account: [
+  Identity: [
     {
       inputs: [],
       stateMutability: "nonpayable",
@@ -1677,7 +1607,7 @@ export default {
       type: "function",
     },
   ],
-  FTProxy: [
+  COINProxy: [
     {
       inputs: [
         {
@@ -1769,7 +1699,7 @@ export default {
           type: "address",
         },
       ],
-      name: "setERC20Parent",
+      name: "setCoinParent",
       outputs: [],
       stateMutability: "nonpayable",
       type: "function",
@@ -1855,7 +1785,7 @@ export default {
       type: "function",
     },
   ],
-  NFTProxy: [
+  ASSETProxy: [
     {
       inputs: [
         {
@@ -1947,7 +1877,7 @@ export default {
           type: "address",
         },
       ],
-      name: "setERC721Parent",
+      name: "setAssetParent",
       outputs: [],
       stateMutability: "nonpayable",
       type: "function",
@@ -2181,7 +2111,7 @@ export default {
               type: "bool",
             },
           ],
-          internalType: "struct WebaverseTrade.Store",
+          internalType: "struct Trade.Store",
           name: "",
           type: "tuple",
         },
@@ -2219,11 +2149,11 @@ export default {
       inputs: [
         {
           internalType: "address",
-          name: "newParentERC20",
+          name: "parentContract",
           type: "address",
         },
       ],
-      name: "setERC20Parent",
+      name: "setCoinParent",
       outputs: [],
       stateMutability: "nonpayable",
       type: "function",
@@ -2236,7 +2166,7 @@ export default {
           type: "address",
         },
       ],
-      name: "setERC721Parent",
+      name: "setAssetParent",
       outputs: [],
       stateMutability: "nonpayable",
       type: "function",

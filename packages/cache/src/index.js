@@ -1,6 +1,3 @@
-const fs = require("fs");
-const child_process = require("child_process");
-const { REDIS_KEY } = require("@blockchain-in-a-box/common/src/environment.js");
 const {
   getChainNft,
   getChainAccount,
@@ -24,59 +21,18 @@ const {
   putRedisItem,
 } = require("@blockchain-in-a-box/common/src/redis.js");
 
-let redisConfTxt = fs.readFileSync("../bin/redis.conf.template", "utf8");
-redisConfTxt = redisConfTxt.replace(
-  /# requirepass foobared/,
-  `requirepass ${REDIS_KEY}`
-);
-fs.writeFileSync("../bin/redis.conf", redisConfTxt);
-
-const cp = child_process.spawn("../bin/redis-server", ["../bin/redis.conf"]);
-cp.on("error", (err) => {
-  console.warn(err);
-  process.exit(1);
-});
-cp.stdout.setEncoding("utf8");
-cp.stdout.on("data", async (s) => {
-  try {
-    // console.log('got data', s);
-    if (/Ready to accept connections/i.test(s)) {
-      console.log("initializing caches");
-      await initCaches();
-      console.log("caches initialized");
-    }
-  } catch (err) {
-    console.warn("failed to initialize caches", err);
-  }
-});
-cp.stderr.setEncoding("utf8");
-cp.stderr.on("data", (s) => {
-  console.warn(s);
-});
-cp.on("exit", (code) => {
-  console.warn(`redis exited with code ${code}`);
-  process.exit(code);
-});
-process.on("exit", () => {
-  cp.kill();
-});
-
-const _warn = (err) => {
-  console.warn("uncaught: " + err.stack);
-};
-process.on("uncaughtException", _warn);
-process.on("unhandledRejection", _warn);
+initCaches();
 
 async function initNftCache({ chainName }) {
   const { web3 } = await getBlockchain();
 
-  await connect();
+  await connect(process.env.REDIS_PORT, process.env.REDIS_HOST);
 
   const currentBlockNumber = await web3[chainName].eth.getBlockNumber();
 
   // Watch for new events.
   const _recurse = (currentBlockNumber) => {
-    const wsContract = makeWeb3WebsocketContract(chainName, "NFT");
+    const wsContract = makeWeb3WebsocketContract(chainName, "ASSET");
     wsContract.events
       .allEvents({ fromBlock: currentBlockNumber })
       .on("data", async function (event) {
@@ -111,7 +67,7 @@ async function initNftCache({ chainName }) {
   if (currentBlockNumber !== lastBlockNumber) {
     const events = await getPastEvents({
       chainName,
-      contractName: "NFT",
+      contractName: "ASSET",
       fromBlock: lastBlockNumber,
     });
     if (events.length > 0) {
@@ -123,6 +79,7 @@ async function initNftCache({ chainName }) {
     }
   }
 }
+
 async function initAccountCache({ chainName }) {
   const { web3 } = await getBlockchain();
 
@@ -130,7 +87,7 @@ async function initAccountCache({ chainName }) {
 
   // Watch for new events.
   const _recurse = (currentBlockNumber) => {
-    const wsContract = makeWeb3WebsocketContract(chainName, "Account");
+    const wsContract = makeWeb3WebsocketContract(chainName, "Identity");
     wsContract.events
       .allEvents({ fromBlock: currentBlockNumber })
       .on("data", async function (event) {
@@ -158,7 +115,7 @@ async function initAccountCache({ chainName }) {
 
   const o = await getRedisItem(
     ids.lastCachedBlockAccount,
-    redisPrefixes[chainName + "Account"]
+    redisPrefixes[chainName + "Identity"]
   );
   const lastBlockNumber = o?.Item?.number || 0;
 
@@ -166,7 +123,7 @@ async function initAccountCache({ chainName }) {
   if (currentBlockNumber !== lastBlockNumber) {
     const events = await getPastEvents({
       chainName,
-      contractName: "Account",
+      contractName: "Identity",
       fromBlock: lastBlockNumber,
     });
     if (events.length > 0) {
@@ -178,8 +135,9 @@ async function initAccountCache({ chainName }) {
     }
   }
 }
+
 async function initCaches() {
-  const _logCache = async (name, p) => {
+  const logCache = async (name, p) => {
     console.log("started init cache", name);
     try {
       return await p;
@@ -191,8 +149,8 @@ async function initCaches() {
   await Promise.all(
     ["mainnet", "mainnetsidechain", "polygon"].map((chainName) => {
       return Promise.all([
-        _logCache(chainName + " NFT", initNftCache({ chainName })),
-        _logCache(chainName + " Account", initAccountCache({ chainName })),
+        logCache(chainName + " ASSET", initNftCache({ chainName })),
+        logCache(chainName + " Identity", initAccountCache({ chainName })),
       ]);
     })
   );
@@ -211,9 +169,9 @@ async function processEventNft({ event, chainName }) {
         sidechainWithdrewEntries,
         polygonDepositedEntries,
         polygonWithdrewEntries,
-      } = await getAllWithdrawsDeposits("NFT")(chainName);
+      } = await getAllWithdrawsDeposits("ASSET")(chainName);
 
-      const token = await getChainNft("NFT")(chainName)(
+      const token = await getChainNft("ASSET")(chainName)(
         tokenId,
         storeEntries,
         mainnetDepositedEntries,
@@ -302,9 +260,9 @@ async function processEventsNft({ events, currentBlockNumber, chainName }) {
     sidechainWithdrewEntries,
     polygonDepositedEntries,
     polygonWithdrewEntries,
-  } = await getAllWithdrawsDeposits("NFT")(chainName);
+  } = await getAllWithdrawsDeposits("ASSET")(chainName);
   for (const tokenId of tokenIds) {
-    const token = await getChainNft("NFT")(chainName)(
+    const token = await getChainNft("ASSET")(chainName)(
       tokenId,
       storeEntries,
       mainnetDepositedEntries,
@@ -353,7 +311,8 @@ async function processEventAccount({ event, chainName }) {
     redisPrefixes.mainnetsidechainAccount
   );
 }
-const _uniquify = (a, pred = (a, b) => a === b) => {
+
+const makeUnique = (a, pred = (a, b) => a === b) => {
   return a.filter((e, i) => {
     for (let j = 0; j < i; j++) {
       if (pred(a[j], e)) {
@@ -363,13 +322,14 @@ const _uniquify = (a, pred = (a, b) => a === b) => {
     return true;
   });
 };
+
 async function processEventsAccount({ events, currentBlockNumber, chainName }) {
   let owners = events.map((e) => {
     let { owner } = e.returnValues;
     owner = owner.toLowerCase();
     return owner;
   });
-  owners = _uniquify(owners);
+  owners = makeUnique(owners);
 
   for (const owner of owners) {
     const account = await getChainAccount({

@@ -2,23 +2,21 @@
 pragma solidity ^0.6.0;
 pragma experimental ABIEncoderV2;
 
-import "./ERC721.sol";
-import "./EnumerableSet.sol";
-import "./Math.sol";
-import "./WebaverseERC20.sol";
+import "./standard/ERC721.sol";
+import "./standard/EnumerableSet.sol";
+import "./standard/Math.sol";
+import "./Coin.sol";
 
 /**
- * @title Extension of {ERC721} for Webaverse non-fungible tokens
- * @dev NFTs can be packed with fungible tokens, and can have special features
+ * @title Extension of {ERC721} for assets
  * I.E. collaborators and separate creatorship and ownership
  */
-contract WebaverseERC721 is ERC721 {
+contract Asset is ERC721 {
     using EnumerableSet for EnumerableSet.UintSet;
 
-    WebaverseERC20 internal erc20Contract; // ERC20 contract for fungible tokens
+    Coin internal coinContract; // ERC20 contract for fungible tokens
     uint256 internal mintFee; // ERC20 fee to mint ERC721
     address internal treasuryAddress; // address into which we deposit minting fees
-    bool internal isSingleIssue; // whether the token is single issue (name based) or no (hash based)
     bool internal isPublicallyMintable; // whether anyone can mint tokens in this copy of the contract
     mapping(address => bool) internal allowedMinters; // addresses allowed to mint in this copy of the contract
     uint256 internal nextTokenId = 0; // the next token id to use (increases linearly)
@@ -58,12 +56,11 @@ contract WebaverseERC721 is ERC721 {
 
     /**
      * @dev Create this ERC721 contract
-     * @param name Name of the contract (default is "NFT")
+     * @param name Name of the contract (default is "ASSET")
      * @param symbol Symbol for the token (default is ???)
      * @param baseUri Base URI (example is http://)
-     * @param _erc20Contract ERC20 contract attached to fungible tokens
+     * @param _coinContract ERC20 contract attached to fungible tokens
      * @param _treasuryAddress Address of the treasury account
-     * @param _isSingleIssue Whether the token is single issue (name based) or no (hash based)
      * @param _isPublicallyMintable Whether anyone can mint tokens with this contract
      * I.E. collaborators and separate creatorship and ownership
      */
@@ -71,24 +68,22 @@ contract WebaverseERC721 is ERC721 {
         string memory name,
         string memory symbol,
         string memory baseUri,
-        WebaverseERC20 _erc20Contract,
+        Coin _coinContract,
         uint256 _mintFee,
         address _treasuryAddress,
-        bool _isSingleIssue,
         bool _isPublicallyMintable
     ) public ERC721(name, symbol) {
         _setBaseURI(baseUri);
-        erc20Contract = _erc20Contract;
+        coinContract = _coinContract;
         mintFee = _mintFee;
         treasuryAddress = _treasuryAddress;
-        isSingleIssue = _isSingleIssue;
         isPublicallyMintable = _isPublicallyMintable;
         allowedMinters[msg.sender] = true;
     }
 
     /**
      * @dev Set the price to mint
-     * @param _mintFee Minting fee, default is 10 FT
+     * @param _mintFee Minting fee, default is 10 COIN
      */
     function setMintFee(uint256 _mintFee) public {
         require(
@@ -100,7 +95,7 @@ contract WebaverseERC721 is ERC721 {
 
     /**
      * @dev Set the treasury address
-     * @param _treasuryAddress Account address of the treasurer
+     * @param _treasuryAddress Address of the treasurer
      */
     function setTreasuryAddress(address _treasuryAddress) public {
         require(
@@ -108,60 +103,6 @@ contract WebaverseERC721 is ERC721 {
             "must be set from treasury address"
         );
         treasuryAddress = _treasuryAddress;
-    }
-
-    /**
-     * @dev Get the balance of fungible tokens packed into this non-fungible token
-     * @param tokenId ID of the non-fungible ERC721 token
-     */
-    function getPackedBalance(uint256 tokenId) public view returns (uint256) {
-        return tokenIdToBalance[tokenId];
-    }
-
-    /**
-     * @dev Pack fungible tokens into this non-fungible token
-     * @param from Address of who is packing the token
-     * @param tokenId ID of the token
-     * @param amount Amount to pack
-     */
-    function pack(
-        address from,
-        uint256 tokenId,
-        uint256 amount
-    ) public {
-        require(_exists(tokenId), "token id does not exist");
-
-        tokenIdToBalance[tokenId] = SafeMath.add(
-            tokenIdToBalance[tokenId],
-            amount
-        );
-
-        require(
-            erc20Contract.transferFrom(from, address(this), amount),
-            "transfer failed"
-        );
-    }
-
-    /**
-     * @dev Unpack fungible tokens from this non-fungible token
-     * @param to Address of who is packing the token
-     * @param tokenId ID of the token
-     * @param amount Amount to unpack
-     */
-    function unpack(
-        address to,
-        uint256 tokenId,
-        uint256 amount
-    ) public {
-        require(ownerOf(tokenId) == msg.sender, "not your token");
-        require(tokenIdToBalance[tokenId] >= amount, "insufficient balance");
-
-        tokenIdToBalance[tokenId] = SafeMath.sub(
-            tokenIdToBalance[tokenId],
-            amount
-        );
-
-        require(erc20Contract.transfer(to, amount), "transfer failed");
     }
 
     /**
@@ -187,7 +128,6 @@ contract WebaverseERC721 is ERC721 {
         string memory description,
         uint256 count
     ) public {
-        require(!isSingleIssue, "wrong mint method called"); // Single issue tokens should use mintSingle
         require(
             isPublicallyMintable || isAllowedMinter(msg.sender),
             "not allowed to mint"
@@ -219,42 +159,7 @@ contract WebaverseERC721 is ERC721 {
         // Unless the mint free, transfer fungible tokens and attempt to pay the fee
         if (mintFee != 0) {
             require(
-                erc20Contract.transferFrom(
-                    msg.sender,
-                    treasuryAddress,
-                    mintFee
-                ),
-                "mint transfer failed"
-            );
-        }
-    }
-
-    /**
-     * @dev Mint one non-fungible tokens with this contract
-     * @param to Address of who is receiving the token on mint
-     * Example: 0x08E242bB06D85073e69222aF8273af419d19E4f6
-     * @param hash Hash of the file to mint
-     */
-    function mintSingle(address to, string memory hash) public {
-        require(isSingleIssue, "wrong mint method called");
-        require(
-            isPublicallyMintable || isAllowedMinter(msg.sender),
-            "not allowed to mint"
-        );
-        require(hashToTotalSupply[hash] == 0, "hash already exists");
-
-        nextTokenId = SafeMath.add(nextTokenId, 1);
-        uint256 tokenId = nextTokenId;
-        _mint(to, tokenId);
-        minters[tokenId] = to;
-
-        tokenIdToHash[tokenId] = hash;
-        hashToTotalSupply[hash] = 1;
-        hashToCollaborators[hash].push(to);
-
-        if (mintFee != 0) {
-            require(
-                erc20Contract.transferFrom(
+                coinContract.transferFrom(
                     msg.sender,
                     treasuryAddress,
                     mintFee
@@ -614,15 +519,9 @@ contract WebaverseERC721 is ERC721 {
         string memory hash;
         string memory name;
         string memory ext;
-        if (isSingleIssue) {
-            hash = getSingleMetadata(tokenId, "hash");
-            name = tokenIdToHash[tokenId];
-            ext = getSingleMetadata(tokenId, "ext");
-        } else {
-            hash = tokenIdToHash[tokenId];
-            name = getMetadata(hash, "name");
-            ext = getMetadata(hash, "ext");
-        }
+        hash = tokenIdToHash[tokenId];
+        name = getMetadata(hash, "name");
+        ext = getMetadata(hash, "ext");
 
         address minter = minters[tokenId];
         address owner = _exists(tokenId) ? ownerOf(tokenId) : address(0);
@@ -645,15 +544,10 @@ contract WebaverseERC721 is ERC721 {
         string memory hash;
         string memory name;
         string memory ext;
-        if (isSingleIssue) {
-            hash = getSingleMetadata(tokenId, "hash");
-            name = tokenIdToHash[tokenId];
-            ext = getSingleMetadata(tokenId, "ext");
-        } else {
-            hash = tokenIdToHash[tokenId];
-            name = getMetadata(hash, "name");
-            ext = getMetadata(hash, "ext");
-        }
+        hash = getSingleMetadata(tokenId, "hash");
+        name = tokenIdToHash[tokenId];
+        ext = getSingleMetadata(tokenId, "ext");
+
         address minter = minters[tokenId];
         uint256 balance = balanceOfHash(owner, hash);
         uint256 totalSupply = hashToTotalSupply[hash];

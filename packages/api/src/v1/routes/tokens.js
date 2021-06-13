@@ -203,15 +203,15 @@ async function mintTokens(
   const address = wallet.getAddressString();
 
   if (MINTING_FEE > 0) {
-    let allowance = await contracts["FT"].methods
-      .allowance(address, contracts["NFT"]._address)
+    let allowance = await contracts["COIN"].methods
+      .allowance(address, contracts["ASSET"]._address)
       .call();
     allowance = new web3.utils.BN(allowance, 0);
     if (allowance.lt(fullAmountD2.v)) {
       const result = await runSidechainTransaction(mnemonic)(
-        "FT",
+        "COIN",
         "approve",
-        contracts["NFT"]._address,
+        contracts["ASSET"]._address,
         fullAmount.v
       );
       status = result.status;
@@ -234,7 +234,7 @@ async function mintTokens(
     const { hash } = JSON.parse(Buffer.from(resHash, "utf8").toString("utf8"));
 
     const result = await runSidechainTransaction(mnemonic)(
-      "NFT",
+      "ASSET",
       "mint",
       address,
       hash,
@@ -248,14 +248,14 @@ async function mintTokens(
     if (privateData) {
       const encryptedData = encodeSecret(privateData);
       await runSidechainTransaction(mnemonic)(
-        "NFT",
+        "ASSET",
         "setMetadata",
         hash,
         unlockableMetadataKey,
         encryptedData
       );
       await runSidechainTransaction(mnemonic)(
-        "NFT",
+        "ASSET",
         "setMetadata",
         hash,
         encryptedMetadataKey,
@@ -497,18 +497,18 @@ async function deleteToken(req, res) {
 
     const address = token.owner.address;
 
-    const currentHash = await contracts["mainnetsidechain"].NFT.methods
+    const currentHash = await contracts["mainnetsidechain"].ASSET.methods
       .getHash(tokenId)
       .call();
     const randomHash = Math.random().toString(36);
     await runSidechainTransaction(MAINNET_MNEMONIC)(
-      "NFT",
+      "ASSET",
       "updateHash",
       currentHash,
       randomHash
     );
     const result = await runSidechainTransaction(MAINNET_MNEMONIC)(
-      "NFT",
+      "ASSET",
       "transferFrom",
       address,
       burnAddress,
@@ -531,12 +531,12 @@ async function sendToken(req, res) {
     let error = null;
     for (let i = 0; i < quantity; i++) {
       try {
-        const isApproved = await contracts.NFT.methods
+        const isApproved = await contracts.ASSET.methods
           .isApprovedForAll(fromUserAddress, contracts["Trade"]._address)
           .call();
         if (!isApproved) {
           await runSidechainTransaction(MAINNET_MNEMONIC)(
-            "NFT",
+            "ASSET",
             "setApprovalForAll",
             contracts["Trade"]._address,
             true
@@ -544,7 +544,7 @@ async function sendToken(req, res) {
         }
 
         const result = await runSidechainTransaction(MAINNET_MNEMONIC)(
-          "NFT",
+          "ASSET",
           "transferFrom",
           fromUserAddress,
           toUserAddress,
@@ -611,10 +611,10 @@ async function getPrivateData(req, res) {
       error: "Failed to unlock private token data",
     });
 
-  const hash = await contracts.mainnetsidechain.NFT.methods.getHash(id).call();
+  const hash = await contracts.mainnetsidechain.ASSET.methods.getHash(id).call();
   const isCollaborator = await areAddressesCollaborator(addresses, hash, id);
   if (isCollaborator) {
-    let value = await contracts.mainnetsidechain.NFT.methods
+    let value = await contracts.mainnetsidechain.ASSET.methods
       .getMetadata(hash, key)
       .call();
     value = jsonParse(value);
@@ -681,11 +681,11 @@ async function updatePublicAsset(req, res, { contracts }) {
           pinataOptions
         );
         if (IpfsHash) {
-          const currentHash = await contracts["mainnetsidechain"].NFT.methods
+          const currentHash = await contracts["mainnetsidechain"].ASSET.methods
             .getHash(tokenId)
             .call();
           await runSidechainTransaction(MAINNET_MNEMONIC)(
-            "NFT",
+            "ASSET",
             "updateHash",
             currentHash,
             IpfsHash
@@ -709,11 +709,11 @@ async function updatePublicAsset(req, res, { contracts }) {
             if (hash) {
               const currentHash = await contracts[
                 "mainnetsidechain"
-              ].NFT.methods
+              ].ASSET.methods
                 .getHash(tokenId)
                 .call();
               await runSidechainTransaction(MAINNET_MNEMONIC)(
-                "NFT",
+                "ASSET",
                 "updateHash",
                 currentHash,
                 hash
@@ -736,11 +736,11 @@ async function updatePublicAsset(req, res, { contracts }) {
         file.pipe(req);
       }
     } else {
-      const currentHash = await contracts["mainnetsidechain"].NFT.methods
+      const currentHash = await contracts["mainnetsidechain"].ASSET.methods
         .getHash(tokenId)
         .call();
       await runSidechainTransaction(MAINNET_MNEMONIC)(
-        "NFT",
+        "ASSET",
         "updateHash",
         currentHash,
         resourceHash
@@ -763,8 +763,8 @@ async function updatePublicAsset(req, res, { contracts }) {
 //         // Set the new metadata
 
 //         // const encryptedData = encodeSecret(privateData);
-//         // await runSidechainTransaction(mnemonic)('NFT', 'setMetadata', token.hash, unlockableMetadataKey, encryptedData);
-//         // await runSidechainTransaction(mnemonic)('NFT', 'setMetadata', token.hash, encryptedMetadataKey, encryptedData);
+//         // await runSidechainTransaction(mnemonic)('ASSET', 'setMetadata', token.hash, unlockableMetadataKey, encryptedData);
+//         // await runSidechainTransaction(mnemonic)('ASSET', 'setMetadata', token.hash, encryptedMetadataKey, encryptedData);
 
 //     }
 //     try {

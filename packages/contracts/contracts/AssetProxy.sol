@@ -2,16 +2,16 @@
 pragma solidity ^0.6.0;
 pragma experimental ABIEncoderV2;
 
-import "./WebaverseERC721.sol";
+import "./Asset.sol";
 
 /** @title ERC721 Proxy contract.
- * @dev Manages ERC721 tokens using the Webaverse signing oracle for validation and cross-chain transfer
+ * @dev Manages ERC721 tokens using the chain owner as a signing oracle for validation and cross-chain transfer
  */
 /* is IERC721Receiver */
-contract WebaverseERC721Proxy {
+contract AssetProxy {
     address internal signer; // signer oracle address
     uint256 internal chainId; // unique chain id
-    WebaverseERC721 internal parent; // managed ERC721 contract
+    Asset internal parent; // managed ERC721 contract
     mapping(uint256 => bool) internal deposits; // whether the token has been deposited in this contract
     mapping(bytes32 => bool) internal usedWithdrawHashes; // deposit hashes that have been used up (replay protection)
 
@@ -39,7 +39,7 @@ contract WebaverseERC721Proxy {
     ) public {
         signer = signerAddress;
         chainId = _chainId;
-        parent = WebaverseERC721(parentAddress);
+        parent = Asset(parentAddress);
     }
 
     /** @dev Set the address for the signer oracle
@@ -56,9 +56,9 @@ contract WebaverseERC721Proxy {
     /** @dev Set the parent contract that this proxy manages
      * @param newParent Address of parent contract
      */
-    function setERC721Parent(address newParent) public {
+    function setAssetParent(address newParent) public {
         require(msg.sender == signer, "must be signer");
-        parent = WebaverseERC721(newParent);
+        parent = Asset(newParent);
     }
 
     /** @dev Withdraw an ERC721 token to an address
