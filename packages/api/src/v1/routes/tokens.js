@@ -309,9 +309,6 @@ async function createToken(req, res, { web3, contracts }) {
           this.push(null);
         },
       });
-
-      // Pinata API keys are valid, so this is probably what the user wants
-      if (pinata) {
         const { IpfsHash } = pinata.pinFileToIPFS(
           readableStream,
           pinataOptions
@@ -323,36 +320,6 @@ async function createToken(req, res, { web3, contracts }) {
             status: ResponseStatus.Error,
             error: "Error pinning to Pinata service, hash was not returned",
           });
-      } else {
-        // Upload to our own IPFS node
-        const req = http.request(IPFS_HOST, { method: "POST" }, (res) => {
-          const bufferString = [];
-          res.on("data", (data) => {
-            bufferString.push(data);
-          });
-          res.on("end", async () => {
-            const buffer = Buffer.concat(bufferString);
-            const string = buffer.toString("utf8");
-            const { hash } = JSON.parse(string);
-            if (hash)
-              mintTokens(hash, mnemonic, quantity, web3, contracts, res);
-            else
-              return res.json({
-                status: ResponseStatus.Error,
-                error: "Error getting hash back from IPFS node",
-              });
-          });
-          res.on("error", (err) => {
-            console.warn(err.stack);
-            return res.json({ status: ResponseStatus.Error, error: err.stack });
-          });
-        });
-        req.on("error", (err) => {
-          console.warn(err.stack);
-          res.json({ status: ResponseStatus.Error, error: err.stack });
-        });
-        file.pipe(req);
-      }
     } else {
       mintTokens(
         resourceHash,
