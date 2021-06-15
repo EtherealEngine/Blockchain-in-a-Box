@@ -1,4 +1,4 @@
-FROM alpine:3.5
+FROM alpine:3.13
 
 RUN  apk add --no-cache python ca-certificates curl && \
   python -m ensurepip && \
