@@ -130,7 +130,6 @@ async function getPastEvents({
 }
 
 async function getBlockchain() {
-  await loadPromise;
   return {
     addresses,
     abis,
