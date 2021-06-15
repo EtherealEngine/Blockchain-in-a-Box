@@ -3,16 +3,16 @@ pragma solidity ^0.6.0;
 
 import "./standard/ERC20Capped.sol";
 
-/** @title Extension of {ERC20} that adds a cap to the supply of tokens. */
+/** @title Extension of {ERC20} that adds a cap to the supply of assets. */
 contract Coin is ERC20Capped {
-    mapping(address => bool) internal allowedMinters; // whether anyone can mint tokens (should be sidechain only)
+    mapping(address => bool) internal allowedMinters; // whether anyone can mint assets (should be sidechain only)
     uint256 internal numAllowedMinters;
 
     /**
-     * @dev Create a new fungible token
-     * @param name Name of the token (default is COIN)
-     * @param symbol Token identifier (default is COIN)
-     * @param cap Sets the token market cap. This value is immutable, it can only be
+     * @dev Create a new fungible asset
+     * @param name Name of the asset (default is COIN)
+     * @param symbol Asset identifier (default is COIN)
+     * @param cap Sets the asset market cap. This value is immutable, it can only be
      * set once during construction.
      * Default cap: 2147483648000000000000000000 or (2**31) + '000000000000000000'
      */
@@ -26,7 +26,7 @@ contract Coin is ERC20Capped {
     }
 
     /**
-     * @dev Test if an address is allowed to mint ERC20 tokens
+     * @dev Test if an address is allowed to mint ERC20 assets
      * @param a address to test
      * @return true if address is allowed to mint
      */
@@ -41,16 +41,16 @@ contract Coin is ERC20Capped {
     }
 
     /**
-     * @dev Mint ERC20 tokens
-     * @param account Tokens created for this account
-     * @param amount Number of tokens to mint
+     * @dev Mint ERC20 assets
+     * @param account Assets created for this account
+     * @param amount Number of assets to mint
      */
     function mint(address account, uint256 amount) public onlyMinter() {
         _mint(account, amount);
     }
 
     /**
-     * @dev Add an account to the list of accounts allowed to create ERC20 tokens
+     * @dev Add an account to the list of accounts allowed to create ERC20 assets
      * @param a address to whitelist
      */
     function addAllowedMinter(address a) public onlyMinter() {
@@ -60,7 +60,7 @@ contract Coin is ERC20Capped {
     }
 
     /**
-     * @dev Remove an account from the list of accounts allowed to create ERC20 tokens
+     * @dev Remove an account from the list of accounts allowed to create ERC20 assets
      * @param a address to remove from whitelist
      */
     function removeAllowedMinter(address a) public onlyMinter() {

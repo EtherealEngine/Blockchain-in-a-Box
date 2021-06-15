@@ -5,24 +5,24 @@ pragma experimental ABIEncoderV2;
 import "./Asset.sol";
 
 /** @title ERC721 Proxy contract.
- * @dev Manages ERC721 tokens using the chain owner as a signing oracle for validation and cross-chain transfer
+ * @dev Manages ERC721 assets using the chain owner as a signing oracle for validation and cross-chain transfer
  */
 /* is IERC721Receiver */
 contract AssetProxy {
     address internal signer; // signer oracle address
     uint256 internal chainId; // unique chain id
     Asset internal parent; // managed ERC721 contract
-    mapping(uint256 => bool) internal deposits; // whether the token has been deposited in this contract
+    mapping(uint256 => bool) internal deposits; // whether the asset has been deposited in this contract
     mapping(bytes32 => bool) internal usedWithdrawHashes; // deposit hashes that have been used up (replay protection)
 
     bytes internal prefix = "\x19Ethereum Signed Message:\n32";
 
     event Withdrew(
         address indexed from,
-        uint256 indexed tokenId,
+        uint256 indexed assetId,
         uint256 indexed timestamp
-    ); // logs the fact that we withdrew an oracle-signed token
-    event Deposited(address indexed to, uint256 indexed tokenId); // used by the oracle when signing
+    ); // logs the fact that we withdrew an oracle-signed asset
+    event Deposited(address indexed to, uint256 indexed assetId); // used by the oracle when signing
 
     /**
      * @dev Construct the proxy with a managed parent and chain ID
@@ -61,10 +61,10 @@ contract AssetProxy {
         parent = Asset(newParent);
     }
 
-    /** @dev Withdraw an ERC721 token to an address
+    /** @dev Withdraw an ERC721 asset to an address
      * @param to Address to withdraw to
      * Example is 0x08E242bB06D85073e69222aF8273af419d19E4f6
-     * @param tokenId Token ID to withdraw
+     * @param assetId Asset ID to withdraw
      * @param timestamp Timestamp of the transaction
      * @param r ECDSA output
      * Example is 0xc336b0bb5cac4584d79e77b1680ab789171ebc95f44f68bb1cc0a7b1174058ad
@@ -75,7 +75,7 @@ contract AssetProxy {
      */
     function withdraw(
         address to,
-        uint256 tokenId,
+        uint256 assetId,
         uint256 timestamp,
         bytes32 r,
         bytes32 s,
@@ -85,7 +85,7 @@ contract AssetProxy {
             keccak256(
                 abi.encodePacked(
                     prefix,
-                    keccak256(abi.encodePacked(to, tokenId, timestamp, chainId))
+                    keccak256(abi.encodePacked(to, assetId, timestamp, chainId))
                 )
             );
         address contractAddress = address(this);
@@ -96,51 +96,51 @@ contract AssetProxy {
         require(!usedWithdrawHashes[prefixedHash], "hash already used");
         usedWithdrawHashes[prefixedHash] = true;
 
-        bool oldDeposits = deposits[tokenId];
+        bool oldDeposits = deposits[assetId];
 
-        deposits[tokenId] = false;
+        deposits[assetId] = false;
 
-        emit Withdrew(to, tokenId, timestamp);
+        emit Withdrew(to, assetId, timestamp);
 
         if (!oldDeposits) {
-            parent.mintTokenId(contractAddress, tokenId);
+            parent.mintAssetId(contractAddress, assetId);
         }
 
-        parent.transferFrom(contractAddress, to, tokenId);
+        parent.transferFrom(contractAddress, to, assetId);
     }
 
-    /** @dev Deposit an ERC721 token to an address
+    /** @dev Deposit an ERC721 asset to an address
      * @param to Address to deposit to
      * Example is 0x08E242bB06D85073e69222aF8273af419d19E4f6
-     * @param tokenId Token ID to withdraw
+     * @param assetId Asset ID to withdraw
      */
-    function deposit(address to, uint256 tokenId) public {
-        deposits[tokenId] = true;
+    function deposit(address to, uint256 assetId) public {
+        deposits[assetId] = true;
 
-        emit Deposited(to, tokenId);
+        emit Deposited(to, assetId);
 
         address from = msg.sender;
         address contractAddress = address(this);
-        parent.transferFrom(from, contractAddress, tokenId);
+        parent.transferFrom(from, contractAddress, assetId);
     }
 
     /** @dev Check if this nonce has already been used on a withdraw (to prevent replay attack)
      * @param to Address to deposit to
      * Example is 0x08E242bB06D85073e69222aF8273af419d19E4f6
-     * @param tokenId Token ID to withdraw
+     * @param assetId Asset ID to withdraw
      * @param timestamp Timestamp of the transaction
      * @return Returns true if the nonce has already been used to sign a transaction
      */
     function withdrawNonceUsed(
         address to,
-        uint256 tokenId,
+        uint256 assetId,
         uint256 timestamp
     ) public view returns (bool) {
         bytes32 prefixedHash =
             keccak256(
                 abi.encodePacked(
                     prefix,
-                    keccak256(abi.encodePacked(to, tokenId, timestamp, chainId))
+                    keccak256(abi.encodePacked(to, assetId, timestamp, chainId))
                 )
             );
         return usedWithdrawHashes[prefixedHash];

@@ -28,7 +28,7 @@ const {
 const { ResponseStatus } = require("../enums.js");
 const {
   runSidechainTransaction,
-} = require("@blockchain-in-a-box/common/src/tokens.js");
+} = require("@blockchain-in-a-box/common/src/assets.js");
 const {
   PRODUCTION,
   DEVELOPMENT,
@@ -86,12 +86,12 @@ let web3, contracts;
 })();
 
 // Takes an account as input
-async function listTokens(req, res, web3) {
+async function listAssets(req, res, web3) {
   const { address, mainnetAddress } = req.params;
 
   if (DEVELOPMENT) setCorsHeaders(res);
   try {
-    const [mainnetTokens, sidechainTokens] = await Promise.all([
+    const [mainnetAssets, sidechainAssets] = await Promise.all([
       (async () => {
         if (!mainnetAddress) return [];
         const recoveredAddress = await web3[network].eth.accounts.recover(
@@ -144,21 +144,21 @@ async function listTokens(req, res, web3) {
         return (o && o.Items) || [];
       })(),
     ]);
-    const tokens = sidechainTokens
-      .concat(mainnetTokens)
+    const assets = sidechainAssets
+      .concat(mainnetAssets)
       .sort((a, b) => a.id - b.id)
-      .filter((token, i) => {
+      .filter((asset, i) => {
         // filter unique hashes
         if (
-          token === "0" ||
-          (token.properties.hash === "" && token.owner.address === zeroAddress)
+          asset === "0" ||
+          (asset.properties.hash === "" && asset.owner.address === zeroAddress)
         )
           return false;
 
         for (let j = 0; j < i; j++) {
           if (
-            tokens[j].properties.hash === token.properties.hash &&
-            token.properties.hash !== ""
+            assets[j].properties.hash === asset.properties.hash &&
+            asset.properties.hash !== ""
           )
             return false;
         }
@@ -166,16 +166,16 @@ async function listTokens(req, res, web3) {
       });
     return res.json({
       status: ResponseStatus.Success,
-      tokens: JSON.stringify(tokens),
+      assets: JSON.stringify(assets),
       error: null,
     });
   } catch (error) {
-    return res.json({ status: ResponseStatus.Error, tokens: null, error });
+    return res.json({ status: ResponseStatus.Error, assets: null, error });
   }
 }
 
-// Called by create token on successful resource upload
-async function mintTokens(
+// Called by create asset on successful resource upload
+async function mintAssets(
   resHash,
   mnemonic,
   quantity,
@@ -184,7 +184,7 @@ async function mintTokens(
   contracts,
   res
 ) {
-  let tokenIds, status;
+  let assetIds, status;
   const fullAmount = {
     t: "uint256",
     v: new web3.utils.BN(1e9)
@@ -263,16 +263,16 @@ async function mintTokens(
       );
     }
 
-    const tokenId = new web3.utils.BN(
+    const assetId = new web3.utils.BN(
       result.logs[0].topics[3].slice(2),
       16
     ).toNumber();
-    tokenIds = [tokenId, tokenId + quantity - 1];
+    assetIds = [assetId, assetId + quantity - 1];
   }
-  return res.json({ status: ResponseStatus.Success, tokenIds, error: null });
+  return res.json({ status: ResponseStatus.Success, assetIds, error: null });
 }
 
-async function createToken(req, res, { web3, contracts }) {
+async function createAsset(req, res, { web3, contracts }) {
   const { mnemonic, quantity, privateData } = req.body;
 
   try {
@@ -314,14 +314,14 @@ async function createToken(req, res, { web3, contracts }) {
           pinataOptions
         );
         if (IpfsHash)
-          mintTokens(IpfsHash, mnemonic, quantity, web3, contracts, res);
+          mintAssets(IpfsHash, mnemonic, quantity, web3, contracts, res);
         else
           res.json({
             status: ResponseStatus.Error,
             error: "Error pinning to Pinata service, hash was not returned",
           });
     } else {
-      mintTokens(
+      mintAssets(
         resourceHash,
         mnemonic,
         quantity,
@@ -333,40 +333,40 @@ async function createToken(req, res, { web3, contracts }) {
     }
   } catch (error) {
     console.warn(error.stack);
-    return res.json({ status: ResponseStatus.Error, tokenIds: [], error });
+    return res.json({ status: ResponseStatus.Error, assetIds: [], error });
   }
 }
 
-async function readToken(req, res) {
-  const { tokenId } = req.params;
-  let o = await getRedisItem(tokenId, redisPrefixes.mainnetSidechainAsset);
-  let token = o.Item;
+async function readAsset(req, res) {
+  const { assetId } = req.params;
+  let o = await getRedisItem(assetId, redisPrefixes.mainnetSidechainAsset);
+  let asset = o.Item;
 
   if (DEVELOPMENT) setCorsHeaders(res);
-  if (token) {
-    return res.json({ status: ResponseStatus.Success, token, error: null });
+  if (asset) {
+    return res.json({ status: ResponseStatus.Success, asset, error: null });
   } else {
     return res.json({
       status: ResponseStatus.Error,
-      token: null,
-      error: "The token could not be found",
+      asset: null,
+      error: "The asset could not be found",
     });
   }
 }
 
-// Same as read token, but return unlockable in plaintext
-async function readTokenWithUnlockable(req, res) {
-  const { tokenId } = req.params;
-  let o = await getRedisItem(tokenId, redisPrefixes.mainnetSidechainAsset);
-  let token = o.Item;
+// Same as read asset, but return unlockable in plaintext
+async function readAssetWithUnlockable(req, res) {
+  const { assetId } = req.params;
+  let o = await getRedisItem(assetId, redisPrefixes.mainnetSidechainAsset);
+  let asset = o.Item;
 
   if (DEVELOPMENT) setCorsHeaders(res);
-  if (token) {
+  if (asset) {
     if (
-      token[unlockableMetadataKey] !== undefined &&
-      token[unlockableMetadataKey] !== ""
+      asset[unlockableMetadataKey] !== undefined &&
+      asset[unlockableMetadataKey] !== ""
     ) {
-      let value = token[unlockableMetadataKey];
+      let value = asset[unlockableMetadataKey];
       value = jsonParse(value);
       if (value !== null) {
         let { ciphertext, tag } = value;
@@ -374,27 +374,27 @@ async function readTokenWithUnlockable(req, res) {
         tag = Buffer.from(tag, "base64");
         value = decodeSecret(ENCRYPTION_MNEMONIC, { ciphertext, tag });
       }
-      token[unlockableMetadataKey] = value;
+      asset[unlockableMetadataKey] = value;
     }
-    return res.json({ status: ResponseStatus.Success, token, error: null });
+    return res.json({ status: ResponseStatus.Success, asset, error: null });
   } else {
     return res.json({
       status: ResponseStatus.Error,
-      token: null,
-      error: "The token could not be found",
+      asset: null,
+      error: "The asset could not be found",
     });
   }
 }
 
 // async function readUnlockable(req, res) {
-//     const {tokenId} = req.params;
-//     let o = await getRedisItem(tokenId, redisPrefixes.mainnetSidechainAsset);
-//     let token = o.Item;
+//     const {assetId} = req.params;
+//     let o = await getRedisItem(assetId, redisPrefixes.mainnetSidechainAsset);
+//     let asset = o.Item;
 //     let value = "";
 //     if (DEVELOPMENT) setCorsHeaders(res);
-//     if (token) {
-//         if(token[unlockableMetadataKey] !== undefined && token[unlockableMetadataKey] !== ""){
-//             value = token[unlockableMetadataKey];
+//     if (asset) {
+//         if(asset[unlockableMetadataKey] !== undefined && asset[unlockableMetadataKey] !== ""){
+//             value = asset[unlockableMetadataKey];
 //             value = jsonParse(value);
 //             if (value !== null) {
 //               let {ciphertext, tag} = value;
@@ -402,51 +402,51 @@ async function readTokenWithUnlockable(req, res) {
 //               tag = Buffer.from(tag, 'base64');
 //               value = decodeSecret(ENCRYPTION_MNEMONIC, {ciphertext, tag});
 //             }
-//             token[unlockableMetadataKey] = value;
+//             asset[unlockableMetadataKey] = value;
 //             return res.json({status: ResponseStatus.Success, value, error: null})
 //         } else {
-//             return res.json({status: ResponseStatus.Error, value: null, error: "The token could not be unlocked"})
+//             return res.json({status: ResponseStatus.Error, value: null, error: "The asset could not be unlocked"})
 //         }
 //     } else {
-//         return res.json({status: ResponseStatus.Error, value: null, error: "The token could not be found"})
+//         return res.json({status: ResponseStatus.Error, value: null, error: "The asset could not be found"})
 //     }
 // }
 
 // async function readEncryptedData(req, res) {
-//     const {tokenId} = req.params;
-//     let o = await getRedisItem(tokenId, redisPrefixes.mainnetSidechainAsset);
-//     let token = o.Item;
+//     const {assetId} = req.params;
+//     let o = await getRedisItem(assetId, redisPrefixes.mainnetSidechainAsset);
+//     let asset = o.Item;
 //     if (DEVELOPMENT) setCorsHeaders(res);
-//     if (token) {
-//         if(token[encryptedMetadataKey] !== undefined && token[encryptedMetadataKey] !== ""){
-//             const url = token[encryptedMetadataKey];
+//     if (asset) {
+//         if(asset[encryptedMetadataKey] !== undefined && asset[encryptedMetadataKey] !== ""){
+//             const url = asset[encryptedMetadataKey];
 //             await fetch(url).then(data => res.send(data));
 //         } else {
-//             return res.json({status: ResponseStatus.Error, value: null, error: "The token does not appear to have encrypted data"})
+//             return res.json({status: ResponseStatus.Error, value: null, error: "The asset does not appear to have encrypted data"})
 //         }
 //     } else {
-//         return res.json({status: ResponseStatus.Error, value: null, error: "The token could not be found"})
+//         return res.json({status: ResponseStatus.Error, value: null, error: "The asset could not be found"})
 //     }
 // }
 
-async function readTokenRange(req, res) {
+async function readAssetRange(req, res) {
   if (DEVELOPMENT) setCorsHeaders(res);
   try {
-    const { tokenStartId, tokenEndId } = req.params;
+    const { assetStartId, assetEndId } = req.params;
 
     if (
-      tokenStartId <= 0 ||
-      tokenEndId < tokenStartId ||
-      tokenEndId - tokenStartId > 100
+      assetStartId <= 0 ||
+      assetEndId < assetStartId ||
+      assetEndId - assetStartId > 100
     )
       return res.json({
         status: ResponseStatus.Error,
-        error: "Invalid range for tokens",
+        error: "Invalid range for assets",
       });
 
     const promise = makePromise();
     const args =
-      `${assetIndexName} * filter id ${tokenStartId} ${tokenEndId} LIMIT 0 1000000`
+      `${assetIndexName} * filter id ${assetStartId} ${assetEndId} LIMIT 0 1000000`
         .split(" ")
         .concat([
           (err, result) => {
@@ -463,42 +463,42 @@ async function readTokenRange(req, res) {
     redisClient.ft_search.apply(redisClient, args);
     const o = await promise;
 
-    let tokens = o.Items.filter((token) => token !== null)
+    let assets = o.Items.filter((asset) => asset !== null)
       .sort((a, b) => a.id - b.id)
-      .filter((token, i) => {
+      .filter((asset, i) => {
         // filter unique hashes
 
-        if (token.properties.hash === "" && token.owner.address === zeroAddress)
+        if (asset.properties.hash === "" && asset.owner.address === zeroAddress)
           return false;
 
         for (let j = 0; j < i; j++)
           if (
-            tokens[j].properties.hash === token.properties.hash &&
-            token.properties.hash !== ""
+            assets[j].properties.hash === asset.properties.hash &&
+            asset.properties.hash !== ""
           )
             return false;
 
         return true;
       });
 
-    return res.json({ status: ResponseStatus.Success, tokens, error: null });
+    return res.json({ status: ResponseStatus.Success, assets, error: null });
   } catch (error) {
-    return res.json({ status: ResponseStatus.Error, tokens: [], error });
+    return res.json({ status: ResponseStatus.Error, assets: [], error });
   }
 }
 
 // TODO: Try to unpin from pinata if we are using pinata
-async function deleteToken(req, res) {
+async function deleteAsset(req, res) {
   try {
-    const { tokenId } = req.body;
+    const { assetId } = req.body;
 
-    let o = await getRedisItem(tokenId, redisPrefixes.mainnetSidechainAsset);
-    let token = o.Item;
+    let o = await getRedisItem(assetId, redisPrefixes.mainnetSidechainAsset);
+    let asset = o.Item;
 
-    const address = token.owner.address;
+    const address = asset.owner.address;
 
     const currentHash = await contracts["mainnetsidechain"].ASSET.methods
-      .getHash(tokenId)
+      .getHash(assetId)
       .call();
     const randomHash = Math.random().toString(36);
     await runSidechainTransaction(MAINNET_MNEMONIC)(
@@ -512,7 +512,7 @@ async function deleteToken(req, res) {
       "transferFrom",
       address,
       burnAddress,
-      tokenId
+      assetId
     );
 
     if (result) console.log("Result of delete transaction:", result);
@@ -522,9 +522,9 @@ async function deleteToken(req, res) {
   }
 }
 
-async function sendToken(req, res) {
+async function sendAsset(req, res) {
   try {
-    const { fromUserAddress, toUserAddress, tokenId } = req.body;
+    const { fromUserAddress, toUserAddress, assetId } = req.body;
     const quantity = req.body.quantity ?? 1;
 
     let status = true;
@@ -548,7 +548,7 @@ async function sendToken(req, res) {
           "transferFrom",
           fromUserAddress,
           toUserAddress,
-          tokenId
+          assetId
         );
         status = status && result.status;
       } catch (err) {
@@ -562,7 +562,7 @@ async function sendToken(req, res) {
     if (status) {
       return res.json({
         status: ResponseStatus.Success,
-        message: "Transferred " + tokenId + " to " + toUserAddress,
+        message: "Transferred " + assetId + " to " + toUserAddress,
         error: null,
       });
     } else {
@@ -575,7 +575,7 @@ async function sendToken(req, res) {
   } catch (error) {
     return res.json({
       status: ResponseStatus.Error,
-      message: "Error sending token",
+      message: "Error sending asset",
       error: error,
     });
   }
@@ -608,7 +608,7 @@ async function getPrivateData(req, res) {
   if (!unlockSuccessful)
     return res.json({
       status: ResponseStatus.error,
-      error: "Failed to unlock private token data",
+      error: "Failed to unlock private asset data",
     });
 
   const hash = await contracts.mainnetsidechain.ASSET.methods.getHash(id).call();
@@ -640,7 +640,7 @@ async function getPrivateData(req, res) {
 
 // TODO: Try to unpin from pinata if we are using pinata and already have file
 async function updatePublicAsset(req, res, { contracts }) {
-  const { mnemonic, tokenId, resourceHash } = req.body;
+  const { mnemonic, assetId, resourceHash } = req.body;
   const file = req.files && req.files[0];
   try {
     if (!bip39.validateMnemonic(mnemonic)) {
@@ -682,7 +682,7 @@ async function updatePublicAsset(req, res, { contracts }) {
         );
         if (IpfsHash) {
           const currentHash = await contracts["mainnetsidechain"].ASSET.methods
-            .getHash(tokenId)
+            .getHash(assetId)
             .call();
           await runSidechainTransaction(MAINNET_MNEMONIC)(
             "ASSET",
@@ -710,7 +710,7 @@ async function updatePublicAsset(req, res, { contracts }) {
               const currentHash = await contracts[
                 "mainnetsidechain"
               ].ASSET.methods
-                .getHash(tokenId)
+                .getHash(assetId)
                 .call();
               await runSidechainTransaction(MAINNET_MNEMONIC)(
                 "ASSET",
@@ -737,7 +737,7 @@ async function updatePublicAsset(req, res, { contracts }) {
       }
     } else {
       const currentHash = await contracts["mainnetsidechain"].ASSET.methods
-        .getHash(tokenId)
+        .getHash(assetId)
         .call();
       await runSidechainTransaction(MAINNET_MNEMONIC)(
         "ASSET",
@@ -748,29 +748,29 @@ async function updatePublicAsset(req, res, { contracts }) {
     }
   } catch (error) {
     console.warn(error.stack);
-    return res.json({ status: ResponseStatus.Error, tokenIds: [], error });
+    return res.json({ status: ResponseStatus.Error, assetIds: [], error });
   }
 }
 
 // // TODO: Try to unpin from pinata if we are using pinata
 // async function updatePrivateData(req, res, {contracts}) {
-//     async function updateHashForKeys(token, privateDataHash){
+//     async function updateHashForKeys(asset, privateDataHash){
 //         // TODO:
 //         // First, check if it already has this private data
-//         // if(token.privateData)
+//         // if(asset.privateData)
 //         // If yes, check if pinata is true -- if it is, unpin the hash
 //         // Else, unpin the hash for local node
 //         // Set the new metadata
 
 //         // const encryptedData = encodeSecret(privateData);
-//         // await runSidechainTransaction(mnemonic)('ASSET', 'setMetadata', token.hash, unlockableMetadataKey, encryptedData);
-//         // await runSidechainTransaction(mnemonic)('ASSET', 'setMetadata', token.hash, encryptedMetadataKey, encryptedData);
+//         // await runSidechainTransaction(mnemonic)('ASSET', 'setMetadata', asset.hash, unlockableMetadataKey, encryptedData);
+//         // await runSidechainTransaction(mnemonic)('ASSET', 'setMetadata', asset.hash, encryptedMetadataKey, encryptedData);
 
 //     }
 //     try {
-//     const {mnemonic, tokenId, resourceHash, privateData} = req.body;
-//     let o = await getRedisItem(tokenId, redisPrefixes.mainnetSidechainAsset);
-//     let token = o.Item;
+//     const {mnemonic, assetId, resourceHash, privateData} = req.body;
+//     let o = await getRedisItem(assetId, redisPrefixes.mainnetSidechainAsset);
+//     let asset = o.Item;
 //     const file = req.files && req.files[0];
 //         if (!bip39.validateMnemonic(mnemonic)) {
 //             return res.json({status: ResponseStatus.Error, error: "Invalid mnemonic"});
@@ -798,7 +798,7 @@ async function updatePublicAsset(req, res, { contracts }) {
 //                 // TODO: Try to unpin existing pinata hash
 //                 const {IpfsHash} = pinata.pinFileToIPFS(readableStream, pinataOptions);
 //                 if (IpfsHash){
-//                     updateHashForKeys(token, IpfsHash);
+//                     updateHashForKeys(asset, IpfsHash);
 //                 }
 //                 else res.json({status: ResponseStatus.Error, error: "Error pinning to Pinata service, hash was not returned"});
 //             } else {
@@ -813,7 +813,7 @@ async function updatePublicAsset(req, res, { contracts }) {
 //                         const string = buffer.toString('utf8');
 //                         const {hash} = JSON.parse(string);
 //                         if (hash){
-//                             updateHashForKeys(token, hash);
+//                             updateHashForKeys(asset, hash);
 //                         }
 //                         else return res.json({status: ResponseStatus.Error, error: "Error getting hash back from IPFS node"});
 //                     });
@@ -829,23 +829,23 @@ async function updatePublicAsset(req, res, { contracts }) {
 //                 file.pipe(req);
 //             }
 //         } else {
-//             updateHashForKeys(token, resourceHash);
+//             updateHashForKeys(asset, resourceHash);
 //         }
 //     } catch (error) {
 //         console.warn(error.stack);
-//         return res.json({status: ResponseStatus.Error, tokenIds: [], error});
+//         return res.json({status: ResponseStatus.Error, assetIds: [], error});
 //     }
 // }
 
 module.exports = {
-  listTokens,
-  createToken,
+  listAssets,
+  createAsset,
   updatePublicAsset,
-  readToken,
-  readTokenWithUnlockable,
-  readTokenRange,
-  deleteToken,
-  sendToken,
+  readAsset,
+  readAssetWithUnlockable,
+  readAssetRange,
+  deleteAsset,
+  sendAsset,
   getPrivateData,
   signTransfer,
   // readEncryptedData

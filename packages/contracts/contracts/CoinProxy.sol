@@ -6,7 +6,7 @@ import "./Coin.sol";
 import "./standard/IERC721Receiver.sol";
 
 /** @title ERC20 Proxy contract.
- * @dev Manages ERC20 tokens using the chain owner as a signing oracle for validation and cross-chain transfer
+ * @dev Manages ERC20 assets using the chain owner as a signing oracle for validation and cross-chain transfer
  */
 contract CoinProxy {
     address internal signer; // signer oracle address
@@ -35,7 +35,7 @@ contract CoinProxy {
         parent = Coin(parentAddress);
     }
 
-    /** @dev Log the fact that we withdrew oracle-signed fungible tokens
+    /** @dev Log the fact that we withdrew oracle-signed fungible assets
      * @param from Address withdrawn from
      * @param amount Amount to withdraw
      * @param timestamp Time of the transaction withdrawl
@@ -71,7 +71,7 @@ contract CoinProxy {
         parent = Coin(newParent);
     }
 
-    /** @dev Withdraw ERC20 tokens to an address
+    /** @dev Withdraw ERC20 assets to an address
      * @param to Address to withdraw to
      * Example is 0x08E242bB06D85073e69222aF8273af419d19E4f6
      * @param amount Amount to withdraw
@@ -102,7 +102,7 @@ contract CoinProxy {
         require(!usedWithdrawHashes[prefixedHash], "hash already used"); // Check if this transaction has been used (to prevent replay attacks)
         usedWithdrawHashes[prefixedHash] = true; // Mark the transaction hash as used, so it can't be used again
 
-        bool needsMint = deposits < amount; // Check if we have enough token, or if we need to mint more
+        bool needsMint = deposits < amount; // Check if we have enough asset, or if we need to mint more
         uint256 balanceNeeded = SafeMath.sub(amount, deposits); // Calculate how much we need
         if (needsMint) {
             deposits = SafeMath.add(deposits, balanceNeeded); // If we need to mint more, add the balance
@@ -118,7 +118,7 @@ contract CoinProxy {
         require(parent.transfer(to, amount), "transfer failed"); // Attempt the transfer, back out if it fails
     }
 
-    /** @dev Deposit ERC20 tokens to an address
+    /** @dev Deposit ERC20 assets to an address
      * @param to Address to deposit to
      * Example is 0x08E242bB06D85073e69222aF8273af419d19E4f6
      * @param amount Amount to withdraw

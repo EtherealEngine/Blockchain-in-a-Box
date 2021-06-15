@@ -428,7 +428,7 @@ export default {
         {
           indexed: true,
           internalType: "uint256",
-          name: "tokenId",
+          name: "assetId",
           type: "uint256",
         },
       ],
@@ -510,7 +510,7 @@ export default {
         {
           indexed: false,
           internalType: "uint256",
-          name: "tokenId",
+          name: "assetId",
           type: "uint256",
         },
         {
@@ -547,7 +547,7 @@ export default {
         {
           indexed: true,
           internalType: "uint256",
-          name: "tokenId",
+          name: "assetId",
           type: "uint256",
         },
       ],
@@ -589,7 +589,7 @@ export default {
       inputs: [
         {
           internalType: "uint256",
-          name: "tokenId",
+          name: "assetId",
           type: "uint256",
         },
         {
@@ -612,7 +612,7 @@ export default {
         },
         {
           internalType: "uint256",
-          name: "tokenId",
+          name: "assetId",
           type: "uint256",
         },
       ],
@@ -681,7 +681,7 @@ export default {
       inputs: [
         {
           internalType: "uint256",
-          name: "tokenId",
+          name: "assetId",
           type: "uint256",
         },
       ],
@@ -700,7 +700,7 @@ export default {
       inputs: [
         {
           internalType: "uint256",
-          name: "tokenId",
+          name: "assetId",
           type: "uint256",
         },
       ],
@@ -743,7 +743,7 @@ export default {
       inputs: [
         {
           internalType: "uint256",
-          name: "tokenId",
+          name: "assetId",
           type: "uint256",
         },
       ],
@@ -762,7 +762,7 @@ export default {
       inputs: [
         {
           internalType: "uint256",
-          name: "tokenId",
+          name: "assetId",
           type: "uint256",
         },
         {
@@ -790,7 +790,7 @@ export default {
           type: "address",
         },
       ],
-      name: "getTokenIdsOf",
+      name: "getAssetIdsOf",
       outputs: [
         {
           internalType: "uint256[]",
@@ -872,7 +872,7 @@ export default {
       inputs: [
         {
           internalType: "uint256",
-          name: "tokenId",
+          name: "assetId",
           type: "uint256",
         },
         {
@@ -957,11 +957,11 @@ export default {
         },
         {
           internalType: "uint256",
-          name: "tokenId",
+          name: "assetId",
           type: "uint256",
         },
       ],
-      name: "mintTokenId",
+      name: "mintAssetId",
       outputs: [],
       stateMutability: "nonpayable",
       type: "function",
@@ -983,7 +983,7 @@ export default {
       inputs: [
         {
           internalType: "uint256",
-          name: "tokenId",
+          name: "assetId",
           type: "uint256",
         },
       ],
@@ -1033,7 +1033,7 @@ export default {
       inputs: [
         {
           internalType: "uint256",
-          name: "tokenId",
+          name: "assetId",
           type: "uint256",
         },
         {
@@ -1061,7 +1061,7 @@ export default {
         },
         {
           internalType: "uint256",
-          name: "tokenId",
+          name: "assetId",
           type: "uint256",
         },
       ],
@@ -1084,7 +1084,7 @@ export default {
         },
         {
           internalType: "uint256",
-          name: "tokenId",
+          name: "assetId",
           type: "uint256",
         },
         {
@@ -1182,7 +1182,7 @@ export default {
       inputs: [
         {
           internalType: "uint256",
-          name: "tokenId",
+          name: "assetId",
           type: "uint256",
         },
         {
@@ -1250,11 +1250,11 @@ export default {
       inputs: [
         {
           internalType: "uint256",
-          name: "tokenId",
+          name: "assetId",
           type: "uint256",
         },
       ],
-      name: "tokenByIdFull",
+      name: "assetByIdFull",
       outputs: [
         {
           components: [
@@ -1299,7 +1299,7 @@ export default {
               type: "uint256",
             },
           ],
-          internalType: "struct Asset.Token",
+          internalType: "struct Asset.Asset",
           name: "",
           type: "tuple",
         },
@@ -1315,7 +1315,7 @@ export default {
           type: "uint256",
         },
       ],
-      name: "tokenByIndex",
+      name: "assetByIndex",
       outputs: [
         {
           internalType: "uint256",
@@ -1330,11 +1330,11 @@ export default {
       inputs: [
         {
           internalType: "uint256",
-          name: "tokenId",
+          name: "assetId",
           type: "uint256",
         },
       ],
-      name: "tokenExists",
+      name: "assetExists",
       outputs: [
         {
           internalType: "bool",
@@ -1358,7 +1358,7 @@ export default {
           type: "uint256",
         },
       ],
-      name: "tokenOfOwnerByIndex",
+      name: "assetOfOwnerByIndex",
       outputs: [
         {
           internalType: "uint256",
@@ -1382,7 +1382,7 @@ export default {
           type: "uint256",
         },
       ],
-      name: "tokenOfOwnerByIndexFull",
+      name: "assetOfOwnerByIndexFull",
       outputs: [
         {
           components: [
@@ -1427,7 +1427,7 @@ export default {
               type: "uint256",
             },
           ],
-          internalType: "struct Asset.Token",
+          internalType: "struct Asset.Asset",
           name: "",
           type: "tuple",
         },
@@ -1439,11 +1439,11 @@ export default {
       inputs: [
         {
           internalType: "uint256",
-          name: "tokenId",
+          name: "assetId",
           type: "uint256",
         },
       ],
-      name: "tokenURI",
+      name: "assetURI",
       outputs: [
         {
           internalType: "string",
@@ -1500,7 +1500,7 @@ export default {
         },
         {
           internalType: "uint256",
-          name: "tokenId",
+          name: "assetId",
           type: "uint256",
         },
       ],
@@ -1819,7 +1819,7 @@ export default {
         {
           indexed: true,
           internalType: "uint256",
-          name: "tokenId",
+          name: "assetId",
           type: "uint256",
         },
       ],
@@ -1838,7 +1838,7 @@ export default {
         {
           indexed: true,
           internalType: "uint256",
-          name: "tokenId",
+          name: "assetId",
           type: "uint256",
         },
         {
@@ -1860,7 +1860,7 @@ export default {
         },
         {
           internalType: "uint256",
-          name: "tokenId",
+          name: "assetId",
           type: "uint256",
         },
       ],
@@ -1904,7 +1904,7 @@ export default {
         },
         {
           internalType: "uint256",
-          name: "tokenId",
+          name: "assetId",
           type: "uint256",
         },
         {
@@ -1942,7 +1942,7 @@ export default {
         },
         {
           internalType: "uint256",
-          name: "tokenId",
+          name: "assetId",
           type: "uint256",
         },
         {
@@ -2016,7 +2016,7 @@ export default {
         {
           indexed: true,
           internalType: "uint256",
-          name: "tokenId",
+          name: "assetId",
           type: "uint256",
         },
         {
@@ -2046,7 +2046,7 @@ export default {
       inputs: [
         {
           internalType: "uint256",
-          name: "tokenId",
+          name: "assetId",
           type: "uint256",
         },
         {
@@ -2097,7 +2097,7 @@ export default {
             },
             {
               internalType: "uint256",
-              name: "tokenId",
+              name: "assetId",
               type: "uint256",
             },
             {

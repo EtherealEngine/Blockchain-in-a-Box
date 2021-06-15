@@ -19,7 +19,7 @@ To deploy contracts, you will need several things:
     Your best option is to download Metamask. Create a new Metamask wallet for this purpose so you can use the private keys for your signing authority.
 
 2. Several BIP39 mnemonics and private keys
- -- Treasury addresses, for handling tokens owned by your treasury
+ -- Treasury addresses, for handling assets and coin owned by your treasury
  -- Signing addresses, for handling chain transfers and other transactions
  -- Private keys for each of the networks you want to interact with
 
@@ -42,7 +42,7 @@ testnetpolygon=a72ee7af443c3333e59d59a4273ce5a39a9f072a89fbc1cdbace0522197bf465
 
 Next, you will need public wallet addresses, which are derived from BIP39 mnemonics.
 
-These should be unique and generated per chain you hope to deploy to. You will need keys for both your signer and your treasury. The signer is responsible for signing off on transactions, while the treasury holds items and tokens on behalf of your org as a network peer.
+These should be unique and generated per chain you hope to deploy to. You will need keys for both your signer and your treasury. The signer is responsible for signing off on transactions, while the treasury holds assets and coins on behalf of your org as a network peer.
 
 Make sure you are generating addresses for the ethereum network. They will have a "0x" at the beginning.
 

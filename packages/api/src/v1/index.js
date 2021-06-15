@@ -1,16 +1,16 @@
 const expressJSDocSwagger = require("express-jsdoc-swagger");
 
 const { createWallet } = require("./routes/wallet.js");
-const { handleServerSideAuth, authenticateToken } = require("./routes/auth.js");
+const { handleServerSideAuth, authenticateAsset } = require("./routes/auth.js");
 const {
-  listTokens,
-  createToken,
-  readToken,
-  deleteToken,
-  sendToken,
-  readTokenRange,
+  listAssets,
+  createAsset,
+  readAsset,
+  deleteAsset,
+  sendAsset,
+  readAssetRange,
   signTransfer,
-} = require("./routes/tokens.js");
+} = require("./routes/assets.js");
 
 const {
   getBlockchain,
@@ -57,13 +57,13 @@ function addV1Routes(app) {
    * Authentication response
    * @typedef {object} AuthResponse
    * @property {string} status - The status of the authentication request (success/error)
-   * @property {string} accessToken - JWT token for authentication
+   * @property {string} accessAsset - JWT asset for authentication
    * @property {string} error - If the status is error, the error can be read from here
    */
 
   /**
    * POST /api/v1/authorizeServer
-   * @summary Get authentication token
+   * @summary Get authentication asset
    * @param {AuthPayload} request.body.required - AuthPayload object for authentication
    * @return {AuthResponse} 200 - success response
    */
@@ -89,7 +89,7 @@ function addV1Routes(app) {
    * @return {WalletCreationResponse} 200 - success response
    * @return {AuthResponse} 401 - authentication error response
    */
-  app.post("/api/v1/wallet", authenticateToken, async (req, res) => {
+  app.post("/api/v1/wallet", authenticateAsset, async (req, res) => {
     return await createWallet(req, res);
   });
 
@@ -97,148 +97,148 @@ function addV1Routes(app) {
 
   /**
    * Response for user account creation and retrieval
-   * @typedef {object} TokenResponse
+   * @typedef {object} AssetResponse
    * @property {string} status - The status of the list request (success/error)
-   * @property {object} token - Token object returned
+   * @property {object} asset - Asset object returned
    * @property {string} error - If the status is error, the error can be read from here
    */
 
   /**
    * Response for user account creation and retrieval
-   * @typedef {object} TokenIdResponse
+   * @typedef {object} AssetIdResponse
    * @property {string} status - The status of the list request (success/error)
-   * @property {string} tokenId - Token id returned
+   * @property {string} assetId - Asset id returned
    * @property {string} error - If the status is error, the error can be read from here
    */
 
   /**
    * Response for user account creation and retrieval
-   * @typedef {object} TokenIdListResponse
+   * @typedef {object} AssetIdListResponse
    * @property {string} status - The status of the list request (success/error)
-   * @property {object} tokenIds - Token id returned
+   * @property {object} assetIds - Asset id returned
    * @property {string} error - If the status is error, the error can be read from here
    */
 
   /**
    * Response for user account creation and retrieval
-   * @typedef {object} TokenListResponse
+   * @typedef {object} AssetListResponse
    * @property {string} status - The status of the list request (success/error)
-   * @property {object} tokens - Array of token objects returned
+   * @property {object} assets - Array of asset objects returned
    * @property {string} error - If the status is error, the error can be read from here
    */
 
   /**
    * Response for user account creation and retrieval
-   * @typedef {object} TokenStatusResponse
+   * @typedef {object} AssetStatusResponse
    * @property {string} status - The status of the list request (success/error)
    * @property {string} error - If the status is error, the error can be read from here
    */
 
   /**
    * Response for user account creation and retrieval
-   * @typedef {object} TokenSignatureResponse
+   * @typedef {object} AssetSignatureResponse
    * @property {string} status - The status of the list request (success/error)
-   * @property {string} tokenId - The ID fo the token being signed
+   * @property {string} assetId - The ID fo the asset being signed
    * @property {string} signature - The status of the list request (success/error)
    * @property {string} error - If the status is error, the error can be read from here
    */
 
   /**
-   * GET /api/v1/tokens/:address/:mainnetAddress
-   * @summary List tokens for a user
+   * GET /api/v1/assets/:address/:mainnetAddress
+   * @summary List assets for a user
    * @security bearerAuth
-   * @return {TokenListResponse} 200 - success response
+   * @return {AssetListResponse} 200 - success response
    * @return {AuthResponse} 401 - authentication error response
-   * @param {string} address.path.required - Address of the user to list tokens for
-   * @param {string} mainnetAddress.path.optional - Mainnet address of the user to list tokens for (optional)
+   * @param {string} address.path.required - Address of the user to list assets for
+   * @param {string} mainnetAddress.path.optional - Mainnet address of the user to list assets for (optional)
    */
   app.get(
-    "/api/v1/tokens/:address/:mainnetAddress?",
-    authenticateToken,
+    "/api/v1/assets/:address/:mainnetAddress?",
+    authenticateAsset,
     async (req, res) => {
-      return await listTokens(req, res, blockchain.web3);
+      return await listAssets(req, res, blockchain.web3);
     }
   );
 
   /**
-   * GET /api/v1/token/:tokenId
-   * @summary Retrieve data for a non-fungible token
+   * GET /api/v1/asset/:assetId
+   * @summary Retrieve data for a non-fungible asset
    * @security bearerAuth
-   * @return {TokenResponse} 200 - success response
+   * @return {AssetResponse} 200 - success response
    * @return {AuthResponse} 401 - authentication error response
-   * @param {string} tokenId.path.required - Token to retrieve
+   * @param {string} assetId.path.required - Asset to retrieve
    */
-  app.get("/api/v1/token/:tokenId", authenticateToken, async (req, res) => {
-    return await readToken(req, res);
+  app.get("/api/v1/asset/:assetId", authenticateAsset, async (req, res) => {
+    return await readAsset(req, res);
   });
 
   /**
-   * GET /api/v1/token/:tokenStartId/:tokenEndId
-   * @summary Retrieve a range of tokens
+   * GET /api/v1/asset/:assetStartId/:assetEndId
+   * @summary Retrieve a range of assets
    * @security bearerAuth
-   * @return {TokenListResponse} 200 - success response
+   * @return {AssetListResponse} 200 - success response
    * @return {AuthResponse} 401 - authentication error response
-   * @param {string} tokenStartId.path.required - First token to retrieve
-   * @param {string} tokenEndId.path.required - Last token in range to retrieve
+   * @param {string} assetStartId.path.required - First asset to retrieve
+   * @param {string} assetEndId.path.required - Last asset in range to retrieve
    */
   app.get(
-    "/api/v1/token/:tokenStartId/:tokenEndId",
-    authenticateToken,
+    "/api/v1/asset/:assetStartId/:assetEndId",
+    authenticateAsset,
     async (req, res) => {
-      return await readTokenRange(req, res);
+      return await readAssetRange(req, res);
     }
   );
 
   /**
-   * POST /api/v1/token
-   * @summary Create a non-fungible token with a file or IPFS hash
+   * POST /api/v1/asset
+   * @summary Create a non-fungible asset with a file or IPFS hash
    * @security bearerAuth
-   * @return {TokenListResponse} 200 - success response
+   * @return {AssetListResponse} 200 - success response
    * @return {AuthResponse} 401 - authentication error response
-   * @param {string} userMnemonic.required - Mint the token using a user's private key
+   * @param {string} userMnemonic.required - Mint the asset using a user's private key
    * @param {string} file.optional - File to upload to IPFS
    * @param {string} resourceHash.optional - IPFS resource hash or other URI
-   * @param {number} quantity.optional; - Number of tokens to mint
+   * @param {number} quantity.optional; - Number of assets to mint
    */
-  // app.post("/api/v1/token", authenticateToken, async (req, res) => {
-  //   return await createToken(req, res, blockchain);
+  // app.post("/api/v1/asset", authenticateAsset, async (req, res) => {
+  //   return await createAsset(req, res, blockchain);
   // });
 
   /**
-   * DELETE /api/v1/token
-   * @summary Burn a token forever
+   * DELETE /api/v1/asset
+   * @summary Burn a asset forever
    * @security bearerAuth
-   * @param {string} tokenId.required - Token to delete
-   * @return {TokenStatusResponse} 200 - success response
+   * @param {string} assetId.required - Asset to delete
+   * @return {AssetStatusResponse} 200 - success response
    * @return {AuthResponse} 401 - authentication error response
    */
-  app.delete("/api/v1/token", authenticateToken, async (req, res) => {
-    return await deleteToken(req, res, blockchain);
+  app.delete("/api/v1/asset", authenticateAsset, async (req, res) => {
+    return await deleteAsset(req, res, blockchain);
   });
 
   /**
-   * POST /api/v1/token/send
-   * @summary Send this token from one user to another
+   * POST /api/v1/asset/send
+   * @summary Send this asset from one user to another
    * @security bearerAuth
-   * @return {TokenStatusResponse} 200 - success response
+   * @return {AssetStatusResponse} 200 - success response
    * @return {AuthResponse} 401 - authentication error response
-   * @param {string} tokenId.required - Token to be sent
-   * @param {string} fromUserAddress.required - Token sent by this user (public address)
-   * @param {string} toUserAddress.required - Token received by this user (public address)
+   * @param {string} assetId.required - Asset to be sent
+   * @param {string} fromUserAddress.required - Asset sent by this user (public address)
+   * @param {string} toUserAddress.required - Asset received by this user (public address)
    */
-  app.post("/api/v1/token/send", authenticateToken, async (req, res) => {
-    return await sendToken(req, res, blockchain);
+  app.post("/api/v1/asset/send", authenticateAsset, async (req, res) => {
+    return await sendAsset(req, res, blockchain);
   });
 
   /**
-   * POST /api/v1/token/signTransfer
-   * @summary Prepare a token to be transferred, either mainnet <-> sidechain or polygon <-> sidechain
-   * @return {TokenSignatureResponse} 200 - success response
+   * POST /api/v1/asset/signTransfer
+   * @summary Prepare a asset to be transferred, either mainnet <-> sidechain or polygon <-> sidechain
+   * @return {AssetSignatureResponse} 200 - success response
    * @return {object} 401 - forbidden request response
-   * @property {string} tokenId - Token to be sent
+   * @property {string} assetId - Asset to be sent
    * @property {string} transferToChain - Transfer to this chain
    */
-  app.post("/api/v1/token/signTransfer", async (req, res) => {
+  app.post("/api/v1/asset/signTransfer", async (req, res) => {
     return await signTransfer(req, res, blockchain);
   });
 }

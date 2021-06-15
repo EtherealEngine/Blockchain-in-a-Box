@@ -16,10 +16,10 @@ const _log = async (text, p) => {
   }
 };
 
-const _fetchAccountForMinter = async (tokenId, chainName) => {
+const _fetchAccountForMinter = async (assetId, chainName) => {
   const { contracts } = await getBlockchain();
   const address = await contracts[chainName].ASSET.methods
-    .getMinter(tokenId)
+    .getMinter(assetId)
     .call();
   if (address !== zeroAddress) {
     return await _fetchAccount(address, chainName);
@@ -27,10 +27,10 @@ const _fetchAccountForMinter = async (tokenId, chainName) => {
     return null;
   }
 };
-const _fetchAccountForOwner = async (tokenId, chainName) => {
+const _fetchAccountForOwner = async (assetId, chainName) => {
   const { contracts } = await getBlockchain();
   const address = await contracts[chainName].ASSET.methods
-    .ownerOf(tokenId)
+    .ownerOf(assetId)
     .call();
   if (address !== zeroAddress) {
     return await _fetchAccount(address, chainName);
@@ -60,8 +60,8 @@ const _fetchAccount = async (address, chainName) => {
     monetizationPointer,
   };
 };
-const _filterByTokenId = (tokenId) => (entry) => {
-  return parseInt(entry.returnValues.tokenId, 10) === tokenId;
+const _filterByTokenId = (assetId) => (entry) => {
+  return parseInt(entry.returnValues.assetId, 10) === assetId;
 };
 const _cancelEntry = (
   deposits,
@@ -500,7 +500,7 @@ const _cancelEntries = (
 const formatToken =
   (chainName) =>
   async (
-    token,
+    asset,
     storeEntries,
     mainnetDepositedEntries,
     mainnetWithdrewEntries,
@@ -509,8 +509,8 @@ const formatToken =
     polygonDepositedEntries,
     polygonWithdrewEntries
   ) => {
-    const tokenId = parseInt(token.id, 10);
-    const { name, ext, unlockable, hash } = token;
+    const assetId = parseInt(asset.id, 10);
+    const { name, ext, unlockable, hash } = asset;
 
     const { contracts } = await getBlockchain();
 
@@ -519,23 +519,23 @@ const formatToken =
     let [minter, owner, description, sidechainMinterAddress] =
       await Promise.all([
         _log(
-          "formatToken 1" + JSON.stringify({ id: token.id }),
-          _fetchAccountForMinter(tokenId, sidechainChainName)
+          "formatToken 1" + JSON.stringify({ id: asset.id }),
+          _fetchAccountForMinter(assetId, sidechainChainName)
         ),
         _log(
-          "formatToken 2" + JSON.stringify({ id: token.id }),
-          _fetchAccountForOwner(tokenId, sidechainChainName)
+          "formatToken 2" + JSON.stringify({ id: asset.id }),
+          _fetchAccountForOwner(assetId, sidechainChainName)
         ),
         _log(
-          "formatToken 3" + JSON.stringify({ id: token.id }),
+          "formatToken 3" + JSON.stringify({ id: asset.id }),
           contracts[sidechainChainName].ASSET.methods
-            .getMetadata(token.hash, "description")
+            .getMetadata(asset.hash, "description")
             .call()
         ),
-        contracts[sidechainChainName].ASSET.methods.getMinter(tokenId).call(),
+        contracts[sidechainChainName].ASSET.methods.getMinter(assetId).call(),
       ]);
 
-    const _filterByTokenIdLocal = _filterByTokenId(tokenId);
+    const _filterByTokenIdLocal = _filterByTokenId(assetId);
     mainnetDepositedEntries = mainnetDepositedEntries.filter(
       _filterByTokenIdLocal
     );
@@ -573,11 +573,11 @@ const formatToken =
     const currentLocation = result[6];
     sidechainMinterAddress = result[7];
 
-    const storeEntry = storeEntries.find((entry) => entry.tokenId === tokenId);
+    const storeEntry = storeEntries.find((entry) => entry.assetId === assetId);
     const buyPrice = storeEntry ? storeEntry.price : null;
     const storeId = storeEntry ? storeEntry.id : null;
     const o = {
-      id: tokenId,
+      id: assetId,
       name,
       description,
       image: "https://preview.exokit.org/" + hash + "." + ext + "/preview.png",
@@ -596,13 +596,13 @@ const formatToken =
       ownerAddress: owner.address.toLowerCase(),
       owner,
       currentOwnerAddress: sidechainMinterAddress.toLowerCase(),
-      balance: parseInt(token.balance, 10),
-      totalSupply: parseInt(token.totalSupply, 10),
+      balance: parseInt(asset.balance, 10),
+      totalSupply: parseInt(asset.totalSupply, 10),
       buyPrice,
       storeId,
       currentLocation,
     };
-    console.log("got token", JSON.stringify(o, null, 2));
+    console.log("got asset", JSON.stringify(o, null, 2));
     return o;
   };
 
@@ -616,12 +616,12 @@ const _copy = (o) => {
   }
   return newO;
 };
-const _isValidToken = (token) => token.owner !== zeroAddress;
+const _isValidToken = (asset) => asset.owner !== zeroAddress;
 const getChainAsset =
   (contractName) =>
   (chainName) =>
   async (
-    tokenId,
+    assetId,
     storeEntries,
     mainnetDepositedEntries,
     mainnetWithdrewEntries,
@@ -655,28 +655,28 @@ const getChainAsset =
 
     const { contracts } = await getBlockchain();
 
-    const [token] = await Promise.all([
+    const [asset] = await Promise.all([
       (async () => {
-        const tokenSrc = await contracts[chainName][contractName].methods
-          .tokenByIdFull(tokenId)
+        const assetSrc = await contracts[chainName][contractName].methods
+          .assetByIdFull(assetId)
           .call();
-        const token = _copy(tokenSrc);
-        const { hash } = token;
-        token.unlockable = await contracts[chainName].ASSET.methods
+        const asset = _copy(assetSrc);
+        const { hash } = asset;
+        asset.unlockable = await contracts[chainName].ASSET.methods
           .getMetadata(hash, "unlockable")
           .call();
-        if (!token.unlockable) {
-          token.unlockable = "";
+        if (!asset.unlockable) {
+          asset.unlockable = "";
         }
-        return token;
+        return asset;
       })(),
     ]);
 
     try {
-      if (_isValidToken(token)) {
+      if (_isValidToken(asset)) {
         if (contractName === "ASSET") {
           const r = await formatToken(chainName)(
-            token,
+            asset,
             storeEntries,
             mainnetDepositedEntries,
             mainnetWithdrewEntries,
@@ -733,22 +733,22 @@ const getChainOwnerAsset =
     }
     const { contracts } = await getBlockchain();
 
-    const tokenSrc = await contracts[chainName][contractName].methods
-      .tokenOfOwnerByIndexFull(address, i)
+    const assetSrc = await contracts[chainName][contractName].methods
+      .assetOfOwnerByIndexFull(address, i)
       .call();
-    const token = _copy(tokenSrc);
-    const { hash } = token;
-    token.unlockable = await contracts[chainName][contractName].methods
+    const asset = _copy(assetSrc);
+    const { hash } = asset;
+    asset.unlockable = await contracts[chainName][contractName].methods
       .getMetadata(hash, "unlockable")
       .call();
-    if (!token.unlockable) {
-      token.unlockable = "";
+    if (!asset.unlockable) {
+      asset.unlockable = "";
     }
 
     try {
       if (contractName === "ASSET") {
         return await formatToken(chainName)(
-          token,
+          asset,
           storeEntries,
           mainnetDepositedEntries,
           mainnetWithdrewEntries,
@@ -800,12 +800,12 @@ const getStoreEntries = async (chainName) => {
         if (store.live) {
           const id = parseInt(store.id, 10);
           const seller = store.seller.toLowerCase();
-          const tokenId = parseInt(store.tokenId, 10);
+          const assetId = parseInt(store.assetId, 10);
           const price = parseInt(store.price, 10);
           return {
             id,
             seller,
-            tokenId,
+            assetId,
             price,
           };
         } else {

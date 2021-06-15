@@ -2,10 +2,10 @@
 A batteries-included ethereum blockchain for bootstrapping the Metaverse.🚀🚀🚀
 
 ## What Is This?
-A Node.js-based REST API, Ethereum node, cache service and smart contracts to deploy your own Ethereum-based sidechain and tokenize your assets. Users can transfer tokens minted on your platform to the Ethereum or Polygon main networks.
+A Node.js-based REST API, Ethereum node, cache service and smart contracts to deploy your own Ethereum-based sidechain for identity and durable assets. Users can transfer assets created on your platform to the Ethereum or Polygon main networks.
 
 ## Who Is It For?
-1. Javascript developers who want to build interoperable applications with tokenized assets but don't have the resources to write everything from scratch and need a starting point which they can mold to their needs.
+1. Javascript developers who want to build interoperable applications with durable digital assets but don't have the resources to write everything from scratch and need a starting point which they can mold to their needs.
 
 2. Developers interested in creating metaverse-scale interoperable applications where users may want to move their assets and identity to other platforms.
 

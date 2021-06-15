@@ -6,20 +6,20 @@ import "./Coin.sol";
 import "./Asset.sol";
 
 /** @title Trade Contract
- * @dev Trade contract to manage user to user trading of fungible and non-fungible tokens
+ * @dev Trade contract to manage user to user trading of fungible and non-fungible assets
  */
 contract Trade {
     struct Store {
         uint256 id;
         address seller;
-        uint256 tokenId;
+        uint256 assetId;
         uint256 price;
         bool live;
     }
     event Sell(
         uint256 indexed id,
         address indexed seller,
-        uint256 indexed tokenId,
+        uint256 indexed assetId,
         uint256 price
     );
     event Unsell(uint256 indexed id);
@@ -79,21 +79,21 @@ contract Trade {
         parentERC721 = Asset(newParentERC721Address);
     }
 
-    /** @dev Add a non-fungible token to the store to be sold
-     * @param tokenId Token to sell
-     * @param price Price to sell token for
+    /** @dev Add a non-fungible asset to the store to be sold
+     * @param assetId Asset to sell
+     * @param price Price to sell asset for
      */
-    function addStore(uint256 tokenId, uint256 price) public {
+    function addStore(uint256 assetId, uint256 price) public {
         uint256 buyId = ++nextBuyId;
-        stores[buyId] = Store(buyId, msg.sender, tokenId, price, true);
+        stores[buyId] = Store(buyId, msg.sender, assetId, price, true);
 
-        emit Sell(buyId, msg.sender, tokenId, price);
+        emit Sell(buyId, msg.sender, assetId, price);
 
         address contractAddress = address(this);
-        parentERC721.transferFrom(msg.sender, contractAddress, tokenId);
+        parentERC721.transferFrom(msg.sender, contractAddress, assetId);
     }
 
-    /** @dev Remove a token from the store for sale
+    /** @dev Remove a asset from the store for sale
      * @param buyId ID of the asset in the store
      */
     function removeStore(uint256 buyId) public {
@@ -105,10 +105,10 @@ contract Trade {
         emit Unsell(buyId);
 
         address contractAddress = address(this);
-        parentERC721.transferFrom(contractAddress, store.seller, store.tokenId);
+        parentERC721.transferFrom(contractAddress, store.seller, store.assetId);
     }
 
-    /** @dev Purchase a token for sale
+    /** @dev Purchase a asset for sale
      * @param buyId ID of the asset in the store
      */
     function buy(uint256 buyId) public {
@@ -120,7 +120,7 @@ contract Trade {
 
         parentERC20.transferFrom(msg.sender, store.seller, store.price);
         address contractAddress = address(this);
-        parentERC721.transferFrom(contractAddress, msg.sender, store.tokenId);
+        parentERC721.transferFrom(contractAddress, msg.sender, store.assetId);
     }
 
     /** @dev Get the number of stored assets by the next available ID
@@ -141,8 +141,8 @@ contract Trade {
     /** @dev Trade assets between users
      * @param from ID of player A
      * @param to ID of player B
-     * @param fromFt Amount of ERC20 tokens player A has committed to trade
-     * @param toFt Amount of ERC20 tokens player B has committed to trade
+     * @param fromFt Amount of ERC20 assets player A has committed to trade
+     * @param toFt Amount of ERC20 assets player B has committed to trade
      * @param a1 Item 1 in player A's trade window
      * @param b1 Item 1 in player B's trade window
      * @param a2 Item 2 in player A's trade window

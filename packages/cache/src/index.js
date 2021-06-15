@@ -2,7 +2,7 @@ const {
   getChainAsset,
   getChainIdentity,
   getAllWithdrawsDeposits,
-} = require("@blockchain-in-a-box/common/src/tokens.js");
+} = require("@blockchain-in-a-box/common/src/assets.js");
 const {
   assetKeys,
   assetPropertiesKeys,
@@ -157,9 +157,9 @@ async function initCaches() {
 }
 
 async function processEventAsset({ event, chainName }) {
-  let { tokenId, hash, key, value } = event.returnValues;
+  let { assetId, hash, key, value } = event.returnValues;
 
-  if (tokenId) {
+  if (assetId) {
     try {
       const storeEntries = [];
       const {
@@ -171,8 +171,8 @@ async function processEventAsset({ event, chainName }) {
         polygonWithdrewEntries,
       } = await getAllWithdrawsDeposits("ASSET")(chainName);
 
-      const token = await getChainAsset("ASSET")(chainName)(
-        tokenId,
+      const asset = await getChainAsset("ASSET")(chainName)(
+        assetId,
         storeEntries,
         mainnetDepositedEntries,
         mainnetWithdrewEntries,
@@ -183,13 +183,13 @@ async function processEventAsset({ event, chainName }) {
       );
 
       if (
-        token.owner.address !== "0x0000000000000000000000000000000000000000"
+        asset.owner.address !== "0x0000000000000000000000000000000000000000"
       ) {
-        const tokenIdNum = parseInt(tokenId, 10);
+        const assetIdNum = parseInt(assetId, 10);
 
         await putRedisItem(
-          tokenIdNum,
-          token,
+          assetIdNum,
+          asset,
           redisPrefixes.mainnetSidechainAsset
         );
       }
@@ -199,24 +199,24 @@ async function processEventAsset({ event, chainName }) {
   } else if (hash && key && value) {
     console.log("updating hash 1", { hash, key, value }, event.returnValues);
 
-    const tokens = await getRedisAllItems(redisPrefixes[chainName + "Asset"]);
-    const token = tokens.find((token) => token.hash === hash);
-    console.log("updating hash 2", token);
-    if (token) {
+    const assets = await getRedisAllItems(redisPrefixes[chainName + "Asset"]);
+    const asset = assets.find((asset) => asset.hash === hash);
+    console.log("updating hash 2", asset);
+    if (asset) {
       let updated = false;
       if (assetKeys.includes(key)) {
-        token[key] = value;
+        asset[key] = value;
         updated = true;
       }
       if (assetPropertiesKeys.includes(key)) {
-        token.properties[key] = value;
+        asset.properties[key] = value;
         updated = true;
       }
       if (updated) {
-        await putRedisItem(token.id, token, redisPrefixes.mainnetSidechainAsset);
+        await putRedisItem(asset.id, asset, redisPrefixes.mainnetSidechainAsset);
       }
     } else {
-      console.warn("could not find hash to update", token);
+      console.warn("could not find hash to update", asset);
     }
   }
 
@@ -232,15 +232,15 @@ async function processEventAsset({ event, chainName }) {
 }
 
 async function processEventsAsset({ events, currentBlockNumber, chainName }) {
-  const seenTokenIds = {};
-  const tokenIds = events
+  const seenAssetIds = {};
+  const assetIds = events
     .map((event) => {
-      let { tokenId } = event.returnValues;
-      if (typeof tokenId === "string") {
-        tokenId = parseInt(tokenId, 10);
-        if (!seenTokenIds[tokenId]) {
-          seenTokenIds[tokenId] = true;
-          return tokenId;
+      let { assetId } = event.returnValues;
+      if (typeof assetId === "string") {
+        assetId = parseInt(assetId, 10);
+        if (!seenAssetIds[assetId]) {
+          seenAssetIds[assetId] = true;
+          return assetId;
         } else {
           return null;
         }
@@ -248,9 +248,9 @@ async function processEventsAsset({ events, currentBlockNumber, chainName }) {
         return null;
       }
     })
-    .filter((tokenId) => tokenId !== null);
+    .filter((assetId) => assetId !== null);
 
-  console.log("process events", chainName, tokenIds.length);
+  console.log("process events", chainName, assetIds.length);
 
   const storeEntries = [];
   const {
@@ -261,9 +261,9 @@ async function processEventsAsset({ events, currentBlockNumber, chainName }) {
     polygonDepositedEntries,
     polygonWithdrewEntries,
   } = await getAllWithdrawsDeposits("ASSET")(chainName);
-  for (const tokenId of tokenIds) {
-    const token = await getChainAsset("ASSET")(chainName)(
-      tokenId,
+  for (const assetId of assetIds) {
+    const asset = await getChainAsset("ASSET")(chainName)(
+      assetId,
       storeEntries,
       mainnetDepositedEntries,
       mainnetWithdrewEntries,
@@ -273,8 +273,8 @@ async function processEventsAsset({ events, currentBlockNumber, chainName }) {
       polygonWithdrewEntries
     );
 
-    if (token.owner.address !== "0x0000000000000000000000000000000000000000") {
-      await putRedisItem(tokenId, token, redisPrefixes.mainnetSidechainAsset);
+    if (asset.owner.address !== "0x0000000000000000000000000000000000000000") {
+      await putRedisItem(assetId, asset, redisPrefixes.mainnetSidechainAsset);
     }
   }
 
