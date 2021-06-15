@@ -114,7 +114,7 @@ module.exports = async function (deployer) {
   let asset = await Asset.deployed();
   const assetAddress = asset.address;
 
-  console.log("Asset Token address is " + assetAddress);
+  console.log("Asset address is " + assetAddress);
 
   /** parentAddress, signerAddress, _chainId */
   await deployer.deploy(

@@ -1,7 +1,7 @@
 const expressJSDocSwagger = require("express-jsdoc-swagger");
 
 const { createWallet } = require("./routes/wallet.js");
-const { handleServerSideAuth, authenticateAsset } = require("./routes/auth.js");
+const { handleServerSideAuth, authenticateToken } = require("./routes/auth.js");
 const {
   listAssets,
   createAsset,
@@ -89,11 +89,11 @@ function addV1Routes(app) {
    * @return {WalletCreationResponse} 200 - success response
    * @return {AuthResponse} 401 - authentication error response
    */
-  app.post("/api/v1/wallet", authenticateAsset, async (req, res) => {
+  app.post("/api/v1/wallet", authenticateToken, async (req, res) => {
     return await createWallet(req, res);
   });
 
-  // TOKENS
+  // ASSETS
 
   /**
    * Response for user account creation and retrieval
@@ -154,7 +154,7 @@ function addV1Routes(app) {
    */
   app.get(
     "/api/v1/assets/:address/:mainnetAddress?",
-    authenticateAsset,
+    authenticateToken,
     async (req, res) => {
       return await listAssets(req, res, blockchain.web3);
     }
@@ -168,7 +168,7 @@ function addV1Routes(app) {
    * @return {AuthResponse} 401 - authentication error response
    * @param {string} assetId.path.required - Asset to retrieve
    */
-  app.get("/api/v1/asset/:assetId", authenticateAsset, async (req, res) => {
+  app.get("/api/v1/asset/:assetId", authenticateToken, async (req, res) => {
     return await readAsset(req, res);
   });
 
@@ -183,7 +183,7 @@ function addV1Routes(app) {
    */
   app.get(
     "/api/v1/asset/:assetStartId/:assetEndId",
-    authenticateAsset,
+    authenticateToken,
     async (req, res) => {
       return await readAssetRange(req, res);
     }
@@ -200,7 +200,7 @@ function addV1Routes(app) {
    * @param {string} resourceHash.optional - IPFS resource hash or other URI
    * @param {number} quantity.optional; - Number of assets to mint
    */
-  // app.post("/api/v1/asset", authenticateAsset, async (req, res) => {
+  // app.post("/api/v1/asset", authenticateToken, async (req, res) => {
   //   return await createAsset(req, res, blockchain);
   // });
 
@@ -212,7 +212,7 @@ function addV1Routes(app) {
    * @return {AssetStatusResponse} 200 - success response
    * @return {AuthResponse} 401 - authentication error response
    */
-  app.delete("/api/v1/asset", authenticateAsset, async (req, res) => {
+  app.delete("/api/v1/asset", authenticateToken, async (req, res) => {
     return await deleteAsset(req, res, blockchain);
   });
 
@@ -226,7 +226,7 @@ function addV1Routes(app) {
    * @param {string} fromUserAddress.required - Asset sent by this user (public address)
    * @param {string} toUserAddress.required - Asset received by this user (public address)
    */
-  app.post("/api/v1/asset/send", authenticateAsset, async (req, res) => {
+  app.post("/api/v1/asset/send", authenticateToken, async (req, res) => {
     return await sendAsset(req, res, blockchain);
   });
 

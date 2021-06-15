@@ -35,7 +35,7 @@ const {
   PINATA_API_KEY,
   PINATA_SECRET_API_KEY,
   MINTING_FEE,
-  DEFAULT_TOKEN_DESCRIPTION,
+  DEFAULT_ASSET_DESCRIPTION,
   IPFS_HOST,
   ENCRYPTION_MNEMONIC,
   MAINNET_MNEMONIC,
@@ -221,7 +221,7 @@ async function mintAssets(
   } else status = true;
 
   if (status) {
-    const description = DEFAULT_TOKEN_DESCRIPTION;
+    const description = DEFAULT_ASSET_DESCRIPTION;
 
     let fileName = resHash.split("/").pop();
 

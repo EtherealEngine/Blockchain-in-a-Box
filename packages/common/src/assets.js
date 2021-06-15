@@ -60,7 +60,7 @@ const _fetchAccount = async (address, chainName) => {
     monetizationPointer,
   };
 };
-const _filterByTokenId = (assetId) => (entry) => {
+const _filterByAssetId = (assetId) => (entry) => {
   return parseInt(entry.returnValues.assetId, 10) === assetId;
 };
 const _cancelEntry = (
@@ -497,7 +497,7 @@ const _cancelEntries = (
   ];
 };
 
-const formatToken =
+const formatAsset =
   (chainName) =>
   async (
     asset,
@@ -519,15 +519,15 @@ const formatToken =
     let [minter, owner, description, sidechainMinterAddress] =
       await Promise.all([
         _log(
-          "formatToken 1" + JSON.stringify({ id: asset.id }),
+          "formatAsset 1" + JSON.stringify({ id: asset.id }),
           _fetchAccountForMinter(assetId, sidechainChainName)
         ),
         _log(
-          "formatToken 2" + JSON.stringify({ id: asset.id }),
+          "formatAsset 2" + JSON.stringify({ id: asset.id }),
           _fetchAccountForOwner(assetId, sidechainChainName)
         ),
         _log(
-          "formatToken 3" + JSON.stringify({ id: asset.id }),
+          "formatAsset 3" + JSON.stringify({ id: asset.id }),
           contracts[sidechainChainName].ASSET.methods
             .getMetadata(asset.hash, "description")
             .call()
@@ -535,24 +535,24 @@ const formatToken =
         contracts[sidechainChainName].ASSET.methods.getMinter(assetId).call(),
       ]);
 
-    const _filterByTokenIdLocal = _filterByTokenId(assetId);
+    const _filterByAssetIdLocal = _filterByAssetId(assetId);
     mainnetDepositedEntries = mainnetDepositedEntries.filter(
-      _filterByTokenIdLocal
+      _filterByAssetIdLocal
     );
     mainnetWithdrewEntries = mainnetWithdrewEntries.filter(
-      _filterByTokenIdLocal
+      _filterByAssetIdLocal
     );
     sidechainDepositedEntries = sidechainDepositedEntries.filter(
-      _filterByTokenIdLocal
+      _filterByAssetIdLocal
     );
     sidechainWithdrewEntries = sidechainWithdrewEntries.filter(
-      _filterByTokenIdLocal
+      _filterByAssetIdLocal
     );
     polygonDepositedEntries = polygonDepositedEntries.filter(
-      _filterByTokenIdLocal
+      _filterByAssetIdLocal
     );
     polygonWithdrewEntries = polygonWithdrewEntries.filter(
-      _filterByTokenIdLocal
+      _filterByAssetIdLocal
     );
 
     const result = _cancelEntries(
@@ -616,7 +616,7 @@ const _copy = (o) => {
   }
   return newO;
 };
-const _isValidToken = (asset) => asset.owner !== zeroAddress;
+const _isValidAsset = (asset) => asset.owner !== zeroAddress;
 const getChainAsset =
   (contractName) =>
   (chainName) =>
@@ -673,9 +673,9 @@ const getChainAsset =
     ]);
 
     try {
-      if (_isValidToken(asset)) {
+      if (_isValidAsset(asset)) {
         if (contractName === "ASSET") {
-          const r = await formatToken(chainName)(
+          const r = await formatAsset(chainName)(
             asset,
             storeEntries,
             mainnetDepositedEntries,
@@ -747,7 +747,7 @@ const getChainOwnerAsset =
 
     try {
       if (contractName === "ASSET") {
-        return await formatToken(chainName)(
+        return await formatAsset(chainName)(
           asset,
           storeEntries,
           mainnetDepositedEntries,
