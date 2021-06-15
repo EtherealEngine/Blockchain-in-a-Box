@@ -10,9 +10,6 @@ contract Identity {
     /** @dev Mapping of a key like "avatar" to a asset address. */
     mapping(address => mapping(string => string)) private addressToMetadata;
 
-    /** @dev Constructor is empty. */
-    constructor() public {}
-
     /**  @dev Read the metadata value for a key
      *  Example: 0x08E242bB06D85073e69222aF8273af419d19E4f6, "avatar"
      *  @param owner Owner of this account
