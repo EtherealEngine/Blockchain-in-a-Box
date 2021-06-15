@@ -1,11 +1,11 @@
 const {
-  getChainNft,
-  getChainAccount,
+  getChainAsset,
+  getChainIdentity,
   getAllWithdrawsDeposits,
 } = require("@blockchain-in-a-box/common/src/tokens.js");
 const {
-  nftKeys,
-  nftPropertiesKeys,
+  assetKeys,
+  assetPropertiesKeys,
   ids,
   redisPrefixes,
 } = require("@blockchain-in-a-box/common/src/constants.js");
@@ -23,7 +23,7 @@ const {
 
 initCaches();
 
-async function initNftCache({ chainName }) {
+async function initializeAssetCache({ chainName }) {
   const { web3 } = await getBlockchain();
 
   await connect(process.env.REDIS_PORT, process.env.REDIS_HOST);
@@ -31,35 +31,35 @@ async function initNftCache({ chainName }) {
   const currentBlockNumber = await web3[chainName].eth.getBlockNumber();
 
   // Watch for new events.
-  const _recurse = (currentBlockNumber) => {
+  const recursivelyProcessEvents = (currentBlockNumber) => {
     const wsContract = makeWeb3WebsocketContract(chainName, "ASSET");
     wsContract.events
       .allEvents({ fromBlock: currentBlockNumber })
       .on("data", async function (event) {
-        console.log("nft event", chainName, event);
+        console.log("Asset event", chainName, event);
 
         currentBlockNumber = Math.max(currentBlockNumber, event.blockNumber);
 
-        await processEventNft({
+        await processEventAsset({
           event,
           chainName,
         });
       });
     wsContract.listener.on("error", async (err) => {
-      console.warn("error nft listener", chainName, err);
+      console.warn("Error Asset listener", chainName, err);
     });
     wsContract.listener.on("end", async () => {
-      console.log("reconnect nft listener", chainName);
+      console.log("Reconnect Asset listener", chainName);
 
       wsContract.listener.disconnect();
-      _recurse(currentBlockNumber);
+      recursivelyProcessEvents(currentBlockNumber);
     });
   };
-  _recurse(currentBlockNumber);
+  recursivelyProcessEvents(currentBlockNumber);
 
   let o = await getRedisItem(
-    ids.lastCachedBlockNft,
-    redisPrefixes[chainName + "Nft"]
+    ids.lastCachedBlockAsset,
+    redisPrefixes[chainName + "Asset"]
   );
   const lastBlockNumber = o?.Item?.number || 0;
 
@@ -71,7 +71,7 @@ async function initNftCache({ chainName }) {
       fromBlock: lastBlockNumber,
     });
     if (events.length > 0) {
-      await processEventsNft({
+      await processEventsAsset({
         events,
         currentBlockNumber,
         chainName,
@@ -149,14 +149,14 @@ async function initCaches() {
   await Promise.all(
     ["mainnet", "mainnetsidechain", "polygon"].map((chainName) => {
       return Promise.all([
-        logCache(chainName + " ASSET", initNftCache({ chainName })),
+        logCache(chainName + " ASSET", initializeAssetCache({ chainName })),
         logCache(chainName + " Identity", initAccountCache({ chainName })),
       ]);
     })
   );
 }
 
-async function processEventNft({ event, chainName }) {
+async function processEventAsset({ event, chainName }) {
   let { tokenId, hash, key, value } = event.returnValues;
 
   if (tokenId) {
@@ -171,7 +171,7 @@ async function processEventNft({ event, chainName }) {
         polygonWithdrewEntries,
       } = await getAllWithdrawsDeposits("ASSET")(chainName);
 
-      const token = await getChainNft("ASSET")(chainName)(
+      const token = await getChainAsset("ASSET")(chainName)(
         tokenId,
         storeEntries,
         mainnetDepositedEntries,
@@ -190,7 +190,7 @@ async function processEventNft({ event, chainName }) {
         await putRedisItem(
           tokenIdNum,
           token,
-          redisPrefixes.mainnetsidechainNft
+          redisPrefixes.mainnetSidechainAsset
         );
       }
     } catch (e) {
@@ -199,21 +199,21 @@ async function processEventNft({ event, chainName }) {
   } else if (hash && key && value) {
     console.log("updating hash 1", { hash, key, value }, event.returnValues);
 
-    const tokens = await getRedisAllItems(redisPrefixes[chainName + "Nft"]);
+    const tokens = await getRedisAllItems(redisPrefixes[chainName + "Asset"]);
     const token = tokens.find((token) => token.hash === hash);
     console.log("updating hash 2", token);
     if (token) {
       let updated = false;
-      if (nftKeys.includes(key)) {
+      if (assetKeys.includes(key)) {
         token[key] = value;
         updated = true;
       }
-      if (nftPropertiesKeys.includes(key)) {
+      if (assetPropertiesKeys.includes(key)) {
         token.properties[key] = value;
         updated = true;
       }
       if (updated) {
-        await putRedisItem(token.id, token, redisPrefixes.mainnetsidechainNft);
+        await putRedisItem(token.id, token, redisPrefixes.mainnetSidechainAsset);
       }
     } else {
       console.warn("could not find hash to update", token);
@@ -222,16 +222,16 @@ async function processEventNft({ event, chainName }) {
 
   const { blockNumber } = event;
   await putRedisItem(
-    ids.lastCachedBlockNft,
+    ids.lastCachedBlockAsset,
     {
-      id: ids.lastCachedBlockNft,
+      id: ids.lastCachedBlockAsset,
       number: blockNumber,
     },
-    redisPrefixes.mainnetsidechainNft
+    redisPrefixes.mainnetSidechainAsset
   );
 }
 
-async function processEventsNft({ events, currentBlockNumber, chainName }) {
+async function processEventsAsset({ events, currentBlockNumber, chainName }) {
   const seenTokenIds = {};
   const tokenIds = events
     .map((event) => {
@@ -262,7 +262,7 @@ async function processEventsNft({ events, currentBlockNumber, chainName }) {
     polygonWithdrewEntries,
   } = await getAllWithdrawsDeposits("ASSET")(chainName);
   for (const tokenId of tokenIds) {
-    const token = await getChainNft("ASSET")(chainName)(
+    const token = await getChainAsset("ASSET")(chainName)(
       tokenId,
       storeEntries,
       mainnetDepositedEntries,
@@ -274,17 +274,17 @@ async function processEventsNft({ events, currentBlockNumber, chainName }) {
     );
 
     if (token.owner.address !== "0x0000000000000000000000000000000000000000") {
-      await putRedisItem(tokenId, token, redisPrefixes.mainnetsidechainNft);
+      await putRedisItem(tokenId, token, redisPrefixes.mainnetSidechainAsset);
     }
   }
 
   await putRedisItem(
-    ids.lastCachedBlockNft,
+    ids.lastCachedBlockAsset,
     {
-      id: ids.lastCachedBlockNft,
+      id: ids.lastCachedBlockAsset,
       number: currentBlockNumber,
     },
-    redisPrefixes.mainnetsidechainNft
+    redisPrefixes.mainnetSidechainAsset
   );
 }
 
@@ -294,11 +294,11 @@ async function processEventAccount({ event, chainName }) {
   if (owner) {
     owner = owner.toLowerCase();
     try {
-      const account = await getChainAccount({
+      const account = await getChainIdentity({
         address: owner,
         chainName,
       });
-      await putRedisItem(owner, account, redisPrefixes.mainnetsidechainAccount);
+      await putRedisItem(owner, account, redisPrefixes.mainnetSidechainIdentity);
     } catch (e) {
       console.error(e);
     }
@@ -308,7 +308,7 @@ async function processEventAccount({ event, chainName }) {
   await putRedisItem(
     ids.lastCachedBlockAccount,
     { number: blockNumber },
-    redisPrefixes.mainnetsidechainAccount
+    redisPrefixes.mainnetSidechainIdentity
   );
 }
 
@@ -332,16 +332,16 @@ async function processEventsAccount({ events, currentBlockNumber, chainName }) {
   owners = makeUnique(owners);
 
   for (const owner of owners) {
-    const account = await getChainAccount({
+    const account = await getChainIdentity({
       address: owner,
       chainName,
     });
-    await putRedisItem(owner, account, redisPrefixes.mainnetsidechainAccount);
+    await putRedisItem(owner, account, redisPrefixes.mainnetSidechainIdentity);
   }
 
   await putRedisItem(
     ids.lastCachedBlockAccount,
     { number: currentBlockNumber },
-    redisPrefixes.mainnetsidechainAccount
+    redisPrefixes.mainnetSidechainIdentity
   );
 }

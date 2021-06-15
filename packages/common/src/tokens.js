@@ -1,7 +1,6 @@
 const {
   identityKeys,
   zeroAddress,
-  defaultAvatarPreview,
 } = require("./constants.js");
 const { getBlockchain, getPastEvents } = require("./blockchain.js");
 const {
@@ -42,7 +41,7 @@ const _fetchAccountForOwner = async (tokenId, chainName) => {
 const _fetchAccount = async (address, chainName) => {
   const { contracts } = await getBlockchain();
 
-  const [username, avatarPreview, monetizationPointer] = await Promise.all([
+  const [username] = await Promise.all([
     (async () => {
       let username = await contracts[chainName].Identity.methods
         .getMetadata(address, "name")
@@ -51,25 +50,7 @@ const _fetchAccount = async (address, chainName) => {
         username = "Anonymous";
       }
       return username;
-    })(),
-    (async () => {
-      let avatarPreview = await contracts[chainName].Identity.methods
-        .getMetadata(address, "avatarPreview")
-        .call();
-      if (!avatarPreview) {
-        avatarPreview = defaultAvatarPreview;
-      }
-      return avatarPreview;
-    })(),
-    (async () => {
-      let monetizationPointer = await contracts[chainName].Identity.methods
-        .getMetadata(address, "monetizationPointer")
-        .call();
-      if (!monetizationPointer) {
-        monetizationPointer = "";
-      }
-      return monetizationPointer;
-    })(),
+    })()
   ]);
 
   return {
@@ -636,7 +617,7 @@ const _copy = (o) => {
   return newO;
 };
 const _isValidToken = (token) => token.owner !== zeroAddress;
-const getChainNft =
+const getChainAsset =
   (contractName) =>
   (chainName) =>
   async (
@@ -716,8 +697,7 @@ const getChainNft =
       return null;
     }
   };
-const getChainToken = getChainNft("ASSET");
-const getChainOwnerNft =
+const getChainOwnerAsset =
   (contractName) =>
   (chainName) =>
   async (
@@ -785,7 +765,7 @@ const getChainOwnerNft =
       return null;
     }
   };
-async function getChainAccount({ address, chainName } = {}) {
+async function getChainIdentity({ address, chainName } = {}) {
   const { contracts } = await getBlockchain();
   const contract = contracts[chainName];
 
@@ -936,10 +916,9 @@ const getAllWithdrawsDeposits = (contractName) => async (chainName) => {
 };
 
 module.exports = {
-  getChainNft,
-  getChainAccount,
-  getChainToken,
-  getChainOwnerNft,
+  getChainAsset,
+  getChainIdentity,
+  getChainOwnerAsset,
   getStoreEntries,
   getAllWithdrawsDeposits,
 };

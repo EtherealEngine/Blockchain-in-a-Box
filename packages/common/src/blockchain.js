@@ -135,13 +135,13 @@ async function getBlockchain() {
     addresses,
     abis,
     web3,
-    // web3socketProviders,
     web3sockets,
     contracts,
-    // wsContracts,
     gethNodeUrl,
     gethNodeWSUrl,
     web3socketProviderUrls,
+    // web3socketProviders,
+    // wsContracts,
   };
 }
 

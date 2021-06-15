@@ -74,7 +74,7 @@ Once you've read up and done a practice deployment, you are ready to deploy to y
 npm run deploy-mainnetsidechain
 ```
 
-If everything goes as planned, a list of addresses will be returned to you -- these are the addresses of your contracts. Write them down! In order to access NFTs from your contracts later, you will need these addresses.
+If everything goes as planned, a list of addresses will be returned to you -- these are the addresses of your contracts. Write them down! In order to access assets from your contracts later, you will need these addresses.
 
 Once you've deployed to the sidechain, you can additionally deploy to the polygon network and mainnet ethereum.
 

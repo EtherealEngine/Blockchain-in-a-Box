@@ -21,7 +21,7 @@ const {
   encryptedMetadataKey,
   redisPrefixes,
   mainnetSignatureMessage,
-  nftIndexName,
+  assetIndexName,
   burnAddress,
   zeroAddress,
 } = require("@blockchain-in-a-box/common/src/constants.js");
@@ -100,7 +100,7 @@ async function listTokens(req, res, web3) {
         );
         if (!recoveredAddress) return [];
         const p = makePromise();
-        const args = `${nftIndexName} ${JSON.stringify(
+        const args = `${assetIndexName} ${JSON.stringify(
           recoveredAddress
         )} INFIELDS 1 currentOwnerAddress LIMIT 0 1000000`
           .split(" ")
@@ -123,7 +123,7 @@ async function listTokens(req, res, web3) {
       })(),
       (async () => {
         const p = makePromise();
-        const args = `${nftIndexName} ${JSON.stringify(
+        const args = `${assetIndexName} ${JSON.stringify(
           address
         )} INFIELDS 1 currentOwnerAddress LIMIT 0 1000000`
           .split(" ")
@@ -339,7 +339,7 @@ async function createToken(req, res, { web3, contracts }) {
 
 async function readToken(req, res) {
   const { tokenId } = req.params;
-  let o = await getRedisItem(tokenId, redisPrefixes.mainnetsidechainNft);
+  let o = await getRedisItem(tokenId, redisPrefixes.mainnetSidechainAsset);
   let token = o.Item;
 
   if (DEVELOPMENT) setCorsHeaders(res);
@@ -357,7 +357,7 @@ async function readToken(req, res) {
 // Same as read token, but return unlockable in plaintext
 async function readTokenWithUnlockable(req, res) {
   const { tokenId } = req.params;
-  let o = await getRedisItem(tokenId, redisPrefixes.mainnetsidechainNft);
+  let o = await getRedisItem(tokenId, redisPrefixes.mainnetSidechainAsset);
   let token = o.Item;
 
   if (DEVELOPMENT) setCorsHeaders(res);
@@ -388,7 +388,7 @@ async function readTokenWithUnlockable(req, res) {
 
 // async function readUnlockable(req, res) {
 //     const {tokenId} = req.params;
-//     let o = await getRedisItem(tokenId, redisPrefixes.mainnetsidechainNft);
+//     let o = await getRedisItem(tokenId, redisPrefixes.mainnetSidechainAsset);
 //     let token = o.Item;
 //     let value = "";
 //     if (DEVELOPMENT) setCorsHeaders(res);
@@ -414,7 +414,7 @@ async function readTokenWithUnlockable(req, res) {
 
 // async function readEncryptedData(req, res) {
 //     const {tokenId} = req.params;
-//     let o = await getRedisItem(tokenId, redisPrefixes.mainnetsidechainNft);
+//     let o = await getRedisItem(tokenId, redisPrefixes.mainnetSidechainAsset);
 //     let token = o.Item;
 //     if (DEVELOPMENT) setCorsHeaders(res);
 //     if (token) {
@@ -446,7 +446,7 @@ async function readTokenRange(req, res) {
 
     const promise = makePromise();
     const args =
-      `${nftIndexName} * filter id ${tokenStartId} ${tokenEndId} LIMIT 0 1000000`
+      `${assetIndexName} * filter id ${tokenStartId} ${tokenEndId} LIMIT 0 1000000`
         .split(" ")
         .concat([
           (err, result) => {
@@ -492,7 +492,7 @@ async function deleteToken(req, res) {
   try {
     const { tokenId } = req.body;
 
-    let o = await getRedisItem(tokenId, redisPrefixes.mainnetsidechainNft);
+    let o = await getRedisItem(tokenId, redisPrefixes.mainnetSidechainAsset);
     let token = o.Item;
 
     const address = token.owner.address;
@@ -769,7 +769,7 @@ async function updatePublicAsset(req, res, { contracts }) {
 //     }
 //     try {
 //     const {mnemonic, tokenId, resourceHash, privateData} = req.body;
-//     let o = await getRedisItem(tokenId, redisPrefixes.mainnetsidechainNft);
+//     let o = await getRedisItem(tokenId, redisPrefixes.mainnetSidechainAsset);
 //     let token = o.Item;
 //     const file = req.files && req.files[0];
 //         if (!bip39.validateMnemonic(mnemonic)) {
