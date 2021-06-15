@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   mainnet: {
     Identity: "0xd8C10159436B5af675b6a9259Ed1C0262314B30A",
     COIN: "0xb669000Ee52F10484363bC2e1D0020535F9102EA",
