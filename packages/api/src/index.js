@@ -7,6 +7,8 @@ const app = express();
 
 app.use(fileUpload());
 
+app.use(express.json());
+
 let requestsLogger = (req, res, next) => {
   let current_datetime = new Date();
   let formatted_date =

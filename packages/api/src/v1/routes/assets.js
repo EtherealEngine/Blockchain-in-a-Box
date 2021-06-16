@@ -273,11 +273,9 @@ async function mintAssets(
 }
 
 async function createAsset(req, res, { web3, contracts }) {
-  const { mnemonic, quantity, privateData } = req.body;
+  const { mnemonic, quantity, privateData, resourceHash } = req.body;
 
   try {
-    let { resourceHash } = req.body;
-
     const file = req.files && req.files[0];
 
     if (!bip39.validateMnemonic(mnemonic)) {
