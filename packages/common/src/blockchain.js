@@ -33,7 +33,7 @@ const BlockchainNetworks = [
   "testnetpolygon",
 ];
 
-(async () => {
+const loadPromise = (async() => {
   const ethereumHostAddress =  await new Promise((accept, reject) => {
       dns.resolve4(ETHEREUM_HOST, (err, addresses) => {
         if (!err) {
@@ -130,6 +130,7 @@ async function getPastEvents({
 }
 
 async function getBlockchain() {
+  await loadPromise;
   return {
     addresses,
     abis,
