@@ -43,15 +43,11 @@ const zeroAddress = "0x0000000000000000000000000000000000000000";
 const burnAddress = "0x000000000000000000000000000000000000dEaD";
 
 const proofOfAddressMessage = `Proof of address.`;
-const unlockableMetadataKey = "unlockable";
-const encryptedMetadataKey = "encrypted";
 
 const maxFileSize = 50 * 1024 * 1024;
 module.exports = {
   maxFileSize,
   burnAddress,
-  unlockableMetadataKey,
-  encryptedMetadataKey,
   proofOfAddressMessage,
   identityKeys,
   ids,

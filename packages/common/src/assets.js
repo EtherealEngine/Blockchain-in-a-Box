@@ -3,9 +3,6 @@ const {
   zeroAddress,
 } = require("./constants.js");
 const { getBlockchain, getPastEvents } = require("./blockchain.js");
-const {
-  STORAGE_HOST,
-} = require("@blockchain-in-a-box/common/src/environment.js");
 
 const _log = async (text, p) => {
   try {
@@ -56,8 +53,6 @@ const _fetchAccount = async (address, chainName) => {
   return {
     address,
     username,
-    avatarPreview,
-    monetizationPointer,
   };
 };
 const _filterByAssetId = (assetId) => (entry) => {
@@ -510,7 +505,7 @@ const formatAsset =
     polygonWithdrewEntries
   ) => {
     const assetId = parseInt(asset.id, 10);
-    const { name, ext, unlockable, hash } = asset;
+    const { name, ext, hash } = asset;
 
     const { contracts } = await getBlockchain();
 
@@ -580,16 +575,10 @@ const formatAsset =
       id: assetId,
       name,
       description,
-      image: "https://preview.exokit.org/" + hash + "." + ext + "/preview.png",
-      external_url: "https://app.webaverse.com?h=" + hash,
-      animation_url: `${STORAGE_HOST}/${hash}/preview.${
-        ext === "vrm" ? "glb" : ext
-      }`,
       properties: {
         name,
         hash,
         ext,
-        unlockable,
       },
       minterAddress: minter.address.toLowerCase(),
       minter,
@@ -661,13 +650,6 @@ const getChainAsset =
           .assetByIdFull(assetId)
           .call();
         const asset = _copy(assetSrc);
-        const { hash } = asset;
-        asset.unlockable = await contracts[chainName].Inventory.methods
-          .getMetadata(hash, "unlockable")
-          .call();
-        if (!asset.unlockable) {
-          asset.unlockable = "";
-        }
         return asset;
       })(),
     ]);
@@ -737,13 +719,6 @@ const getChainOwnerAsset =
       .tokenOfOwnerByIndexFull(address, i)
       .call();
     const asset = _copy(assetSrc);
-    const { hash } = asset;
-    asset.unlockable = await contracts[chainName][contractName].methods
-      .getMetadata(hash, "unlockable")
-      .call();
-    if (!asset.unlockable) {
-      asset.unlockable = "";
-    }
 
     try {
       if (contractName === "Inventory") {

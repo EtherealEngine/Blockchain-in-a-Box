@@ -13,13 +13,6 @@ A Node.js-based REST API, Ethereum node, cache service and smart contracts to de
 
 4. Organizations who wish to build blockchains with other organizations and need a standard and conventional way to do so.
 
-## Who Made It?
-A lot of the core contract and web3 code was  written by Avaer Kazmer and the Webaverse team. If you are interested in participating in an ambitious 3D universe built on blockchain technology, check out https://webaverse.com/
-
-Webaverse provides some ready-made tools for users to integrate blockchain into their communities and to start making and trading assets on their Discord or other social platform. However, while Webaverse is an open source project, they do not have the resources to support external developer projects right now.
-
-This package was created by the architects at XRFoundation to make a simple, streamlined and developer friendly system for interacting with their own blockchain, with the goal that these chains can be connected to each other or to Webaverse itself.
-
 ## Any Resources to Help Me Learn What's Going On?
 How to Code a Crypto Collectible: ERC-721 ASSET Tutorial (Ethereum)
 https://www.youtube.com/watch?v=YPbgjPPC1d0
