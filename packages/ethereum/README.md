@@ -10,6 +10,10 @@ Support Feature:
 * Docker engine.
 * Kubernetes cluster.
 
+Developer Setup:
+* https://www.trufflesuite.com/ganache
+* https://metamask.io/
+
 ## Usage
 To run the Ethereum private chain cluster(without the Ethereum network status):
 ```sh
