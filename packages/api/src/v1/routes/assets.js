@@ -179,7 +179,6 @@ async function mintAssets(
   resHash,
   mnemonic,
   quantity,
-  privateData,
   web3,
   contracts,
   res
@@ -245,24 +244,6 @@ async function mintAssets(
     );
     status = result.status;
 
-    if (privateData) {
-      const encryptedData = encodeSecret(privateData);
-      await runSidechainTransaction(mnemonic)(
-        "ASSET",
-        "setMetadata",
-        hash,
-        unlockableMetadataKey,
-        encryptedData
-      );
-      await runSidechainTransaction(mnemonic)(
-        "ASSET",
-        "setMetadata",
-        hash,
-        encryptedMetadataKey,
-        encryptedData
-      );
-    }
-
     const assetId = new web3.utils.BN(
       result.logs[0].topics[3].slice(2),
       16
@@ -273,11 +254,9 @@ async function mintAssets(
 }
 
 async function createAsset(req, res, { web3, contracts }) {
-  const { mnemonic, quantity, privateData } = req.body;
+  const { mnemonic, quantity, resourceHash } = req.body;
 
   try {
-    let { resourceHash } = req.body;
-
     const file = req.files && req.files[0];
 
     if (!bip39.validateMnemonic(mnemonic)) {
@@ -325,7 +304,6 @@ async function createAsset(req, res, { web3, contracts }) {
         resourceHash,
         mnemonic,
         quantity,
-        privateData,
         web3,
         contracts,
         res
@@ -585,58 +563,6 @@ async function signTransfer(req, res, blockchain) {
   console.warn("Method not implemented", req, res, blockchain);
 }
 
-async function getPrivateData(req, res) {
-  const { signatures, id } = req.body;
-  const key = unlockableMetadataKey;
-  const addresses = [];
-  let unlockSuccessful = false;
-  for (const signature of signatures) {
-    try {
-      let address = await web3.mainnetsidechain.eth.accounts.recover(
-        proofOfAddressMessage,
-        signature
-      );
-      address = address.toLowerCase();
-      addresses.push(address);
-      unlockSuccessful = true;
-    } catch (err) {
-      console.warn(err.stack);
-      unlockSuccessful = false;
-    }
-  }
-
-  if (!unlockSuccessful)
-    return res.json({
-      status: ResponseStatus.error,
-      error: "Failed to unlock private asset data",
-    });
-
-  const hash = await contracts.mainnetsidechain.ASSET.methods.getHash(id).call();
-  const isCollaborator = await areAddressesCollaborator(addresses, hash, id);
-  if (isCollaborator) {
-    let value = await contracts.mainnetsidechain.ASSET.methods
-      .getMetadata(hash, key)
-      .call();
-    value = jsonParse(value);
-    if (value !== null) {
-      let { ciphertext, tag } = value;
-      ciphertext = Buffer.from(ciphertext, "base64");
-      tag = Buffer.from(tag, "base64");
-      value = decodeSecret(ENCRYPTION_MNEMONIC, { ciphertext, tag });
-    }
-    return res.json({
-      status: ResponseStatus.success,
-      payload: value,
-      error: null,
-    });
-  } else {
-    return res.json({
-      status: ResponseStatus.error,
-      payload: null,
-      error: `Address is not a collaborator on ${hash}`,
-    });
-  }
-}
 
 // TODO: Try to unpin from pinata if we are using pinata and already have file
 async function updatePublicAsset(req, res, { contracts }) {
@@ -846,7 +772,6 @@ module.exports = {
   readAssetRange,
   deleteAsset,
   sendAsset,
-  getPrivateData,
   signTransfer,
   // readEncryptedData
 };
