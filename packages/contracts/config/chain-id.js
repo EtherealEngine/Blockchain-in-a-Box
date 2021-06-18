@@ -1,26 +1,26 @@
 module.exports = {
   mainnet: {
-    COIN: 1,
-    ASSET: 2,
+    Currency: 1,
+    Inventory: 2,
   },
   mainnetsidechain: {
-    COIN: 2,
-    ASSET: 5,
+    Currency: 2,
+    Inventory: 5,
   },
   testnet: {
-    COIN: 1,
-    ASSET: 2,
+    Currency: 1,
+    Inventory: 2,
   },
   testnetsidechain: {
-    COIN: 4,
-    ASSET: 5,
+    Currency: 4,
+    Inventory: 5,
   },
   polygon: {
-    COIN: 1,
-    ASSET: 2,
+    Currency: 1,
+    Inventory: 2,
   },
   testnetpolygon: {
-    COIN: 4,
-    ASSET: 5,
+    Currency: 4,
+    Inventory: 5,
   },
 };

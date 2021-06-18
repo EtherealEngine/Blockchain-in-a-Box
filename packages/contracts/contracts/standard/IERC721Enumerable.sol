@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.6.2;
+pragma solidity ^0.8.5;
 
 import "./IERC721.sol";
 
@@ -9,7 +9,6 @@ import "./IERC721.sol";
  * @dev See https://eips.ethereum.org/EIPS/eip-721
  */
 interface IERC721Enumerable is IERC721 {
-
     /**
      * @dev Returns the total amount of tokens stored by the contract.
      */

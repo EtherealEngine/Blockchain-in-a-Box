@@ -2,16 +2,16 @@
 pragma solidity ^0.8.5;
 pragma experimental ABIEncoderV2;
 
-import "./Asset.sol";
+import "./Inventory.sol";
 
 /** @title ERC721 Proxy contract.
  * @dev Manages ERC721 assets using the chain owner as a signing oracle for validation and cross-chain transfer
  */
 /* is IERC721Receiver */
-contract AssetProxy {
+contract InventoryProxy {
     address internal signer; // signer oracle address
     uint256 internal chainId; // unique chain id
-    Asset internal parent; // managed ERC721 contract
+    Inventory internal parent; // managed ERC721 contract
     mapping(uint256 => bool) internal deposits; // whether the asset has been deposited in this contract
     mapping(bytes32 => bool) internal usedWithdrawHashes; // deposit hashes that have been used up (replay protection)
 
@@ -39,7 +39,7 @@ contract AssetProxy {
     ) public {
         signer = signerAddress;
         chainId = _chainId;
-        parent = Asset(parentAddress);
+        parent = Inventory(parentAddress);
     }
 
     /** @dev Set the address for the signer oracle
@@ -58,7 +58,7 @@ contract AssetProxy {
      */
     function setAssetParent(address newParent) public {
         require(msg.sender == signer, "must be signer");
-        parent = Asset(newParent);
+        parent = Inventory(newParent);
     }
 
     /** @dev Withdraw an ERC721 asset to an address

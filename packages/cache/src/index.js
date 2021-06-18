@@ -32,7 +32,7 @@ async function initializeAssetCache({ chainName }) {
 
   // Watch for new events.
   const recursivelyProcessEvents = (currentBlockNumber) => {
-    const wsContract = makeWeb3WebsocketContract(chainName, "ASSET");
+    const wsContract = makeWeb3WebsocketContract(chainName, "Inventory");
     wsContract.events
       .allEvents({ fromBlock: currentBlockNumber })
       .on("data", async function (event) {
@@ -67,7 +67,7 @@ async function initializeAssetCache({ chainName }) {
   if (currentBlockNumber !== lastBlockNumber) {
     const events = await getPastEvents({
       chainName,
-      contractName: "ASSET",
+      contractName: "Inventory",
       fromBlock: lastBlockNumber,
     });
     if (events.length > 0) {
@@ -149,7 +149,7 @@ async function initCaches() {
   await Promise.all(
     ["mainnet", "mainnetsidechain", "polygon"].map((chainName) => {
       return Promise.all([
-        logCache(chainName + " ASSET", initializeAssetCache({ chainName })),
+        logCache(chainName + " Inventory", initializeAssetCache({ chainName })),
         logCache(chainName + " Identity", initAccountCache({ chainName })),
       ]);
     })
@@ -169,9 +169,9 @@ async function processEventAsset({ event, chainName }) {
         sidechainWithdrewEntries,
         polygonDepositedEntries,
         polygonWithdrewEntries,
-      } = await getAllWithdrawsDeposits("ASSET")(chainName);
+      } = await getAllWithdrawsDeposits("Inventory")(chainName);
 
-      const asset = await getChainAsset("ASSET")(chainName)(
+      const asset = await getChainAsset("Inventory")(chainName)(
         assetId,
         storeEntries,
         mainnetDepositedEntries,
@@ -260,9 +260,9 @@ async function processEventsAsset({ events, currentBlockNumber, chainName }) {
     sidechainWithdrewEntries,
     polygonDepositedEntries,
     polygonWithdrewEntries,
-  } = await getAllWithdrawsDeposits("ASSET")(chainName);
+  } = await getAllWithdrawsDeposits("Inventory")(chainName);
   for (const assetId of assetIds) {
-    const asset = await getChainAsset("ASSET")(chainName)(
+    const asset = await getChainAsset("Inventory")(chainName)(
       assetId,
       storeEntries,
       mainnetDepositedEntries,
