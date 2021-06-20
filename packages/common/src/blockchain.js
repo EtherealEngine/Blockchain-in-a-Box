@@ -92,15 +92,15 @@ const loadPromise = (async() => {
         abis.Identity,
         addresses[network].Identity
       ),
-      COIN: new web3[network].eth.Contract(abis.COIN, addresses[network].COIN),
-      COINProxy: new web3[network].eth.Contract(
-        abis.COINProxy,
-        addresses[network].COINProxy
+      Currency: new web3[network].eth.Contract(abis.Currency, addresses[network].Currency),
+      CurrencyProxy: new web3[network].eth.Contract(
+        abis.CurrencyProxy,
+        addresses[network].CurrencyProxy
       ),
-      ASSET: new web3[network].eth.Contract(abis.ASSET, addresses[network].ASSET),
-      ASSETProxy: new web3[network].eth.Contract(
-        abis.ASSETProxy,
-        addresses[network].ASSETProxy
+      Inventory: new web3[network].eth.Contract(abis.Inventory, addresses[network].Inventory),
+      InventoryProxy: new web3[network].eth.Contract(
+        abis.InventoryProxy,
+        addresses[network].InventoryProxy
       ),
       Trade: new web3[network].eth.Contract(
         abis.Trade,

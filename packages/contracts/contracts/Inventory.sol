@@ -4,17 +4,19 @@ pragma experimental ABIEncoderV2;
 
 import "./standard/ERC721.sol";
 import "./standard/EnumerableSet.sol";
+import "./standard/ERC721Enumerable.sol";
+
 import "./standard/Math.sol";
-import "./Coin.sol";
+import "./Currency.sol";
 
 /**
  * @title Extension of {ERC721} for assets
  * I.E. collaborators and separate creatorship and ownership
  */
-contract Asset is ERC721 {
+contract Inventory is ERC721Enumerable {
     using EnumerableSet for EnumerableSet.UintSet;
 
-    Coin internal coinContract; // ERC20 contract for fungible assets
+    Currency internal coinContract; // ERC20 contract for fungible assets
     uint256 internal mintFee; // ERC20 fee to mint ERC721
     address internal treasuryAddress; // address into which we deposit minting fees
     bool internal isPublicallyMintable; // whether anyone can mint assets in this copy of the contract
@@ -56,7 +58,7 @@ contract Asset is ERC721 {
 
     /**
      * @dev Create this ERC721 contract
-     * @param name Name of the contract (default is "ASSET")
+     * @param name Name of the contract (default is "Inventory")
      * @param symbol Symbol for the asset (default is ???)
      * @param baseUri Base URI (example is http://)
      * @param _coinContract ERC20 contract attached to fungible assets
@@ -68,7 +70,7 @@ contract Asset is ERC721 {
         string memory name,
         string memory symbol,
         string memory baseUri,
-        Coin _coinContract,
+        Currency _coinContract,
         uint256 _mintFee,
         address _treasuryAddress,
         bool _isPublicallyMintable
@@ -83,7 +85,7 @@ contract Asset is ERC721 {
 
     /**
      * @dev Set the price to mint
-     * @param _mintFee Minting fee, default is 10 COIN
+     * @param _mintFee Minting fee, default is 10 Currency
      */
     function setMintFee(uint256 _mintFee) public {
         require(
@@ -221,13 +223,13 @@ contract Asset is ERC721 {
      * @param assetId Asset to get the URI from (ie: 250)
      * @return URI of the asset to retrieve
      */
-    function assetURI(uint256 assetId)
+    function tokenURI(uint256 assetId)
         public
         view
         override
         returns (string memory)
     {
-        return string(abi.encodePacked(baseURI(), uint2str(assetId)));
+        return string(abi.encodePacked(_getBaseURI(), uint2str(assetId)));
     }
 
     /**
@@ -457,7 +459,7 @@ contract Asset is ERC721 {
         uint256 count = 0;
         uint256 balance = balanceOf(owner);
         for (uint256 i = 0; i < balance; i++) {
-            uint256 assetId = assetOfOwnerByIndex(owner, i);
+            uint256 assetId = tokenOfOwnerByIndex(owner, i);
             string memory h = assetIdToHash[assetId];
             if (streq(h, hash)) {
                 count++;
@@ -505,7 +507,7 @@ contract Asset is ERC721 {
         uint256 count = balanceOf(owner);
         uint256[] memory ids = new uint256[](count);
         for (uint256 i = 0; i < count; i++) {
-            ids[i] = assetOfOwnerByIndex(owner, i);
+            ids[i] = tokenOfOwnerByIndex(owner, i);
         }
         return ids;
     }
@@ -535,12 +537,12 @@ contract Asset is ERC721 {
      * @param index Index in owner's balance to query
      * @return Asset struct containing asset data
      */
-    function assetOfOwnerByIndexFull(address owner, uint256 index)
+    function tokenOfOwnerByIndexFull(address owner, uint256 index)
         public
         view
         returns (Asset memory)
     {
-        uint256 assetId = assetOfOwnerByIndex(owner, index);
+        uint256 assetId = tokenOfOwnerByIndex(owner, index);
         string memory hash;
         string memory name;
         string memory ext;

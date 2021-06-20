@@ -9,7 +9,7 @@
   },
   "workspaces": [
     "packages/*"
-],
+  ],
   "keywords": [
     "ethereum",
     "blockchain",

@@ -2,16 +2,16 @@
 pragma solidity ^0.8.5;
 pragma experimental ABIEncoderV2;
 
-import "./Coin.sol";
+import "./Currency.sol";
 import "./standard/IERC721Receiver.sol";
 
 /** @title ERC20 Proxy contract.
  * @dev Manages ERC20 assets using the chain owner as a signing oracle for validation and cross-chain transfer
  */
-contract CoinProxy {
+contract CurrencyProxy {
     address internal signer; // signer oracle address
     uint256 internal chainId; // unique chain id
-    Coin internal parent; // managed ERC20 contract
+    Currency internal parent; // managed ERC20 contract
     uint256 internal deposits; // amount deposited in this contract
     mapping(bytes32 => bool) internal usedWithdrawHashes; // deposit hashes that have been used up (replay protection)
 
@@ -32,7 +32,7 @@ contract CoinProxy {
     ) public {
         signer = signerAddress;
         chainId = _chainId;
-        parent = Coin(parentAddress);
+        parent = Currency(parentAddress);
     }
 
     /** @dev Log the fact that we withdrew oracle-signed fungible assets
@@ -68,7 +68,7 @@ contract CoinProxy {
      */
     function setCoinParent(address newParent) public {
         require(msg.sender == signer, "must be signer");
-        parent = Coin(newParent);
+        parent = Currency(newParent);
     }
 
     /** @dev Withdraw ERC20 assets to an address

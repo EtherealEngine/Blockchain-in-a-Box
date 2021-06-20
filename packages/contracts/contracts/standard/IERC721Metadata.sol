@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.6.2;
+pragma solidity ^0.8.5;
 
 import "./IERC721.sol";
 
@@ -8,8 +8,7 @@ import "./IERC721.sol";
  * @title ERC-721 Non-Fungible Token Standard, optional metadata extension
  * @dev See https://eips.ethereum.org/EIPS/eip-721
  */
-interface IERC721Metadata {
-
+interface IERC721Metadata is IERC721 {
     /**
      * @dev Returns the token collection name.
      */

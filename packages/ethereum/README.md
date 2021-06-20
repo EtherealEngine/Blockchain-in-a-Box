@@ -1,4 +1,8 @@
-This repo containerizes the Ethereum example. The goal is quickly setup a private Ethereum blockchain using Docker and Kubernetes.
+This repo containerizes the Ethereum sidechain. The goal is quickly setup a private Ethereum blockchain using Docker and Kubernetes.
+
+Testing geth locally:
+You can download geth to Ubuntu by following the instructions here:
+https://launchpad.net/~ethereum/+archive/ubuntu/ethereum
 
 Support Feature:
 * Private network chain.

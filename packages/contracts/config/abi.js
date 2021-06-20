@@ -1,5 +1,5 @@
 module.exports = {
-  COIN: [
+  Currency: [
     {
       inputs: [
         {
@@ -368,7 +368,7 @@ module.exports = {
       type: "function",
     },
   ],
-  ASSET: [
+  Inventory: [
     {
       inputs: [
         {
@@ -1358,7 +1358,7 @@ module.exports = {
           type: "uint256",
         },
       ],
-      name: "assetOfOwnerByIndex",
+      name: "tokenOfOwnerByIndex",
       outputs: [
         {
           internalType: "uint256",
@@ -1382,7 +1382,7 @@ module.exports = {
           type: "uint256",
         },
       ],
-      name: "assetOfOwnerByIndexFull",
+      name: "tokenOfOwnerByIndexFull",
       outputs: [
         {
           components: [
@@ -1443,7 +1443,7 @@ module.exports = {
           type: "uint256",
         },
       ],
-      name: "assetURI",
+      name: "tokenURI",
       outputs: [
         {
           internalType: "string",
@@ -1607,7 +1607,7 @@ module.exports = {
       type: "function",
     },
   ],
-  COINProxy: [
+  CurrencyProxy: [
     {
       inputs: [
         {
@@ -1785,7 +1785,7 @@ module.exports = {
       type: "function",
     },
   ],
-  ASSETProxy: [
+  InventoryProxy: [
     {
       inputs: [
         {

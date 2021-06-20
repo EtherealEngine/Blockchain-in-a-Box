@@ -1,7 +1,9 @@
 const expressJSDocSwagger = require("express-jsdoc-swagger");
 
 const { createWallet } = require("./routes/wallet.js");
+
 const { handleServerSideAuth, authenticateToken } = require("./routes/auth.js");
+
 const {
   listAssets,
   createAsset,

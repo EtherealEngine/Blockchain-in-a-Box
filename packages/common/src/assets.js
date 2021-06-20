@@ -18,7 +18,7 @@ const _log = async (text, p) => {
 
 const _fetchAccountForMinter = async (assetId, chainName) => {
   const { contracts } = await getBlockchain();
-  const address = await contracts[chainName].ASSET.methods
+  const address = await contracts[chainName].Inventory.methods
     .getMinter(assetId)
     .call();
   if (address !== zeroAddress) {
@@ -29,7 +29,7 @@ const _fetchAccountForMinter = async (assetId, chainName) => {
 };
 const _fetchAccountForOwner = async (assetId, chainName) => {
   const { contracts } = await getBlockchain();
-  const address = await contracts[chainName].ASSET.methods
+  const address = await contracts[chainName].Inventory.methods
     .ownerOf(assetId)
     .call();
   if (address !== zeroAddress) {
@@ -528,11 +528,11 @@ const formatAsset =
         ),
         _log(
           "formatAsset 3" + JSON.stringify({ id: asset.id }),
-          contracts[sidechainChainName].ASSET.methods
+          contracts[sidechainChainName].Inventory.methods
             .getMetadata(asset.hash, "description")
             .call()
         ),
-        contracts[sidechainChainName].ASSET.methods.getMinter(assetId).call(),
+        contracts[sidechainChainName].Inventory.methods.getMinter(assetId).call(),
       ]);
 
     const _filterByAssetIdLocal = _filterByAssetId(assetId);
@@ -662,7 +662,7 @@ const getChainAsset =
           .call();
         const asset = _copy(assetSrc);
         const { hash } = asset;
-        asset.unlockable = await contracts[chainName].ASSET.methods
+        asset.unlockable = await contracts[chainName].Inventory.methods
           .getMetadata(hash, "unlockable")
           .call();
         if (!asset.unlockable) {
@@ -674,7 +674,7 @@ const getChainAsset =
 
     try {
       if (_isValidAsset(asset)) {
-        if (contractName === "ASSET") {
+        if (contractName === "Inventory") {
           const r = await formatAsset(chainName)(
             asset,
             storeEntries,
@@ -734,7 +734,7 @@ const getChainOwnerAsset =
     const { contracts } = await getBlockchain();
 
     const assetSrc = await contracts[chainName][contractName].methods
-      .assetOfOwnerByIndexFull(address, i)
+      .tokenOfOwnerByIndexFull(address, i)
       .call();
     const asset = _copy(assetSrc);
     const { hash } = asset;
@@ -746,7 +746,7 @@ const getChainOwnerAsset =
     }
 
     try {
-      if (contractName === "ASSET") {
+      if (contractName === "Inventory") {
         return await formatAsset(chainName)(
           asset,
           storeEntries,

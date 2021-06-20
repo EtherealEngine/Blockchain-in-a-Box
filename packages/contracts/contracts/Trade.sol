@@ -2,8 +2,8 @@
 pragma solidity ^0.8.5;
 pragma experimental ABIEncoderV2;
 
-import "./Coin.sol";
-import "./Asset.sol";
+import "./Currency.sol";
+import "./Inventory.sol";
 
 /** @title Trade Contract
  * @dev Trade contract to manage user to user trading of fungible and non-fungible assets
@@ -25,8 +25,8 @@ contract Trade {
     event Unsell(uint256 indexed id);
     event Buy(uint256 indexed id);
 
-    Coin parentERC20; // managed ERC20 contract
-    Asset parentERC721; // managed ERC721 contract
+    Currency parentERC20; // managed ERC20 contract
+    Inventory parentERC721; // managed ERC721 contract
     address signer; // signer oracle address
     uint256 nextBuyId; // next buy id
     mapping(uint256 => Store) stores;
@@ -46,8 +46,8 @@ contract Trade {
         address parentERC721Address,
         address signerAddress
     ) public {
-        parentERC20 = Coin(parentERC20Address);
-        parentERC721 = Asset(parentERC721Address);
+        parentERC20 = Currency(parentERC20Address);
+        parentERC721 = Inventory(parentERC721Address);
         signer = signerAddress;
         nextBuyId = 0;
     }
@@ -68,7 +68,7 @@ contract Trade {
      */
     function setCoinParent(address parentContract) public {
         require(msg.sender == signer, "must be signer");
-        parentERC20 = Coin(parentContract);
+        parentERC20 = Currency(parentContract);
     }
 
     /** @dev Set the ERC721 contract that this contract manages
@@ -76,7 +76,7 @@ contract Trade {
      */
     function setAssetParent(address newParentERC721Address) public {
         require(msg.sender == signer, "must be signer");
-        parentERC721 = Asset(newParentERC721Address);
+        parentERC721 = Inventory(newParentERC721Address);
     }
 
     /** @dev Add a non-fungible asset to the store to be sold

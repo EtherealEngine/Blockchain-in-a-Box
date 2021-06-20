@@ -202,15 +202,15 @@ async function mintAssets(
   const address = wallet.getAddressString();
 
   if (MINTING_FEE > 0) {
-    let allowance = await contracts["COIN"].methods
-      .allowance(address, contracts["ASSET"]._address)
+    let allowance = await contracts["Currency"].methods
+      .allowance(address, contracts["Inventory"]._address)
       .call();
     allowance = new web3.utils.BN(allowance, 0);
     if (allowance.lt(fullAmountD2.v)) {
       const result = await runSidechainTransaction(mnemonic)(
-        "COIN",
+        "Currency",
         "approve",
-        contracts["ASSET"]._address,
+        contracts["Inventory"]._address,
         fullAmount.v
       );
       status = result.status;
@@ -233,7 +233,7 @@ async function mintAssets(
     const { hash } = JSON.parse(Buffer.from(resHash, "utf8").toString("utf8"));
 
     const result = await runSidechainTransaction(mnemonic)(
-      "ASSET",
+      "Inventory",
       "mint",
       address,
       hash,
@@ -475,18 +475,18 @@ async function deleteAsset(req, res) {
 
     const address = asset.owner.address;
 
-    const currentHash = await contracts["mainnetsidechain"].ASSET.methods
+    const currentHash = await contracts["mainnetsidechain"].Inventory.methods
       .getHash(assetId)
       .call();
     const randomHash = Math.random().toString(36);
     await runSidechainTransaction(MAINNET_MNEMONIC)(
-      "ASSET",
+      "Inventory",
       "updateHash",
       currentHash,
       randomHash
     );
     const result = await runSidechainTransaction(MAINNET_MNEMONIC)(
-      "ASSET",
+      "Inventory",
       "transferFrom",
       address,
       burnAddress,
@@ -509,12 +509,12 @@ async function sendAsset(req, res) {
     let error = null;
     for (let i = 0; i < quantity; i++) {
       try {
-        const isApproved = await contracts.ASSET.methods
+        const isApproved = await contracts.Inventory.methods
           .isApprovedForAll(fromUserAddress, contracts["Trade"]._address)
           .call();
         if (!isApproved) {
           await runSidechainTransaction(MAINNET_MNEMONIC)(
-            "ASSET",
+            "Inventory",
             "setApprovalForAll",
             contracts["Trade"]._address,
             true
@@ -522,7 +522,7 @@ async function sendAsset(req, res) {
         }
 
         const result = await runSidechainTransaction(MAINNET_MNEMONIC)(
-          "ASSET",
+          "Inventory",
           "transferFrom",
           fromUserAddress,
           toUserAddress,
@@ -607,11 +607,11 @@ async function updatePublicAsset(req, res, { contracts }) {
           pinataOptions
         );
         if (IpfsHash) {
-          const currentHash = await contracts["mainnetsidechain"].ASSET.methods
+          const currentHash = await contracts["mainnetsidechain"].Inventory.methods
             .getHash(assetId)
             .call();
           await runSidechainTransaction(MAINNET_MNEMONIC)(
-            "ASSET",
+            "Inventory",
             "updateHash",
             currentHash,
             IpfsHash
@@ -635,11 +635,11 @@ async function updatePublicAsset(req, res, { contracts }) {
             if (hash) {
               const currentHash = await contracts[
                 "mainnetsidechain"
-              ].ASSET.methods
+              ].Inventory.methods
                 .getHash(assetId)
                 .call();
               await runSidechainTransaction(MAINNET_MNEMONIC)(
-                "ASSET",
+                "Inventory",
                 "updateHash",
                 currentHash,
                 hash
@@ -662,11 +662,11 @@ async function updatePublicAsset(req, res, { contracts }) {
         file.pipe(req);
       }
     } else {
-      const currentHash = await contracts["mainnetsidechain"].ASSET.methods
+      const currentHash = await contracts["mainnetsidechain"].Inventory.methods
         .getHash(assetId)
         .call();
       await runSidechainTransaction(MAINNET_MNEMONIC)(
-        "ASSET",
+        "Inventory",
         "updateHash",
         currentHash,
         resourceHash
@@ -689,8 +689,8 @@ async function updatePublicAsset(req, res, { contracts }) {
 //         // Set the new metadata
 
 //         // const encryptedData = encodeSecret(privateData);
-//         // await runSidechainTransaction(mnemonic)('ASSET', 'setMetadata', asset.hash, unlockableMetadataKey, encryptedData);
-//         // await runSidechainTransaction(mnemonic)('ASSET', 'setMetadata', asset.hash, encryptedMetadataKey, encryptedData);
+//         // await runSidechainTransaction(mnemonic)('Inventory', 'setMetadata', asset.hash, unlockableMetadataKey, encryptedData);
+//         // await runSidechainTransaction(mnemonic)('Inventory', 'setMetadata', asset.hash, encryptedMetadataKey, encryptedData);
 
 //     }
 //     try {

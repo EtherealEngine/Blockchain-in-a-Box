@@ -2,16 +2,17 @@
 pragma solidity ^0.8.5;
 
 import "./standard/ERC20Capped.sol";
+import "./standard/SafeMath.sol";
 
 /** @title Extension of {ERC20} that adds a cap to the supply of assets. */
-contract Coin is ERC20Capped {
+contract Currency is ERC20Capped {
     mapping(address => bool) internal allowedMinters; // whether anyone can mint assets (should be sidechain only)
     uint256 internal numAllowedMinters;
 
     /**
      * @dev Create a new fungible asset
-     * @param name Name of the asset (default is COIN)
-     * @param symbol Asset identifier (default is COIN)
+     * @param name Name of the asset (default is Currency)
+     * @param symbol Asset identifier (default is Currency)
      * @param cap Sets the asset market cap. This value is immutable, it can only be
      * set once during construction.
      * Default cap: 2147483648000000000000000000 or (2**31) + '000000000000000000'
