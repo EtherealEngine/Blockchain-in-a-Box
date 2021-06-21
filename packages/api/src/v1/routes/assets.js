@@ -4,7 +4,6 @@ const bip39 = require("bip39");
 const { hdkey } = require("ethereumjs-wallet");
 const {
   getBlockchain,
-  areAddressesCollaborator,
 } = require("@blockchain-in-a-box/common/src/blockchain.js");
 const {
   makePromise,
@@ -16,9 +15,6 @@ const {
   getRedisClient,
 } = require("@blockchain-in-a-box/common/src/redis.js");
 const {
-  proofOfAddressMessage,
-  unlockableMetadataKey,
-  encryptedMetadataKey,
   redisPrefixes,
   mainnetSignatureMessage,
   assetIndexName,
@@ -37,16 +33,8 @@ const {
   MINTING_FEE,
   DEFAULT_ASSET_DESCRIPTION,
   IPFS_HOST,
-  ENCRYPTION_MNEMONIC,
   MAINNET_MNEMONIC,
 } = require("@blockchain-in-a-box/common/src/environment.js");
-
-const { jsonParse } = require("@blockchain-in-a-box/common/src/utils.js");
-
-const {
-  encodeSecret,
-  decodeSecret,
-} = require("@blockchain-in-a-box/common/src/encryption.js");
 
 const pinataSDK = require("@pinata/sdk");
 const pinata =
@@ -77,11 +65,10 @@ const network = PRODUCTION ? "mainnet" : "testnet";
 
 const { Readable } = require("stream");
 
-let web3, contracts;
+let contracts;
 
 (async function () {
   const blockchain = await getBlockchain();
-  web3 = blockchain.web3;
   contracts = blockchain.contracts;
 })();
 
@@ -331,81 +318,6 @@ async function readAsset(req, res) {
     });
   }
 }
-
-// Same as read asset, but return unlockable in plaintext
-async function readAssetWithUnlockable(req, res) {
-  const { assetId } = req.params;
-  let o = await getRedisItem(assetId, redisPrefixes.mainnetSidechainAsset);
-  let asset = o.Item;
-
-  if (DEVELOPMENT) setCorsHeaders(res);
-  if (asset) {
-    if (
-      asset[unlockableMetadataKey] !== undefined &&
-      asset[unlockableMetadataKey] !== ""
-    ) {
-      let value = asset[unlockableMetadataKey];
-      value = jsonParse(value);
-      if (value !== null) {
-        let { ciphertext, tag } = value;
-        ciphertext = Buffer.from(ciphertext, "base64");
-        tag = Buffer.from(tag, "base64");
-        value = decodeSecret(ENCRYPTION_MNEMONIC, { ciphertext, tag });
-      }
-      asset[unlockableMetadataKey] = value;
-    }
-    return res.json({ status: ResponseStatus.Success, asset, error: null });
-  } else {
-    return res.json({
-      status: ResponseStatus.Error,
-      asset: null,
-      error: "The asset could not be found",
-    });
-  }
-}
-
-// async function readUnlockable(req, res) {
-//     const {assetId} = req.params;
-//     let o = await getRedisItem(assetId, redisPrefixes.mainnetSidechainAsset);
-//     let asset = o.Item;
-//     let value = "";
-//     if (DEVELOPMENT) setCorsHeaders(res);
-//     if (asset) {
-//         if(asset[unlockableMetadataKey] !== undefined && asset[unlockableMetadataKey] !== ""){
-//             value = asset[unlockableMetadataKey];
-//             value = jsonParse(value);
-//             if (value !== null) {
-//               let {ciphertext, tag} = value;
-//               ciphertext = Buffer.from(ciphertext, 'base64');
-//               tag = Buffer.from(tag, 'base64');
-//               value = decodeSecret(ENCRYPTION_MNEMONIC, {ciphertext, tag});
-//             }
-//             asset[unlockableMetadataKey] = value;
-//             return res.json({status: ResponseStatus.Success, value, error: null})
-//         } else {
-//             return res.json({status: ResponseStatus.Error, value: null, error: "The asset could not be unlocked"})
-//         }
-//     } else {
-//         return res.json({status: ResponseStatus.Error, value: null, error: "The asset could not be found"})
-//     }
-// }
-
-// async function readEncryptedData(req, res) {
-//     const {assetId} = req.params;
-//     let o = await getRedisItem(assetId, redisPrefixes.mainnetSidechainAsset);
-//     let asset = o.Item;
-//     if (DEVELOPMENT) setCorsHeaders(res);
-//     if (asset) {
-//         if(asset[encryptedMetadataKey] !== undefined && asset[encryptedMetadataKey] !== ""){
-//             const url = asset[encryptedMetadataKey];
-//             await fetch(url).then(data => res.send(data));
-//         } else {
-//             return res.json({status: ResponseStatus.Error, value: null, error: "The asset does not appear to have encrypted data"})
-//         }
-//     } else {
-//         return res.json({status: ResponseStatus.Error, value: null, error: "The asset could not be found"})
-//     }
-// }
 
 async function readAssetRange(req, res) {
   if (DEVELOPMENT) setCorsHeaders(res);
@@ -678,100 +590,13 @@ async function updatePublicAsset(req, res, { contracts }) {
   }
 }
 
-// // TODO: Try to unpin from pinata if we are using pinata
-// async function updatePrivateData(req, res, {contracts}) {
-//     async function updateHashForKeys(asset, privateDataHash){
-//         // TODO:
-//         // First, check if it already has this private data
-//         // if(asset.privateData)
-//         // If yes, check if pinata is true -- if it is, unpin the hash
-//         // Else, unpin the hash for local node
-//         // Set the new metadata
-
-//         // const encryptedData = encodeSecret(privateData);
-//         // await runSidechainTransaction(mnemonic)('Inventory', 'setMetadata', asset.hash, unlockableMetadataKey, encryptedData);
-//         // await runSidechainTransaction(mnemonic)('Inventory', 'setMetadata', asset.hash, encryptedMetadataKey, encryptedData);
-
-//     }
-//     try {
-//     const {mnemonic, assetId, resourceHash, privateData} = req.body;
-//     let o = await getRedisItem(assetId, redisPrefixes.mainnetSidechainAsset);
-//     let asset = o.Item;
-//     const file = req.files && req.files[0];
-//         if (!bip39.validateMnemonic(mnemonic)) {
-//             return res.json({status: ResponseStatus.Error, error: "Invalid mnemonic"});
-//         }
-
-//         if (!resourceHash && !file && !privateData) {
-//             return res.json({status: ResponseStatus.Error, error: "POST did not include a privateData field or a file or resourceHash"});
-//         }
-
-//         // Check if there are any files -- if there aren't, check if there's a hash
-//         if (resourceHash && file) {
-//             return res.json({status: ResponseStatus.Error, error: "POST should include a privateData field, resourceHash *or* file but not more than one"});
-//         }
-
-//         if (file) {
-//             const readableStream = new Readable({
-//                 read() {
-//                     this.push(Buffer.from(file));
-//                     this.push(null);
-//                 }
-//             });
-
-//             // Pinata API keys are valid, so this is probably what the user wants
-//             if (pinata) {
-//                 // TODO: Try to unpin existing pinata hash
-//                 const {IpfsHash} = pinata.pinFileToIPFS(readableStream, pinataOptions);
-//                 if (IpfsHash){
-//                     updateHashForKeys(asset, IpfsHash);
-//                 }
-//                 else res.json({status: ResponseStatus.Error, error: "Error pinning to Pinata service, hash was not returned"});
-//             } else {
-//                 // Upload to our own IPFS node
-//                 const req = http.request(IPFS_HOST, {method: 'POST'}, res => {
-//                     const bufferString = [];
-//                     res.on('data', data => {
-//                         bufferString.push(data);
-//                     });
-//                     res.on('end', async () => {
-//                         const buffer = Buffer.concat(bufferString);
-//                         const string = buffer.toString('utf8');
-//                         const {hash} = JSON.parse(string);
-//                         if (hash){
-//                             updateHashForKeys(asset, hash);
-//                         }
-//                         else return res.json({status: ResponseStatus.Error, error: "Error getting hash back from IPFS node"});
-//                     });
-//                     res.on('error', err => {
-//                         console.warn(err.stack);
-//                         return res.json({status: ResponseStatus.Error, error: err.stack});
-//                     });
-//                 });
-//                 req.on('error', err => {
-//                     console.warn(err.stack);
-//                     res.json({status: ResponseStatus.Error, error: err.stack});
-//                 });
-//                 file.pipe(req);
-//             }
-//         } else {
-//             updateHashForKeys(asset, resourceHash);
-//         }
-//     } catch (error) {
-//         console.warn(error.stack);
-//         return res.json({status: ResponseStatus.Error, assetIds: [], error});
-//     }
-// }
-
 module.exports = {
   listAssets,
   createAsset,
   updatePublicAsset,
   readAsset,
-  readAssetWithUnlockable,
   readAssetRange,
   deleteAsset,
   sendAsset,
-  signTransfer,
-  // readEncryptedData
+  signTransfer
 };

@@ -1,8 +1,6 @@
 const events = require("events");
 const { EventEmitter } = events;
 const dns = require("dns");
-const https = require("https");
-const fetch = require("node-fetch");
 const Web3 = require("web3");
 const {
   INFURA_PROJECT_ID,
@@ -13,7 +11,6 @@ const {
 const addresses = require("@blockchain-in-a-box/contracts/config/addresses.js");
 const abis = require("@blockchain-in-a-box/contracts/config/abi.js");
 const ports = require("@blockchain-in-a-box/contracts/config/ports.js");
-const ethereumHostAddress = require("@blockchain-in-a-box/contracts/config/abi.js");
 
 let web3,
   // web3socketProviders,

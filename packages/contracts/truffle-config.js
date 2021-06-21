@@ -21,11 +21,11 @@ module.exports = {
       gasPrice: 10000000000,
     },
     testnetsidechain: {
-      host: "testnetsidechain.exokit.org",
+      host: process.env.TESTNET_SIDECHAIN_URL,
       provider: () =>
         new HDWalletProvider(
           process.env.mainnetsidechain,
-          "http://testnetsidechain.exokit.org"
+          "http://" + process.env.TESTNET_SIDECHAIN_URL
         ),
       port: 8486,
       network_id: "1337",
@@ -50,11 +50,11 @@ module.exports = {
       networkCheckTimeout: 10000,
     },
     mainnetsidechain: {
-      host: "mainnetsidechain.exokit.org",
+      host: process.env.MAINNET_SIDECHAIN_URL,
       provider: () =>
         new HDWalletProvider(
           process.env.mainnetsidechain,
-          "http://mainnetsidechain.exokit.org"
+          "http://" +  process.env.MAINNET_SIDECHAIN_URL
         ),
       port: 8485,
       network_id: "1338",
