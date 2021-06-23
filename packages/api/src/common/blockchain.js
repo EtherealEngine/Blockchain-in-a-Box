@@ -6,11 +6,11 @@ const {
   INFURA_PROJECT_ID,
   POLYGON_VIGIL_KEY,
   ETHEREUM_HOST,
-} = require("@blockchain-in-a-box/common/src/environment.js");
+} = require("./environment.js");
 
-const addresses = require("@blockchain-in-a-box/contracts/config/addresses.js");
-const abis = require("@blockchain-in-a-box/contracts/config/abi.js");
-const ports = require("@blockchain-in-a-box/contracts/config/ports.js");
+const addresses = require("../config/addresses.js");
+const abis = require("../config/abi.js");
+const ports = require("../config/ports.js");
 
 let web3,
   // web3socketProviders,

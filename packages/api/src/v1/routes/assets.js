@@ -4,27 +4,27 @@ const bip39 = require("bip39");
 const { hdkey } = require("ethereumjs-wallet");
 const {
   getBlockchain,
-} = require("@blockchain-in-a-box/common/src/blockchain.js");
+} = require("../../common/blockchain.js");
 const {
   makePromise,
   setCorsHeaders,
-} = require("@blockchain-in-a-box/common/src/utils.js");
+} = require("../../common/utils.js");
 const {
   getRedisItem,
   parseRedisItems,
   getRedisClient,
-} = require("@blockchain-in-a-box/common/src/redis.js");
+} = require("../../common/redis.js");
 const {
   redisPrefixes,
   mainnetSignatureMessage,
   assetIndexName,
   burnAddress,
   zeroAddress,
-} = require("@blockchain-in-a-box/common/src/constants.js");
+} = require("../../common/constants.js");
 const { ResponseStatus } = require("../enums.js");
 const {
   runSidechainTransaction,
-} = require("@blockchain-in-a-box/common/src/assets.js");
+} = require("../../common/assets.js");
 const {
   PRODUCTION,
   DEVELOPMENT,
@@ -34,7 +34,7 @@ const {
   DEFAULT_ASSET_DESCRIPTION,
   IPFS_HOST,
   MAINNET_MNEMONIC,
-} = require("@blockchain-in-a-box/common/src/environment.js");
+} = require("../../common/environment.js");
 
 const pinataSDK = require("@pinata/sdk");
 const pinata =

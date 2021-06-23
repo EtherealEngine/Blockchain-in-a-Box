@@ -1,7 +1,7 @@
 const express = require("express");
 const fileUpload = require("express-fileupload");
 const { addV1Routes } = require("./v1/index.js");
-const { HTTP_PORT, DEVELOPMENT } = require("@blockchain-in-a-box/common/src/environment.js");
+const { HTTP_PORT, DEVELOPMENT } = require("./common/environment.js");
 
 const app = express();
 
