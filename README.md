@@ -33,7 +33,20 @@ Pinata Cloud - The Broken Token (how Pinata can make NFTs more durable)
 https://www.youtube.com/watch?v=0iuAvE-a0fI
 
 # Setup and Installation
-TODO
+
+## Configure .env file
+In the root folder create a clone of `.env.default` file and name it `.env`. Update the content of `.env` file with your resources. 
+
+## Setup Pinata Account
+Pinata is allows you to upload and manage files on IPFS. It provides IPFS API through which you can easily perform IPFS pinning service.
+
+1. Open https://pinata.cloud/ and sigup/login.
+2. Navigate to https://pinata.cloud/keys and create a new key. Make sure to check Admin key switch button in the modal.
+3. Update `.env` file with following entries from generated key.
+    ```
+    PINATA_API_KEY=
+    PINATA_SECRET_API_KEY=
+    ```
 
 # Deployment
 
