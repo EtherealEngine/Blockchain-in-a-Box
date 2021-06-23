@@ -1,10 +1,10 @@
-const { setCorsHeaders } = require("@blockchain-in-a-box/common/src/utils.js");
+const { setCorsHeaders } = require("../../common/utils.js");
 const { ResponseStatus } = require("../enums.js");
 const {
   DEVELOPMENT,
   AUTH_TOKEN_SECRET,
   AUTH_SECRET_KEY,
-} = require("@blockchain-in-a-box/common/src/environment.js");
+} = require("../../common/environment.js");
 const jwt = require("jsonwebtoken");
 
 function authenticateToken(req, res, next) {

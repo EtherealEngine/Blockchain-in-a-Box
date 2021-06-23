@@ -16,7 +16,7 @@ const {
 
 const {
   getBlockchain,
-} = require("@blockchain-in-a-box/common/src/blockchain.js");
+} = require("../common/blockchain.js");
 
 let blockchain;
 

@@ -2,24 +2,24 @@ const {
   getChainAsset,
   getChainIdentity,
   getAllWithdrawsDeposits,
-} = require("@blockchain-in-a-box/common/src/assets.js");
+} = require("./common/assets.js");
 const {
   assetKeys,
   assetPropertiesKeys,
   ids,
   redisPrefixes,
-} = require("@blockchain-in-a-box/common/src/constants.js");
+} = require("./common/constants.js");
 const {
   getBlockchain,
   getPastEvents,
   makeWeb3WebsocketContract,
-} = require("@blockchain-in-a-box/common/src/blockchain.js");
+} = require("./common/blockchain.js");
 const {
   connect,
   getRedisAllItems,
   getRedisItem,
   putRedisItem,
-} = require("@blockchain-in-a-box/common/src/redis.js");
+} = require("./common/redis.js");
 
 initCaches();
 
