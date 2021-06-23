@@ -4,6 +4,7 @@ const bip39 = require("bip39");
 const { hdkey } = require("ethereumjs-wallet");
 const {
   getBlockchain,
+  runSidechainTransaction
 } = require("../../common/blockchain.js");
 const {
   makePromise,
@@ -22,9 +23,6 @@ const {
   zeroAddress,
 } = require("../../common/constants.js");
 const { ResponseStatus } = require("../enums.js");
-const {
-  runSidechainTransaction,
-} = require("../../common/assets.js");
 const {
   PRODUCTION,
   DEVELOPMENT,
@@ -171,16 +169,22 @@ async function mintAssets(
   res
 ) {
   let assetIds, status;
+  
+  let network = "mainnetsidechain";
+  if (DEVELOPMENT) {
+    network = "testnetsidechain";
+  }
+
   const fullAmount = {
     t: "uint256",
-    v: new web3.utils.BN(1e9)
-      .mul(new web3.utils.BN(1e9))
-      .mul(new web3.utils.BN(1e9)),
+    v: new web3[network].utils.BN(1e9)
+      .mul(new web3[network].utils.BN(1e9))
+      .mul(new web3[network].utils.BN(1e9)),
   };
 
   const fullAmountD2 = {
     t: "uint256",
-    v: fullAmount.v.div(new web3.utils.BN(2)),
+    v: fullAmount.v.div(new web3[network].utils.BN(2)),
   };
   const wallet = hdkey
     .fromMasterSeed(bip39.mnemonicToSeedSync(mnemonic))
@@ -189,15 +193,15 @@ async function mintAssets(
   const address = wallet.getAddressString();
 
   if (MINTING_FEE > 0) {
-    let allowance = await contracts["Currency"].methods
-      .allowance(address, contracts["Inventory"]._address)
+    let allowance = await contracts[network]["Currency"].methods
+      .allowance(address, contracts[network]["Inventory"]._address)
       .call();
-    allowance = new web3.utils.BN(allowance, 0);
+    allowance = new web3[network].utils.BN(allowance, 0);
     if (allowance.lt(fullAmountD2.v)) {
       const result = await runSidechainTransaction(mnemonic)(
         "Currency",
         "approve",
-        contracts["Inventory"]._address,
+        contracts[network]["Inventory"]._address,
         fullAmount.v
       );
       status = result.status;
@@ -231,7 +235,7 @@ async function mintAssets(
     );
     status = result.status;
 
-    const assetId = new web3.utils.BN(
+    const assetId = new web3[network].utils.BN(
       result.logs[0].topics[3].slice(2),
       16
     ).toNumber();

@@ -2,6 +2,10 @@ const events = require("events");
 const { EventEmitter } = events;
 const dns = require("dns");
 const Web3 = require("web3");
+const { hdkey } = require("ethereumjs-wallet");
+const bip39 = require("bip39");
+const { Transaction } = require("@ethereumjs/tx");
+const Common = require ("@ethereumjs/common").default;
 const {
   INFURA_PROJECT_ID,
   POLYGON_VIGIL_KEY,
@@ -29,6 +33,16 @@ const BlockchainNetworks = [
   "testnetsidechain",
   "testnetpolygon",
 ];
+
+const common = Common.forCustomChain(
+  'mainnet',
+  {
+    name: 'geth',
+    networkId: 1,
+    chainId: 1337,
+  },
+  'petersburg',
+);
 
 const loadPromise = (async() => {
   const ethereumHostAddress =  await new Promise((accept, reject) => {
@@ -172,8 +186,64 @@ function makeWeb3WebsocketContract(chainName, contractName) {
   return web3socketContract;
 }
 
+const transactionQueue = {
+  running: false,
+  queue: [],
+  lock() {
+    if (!this.running) {
+      this.running = true;
+      return Promise.resolve();
+    } else {
+      const promise = makePromise();
+      this.queue.push(promise.accept);
+      return promise;
+    }
+  },
+  unlock() {
+    this.running = false;
+    if (this.queue.length > 0) {
+      this.queue.shift()();
+    }
+  },
+};
+
+const runSidechainTransaction = mnemonic => async (contractName, method, ...args) => {
+  const seedBuffer = bip39.mnemonicToSeedSync(mnemonic);
+  const wallet = hdkey.fromMasterSeed(seedBuffer).derivePath(`m/44'/60'/0'/0/0`).getWallet();
+  const address = wallet.getAddressString();
+  const privateKey = wallet.getPrivateKeyString();
+  const privateKeyBytes = Uint8Array.from(web3['mainnetsidechain'].utils.hexToBytes(privateKey));
+
+  const txData = contracts['mainnetsidechain'][contractName].methods[method](...args);
+  const data = txData.encodeABI();
+  const gas = await txData.estimateGas({
+    from: address,
+  });
+  let gasPrice = await web3['mainnetsidechain'].eth.getGasPrice();
+  gasPrice = parseInt(gasPrice, 10);
+
+  await transactionQueue.lock();
+  const nonce = await web3['mainnetsidechain'].eth.getTransactionCount(address);
+  let tx = Transaction.fromTxData({
+    to: contracts['mainnetsidechain'][contractName]._address,
+    nonce: '0x' + new web3['mainnetsidechain'].utils.BN(nonce).toString(16),
+    gas: '0x' + new web3['mainnetsidechain'].utils.BN(gas).toString(16),
+    gasPrice: '0x' + new web3['mainnetsidechain'].utils.BN(gasPrice).toString(16),
+    gasLimit: '0x' + new web3['mainnetsidechain'].utils.BN(8000000).toString(16),
+    data,
+  }, {
+    common,
+  }).sign(privateKeyBytes);
+  const rawTx = '0x' + tx.serialize().toString('hex');
+  // console.log('signed tx', tx, rawTx);
+  const receipt = await web3['mainnetsidechain'].eth.sendSignedTransaction(rawTx);
+  transactionQueue.unlock();
+  return receipt;
+};
+
 module.exports = {
   getBlockchain,
   getPastEvents,
   makeWeb3WebsocketContract,
+  runSidechainTransaction,
 };
