@@ -1,7 +1,7 @@
 **For AWS EKS setup**
 Set AWS EKS with kubectl
 
-aws eks --region us-west-1 update-kubeconfig --name <AWS EKS name>
+aws eks --region us-west-1 update-kubeconfig --name **<AWS EKS name>**
  
 **Step 1**
 Go to installer folder
@@ -31,13 +31,13 @@ kubectl logs pod/geth-p7gjv -c geth-ethnetintel
 Also can check using infra app.
  
 ethstats-dashboard
-http://<ethstats-dashboard-loadbalancer>:3000/
+http://**<ethstats-dashboard-loadbalancer>**:3000/
 
 solidity browser
-http://<solidity-browser-loadbalancer>
+http://**<solidity-browser-loadbalancer>**
 
  geth
-http://<geth-loadbalancer>:8545/ 
+http://**<geth-loadbalancer>**:8545/ 
  
  
  --------------------------------------------------------------------------------------
