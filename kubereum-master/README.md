@@ -31,7 +31,7 @@ kubectl logs pod/geth-p7gjv -c geth-ethnetintel
 Also can check using infra app.
  
 ethstats-dashboard
-http://ethstats-dashboard-loadbalancer*:3000/
+http://ethstats-dashboard-loadbalancer:3000/
 
 solidity browser
 http://solidity-browser-loadbalancer
