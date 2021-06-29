@@ -7,12 +7,19 @@
 6. infura app
 
 Example windows 
+
 install choco
+
 install choce terraform
+
 install choco git
+
 install choco kubectl
+
 install docker
+
 choco install minikube
+
 https://infra.app/
 
 **Step 1**
