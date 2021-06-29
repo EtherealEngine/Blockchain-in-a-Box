@@ -30,7 +30,7 @@ To initialize terraform scripts
 
 terraform init
 
-**Step 4*
+**Step 4**
 To apply terraform scripts
 
 terraform apply
