@@ -40,6 +40,8 @@ http://<solidity-browser-loadbalancer>
 http://<geth-loadbalancer>:8545/ 
  
  
+ --------------------------------------------------------------------------------------
+ 
  
 **For Local setup**
  
