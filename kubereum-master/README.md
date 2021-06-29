@@ -41,8 +41,22 @@ http://geth-loadbalancer:8545/
  
  
  --------------------------------------------------------------------------------------
+
+Example: setup in windows 
+
+install choco
+
+install choco git
+
+install choco kubectl
+
+install docker
+
+choco install minikube
+
+https://infra.app/
  
- 
+
 **For Local setup**
  
 Set local minikube with kubectl
