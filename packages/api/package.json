@@ -49,6 +49,6 @@
   },
   "devDependencies": {
     "forever": "4.0.1",
-    "nodemon": "2.0.8"
+    "nodemon": "2.0.9"
   }
 }
