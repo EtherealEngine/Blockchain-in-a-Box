@@ -20,7 +20,7 @@ resource "random_string" "suffix" {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "3.2.0"
+  version = "2.66.0"
 
   name                 = "kubereum-vpc"
   cidr                 = "10.0.0.0/16"
