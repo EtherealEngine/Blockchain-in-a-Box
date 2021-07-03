@@ -35,3 +35,5 @@ app.listen(HTTP_PORT, (err) => {
   if (err) console.log(err);
   console.log(`App listening at http://localhost:${HTTP_PORT}`);
 });
+
+module.exports = {app};
