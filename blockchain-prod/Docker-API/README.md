@@ -31,4 +31,5 @@ sudo docker run -p 8080:8080 dockerid/blockchain-api
 **push image to docker hub**
 
 sudo docker login -u dockerid
+
 sudo docker push dockerid/blockchain-api:latest
