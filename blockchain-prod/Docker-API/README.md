@@ -7,6 +7,7 @@ A neat little API for interacting with the blockchain.
 **for windows and others**
 
 npm install
+
 npm run start
 
 **For unix-ubuntu**
