@@ -1,4 +1,4 @@
-# REST API Server
+# REST API Server with docker
 
 A neat little API for interacting with the blockchain.
 
