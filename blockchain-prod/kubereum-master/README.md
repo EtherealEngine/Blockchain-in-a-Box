@@ -1,62 +1,95 @@
-[![Build Status](https://travis-ci.org/kairen/kubereum.svg?branch=master)](https://travis-ci.org/kairen/kubereum)
-# Kubernetes + Ethereum = Kubereum
-This repos is containerize the Ethereum example. The goal is quickly setup a private Ethereum blockchain using Docker and Kubernetes.
+**For AWS EKS setup Set AWS EKS with kubectl**
 
-Support Feature:
-* Private network chain.
-* Miner monitoring.
-* Blockchain stats dashboard.
-* Solidity browser service.
+aws eks --region us-west-1 update-kubeconfig --name AWS EKS name
 
-Example in my Lab:
-[![asciicast](https://asciinema.org/a/lRWNbs4bQmmS6ijQcyjdLqvsS.png)](https://asciinema.org/a/lRWNbs4bQmmS6ijQcyjdLqvsS?speed=2)
+**Step 1 Go to installer folder**
 
-### Image build status
+cd C:\Onedrive\Work\LagunaLabs\kubereum-master
 
-| Solidity | Ethnetintel | Ethstats | Auto peer |
-|----------|-------------|----------|-----------|
-|[![Docker Build Statu](https://img.shields.io/docker/build/kairen/solidity.svg)](https://hub.docker.com/r/kairen/solidity/)|[![Docker Build Statu](https://img.shields.io/docker/build/kairen/ethnetintel.svg)](https://hub.docker.com/r/kairen/ethnetintel/)|[![Docker Build Statu](https://img.shields.io/docker/build/kairen/ethstats.svg)](https://hub.docker.com/r/kairen/ethstats/)|[![Docker Build Statu](https://img.shields.io/docker/build/kairen/auto-peer.svg)](https://hub.docker.com/r/kairen/auto-peer/)|
+**Step 2 Apply the different setup script**
 
-### Requirements
-* Docker engine.
-* Kubernetes cluster.
+kubectl apply -f geth-config.yml -f geth-svc.yml -f geth-ds.yml -f geth-ethnetintel-ds.yml -f ethstats-dashboard-dp.yml -f solidity-browser-dp.yml -f solidity-browser-loadbalancer.yml -f ethstats-dashboard-loadbalancer.yml -f ethstats-dashboard-loadbalancer.yml -f geth-loadbalancer.yml -f blockchain-api.yml -f blockchain-api-loadbalancer.yml
 
-## Usage
-To run the Ethereum private chain cluster(without the Ethereum network status):
-```sh
-$ kubectl apply \
--f geth-config.yml \
--f geth-svc.yml \
--f geth-ds.yml
-```
+**Step 3**
 
-Check the pods:
-```sh
-$  kubectl get po,svc -o wide
-NAME            READY     STATUS    RESTARTS   AGE       IP            NODE
-po/geth-289mg   2/2       Running   0          10m       10.244.52.3   node4
-po/geth-fqszz   2/2       Running   0          10m       10.244.96.2   node1
-po/geth-hxlf2   2/2       Running   0          10m       10.244.85.4   node3
-po/geth-vjtpf   2/2       Running   0          10m       10.244.98.3   node2
+Test multiple command after set
 
-NAME             CLUSTER-IP        EXTERNAL-IP   PORT(S)    AGE       SELECTOR
-svc/geth         192.168.170.219   <none>        8545/TCP   4h        app=geth
-```
+Get pod and services kubectl get po,svc -o wide
 
-Attach the Ethereum IPC file(Install geth from [Building-Ethereum](https://github.com/ethereum/go-ethereum/wiki/Building-Ethereum)):
-```sh
-$ cd /var/geth && ls
-geth  geth.ipc  keystore
+To check events kubectl get events
 
-$ geth attach ipc:geth.ipc
-Welcome to the Geth JavaScript console!
+To logs kubectl logs pod/geth-htkl5 -c init-genesis
 
-instance: Geth/v1.6.7-unstable/linux-amd64/go1.7.3
-coinbase: 0x2f99300b9fb9da018e7004e448f0a16730dbe6a4
-at block: 0 (Thu, 01 Jan 1970 00:00:00 UTC)
- datadir: /var/geth
- modules: admin:1.0 debug:1.0 eth:1.0 miner:1.0 net:1.0 personal:1.0 rpc:1.0 txpool:1.0 web3:1.0
+kubectl logs pod/geth-p7gjv -c geth-ethnetintel
 
-> net.peerCount
-3
-```
+Also can check using infra app.
+
+ethstats-dashboard http://ethstats-dashboard-loadbalancer/
+
+solidity browser http://solidity-browser-loadbalancer
+
+geth http://geth-loadbalancer/
+
+blockchain api  http://blockchain-api-loadbalancer/
+
+Example: setup in windows
+
+install choco
+
+install choco git
+
+install choco kubectl
+
+install docker
+
+choco install minikube
+
+https://infra.app/
+
+For Local setup
+
+Set local minikube with kubectl
+
+minikube start
+
+minikube ip
+
+minikube dashboard
+
+kubectl config use-context minikube
+
+kubectl cluster-info
+
+minikube service list
+
+**Step 1 Go to installer folder**
+
+cd C:\Onedrive\Work\LagunaLabs\kubereum-master
+
+**Step 2 Apply the different setup script**
+
+kubectl apply -f geth-config.yml -f geth-svc.yml -f geth-ds.yml -f geth-ethnetintel-ds.yml -f ethstats-dashboard-dp.yml -f solidity-browser-dp.yml -f solidity-browser-loadbalancer.yml -f ethstats-dashboard-loadbalancer.yml -f ethstats-dashboard-loadbalancer.yml -f geth-loadbalancer.yml -f blockchain-api.yml -f blockchain-api-loadbalancer.yml
+
+**Step 3**
+
+Test multiple command after set
+
+Get pod and services kubectl get po,svc -o wide
+
+To check events kubectl get events
+
+**Step 4 For make minikube accessible**
+
+minikube tunnel
+
+Also can check using infra app.
+
+Please change port in script for local setup else it will conflict each other.
+
+ethstats-dashboard http://127.0.0.1:3000/
+
+solidity browser http://127.0.0.1
+
+geth http://127.0.0.1:8545/
+
+blockchain api http://127.0.0.1:8080/
