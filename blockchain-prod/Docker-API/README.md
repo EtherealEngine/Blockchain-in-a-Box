@@ -13,6 +13,7 @@ npm run start
 **For unix-ubuntu**
 
 sudo npm install --save puppeteer --unsafe-perm=true
+
 sudo npm install
 
 ## **Create docker**
