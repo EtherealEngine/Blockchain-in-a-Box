@@ -46,7 +46,9 @@ choco install minikube
 
 https://infra.app/
 
-For Local setup
+--------------------------------------------------------------------------------------
+**For Local setup**
+
 
 Set local minikube with kubectl
 
