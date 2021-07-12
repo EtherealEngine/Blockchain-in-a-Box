@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: geth-loadbalancer
+spec:
+  type: LoadBalancer
+  selector:
+    app: geth
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8545
