@@ -8,6 +8,7 @@ const {
 const jwt = require("jsonwebtoken");
 
 function authenticateToken(req, res, next) {
+  // TODO: Clear this?
   next();
   return;
   
