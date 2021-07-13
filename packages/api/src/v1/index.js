@@ -125,7 +125,7 @@ function addV1Routes(app) {
     apiDocsPath: "/api/v1/api-docs",
   };
 
-  expressJSDocSwagger(app)(swaggerOptions);
+  exzpressJSDocSwagger(app)(swaggerOptions);
 
   /**
    * Authentication payload
