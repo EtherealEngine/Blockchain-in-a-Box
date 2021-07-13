@@ -260,7 +260,7 @@ describe("GET /api/v1/assets/:address/:mainnetAddress?", () => {
 
   const address = {
     wrong: "",
-    corrent: "",
+    correct: "",
   };
   const mainnetAddress = {
     wrong: "",
@@ -487,7 +487,7 @@ describe("GET /api/v1/asset/:assetId", () => {
 
   const assetId = {
     wrong: "",
-    corrent: "",
+    correct: "",
   };
 
   test("rejects requests with wrong assetId", async () => {
@@ -523,7 +523,7 @@ describe("GET /api/v1/asset/:assetId", () => {
 
 /////////////////////////////////////////////////////////
 
-describe("GET /api/v1/asset/:assetId", () => {
+describe("GET /api/v1/asset/:assetStartId/:assetEndId", () => {
   //   const accessToken = {
   //     wrong: "bearer aaa",
   //     correct: jwt.sign({ authSecretKey }, process.env.AUTH_TOKEN_SECRET),
@@ -556,20 +556,20 @@ describe("GET /api/v1/asset/:assetId", () => {
       assetEndId: 120,
     },
     {
-      assetStartId: "Sdfs",
+      assetStartId: "any string",
       assetEndId: 10,
     },
     {
       assetStartId: 1,
-      assetEndId: "Sdf",
+      assetEndId: "any string",
     },
     {
-      assetStartId: "Sdf",
-      assetEndId: "Sdf",
+      assetStartId: "any string",
+      assetEndId: "any string",
     },
   ];
 
-  //should replace these fields
+  //should replace these fields with the correct range value
 
   const correct_range = {
     assetStartId: 1,
