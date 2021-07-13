@@ -25,7 +25,7 @@ const assetContractName = "Inventory";
 const assetContractSymbol = process.env.ASSET_CONTRACT_SYMBOL || "ASSET";
 const assetsAreMintable = process.env.ASSETS_ARE_MINTABLE || true;
 const assetBaseUri = process.env.ASSET_BASE_URI || "";
-const mintFee = process.env.ASSET_CREATION_FEE || 10;
+const mintFee = process.env.MINTING_FEE || 10;
 
 const NetworkTypes = {
   mainnet: "mainnet",
