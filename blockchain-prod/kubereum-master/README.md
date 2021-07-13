@@ -76,7 +76,9 @@ kubectl apply -f geth-config.yml -f geth-svc.yml -f geth-ds.yml -f geth-ethnetin
 
 Test multiple command after set
 
-Get pod and services kubectl get po,svc -o wide
+Get pod and services 
+
+kubectl get po,svc -o wide
 
 To check events kubectl get events
 
