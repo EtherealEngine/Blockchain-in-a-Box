@@ -6,7 +6,7 @@ EXPOSE 80
 EXPOSE 443
 EXPOSE 8443
 COPY package*.json ./
-RUN npm install
+RUN sudo npm install
 COPY . .
 
-CMD [ "node", "index.js" ]
+CMD [ "npm", "run", "start" ]

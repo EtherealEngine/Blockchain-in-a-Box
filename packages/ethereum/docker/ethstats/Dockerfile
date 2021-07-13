@@ -1,4 +1,5 @@
 FROM node:6-alpine
+MAINTAINER Kyle Bai <kyle.b@inwinstack.com>
 
 RUN apk add --no-cache git g++ make bash && \
   git clone https://github.com/cubedro/eth-netstats /ethstats && \

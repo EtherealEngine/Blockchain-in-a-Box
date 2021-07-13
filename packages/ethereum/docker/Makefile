@@ -1,4 +1,4 @@
-USER = blockchain-in-a-box
+USER = kairen
 BUILD_IMAGES = auto-peer ethnetintel ethstats solidity
 GETH_IMAGE = ethereum/client-go
 DATA_DIR = genesis-data

@@ -1,18 +1,19 @@
 {
   "name": "@blockchain-in-a-box/cache",
   "version": "0.1.0",
-  "description": "Redis cache server for Blockchain-in-a-Box",
-  "main": "src/index.js",
+  "description": "Cache Server for Blockchain-in-a-Box",
+  "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "sudo $(which node) src/index.js",
+    "test": "cross-env NODE_ENV=test jest --testTimeout=10000"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/xrfoundation/blockchain-in-a-box.git"
   },
   "author": "",
-  "license": "MIT",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/xrfoundation/blockchain-in-a-box/issues"
   },

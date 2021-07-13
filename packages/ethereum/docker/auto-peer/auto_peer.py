@@ -1,4 +1,6 @@
 # encode=utf-8
+# Copyright 2017 Kyle Bai(kyle.b@inwinstack.com)
+# All Rights Reserved
 
 import os
 import sys

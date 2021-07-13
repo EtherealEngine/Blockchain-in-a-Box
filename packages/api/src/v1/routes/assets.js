@@ -419,7 +419,7 @@ async function deleteAsset(req, res) {
 async function sendAsset(req, res) {
   try {
     const { fromUserAddress, toUserAddress, assetId } = req.body;
-    const quantity = req.body.quantity ?? 1;
+    //const quantity = req.body.quantity ?? 1;
 
     let status = true;
     let error = null;

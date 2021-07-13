@@ -14,13 +14,17 @@ spec:
     protocol: TCP
     targetPort: 3000
 ---
-apiVersion: extensions/v1beta1
+#apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ethstats-dashboard
   labels:
     app: ethstats-dashboard
 spec:
+  selector:
+    matchLabels:
+      app: ethstats-dashboard
   replicas: 1
   template:
     metadata:
@@ -30,7 +34,7 @@ spec:
     spec:
       containers:
       - name: ethstats-dashboard
-        image: blockchain-in-a-box/ethstats
+        image: kairen/ethstats
         env:
         - name: WS_SECRET
           value: "12qw34er"

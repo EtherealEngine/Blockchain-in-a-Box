@@ -1,7 +1,7 @@
 const dotenv = require("dotenv");
 
 dotenv.config({
-  path: `./../../.env`,
+  path: `./.env`,
 });
 
 const INFURA_PROJECT_ID = process.env.INFURA_PROJECT_ID;
@@ -15,6 +15,8 @@ const AUTH_SECRET_KEY = process.env.AUTH_SECRET_KEY;
 const HTTP_PORT = process.env.HTTP_PORT;
 const HTTPS_PORT = process.env.HTTPS_PORT;
 
+const IPFS_HOST_PORT = process.env.IPFS_HOST_PORT;
+const IPFS_HOST = process.env.IPFS_HOST;
 const ETHEREUM_HOST = process.env.ETHEREUM_HOST;
 
 const PINATA_API_KEY = process.env.PINATA_API_KEY;
@@ -43,6 +45,8 @@ module.exports = {
   AUTH_SECRET_KEY,
   HTTP_PORT,
   HTTPS_PORT,
+  IPFS_HOST_PORT,
+  IPFS_HOST,
   ETHEREUM_HOST,
   PINATA_API_KEY,
   PINATA_SECRET_API_KEY,

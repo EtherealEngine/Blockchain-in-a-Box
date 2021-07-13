@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ethstats-dashboard-loadbalancer
+spec:
+  type: LoadBalancer
+  selector:
+    app: ethstats-dashboard
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000

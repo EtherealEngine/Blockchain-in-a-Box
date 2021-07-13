@@ -1,10 +1,14 @@
-apiVersion: extensions/v1beta1
+#apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: geth
   labels:
     app: geth
 spec:
+  selector:
+    matchLabels:
+      app: geth
   template:
     metadata:
       labels:
@@ -27,6 +31,7 @@ spec:
         - "--rpcaddr=0.0.0.0"
         - "--rpcapi=admin,db,eth,debug,miner,net,shh,txpool,personal,web3"
         - "--rpccorsdomain=*"
+        - "--rpcvhosts=*"
         # - "-verbosity=6"
         resources:
           requests:
@@ -41,7 +46,7 @@ spec:
           initialDelaySeconds: 15
           timeoutSeconds: 5
       - name: geth-auto-peer
-        image: blockchain-in-a-box/auto-peer
+        image: kairen/auto-peer
         env:
         - name: SERVICE_NAME
           value: "geth"
@@ -55,7 +60,7 @@ spec:
               fieldPath: metadata.namespace
         command: [ "/bin/sh", "-c" ]
         args:
-        - "set -e -x; while true; do python /etc/auto_peer.py; sleep 15; done"
+        - "set -e -x; while true; do python /etc/auto_peer.py; sleep 15; done;"
       # init genesis data
       initContainers:
       - name: init-genesis

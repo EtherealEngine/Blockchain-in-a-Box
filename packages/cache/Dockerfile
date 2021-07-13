@@ -1,10 +1,12 @@
 FROM node:16
 WORKDIR /usr/src/app
-RUN apt-get update
-RUN apt-get -y install nodejs
-RUN npm install -g npm
-EXPOSE 6379
+ENV PRODUCTION=true
+EXPOSE 8080
+EXPOSE 80
+EXPOSE 443
+EXPOSE 8443
 COPY package*.json ./
-RUN npm install
+RUN sudo npm install
 COPY . .
-CMD [ "node", "index.js" ]
+
+CMD [ "npm", "run", "start" ]
