@@ -1,18 +1,18 @@
-# REST API Server with docker
+# REST API Server
 
-A neat little API for interacting with the blockchain.
+This is the main interface for interacting with the blockchain. Additionally, the cont
 
 ## Setup & Installation
 
-**for windows and others**
-
+**For Windows and others**
+```
 npm install
-
 npm run start
-
-**For unix-ubuntu**
-
+```
+**For Linux**
+```
 sudo npm install
+```
 
 ## **Create docker**
 

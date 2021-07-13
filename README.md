@@ -1,6 +1,8 @@
 # Blockchain-in-a-Box
 A batteries-included ethereum blockchain for bootstrapping the Metaverse.🚀🚀🚀
 
+Includes contracts for identity, inventory, currency and trade. Can be extended for any kind of marketplace application, but the goal is fast, free interoperable transfer of all user data from one server-authoratative platform to another. The ideal use case we imagine is a portal between two separate virtual worlds, sharing user data over the blockchain.
+
 ## What Is This?
 A Node.js-based REST API, Ethereum node, cache service and smart contracts to deploy your own Ethereum-based sidechain for identity and durable assets. Users can transfer assets created on your platform to the Ethereum or Polygon main networks.
 
@@ -32,6 +34,25 @@ https://www.youtube.com/watch?v=RMlo9_wfKYU
 Pinata Cloud - The Broken Token (how Pinata can make NFTs more durable)
 https://www.youtube.com/watch?v=0iuAvE-a0fI
 
+# where can I find the code?
+Everything is in the packages folder. You shouldn't need to change much, beyond setup.
+
+## packages/api
+The API is what you'll interact with. Generate wallets, mint tokens, etc.
+Additional documentation [here](./packages/api/README.md)
+
+## packages/cache
+The cache server listens to the chain for events and posts them to Redis/Elasticache
+Additional documentation [here](./packages/cache/README.md)
+
+## packages/ethereum
+Ethereum, EthStats, Remix IDE and all related services as Docker/Kubernetes YAML files
+Additional documentation [here](./packages/ethereum/README.md)
+
+## packages/terraform-eks
+Simple deployment to Amazon EKS using Terraform
+Additional documentation [here](./packages/ethereum/README.md)
+
 # Setup and Installation
 
 ## Configure .env file
@@ -51,10 +72,10 @@ Pinata is allows you to upload and manage files on IPFS. It provides IPFS API th
 # Deployment
 
 ## Local deployment
-TODO
+Local deployment can be done using Kubectl and Minikube. Full instructions are [here](./packages/ethereum/README.md)
 
 ## Deployment to AWS
-TODO
+AWS setup and deployment is done via Terraform, but there are also instructions on deploying directly to EKS [here](./packages/ethereum/README.md) and [here](./packages/terraform-eks/README.md)
 
 ## Contributing
 Pull requests are gladly accepted!

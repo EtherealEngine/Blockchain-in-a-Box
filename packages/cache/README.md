@@ -1,35 +1,35 @@
-# REST API Server with docker
+# Cache Server
 
-A neat little API for interacting with the blockchain.
+This is a very simple service that listens to the chain for events, and publishes them to Redis/Elasticache so that the API server doesn't need to constantly query the chain.
 
 ## Setup & Installation
 
-**for windows and others**
-
+**For windows and others**
+```
 npm install
-
 npm run start
-
+```
 **For unix-ubuntu**
-
+```
 sudo npm install
+npm run start
+```
 
 ## **Create docker**
 
-**build docker**
-
+**Building the Docker container**
+```
 sudo docker build . -t dockerid/blockchain-api
+```
 
-**check image**
-
-sudo docker images
-
-**test docker**
-
+**Test the container**
+```
 sudo docker run -p 8080:8080 dockerid/blockchain-api
+```
 
-**push image to docker hub**
-
+**Push Image to Dockerhub**
+```
 sudo docker login -u dockerid
 
 sudo docker push dockerid/blockchain-api:latest
+```
