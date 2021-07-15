@@ -16,9 +16,9 @@ const chainId = require("../config/chainIds.js");
 console.log("MAINNET ADDRESS IS", process.env.mainnetTreasuryAddress)
 
 // Currency
-const CurrencyContractName = "Currency";
-const CoinContractSymbol = process.env.CoinContractSymbol || "COIN";
-const CoinMarketCap = process.env.CoinMarketCap || 116340000;
+const CURRENCY_CONTRACT_NAME = "Currency";
+const CURRENCY_CONTRACT_SYMBOL = process.env.CURRENCY_CONTRACT_SYMBOL || "COIN";
+const CURRENCY_MARKET_CAP = process.env.CURRENCY_MARKET_CAP || 116340000;
 
 // ASSETS
 const assetContractName = "Inventory";
@@ -79,15 +79,15 @@ module.exports = async function (deployer) {
   let identity = await Identity.deployed();
   console.log("Identity address is " + identity.address);
 
-  await deployer.deploy(CurrencyContract, CurrencyContractName, CoinContractSymbol, CoinMarketCap);
+  await deployer.deploy(CurrencyContract, CURRENCY_CONTRACT_NAME, CURRENCY_CONTRACT_SYMBOL, CURRENCY_MARKET_CAP);
   let coin = await CurrencyContract.deployed();
   const coinAddress = coin.address;
 
   console.log("Currency contract address is " + coinAddress);
-  console.log("CurrencyContractName is " + CurrencyContractName);
+  console.log("CURRENCY_CONTRACT_NAME is " + CURRENCY_CONTRACT_NAME);
 
   console.log("chainId[networkType] " + chainId[networkType]);
-  console.log("chainId[networkType][CurrencyContractName] " + chainId[networkType][CurrencyContractName]);
+  console.log("chainId[networkType][CURRENCY_CONTRACT_NAME] " + chainId[networkType][CURRENCY_CONTRACT_NAME]);
 
 
   /** parentAddress, signerAddress, _chainId */
@@ -95,7 +95,7 @@ module.exports = async function (deployer) {
     CurrencyProxyContract,
     coinAddress,
     signer[networkType],
-    chainId[networkType][CurrencyContractName]
+    chainId[networkType][CURRENCY_CONTRACT_NAME]
   );
   let coinProxy = await CurrencyProxyContract.deployed();
   const coinProxyAddress = coinProxy.address;

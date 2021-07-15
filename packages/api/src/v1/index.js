@@ -1,4 +1,6 @@
 const expressJSDocSwagger = require("express-jsdoc-swagger");
+const express = require("express");
+const path = require("path");
 
 const { createWallet } = require("./routes/wallet.js");
 
@@ -25,82 +27,7 @@ let blockchain;
 })();
 
 function addV1Routes(app) {
-  /**
-   * Send setup form page to user
-   * 
-   */
-   app.get('/', function (req, res, next) {
-    res.set('Content-Type', 'text/html');
-    res.send(Buffer.from(
-      `
-        <html>
-        <head>
-        <title>Setup</title>
-        </head>
-        <body>
-        <form>
-          <label for="MAINNET_MNEMONIC">Mainnet Private Key</label><br /> <input name="MAINNET_MNEMONIC" type="text" value="MAINNET_MNEMONIC" />
-          <br>
-          <label for="INFURA_PROJECT_ID">Infura Project ID</label><br /> <input name="INFURA_PROJECT_ID" type="text" value="INFURA_PROJECT_ID" />
-          <br>
-          <label for="INFURA_API_KEY">Infura API Key</label><br /> <input name="INFURA_API_KEY" type="text" value="INFURA_API_KEY" />
-          <br>
-          <label for="INFURA_PROJECT_ID">Infura Project ID</label><br /> <input name="INFURA_PROJECT_ID" type="text" value="INFURA_PROJECT_ID" />
-          <br>
-          <label for="PINATA_API_KEY">Pinata API Key</label><br /> <input name="PINATA_API_KEY" type="text" value="PINATA_API_KEY" />
-          <br>
-          <label for="PINATA_SECRET_API_KEY">Pinata Secret API Key</label><br /> <input name="PINATA_SECRET_API_KEY" type="text" value="PINATA_SECRET_API_KEY" />
-          <br>
-
-          <label for="DEFAULT_ASSET_DESCRIPTION">Mainnet Private Key</label><br /> <input name="MAINNET_MNEMONIC" type="text" value="MAINNET_MNEMONIC" />
-          <br>
-          <label for="MINTING_FEE">Infura Project ID</label><br /> <input name="INFURA_PROJECT_ID" type="text" value="INFURA_PROJECT_ID" />
-          <br>
-          <label for="CurrencyContractName">Infura API Key</label><br /> <input name="INFURA_API_KEY" type="text" value="INFURA_API_KEY" />
-          <br>
-          <label for="CoinContractSymbol">Infura Project ID</label><br /> <input name="INFURA_PROJECT_ID" type="text" value="INFURA_PROJECT_ID" />
-          <br>
-          <label for="CoinMarketCap">Pinata API Key</label><br /> <input name="PINATA_API_KEY" type="text" value="PINATA_API_KEY" />
-          <br>
-          <label for="ASSET_CONTRACT_NAME">Pinata Secret API Key</label><br /> <input name="PINATA_SECRET_API_KEY" type="text" value="PINATA_SECRET_API_KEY" />
-          <br>
-          <label for="ASSET_CONTRACT_NAME">Pinata Secret API Key</label><br /> <input name="PINATA_SECRET_API_KEY" type="text" value="PINATA_SECRET_API_KEY" />
-          <br>
-          <label for="ASSET_CONTRACT_SYMBOL">Pinata Secret API Key</label><br /> <input name="PINATA_SECRET_API_KEY" type="text" value="PINATA_SECRET_API_KEY" />
-          <br>
-          <label for="ASSETS_ARE_MINTABLE">Users Can mint Assets</label><br /><input name="ASSETS_ARE_MINTABLE" type="checkbox" value="1" />
-          <br>
-          <button type="submit" value="Submit">Submit</button>
-        </form>
-
-        // Dynamically generated
-        AUTH_SECRET_KEY="<generate>"
-        AUTH_TOKEN_SECRET="<generate>"
-        
-        // Programmatically set
-        ETHEREUM_HOST="ethereum.example.org"
-        ASSET_BASE_URI=""
-        HTTP_PORT=8080
-        HTTPS_PORT=8443
-        REDIS_PORT=6379
-        REDIS_HOST=
-        REDIS_KEY="default"
-
-        // User customizations
-        DEFAULT_ASSET_DESCRIPTION=""
-        MINTING_FEE=0<autofill>
-        CurrencyContractName="Coin"<autofill>
-        CoinContractSymbol="COIN"<autofill>
-        CoinMarketCap=116340000<autofill>
-        ASSET_CONTRACT_NAME="Asset"<autofill>
-        ASSET_CONTRACT_SYMBOL="ASSET"<autofill>
-        ASSETS_ARE_MINTABLE=true<autofill>
-        </body>
-        </html>
-      `
-
-    ));
-  });
+  app.use(express.static(path.join(__dirname, '/../../console/dist')));
 
   const swaggerOptions = {
     info: {
@@ -125,7 +52,7 @@ function addV1Routes(app) {
     apiDocsPath: "/api/v1/api-docs",
   };
 
-  exzpressJSDocSwagger(app)(swaggerOptions);
+  expressJSDocSwagger(app)(swaggerOptions);
 
   /**
    * Authentication payload

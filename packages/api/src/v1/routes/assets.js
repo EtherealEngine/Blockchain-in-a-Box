@@ -29,8 +29,6 @@ const {
   PINATA_API_KEY,
   PINATA_SECRET_API_KEY,
   MINTING_FEE,
-  DEFAULT_ASSET_DESCRIPTION,
-  IPFS_HOST,
   MAINNET_MNEMONIC,
 } = require("../../common/environment.js");
 
@@ -211,7 +209,7 @@ async function mintAssets(
   } else status = true;
 
   if (status) {
-    const description = DEFAULT_ASSET_DESCRIPTION;
+    const description = "";
 
     let fileName = resHash.split("/").pop();
 
@@ -538,44 +536,10 @@ async function updatePublicAsset(req, res, { contracts }) {
             error: "Error pinning to Pinata service, hash was not returned",
           });
       } else {
-        // Upload to our own IPFS node
-        const req = http.request(IPFS_HOST, { method: "POST" }, (res) => {
-          const bufferString = [];
-          res.on("data", (data) => {
-            bufferString.push(data);
-          });
-          res.on("end", async () => {
-            const buffer = Buffer.concat(bufferString);
-            const string = buffer.toString("utf8");
-            const { hash } = JSON.parse(string);
-            if (hash) {
-              const currentHash = await contracts[
-                "mainnetsidechain"
-              ].Inventory.methods
-                .getHash(assetId)
-                .call();
-              await runSidechainTransaction(MAINNET_MNEMONIC)(
-                "Inventory",
-                "updateHash",
-                currentHash,
-                hash
-              );
-            } else
-              return res.json({
-                status: ResponseStatus.Error,
-                error: "Error getting hash back from IPFS node",
-              });
-          });
-          res.on("error", (err) => {
-            console.warn(err.stack);
-            return res.json({ status: ResponseStatus.Error, error: err.stack });
-          });
+        res.json({
+          status: ResponseStatus.Error,
+          error: "Error pinning to Pinata service, API key not set",
         });
-        req.on("error", (err) => {
-          console.warn(err.stack);
-          res.json({ status: ResponseStatus.Error, error: err.stack });
-        });
-        file.pipe(req);
       }
     } else {
       const currentHash = await contracts["mainnetsidechain"].Inventory.methods

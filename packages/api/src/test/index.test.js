@@ -24,23 +24,13 @@ const {
   zeroAddress,
 } = require("../common/constants.js");
 const {
-  redisPrefixes,
-  mainnetSignatureMessage,
-  assetIndexName,
-  burnAddress,
-  zeroAddress,
-} = require("../common/constants.js");
-const {
   PRODUCTION,
   DEVELOPMENT,
   PINATA_API_KEY,
   PINATA_SECRET_API_KEY,
   MINTING_FEE,
-  DEFAULT_ASSET_DESCRIPTION,
-  IPFS_HOST,
   MAINNET_MNEMONIC,
 } = require("../common/environment.js");
-const { getBlockchain } = require("../common/blockchain.js");
 const pinataSDK = require("@pinata/sdk");
 const pinata =
   PINATA_API_KEY && PINATA_API_KEY !== ""
@@ -116,7 +106,7 @@ const redisClient = getRedisClient();
 //   } else status = true;
 
 //   if (status) {
-//     const description = DEFAULT_ASSET_DESCRIPTION;
+//     const description = ;
 
 //     let fileName = resHash.split("/").pop();
 
