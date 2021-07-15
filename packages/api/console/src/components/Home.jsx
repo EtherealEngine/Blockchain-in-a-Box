@@ -1,10 +1,14 @@
 import React from 'react';
+import Deployer from "./Deployer"
+import './App.css'
+import Button from '@material-ui/core/Button';
+
 import {
   HeaderBar,
   LinkButtons,
   loginButton,
   registerButton,
-} from '../components';
+} from '.';
 
 const title = {
   pageTitle: 'Home Screen',
@@ -19,6 +23,13 @@ const Home = () => (
       link="/register"
     />
     <LinkButtons buttonText="Login" buttonStyle={loginButton} link="/login" />
+    <br/>
+    Deployer is here as example, to use later
+    <Deployer
+    target="deploy-dev"
+    />
+
+
   </div>
 );
 

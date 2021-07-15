@@ -2,11 +2,9 @@ import React, { useEffect, useRef } from 'react'
 import Terminal from 'react-console-emulator'
 import Button from '@material-ui/core/Button';
 
-import './App.css'
-
 import { v4 } from "uuid";
 
-function App(props) {
+function Deployer(props) {
   const { target } = props;
 
   var terminal = useRef(null);
@@ -20,7 +18,7 @@ function App(props) {
       _ws.on = _ws.addEventListener;
     }
 
-    _ws.on('open', () => terminal.current && terminal.current.pushToStdout(JSON.parse(data).data))
+    _ws.on('open', () => terminal.current && terminal.current.pushToStdout("Connection established..."));
     _ws.on('close', () => terminal.pushToStdout(event.data));
     _ws.on('error', () => terminal.pushToStdout(event.data));
 
@@ -123,20 +121,18 @@ function App(props) {
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
+    <div className="Deployer">
         <Terminal
           commands={{}}
           ref={terminal} // Assign ref to the terminal here
-          welcomeMessage="Deploying contracts..."
+          welcomeMessage={"Ready to deploy contracts on " + target}
           readOnly
         />
-        <Button variant="contained" color="primary" onclick={() => exec(target)}>
-          Primary
+        <Button variant="contained" style={{ margin: "1em" }} color="primary" onClick={() => exec(target)}>
+          Deploy
         </Button>
-      </header>
     </div>
   )
 }
 
-export default App
+export default Deployer

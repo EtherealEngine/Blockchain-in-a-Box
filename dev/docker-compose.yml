@@ -1,0 +1,33 @@
+version: '3.1'
+
+services:
+  client:
+    build: .
+    volumes:
+      - "./client:/app"
+    ports:
+      - "3031:3000"
+    depends_on:
+      - api
+
+  api:
+    build: .
+    volumes:
+      - "./api:/app"
+    ports:
+      - "3003:3000"
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: users
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test1234
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./docker/data/db:/var/lib/mysql
