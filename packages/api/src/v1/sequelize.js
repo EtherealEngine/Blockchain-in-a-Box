@@ -1,6 +1,8 @@
 import Sequelize from 'sequelize';
 import UserModel from './models/user';
 
+// TODO: Insert these values dynamically
+
 const sequelize = new Sequelize('users', 'test', 'test1234', {
   host: 'db',
   dialect: 'mysql',

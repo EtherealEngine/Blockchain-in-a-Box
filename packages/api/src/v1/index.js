@@ -29,6 +29,17 @@ let blockchain;
 function addV1Routes(app) {
   app.use(express.static(path.join(__dirname, '/../../console/dist')));
 
+  // User API routes
+  require('./v1/routes/loginUser')(app);
+  require('./v1/routes/registerUser')(app);
+  require('./v1/routes/forgotPassword')(app);
+  require('./v1/routes/resetPassword')(app);
+  require('./v1/routes/updatePassword')(app);
+  require('./v1/routes/updatePasswordViaEmail')(app);
+  require('./v1/routes/findUsers')(app);
+  require('./v1/routes/deleteUser')(app);
+  require('./v1/routes/updateUser')(app);
+
   const swaggerOptions = {
     info: {
       version: "v1",

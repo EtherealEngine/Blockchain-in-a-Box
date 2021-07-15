@@ -2,7 +2,7 @@ FROM httpd:2-alpine
 MAINTAINER Kyle Bai <kyle.b@inwinstack.com>
 
 RUN apk add --no-cache git g++ make bash python curl wget nodejs nodejs-npm && \
-  git clone https://github.com/ethereum/remix-project /solidity && \
+  git clone https://github.com/xrfoundation/remix-project /solidity && \
   cd /solidity && \
   npm install && \
   npm run prepublish && \
