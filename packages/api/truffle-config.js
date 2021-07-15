@@ -1,6 +1,8 @@
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 require("dotenv").config();
 
+// TODO: Replace dotenv with mysql calls
+
 module.exports = {
   contracts_directory: "./contracts",
   networks: {
