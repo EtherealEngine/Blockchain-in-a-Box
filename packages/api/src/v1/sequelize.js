@@ -1,5 +1,7 @@
 import Sequelize from 'sequelize';
 import UserModel from './models/user';
+import UserModel from './models/user';
+import UserModel from './models/user';
 
 // TODO: Insert these values dynamically
 
