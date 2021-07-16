@@ -34,8 +34,16 @@ module.exports = (sequelize, Sequelize) => sequelize.define('ENVIRONMENT_DATA', 
     DATA_VALUE: Sequelize.STRING,
     OLD_DATA_VALUE: Sequelize.STRING,
     DELETE_FLAG: Sequelize.STRING,
-    CREATED_ON: Sequelize.STRING,
     CREATED_BY: Sequelize.STRING,
-    MODIFIED_ON: Sequelize.TIMESTAMP,
-    MODIFIED_BY: Sequelize.STRING
+    MODIFIED_BY: Sequelize.STRING,
+    CREATED_ON: {
+      type: 'TIMESTAMP',
+      defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      allowNull: false
+    },
+    MODIFIED_ON: {
+      type: 'TIMESTAMP',
+      defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      allowNull: false
+    },
   });
