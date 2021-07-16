@@ -1,7 +1,7 @@
 const dotenv = require("dotenv");
 
 dotenv.config({
-  path: `./.env`,
+  path: `../../.env`,
 });
 
 const INFURA_PROJECT_ID = process.env.INFURA_PROJECT_ID;
