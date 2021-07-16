@@ -76,8 +76,8 @@
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "sequelize": "^6.0.0",
-    "sequelize-cli": "^4.0.0",
-    "swagger-jsdoc": "^3.2.9",
+    "sequelize-cli": "^6.0.0",
+    "swagger-jsdoc": "^6.0.0",
     "swagger-ui-express": "^4.0.2"
     },
   "devDependencies": {
