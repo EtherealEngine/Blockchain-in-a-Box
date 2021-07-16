@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
-import passport from 'passport';
-import bcrypt from 'bcrypt';
-import User from '../sequelize';
+const passport = require('passport');
+const bcrypt = require('bcrypt');
+const User = require('../sequelize');
 
 /**
  * @swagger

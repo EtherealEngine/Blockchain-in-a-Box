@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
-import bcrypt from 'bcrypt';
-import Sequelize from 'sequelize';
-import User from '../sequelize';
+const Sequelize = require('sequelize');
+const bcrypt = require('bcrypt');
+const User = require('../sequelize');
+
 
 // eslint-disable-next-line prefer-destructuring
 const Op = Sequelize.Op;

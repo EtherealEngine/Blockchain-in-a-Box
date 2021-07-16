@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
-import jwt from 'jsonwebtoken';
-import passport from 'passport';
-import jwtSecret from '../config/jwtConfig';
-import User from '../sequelize';
+const jwt = require('jsonwebtoken');
+const passport = require('passport');
+const jwtSecret = require('../config/jwtConfig');
+const User = require('../sequelize');
 
 /**
  * @swagger

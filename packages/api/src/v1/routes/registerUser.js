@@ -1,7 +1,7 @@
 /* eslint-disable arrow-parens */
 /* eslint-disable no-console */
-import passport from 'passport';
-import User from '../sequelize';
+const passport = require('passport');
+const User = require('../sequelize');
 
 /**
  * @swagger
