@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable max-len */
-import Sequelize from 'sequelize';
+const Sequelize = require('sequelize');
 import User from '../sequelize';
 
 // eslint-disable-next-line prefer-destructuring

@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
 /* eslint-disable consistent-return */
 /* eslint-disable no-console */
-import bcrypt from 'bcrypt';
-import Sequelize from 'sequelize';
-import jwtSecret from './jwtConfig';
+const bcrypt = require('bcrypt');
+const Sequelize = require('sequelize');
+const jwtSecret = require('jwtConfig');
 
 const BCRYPT_SALT_ROUNDS = 12;
 // eslint-disable-next-line prefer-destructuring

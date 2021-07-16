@@ -1,3 +1,3 @@
 module.exports = {
-  secret: 'jwt-secret',
+  secret: process.env.AUTH_TOKEN_SECRET,
 };
