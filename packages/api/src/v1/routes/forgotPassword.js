@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable no-console */
 const crypto = require('crypto');
-import User from '../sequelize';
+const User = require('../sequelize');
 
 require('dotenv').config();
 
