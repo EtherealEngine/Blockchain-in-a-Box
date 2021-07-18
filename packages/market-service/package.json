@@ -16,17 +16,17 @@
     "source-map-support": "^0.5.10"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.17",
-    "@types/node": "^10.12.18",
+    "@types/aws-lambda": "8.10.79",
+    "@types/node": "10.17.60",
     "fork-ts-checker-webpack-plugin": "6.2.12",
-    "prettier": "^2.2.1",
-    "serverless-domain-manager": "^5.1.0",
+    "prettier": "2.3.2",
+    "serverless-domain-manager": "5.1.2",
     "serverless-offline": "7.0.0",
-    "serverless-webpack": "^5.2.0",
+    "serverless-webpack": "5.5.1",
     "ts-loader": "9.2.3",
-    "typescript": "^3.2.4",
+    "typescript": "3.9.10",
     "webpack": "4.46.0",
-    "webpack-node-externals": "^1.7.2"
+    "webpack-node-externals": "1.7.2"
   },
   "author": "Silvio Paganini <silvio@fluuu.id>",
   "license": "MIT"
