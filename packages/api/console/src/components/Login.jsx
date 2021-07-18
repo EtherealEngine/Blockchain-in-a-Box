@@ -1,9 +1,8 @@
 /* eslint-disable no-console */
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import TextField from '@material-ui/core/TextField';
+import { TextField, Grid } from '@material-ui/core';
 import axios from 'axios';
-
 import {
   LinkButtons,
   SubmitButtons,
@@ -12,12 +11,7 @@ import {
   loginButton,
   forgotButton,
   inputStyle,
-  HeaderBar,
 } from '../components';
-
-const title = {
-  pageTitle: 'Login Screen',
-};
 
 class Login extends Component {
   constructor() {
@@ -84,53 +78,54 @@ class Login extends Component {
     } = this.state;
     if (!loggedIn) {
       return (
-        <div>
-          <HeaderBar title={title} />
-          <form className="profile-form" onSubmit={this.loginUser}>
-            <TextField
-              style={inputStyle}
-              id="username"
-              label="username"
-              value={username}
-              onChange={this.handleChange('username')}
-              placeholder="Username"
-            />
-            <TextField
-              style={inputStyle}
-              id="password"
-              label="password"
-              value={password}
-              onChange={this.handleChange('password')}
-              placeholder="Password"
-              type="password"
-            />
-            <SubmitButtons buttonStyle={loginButton} buttonText="Login" />
-          </form>
-          {showNullError && (
-            <div>
-              <p>The username or password cannot be null.</p>
-            </div>
-          )}
-          {showError && (
-            <div>
-              <p>
-                That username or password isn&apos;t recognized. Please try
-                again or register now.
-              </p>
-              <LinkButtons
-                buttonText="Register"
-                buttonStyle={registerButton}
-                link="/register"
+        <Grid container justifyContent="center" >
+          <Grid item>
+            <form className="profile-form" onSubmit={this.loginUser}>
+              <TextField
+                style={inputStyle}
+                id="username"
+                label="username"
+                value={username}
+                onChange={this.handleChange('username')}
+                placeholder="Username"
               />
-            </div>
-          )}
-          <LinkButtons buttonText="Go Home" buttonStyle={homeButton} link="/" />
-          <LinkButtons
-            buttonStyle={forgotButton}
-            buttonText="Forgot Password?"
-            link="/forgotPassword"
-          />
-        </div>
+              <TextField
+                style={inputStyle}
+                id="password"
+                label="password"
+                value={password}
+                onChange={this.handleChange('password')}
+                placeholder="Password"
+                type="password"
+              />
+              <SubmitButtons buttonStyle={loginButton} buttonText="Login" />
+            </form>
+            {showNullError && (
+              <div>
+                <p>The username or password cannot be null.</p>
+              </div>
+            )}
+            {showError && (
+              <div>
+                <p>
+                  That username or password isn&apos;t recognized. Please try
+                  again or register now.
+                </p>
+                <LinkButtons
+                  buttonText="Register"
+                  buttonStyle={registerButton}
+                  link="/register"
+                />
+              </div>
+            )}
+            <LinkButtons buttonText="Go Home" buttonStyle={homeButton} link="/" />
+            <LinkButtons
+              buttonStyle={forgotButton}
+              buttonText="Forgot Password?"
+              link="/forgotPassword"
+            />
+          </Grid>
+        </Grid>
       );
     }
     return <Redirect to={`/userProfile/${username}`} />;

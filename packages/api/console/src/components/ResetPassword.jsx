@@ -9,7 +9,6 @@ import {
   updateButton,
   homeButton,
   loginButton,
-  HeaderBar,
   forgotButton,
   inputStyle,
   SubmitButtons,
@@ -18,10 +17,6 @@ import {
 const loading = {
   margin: '1em',
   fontSize: '24px',
-};
-
-const title = {
-  pageTitle: 'Password Reset Screen',
 };
 
 export default class ResetPassword extends Component {
@@ -116,7 +111,6 @@ export default class ResetPassword extends Component {
     if (error) {
       return (
         <div>
-          <HeaderBar title={title} />
           <div style={loading}>
             <h4>Problem resetting password. Please send another reset link.</h4>
             <LinkButtons
@@ -136,14 +130,12 @@ export default class ResetPassword extends Component {
     if (isLoading) {
       return (
         <div>
-          <HeaderBar title={title} />
           <div style={loading}>Loading User Data...</div>
         </div>
       );
     }
     return (
       <div>
-        <HeaderBar title={title} />
         <form className="password-form" onSubmit={this.updatePassword}>
           <TextField
             style={inputStyle}

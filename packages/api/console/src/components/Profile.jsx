@@ -16,7 +16,6 @@ import {
   updateButton,
   loginButton,
   logoutButton,
-  HeaderBar,
   linkStyle,
   forgotButton,
 } from '../components';
@@ -24,10 +23,6 @@ import {
 const loading = {
   margin: '1em',
   fontSize: '24px',
-};
-
-const title = {
-  pageTitle: 'User Profile Screen',
 };
 
 class Profile extends Component {
@@ -140,7 +135,6 @@ class Profile extends Component {
     if (error) {
       return (
         <div>
-          <HeaderBar title={title} />
           <div style={loading}>
             Problem fetching user data. Please login again.
           </div>
@@ -155,7 +149,6 @@ class Profile extends Component {
     if (isLoading) {
       return (
         <div>
-          <HeaderBar title={title} />
           <div style={loading}>Loading User Data...</div>
         </div>
       );
@@ -165,7 +158,6 @@ class Profile extends Component {
     }
     return (
       <div>
-        <HeaderBar title={title} />
         <Table>
           <TableBody>
             <TableRow>

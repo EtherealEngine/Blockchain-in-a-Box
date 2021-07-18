@@ -9,7 +9,6 @@ import axios from 'axios';
 import {
   LinkButtons,
   SubmitButtons,
-  HeaderBar,
   homeButton,
   cancelButton,
   saveButton,
@@ -20,10 +19,6 @@ import {
 const loading = {
   margin: '1em',
   fontSize: '24px',
-};
-
-const title = {
-  pageTitle: 'Update Password Screen',
 };
 
 class UpdatePassword extends Component {
@@ -131,7 +126,6 @@ class UpdatePassword extends Component {
     if (error) {
       return (
         <div>
-          <HeaderBar title={title} />
           <p style={loading}>
             There was a problem accessing your data. Please go login again.
           </p>
@@ -146,7 +140,6 @@ class UpdatePassword extends Component {
     if (loadingUser !== false) {
       return (
         <div>
-          <HeaderBar title={title} />
           <p style={loading}>Loading user data...</p>
         </div>
       );
@@ -157,7 +150,6 @@ class UpdatePassword extends Component {
     if (loadingUser === false) {
       return (
         <div>
-          <HeaderBar title={title} />
           <form className="profile-form" onSubmit={this.updatePassword}>
             <TextField
               style={inputStyle}
