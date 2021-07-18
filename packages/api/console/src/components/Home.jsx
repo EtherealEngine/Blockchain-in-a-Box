@@ -4,19 +4,13 @@ import './App.css'
 import Button from '@material-ui/core/Button';
 
 import {
-  HeaderBar,
   LinkButtons,
   loginButton,
   registerButton,
 } from '.';
 
-const title = {
-  pageTitle: 'Home Screen',
-};
-
 const Home = () => (
   <div className="home-page">
-    <HeaderBar title={title} />
     <LinkButtons
       buttonText="Register"
       buttonStyle={registerButton}

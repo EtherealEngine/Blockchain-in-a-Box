@@ -9,12 +9,7 @@ import {
   homeButton,
   forgotButton,
   inputStyle,
-  HeaderBar,
 } from '../components';
-
-const title = {
-  pageTitle: 'Forgot Password Screen',
-};
 
 class ForgotPassword extends Component {
   constructor() {
@@ -79,7 +74,6 @@ class ForgotPassword extends Component {
 
     return (
       <div>
-        <HeaderBar title={title} />
         <form className="profile-form" onSubmit={this.sendEmail}>
           <TextField
             style={inputStyle}

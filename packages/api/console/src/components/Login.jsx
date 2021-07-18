@@ -12,12 +12,7 @@ import {
   loginButton,
   forgotButton,
   inputStyle,
-  HeaderBar,
 } from '../components';
-
-const title = {
-  pageTitle: 'Login Screen',
-};
 
 class Login extends Component {
   constructor() {
@@ -85,7 +80,6 @@ class Login extends Component {
     if (!loggedIn) {
       return (
         <div>
-          <HeaderBar title={title} />
           <form className="profile-form" onSubmit={this.loginUser}>
             <TextField
               style={inputStyle}

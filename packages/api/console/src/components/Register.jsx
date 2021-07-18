@@ -11,12 +11,7 @@ import {
   homeButton,
   loginButton,
   inputStyle,
-  HeaderBar,
 } from '../components';
-
-const title = {
-  pageTitle: 'Register Screen',
-};
 
 class Register extends Component {
   constructor(props) {
@@ -100,7 +95,6 @@ class Register extends Component {
     if (messageFromServer === '') {
       return (
         <div>
-          <HeaderBar title={title} />
           <form className="profile-form" onSubmit={this.registerUser}>
             <TextField
               style={inputStyle}
@@ -170,7 +164,6 @@ class Register extends Component {
     if (messageFromServer === 'user created') {
       return (
         <div>
-          <HeaderBar title={title} />
           <h3>User successfully registered!</h3>
           <LinkButtons
             buttonText="Go Login"
