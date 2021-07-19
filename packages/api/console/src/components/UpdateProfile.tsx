@@ -196,7 +196,6 @@ const UpdateProfile: React.FunctionComponent = () => {
           headers: { Authorization: `JWT ${accessString}` },
         }
       );
-      // eslint-disable-next-line no-unused-vars
       console.log(response.data);
       dispatch({ type: LocalAction.SetDetailsUpdated });
     } catch (error) {

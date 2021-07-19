@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useEffect, useReducer } from "react";
 import axios from "axios";
 import TextField from "@material-ui/core/TextField";

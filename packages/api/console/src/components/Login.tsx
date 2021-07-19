@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useReducer } from "react";
 import { Redirect, useHistory } from "react-router-dom";
 import { TextField, Grid, Button } from "@material-ui/core";

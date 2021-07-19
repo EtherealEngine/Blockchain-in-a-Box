@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useReducer } from "react";
 import axios from "axios";
 import { ActionResult } from "../models/Action";
