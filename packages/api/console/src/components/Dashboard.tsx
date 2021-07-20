@@ -5,11 +5,10 @@ import { useHistory } from "react-router-dom";
 import Routes from "../constants/Routes";
 import "../App.css";
 
-const Home: React.FunctionComponent = () => {
+const Dashboard: React.FunctionComponent = () => {
   const history = useHistory();
   return (
-    <div className="home-page">
-      <Button onClick={() => history.push(Routes.REGISTER)}>Register</Button>
+    <div>
       <Button onClick={() => history.push(Routes.LOGIN)}>Login</Button>
       <br />
       Deployer is here as example, to use later
@@ -18,4 +17,4 @@ const Home: React.FunctionComponent = () => {
   );
 };
 
-export default Home;
+export default Dashboard;

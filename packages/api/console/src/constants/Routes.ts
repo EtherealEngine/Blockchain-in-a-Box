@@ -1,13 +1,9 @@
 const Routes = {
   ROOT: '/',
-  HOME: '/home',
+  DASHBOARD: '/dashboard',
   LOGIN: '/login',
-  REGISTER: '/register',
-  RESET: '/reset/:token',
-  FORGOT_PASSWORD: '/forgotPassword',
-  USER_PROFILE: '/userProfile/:username',
-  UPDATE_USER: '/updateUser/:username"',
-  UPDATE_PASSWORD: '/updatePassword/:username',
+  SETUP: '/setup',
+  SETUP_SIDECHAIN: '/setup/sidechain',
 };
 
 export default Routes;

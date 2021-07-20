@@ -158,7 +158,7 @@ const ResetPassword: React.FunctionComponent = () => {
       <div>
         <div style={loading}>
           <h4>Problem resetting password. Please send another reset link.</h4>
-          <Button onClick={() => history.push(Routes.HOME)}>Go Home</Button>
+          <Button onClick={() => history.push(Routes.DASHBOARD)}>Go Home</Button>
           <Button onClick={() => history.push(Routes.FORGOT_PASSWORD)}>
             Forgot Password?
           </Button>
@@ -202,7 +202,7 @@ const ResetPassword: React.FunctionComponent = () => {
           <Button onClick={() => history.push(Routes.LOGIN)}>Login</Button>
         </div>
       )}
-      <Button onClick={() => history.push(Routes.HOME)}>Go Home</Button>
+      <Button onClick={() => history.push(Routes.DASHBOARD)}>Go Home</Button>
     </div>
   );
 };
