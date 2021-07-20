@@ -1,10 +1,41 @@
 import React, { useReducer } from "react";
 import { Redirect, useHistory } from "react-router-dom";
-import { TextField, Grid, Button } from "@material-ui/core";
+import {
+  TextField,
+  Grid,
+  Button,
+  makeStyles,
+  Typography,
+  Box,
+} from "@material-ui/core";
 import axios from "axios";
 import { ActionResult } from "../models/Action";
 import { IBasePayload, IStringPayload } from "../models/IPayloads";
 import Routes from "../constants/Routes";
+
+const useStyles = makeStyles((theme) => ({
+  parentBox: {
+    marginTop: "20vh",
+    marginBottom: theme.spacing(5),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "stretch",
+    width: 350,
+  },
+  heading: {
+    textAlign: "center",
+  },
+  subHeading: {
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(2),
+  },
+  textbox: {
+    marginTop: theme.spacing(2),
+  },
+  button: {
+    marginTop: theme.spacing(3),
+  },
+}));
 
 // Local state
 interface ILocalState {
@@ -81,6 +112,7 @@ const LocalReducer = (
 };
 
 const Login: React.FunctionComponent = () => {
+  const classes = useStyles();
   const history = useHistory();
   const [{ username, password, showError, loggedIn, showNullError }, dispatch] =
     useReducer(LocalReducer, DefaultLocalState);
@@ -113,35 +145,42 @@ const Login: React.FunctionComponent = () => {
   if (!loggedIn) {
     return (
       <Grid container justifyContent="center">
-        <Grid item>
-          <form className="profile-form" onSubmit={loginUser}>
-            <TextField
-              id="username"
-              label="username"
-              placeholder="Username"
-              value={username}
-              onChange={(event) =>
-                dispatch({
-                  type: LocalAction.SetUsername,
-                  payload: { string: event.target.value },
-                })
-              }
-            />
-            <TextField
-              id="password"
-              label="password"
-              value={password}
-              onChange={(event) =>
-                dispatch({
-                  type: LocalAction.SetPassword,
-                  payload: { string: event.target.value },
-                })
-              }
-              placeholder="Password"
-              type="password"
-            />
-            <Button>Login</Button>
-          </form>
+        <Grid className={classes.parentBox} item>
+          <Typography className={classes.heading} variant="h4">
+            Login
+          </Typography>
+          <Typography className={classes.subHeading}>
+            If you are an administrator, you can log in to change API settings.
+          </Typography>
+
+          <TextField
+            className={classes.textbox}
+            variant="outlined"
+            label="Username"
+            placeholder="Enter username"
+            value={username}
+            onChange={(event) =>
+              dispatch({
+                type: LocalAction.SetUsername,
+                payload: { string: event.target.value },
+              })
+            }
+          />
+          <TextField
+            className={classes.textbox}
+            variant="outlined"
+            label="Password"
+            placeholder="Enter password"
+            value={password}
+            onChange={(event) =>
+              dispatch({
+                type: LocalAction.SetPassword,
+                payload: { string: event.target.value },
+              })
+            }
+            type="password"
+          />
+
           {showNullError && (
             <div>
               <p>The username or password cannot be null.</p>
@@ -158,8 +197,19 @@ const Login: React.FunctionComponent = () => {
               </Button>
             </div>
           )}
-          <Button onClick={() => history.push(Routes.HOME)}>Go Home</Button>
-          <Button onClick={() => history.push(Routes.FORGOT_PASSWORD)}>
+          <Button
+            className={classes.button}
+            variant="contained"
+            color="primary"
+            size="large"
+            onClick={loginUser}
+          >
+            Login
+          </Button>
+          <Button
+            className={classes.button}
+            onClick={() => history.push(Routes.FORGOT_PASSWORD)}
+          >
             Forgot Password?
           </Button>
         </Grid>

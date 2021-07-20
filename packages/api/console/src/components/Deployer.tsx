@@ -149,8 +149,8 @@ const Deployer: React.FunctionComponent<DeployerProps> = (
         readOnly
       />
       <Button
+        size="large"
         variant="contained"
-        style={{ margin: "1em" }}
         color="primary"
         onClick={() => exec(target)}
       >
