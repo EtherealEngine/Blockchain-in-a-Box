@@ -21,7 +21,7 @@ contract Currency is ERC20Capped {
         string memory name,
         string memory symbol,
         uint256 cap
-    ) public ERC20(name, symbol) ERC20Capped(cap) {
+    ) ERC20(name, symbol) ERC20Capped(cap) {
         allowedMinters[msg.sender] = true;
         numAllowedMinters = 1;
     }

@@ -29,7 +29,7 @@ contract CurrencyProxy {
         address parentAddress,
         address signerAddress,
         uint256 _chainId
-    ) public {
+    ) {
         signer = signerAddress;
         chainId = _chainId;
         parent = Currency(parentAddress);

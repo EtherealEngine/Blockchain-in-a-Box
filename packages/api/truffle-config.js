@@ -4,7 +4,7 @@ require("dotenv").config();
 // TODO: Replace dotenv with mysql calls
 
 module.exports = {
-  contracts_directory: "./contracts",
+  contracts_directory: "./src/contracts",
   networks: {
     development: {
       host: "127.0.0.1", // Localhost (default: none)
@@ -19,7 +19,7 @@ module.exports = {
           "https://rinkeby.infura.io/v3/" + process.env.INFURA_API_KEY
         ),
       network_id: 4,
-      gas: 6700000,
+      gas: 4612388,
       gasPrice: 10000000000,
     },
     testnetsidechain: {

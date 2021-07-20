@@ -74,7 +74,7 @@ contract Inventory is ERC721Enumerable {
         uint256 _mintFee,
         address _treasuryAddress,
         bool _isPublicallyMintable
-    ) public ERC721(name, symbol) {
+    ) ERC721(name, symbol) {
         _setBaseURI(baseUri);
         coinContract = _coinContract;
         mintFee = _mintFee;

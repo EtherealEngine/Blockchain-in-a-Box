@@ -45,7 +45,7 @@ contract Trade {
         address parentERC20Address,
         address parentERC721Address,
         address signerAddress
-    ) public {
+    ) {
         parentERC20 = Currency(parentERC20Address);
         parentERC721 = Inventory(parentERC721Address);
         signer = signerAddress;
