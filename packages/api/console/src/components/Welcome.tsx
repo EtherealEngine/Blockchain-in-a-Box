@@ -17,9 +17,11 @@ const useStyles = makeStyles((theme) => ({
   buttonsBox: {
     display: 'flex',
     flexDirection: 'column',
+    alignItems: 'center',
   },
   button: {
     marginTop: theme.spacing(3),
+    width: 350,
   }
 }));
 
@@ -36,24 +38,28 @@ const Welcome = () => {
           <Button className={classes.button}
             variant="contained"
             color="primary"
+            size="large"
             onClick={() => history.push(Routes.LOGIN)}>
             Adminstrator Login
           </Button>
           <Button className={classes.button}
             variant="contained"
             color="secondary"
+            size="large"
             onClick={() => console.log("OpenAPI / Swagger UI")}>
             OpenAPI / Swagger UI
           </Button>
           <Button className={classes.button}
             variant="contained"
             color="secondary"
+            size="large"
             onClick={() => console.log("EthStats Dashboard clicked")}>
             EthStats Dashboard
           </Button>
           <Button className={classes.button}
             variant="contained"
             color="secondary"
+            size="large"
             onClick={() => console.log("Remix IDE")}>
             Remix IDE
           </Button>
