@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.5;
+pragma solidity ^0.8.6;
 pragma experimental ABIEncoderV2;
 
 import "./Inventory.sol";
@@ -36,7 +36,7 @@ contract InventoryProxy {
         address parentAddress,
         address signerAddress,
         uint256 _chainId
-    ) public {
+    ) {
         signer = signerAddress;
         chainId = _chainId;
         parent = Inventory(parentAddress);

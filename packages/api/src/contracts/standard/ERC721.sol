@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.5;
+pragma solidity ^0.8.6;
 
 import "./IERC721.sol";
 import "./IERC721Receiver.sol";
@@ -422,10 +422,11 @@ contract ERC721 is Context, ERC165, IERC721, ERC165Storage, IERC721Metadata {
      * @param owner owner of the token to burn
      * @param tokenId uint256 ID of the token being burned by the msg.sender
      */
+    /*
     function _burn(address owner, uint256 tokenId) internal {
         // Clear metadata (if any)
         if (bytes(_tokenURIs[tokenId]).length != 0) {
             delete _tokenURIs[tokenId];
         }
-    }
+    }*/
 }
