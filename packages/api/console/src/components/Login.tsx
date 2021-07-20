@@ -7,11 +7,11 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import axios from "axios";
 import { ActionResult } from "../models/Action";
 import { IBasePayload, IStringPayload } from "../models/IPayloads";
 import { timeout } from "../utilities/Utility";
 import Routes from "../constants/Routes";
+import LoadingView from "./LoadingView";
 
 const useStyles = makeStyles((theme) => ({
   parentBox: {
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "stretch",
-    width: 350,
+    width: 370,
   },
   heading: {
     textAlign: "center",
@@ -130,7 +130,8 @@ const Login: React.FunctionComponent = () => {
     dispatch({
       type: LocalAction.SetStatus,
       payload: {
-        status: LoggedInState.Recurring,
+        status: LoggedInState.FirstTime,
+        // status: LoggedInState.Recurring,
       },
     });
   };
@@ -159,14 +160,22 @@ const Login: React.FunctionComponent = () => {
   //   }
   // };
 
+  if (isLoading) {
+    return <LoadingView loadingText="Getting information" />;
+  }
+
   return (
     <Grid container justifyContent="center">
       <Grid className={classes.parentBox} item>
         <Typography className={classes.heading} variant="h4">
-          Login
+          {status === LoggedInState.Recurring
+            ? "Login"
+            : "Deployment Successful!"}
         </Typography>
         <Typography className={classes.subHeading}>
-          If you are an administrator, you can log in to change API settings.
+          {status === LoggedInState.Recurring
+            ? "If you are an administrator, you can log in to change API settings."
+            : "You’ll need to finalize setup before the chain is ready to use. First, set up an administrator email address."}
         </Typography>
 
         <TextField
@@ -195,14 +204,14 @@ const Login: React.FunctionComponent = () => {
           size="large"
           onClick={() => {
             //TODO: Perform email validation.
-            if (status === LoggedInState.FirstTime) {
-              history.push(Routes.SETUP);
+            if (status === LoggedInState.Recurring) {
+              history.push(`${Routes.LOGIN_VERIFICATION}?email=${email}`);
             } else {
-              history.push(Routes.DASHBOARD);
+              history.push(Routes.SETUP);
             }
           }}
         >
-          Login
+          {status === LoggedInState.Recurring ? "Login" : "Register Account"}
         </Button>
       </Grid>
     </Grid>
