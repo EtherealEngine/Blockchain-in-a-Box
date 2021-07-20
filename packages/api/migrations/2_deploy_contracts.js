@@ -59,7 +59,7 @@ const signer = {
 
 module.exports = async function (deployer) {
   const networkType = NetworkTypes[process.argv[4]];
-
+  console.log(process.argv);
   if (!networkType)
     return console.error(
       process.argv[4] + " was not found in the networkType list"
