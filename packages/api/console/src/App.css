@@ -1,11 +1,10 @@
-.App-header {
-width: 80%;
-  min-height: 100vh;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 3em;
-}
-
 button {
   font-size: calc(10px + 2vmin);
+}
+.MuiButton-contained .MuiButton-label {
+  color: white;
+  text-transform: none;
+}
+.MuiButton-root {
+  max-width: 350px;
 }

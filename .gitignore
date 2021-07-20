@@ -105,3 +105,4 @@ dist
 
 build/
 *package-lock.json
+dev/docker/data/db
