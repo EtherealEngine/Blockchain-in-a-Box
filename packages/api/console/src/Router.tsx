@@ -5,6 +5,8 @@ import Login from "./components/Login";
 import LoginVerification from "./components/LoginVerification";
 import Routes from "./constants/Routes";
 import Welcome from "./components/Welcome";
+import SetupSidechain from "./components/SetupSidechain";
+import SetupSigningAuthority from "./components/SetupSigningAuthority";
 
 const Router: React.FunctionComponent = () => {
   return (
@@ -17,6 +19,16 @@ const Router: React.FunctionComponent = () => {
           exact
           path={Routes.LOGIN_VERIFICATION}
           component={LoginVerification}
+        />
+        <Route
+          exact
+          path={[Routes.SETUP, Routes.SETUP_SIDECHAIN]}
+          component={SetupSidechain}
+        />
+        <Route
+          exact
+          path={Routes.SETUP_SIGNING_AUTHORITY}
+          component={SetupSigningAuthority}
         />
       </Switch>
     </Fragment>
