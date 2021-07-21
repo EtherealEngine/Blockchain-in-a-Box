@@ -185,7 +185,7 @@ const SetupSigningAuthority: React.FunctionComponent = () => {
           color="primary"
           size="large"
           onClick={() => {
-            history.push(Routes.SETUP);
+            history.push(Routes.SETUP_TREASURE);
           }}
         >
           Continue

@@ -6,6 +6,7 @@ const Routes = {
   SETUP: '/setup',
   SETUP_SIDECHAIN: '/setup/sidechain',
   SETUP_SIGNING_AUTHORITY: '/setup/signing-authority',
+  SETUP_TREASURE: '/setup/treasury',
 };
 
 export default Routes;
