@@ -16,7 +16,7 @@
     "source-map-support": "^0.5.10"
   },
   "devDependencies": {
-    "@types/aws-lambda": "8.10.79",
+    "@types/aws-lambda": "8.10.80",
     "@types/node": "14.17.5",
     "fork-ts-checker-webpack-plugin": "6.2.12",
     "prettier": "2.3.2",
