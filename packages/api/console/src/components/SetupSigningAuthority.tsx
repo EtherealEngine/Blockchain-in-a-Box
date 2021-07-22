@@ -1,13 +1,21 @@
 import React, { useReducer } from "react";
 import {
   Button,
+  FormControl,
   Grid,
+  IconButton,
+  InputAdornment,
+  InputLabel,
   makeStyles,
-  TextField,
+  OutlinedInput,
   Typography,
 } from "@material-ui/core";
+import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { ActionResult } from "../models/Action";
-import { IBasePayload, IStringPayload } from "../models/IPayloads";
+import {
+  IBasePayload,
+  IStringPayload,
+} from "../models/IPayloads";
 import "../App.css";
 import { useHistory } from "react-router-dom";
 import Routes from "../constants/Routes";
@@ -45,12 +53,18 @@ const useStyles = makeStyles((theme) => ({
   marginTop6: {
     marginTop: theme.spacing(6),
   },
+  formLabel: {
+    padding: "0 10px",
+    background: "white",
+  },
 }));
 
 // Local state
 interface ILocalState {
   mnemonic: string;
+  showMnemonic: boolean;
   twoFAPassword: string;
+  showTwoFAPassword: boolean;
   isLoading: boolean;
   error: string;
 }
@@ -58,7 +72,9 @@ interface ILocalState {
 // Local default state
 const DefaultLocalState: ILocalState = {
   mnemonic: "",
+  showMnemonic: false,
   twoFAPassword: "",
+  showTwoFAPassword: false,
   isLoading: false,
   error: "",
 };
@@ -67,7 +83,9 @@ const DefaultLocalState: ILocalState = {
 const LocalAction = {
   ToggleLoading: "ToggleLoading",
   SetMnemonic: "SetMnemonic",
+  ToggleMnemonic: "ToggleMnemonic",
   Set2FAPassword: "Set2FAPassword",
+  Toggle2FAPassword: "Toggle2FAPassword",
   SetError: "SetError",
 };
 
@@ -89,10 +107,22 @@ const LocalReducer = (
         mnemonic: (action.payload as IStringPayload).string,
       };
     }
+    case LocalAction.ToggleMnemonic: {
+      return {
+        ...state,
+        showMnemonic: !state.showMnemonic,
+      };
+    }
     case LocalAction.Set2FAPassword: {
       return {
         ...state,
         twoFAPassword: (action.payload as IStringPayload).string,
+      };
+    }
+    case LocalAction.Toggle2FAPassword: {
+      return {
+        ...state,
+        showTwoFAPassword: !state.showTwoFAPassword,
       };
     }
     case LocalAction.SetError: {
@@ -111,8 +141,17 @@ const LocalReducer = (
 const SetupSigningAuthority: React.FunctionComponent = () => {
   const classes = useStyles();
   const history = useHistory();
-  const [{ mnemonic, twoFAPassword, isLoading, error }, dispatch] =
-    useReducer(LocalReducer, DefaultLocalState);
+  const [
+    {
+      mnemonic,
+      showMnemonic,
+      twoFAPassword,
+      showTwoFAPassword,
+      isLoading,
+      error,
+    },
+    dispatch,
+  ] = useReducer(LocalReducer, DefaultLocalState);
 
   return (
     <Grid container justifyContent="center">
@@ -135,33 +174,71 @@ const SetupSigningAuthority: React.FunctionComponent = () => {
           Never share your private key with anyone.
         </Typography>
 
-        <TextField
-          className={classes.marginTop4}
-          variant="outlined"
-          label="Mnemonic"
-          placeholder="Enter mnemonic"
-          value={mnemonic}
-          onChange={(event) =>
-            dispatch({
-              type: LocalAction.SetMnemonic,
-              payload: { string: event.target.value },
-            })
-          }
-        />
+        <FormControl className={classes.marginTop4} variant="outlined">
+          <InputLabel
+            className={classes.formLabel}
+            htmlFor="outlined-adornment-mnemonic"
+          >
+            Mnemonic
+          </InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-mnemonic"
+            placeholder="Enter mnemonic"
+            type={showMnemonic ? "text" : "password"}
+            value={mnemonic}
+            onChange={(event) =>
+              dispatch({
+                type: LocalAction.SetMnemonic,
+                payload: { string: event.target.value },
+              })
+            }
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={() => {
+                    dispatch({ type: LocalAction.ToggleMnemonic });
+                  }}
+                  edge="end"
+                >
+                  {showMnemonic ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+        </FormControl>
 
-        <TextField
-          className={classes.marginTop4}
-          variant="outlined"
-          label="2FA Password (something you will remember and hard to guess)"
-          placeholder="Enter 2FA password"
-          value={twoFAPassword}
-          onChange={(event) =>
-            dispatch({
-              type: LocalAction.Set2FAPassword,
-              payload: { string: event.target.value },
-            })
-          }
-        />
+        <FormControl className={classes.marginTop4} variant="outlined">
+          <InputLabel
+            className={classes.formLabel}
+            htmlFor="outlined-adornment-twoFAPassword"
+          >
+            2FA Password (easy to remember and hard to guess)
+          </InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-twoFAPassword"
+            placeholder="Enter 2FA password"
+            type={showTwoFAPassword ? "text" : "password"}
+            value={twoFAPassword}
+            onChange={(event) =>
+              dispatch({
+                type: LocalAction.Set2FAPassword,
+                payload: { string: event.target.value },
+              })
+            }
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={() => {
+                    dispatch({ type: LocalAction.Toggle2FAPassword });
+                  }}
+                  edge="end"
+                >
+                  {showTwoFAPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+        </FormControl>
 
         <Typography className={classes.marginTop4}>
           <span className={`${classes.bold} ${classes.red}`}>

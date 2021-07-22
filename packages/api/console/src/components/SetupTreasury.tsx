@@ -2,12 +2,18 @@ import React, { useReducer } from "react";
 import {
   Button,
   Checkbox,
+  FormControl,
   FormControlLabel,
   Grid,
+  IconButton,
+  InputAdornment,
+  InputLabel,
   makeStyles,
+  OutlinedInput,
   TextField,
   Typography,
 } from "@material-ui/core";
+import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { ActionResult } from "../models/Action";
 import { IBasePayload, IBooleanPayload, INumberPayload, IStringPayload } from "../models/IPayloads";
 import "../App.css";
@@ -59,11 +65,16 @@ const useStyles = makeStyles((theme) => ({
   marginTop8: {
     marginTop: theme.spacing(8),
   },
+  formLabel: {
+    padding: "0 10px",
+    background: "white",
+  },
 }));
 
 // Local state
 interface ILocalState {
   mnemonic: string;
+  showMnemonic: boolean;
   currencyContractName: string;
   currencyContractSymbol: string;
   currencyMarketCap: string;
@@ -79,6 +90,7 @@ interface ILocalState {
 // Local default state
 const DefaultLocalState: ILocalState = {
   mnemonic: "",
+  showMnemonic: false,
   currencyContractName: "",
   currencyContractSymbol: "",
   currencyMarketCap: "",
@@ -95,6 +107,7 @@ const DefaultLocalState: ILocalState = {
 const LocalAction = {
   ToggleLoading: "ToggleLoading",
   SetMnemonic: "SetMnemonic",
+  ToggleMnemonic: "ToggleMnemonic",
   SetCurrencyContractName: "SetCurrencyContractName",
   SetCurrencyContractSymbol: "SetCurrencyContractSymbol",
   SetCurrencyMarketCap: "SetCurrencyMarketCap",
@@ -122,6 +135,12 @@ const LocalReducer = (
       return {
         ...state,
         mnemonic: (action.payload as IStringPayload).string,
+      };
+    }
+    case LocalAction.ToggleMnemonic: {
+      return {
+        ...state,
+        showMnemonic: !state.showMnemonic,
       };
     }
     case LocalAction.SetCurrencyContractName: {
@@ -191,6 +210,7 @@ const SetupTreasury: React.FunctionComponent = () => {
   const [
     {
       mnemonic,
+      showMnemonic,
       currencyContractName,
       currencyContractSymbol,
       currencyMarketCap,
@@ -225,19 +245,38 @@ const SetupTreasury: React.FunctionComponent = () => {
           Never share your private key with anyone.
         </Typography>
 
-        <TextField
-          className={classes.marginTop4}
-          variant="outlined"
-          label="Mnemonic"
-          placeholder="Enter mnemonic"
-          value={mnemonic}
-          onChange={(event) =>
-            dispatch({
-              type: LocalAction.SetMnemonic,
-              payload: { string: event.target.value },
-            })
-          }
-        />
+        <FormControl className={classes.marginTop4} variant="outlined">
+          <InputLabel
+            className={classes.formLabel}
+            htmlFor="outlined-adornment-mnemonic"
+          >
+            Mnemonic
+          </InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-mnemonic"
+            placeholder="Enter mnemonic"
+            type={showMnemonic ? "text" : "password"}
+            value={mnemonic}
+            onChange={(event) =>
+              dispatch({
+                type: LocalAction.SetMnemonic,
+                payload: { string: event.target.value },
+              })
+            }
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={() => {
+                    dispatch({ type: LocalAction.ToggleMnemonic });
+                  }}
+                  edge="end"
+                >
+                  {showMnemonic ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+        </FormControl>
 
         <Typography className={classes.marginTop4}>
           The ERC20 standard currency contract that is included with this chain
