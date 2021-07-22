@@ -21,8 +21,9 @@ data:
         "eip158Block": 0,
         "byzantiumBlock": 0,
         "constantinopleBlock": 0,
+        "petersburgBlock": 0,
+        "muirglacierBlock": 0,
+        "istanbulBlock": 0
       },
-      "alloc": { "0x67b139e8fd1608eb3fa9a933df3878f2b5767c5a": {"balance": "100000000000000000000000000000"},
-                 "0x08b3f82bdf7373d61690c04f78e9c569ebca8ce1": {"balance": "100000000000000000000000000000"}
-                 "0x247616ddaefbf3f2b97789be376bb138e40e7e94": {"balance": "100000000000000000000000000000"}}
+      "alloc": { }
     }
