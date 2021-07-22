@@ -8,6 +8,7 @@ const Routes = {
   SETUP_SIGNING_AUTHORITY: '/setup/signing-authority',
   SETUP_TREASURE: '/setup/treasury',
   SETUP_MAINNET: '/setup/mainnet',
+  SETUP_INFURA: '/setup/infura',
 };
 
 export default Routes;

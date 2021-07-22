@@ -1,17 +1,11 @@
 import React, { useReducer } from "react";
 import {
-  Box,
   Button,
-  FormControl,
   Grid,
-  IconButton,
-  InputAdornment,
-  InputLabel,
   makeStyles,
-  OutlinedInput,
+  TextField,
   Typography,
 } from "@material-ui/core";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { ActionResult } from "../models/Action";
 import { IBasePayload, IStringPayload } from "../models/IPayloads";
 import { useHistory } from "react-router-dom";
@@ -34,10 +28,10 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
   },
   button: {
-    width: "100%"
+    width: "100%",
   },
-  bold: {
-    fontWeight: "bold",
+  textbox: {
+    marginTop: theme.spacing(2),
   },
   marginTop2: {
     marginTop: theme.spacing(2),
@@ -53,16 +47,16 @@ const useStyles = makeStyles((theme) => ({
 
 // Local state
 interface ILocalState {
-  mnemonic: string;
-  showMnemonic: boolean;
+  projectID: string;
+  apiKey: string;
   isLoading: boolean;
   error: string;
 }
 
 // Local default state
 const DefaultLocalState: ILocalState = {
-  mnemonic: "",
-  showMnemonic: false,
+  projectID: "",
+  apiKey: "",
   isLoading: false,
   error: "",
 };
@@ -70,8 +64,8 @@ const DefaultLocalState: ILocalState = {
 // Local actions
 const LocalAction = {
   ToggleLoading: "ToggleLoading",
-  SetMnemonic: "SetMnemonic",
-  ToggleMnemonic: "ToggleMnemonic",
+  SetProjectID: "SetProjectID",
+  SetAPIKey: "SetAPIKey",
   SetError: "SetError",
 };
 
@@ -87,16 +81,16 @@ const LocalReducer = (
         isLoading: !state.isLoading,
       };
     }
-    case LocalAction.SetMnemonic: {
+    case LocalAction.SetProjectID: {
       return {
         ...state,
-        mnemonic: (action.payload as IStringPayload).string,
+        projectID: (action.payload as IStringPayload).string,
       };
     }
-    case LocalAction.ToggleMnemonic: {
+    case LocalAction.SetAPIKey: {
       return {
         ...state,
-        showMnemonic: !state.showMnemonic,
+        apiKey: (action.payload as IStringPayload).string,
       };
     }
     case LocalAction.SetError: {
@@ -112,10 +106,10 @@ const LocalReducer = (
   }
 };
 
-const SetupMainnet: React.FunctionComponent = () => {
+const SetupInfura: React.FunctionComponent = () => {
   const classes = useStyles();
   const history = useHistory();
-  const [{ mnemonic, showMnemonic, isLoading, error }, dispatch] = useReducer(
+  const [{ projectID, apiKey, isLoading, error }, dispatch] = useReducer(
     LocalReducer,
     DefaultLocalState
   );
@@ -124,61 +118,46 @@ const SetupMainnet: React.FunctionComponent = () => {
     <Grid container justifyContent="center">
       <Grid className={classes.parentBox} item>
         <Typography className={classes.heading} variant="h4">
-          Mainnet Ethereum Private Key Setup
+          Infura API Setup
         </Typography>
 
         <Typography className={classes.subHeading}>
-          If you want to allow mainnet transactions, you will need to supply a
-          private key. You can skip this step if you don’t plan to offer
-          cross-chain transfer, or wish to set it up later.
+          The REST API interacts with the mainnet via Infura. You will need an
+          API key from infura.io
         </Typography>
 
         <Typography className={classes.marginTop2}>
-          You will need to provide the mnemonic for a wallet that has enough eth
-          in it to mint the contracts. It is recommended that you set this up
-          using Metamask.
+          Infura is free to use, but you may with to upgrade if you intend on
+          handling a lot of mainnet transactions.
         </Typography>
 
-        <Typography className={`${classes.marginTop2} ${classes.bold}`}>
-          Never share your private key with anyone.
-        </Typography>
+        <TextField
+          className={`${classes.textbox} ${classes.marginTop4}`}
+          variant="outlined"
+          label="Project ID"
+          placeholder="Enter project ID"
+          value={projectID}
+          onChange={(event) =>
+            dispatch({
+              type: LocalAction.SetProjectID,
+              payload: { string: event.target.value },
+            })
+          }
+        />
 
-        <Typography className={`${classes.marginTop2} ${classes.bold}`}>
-          Never keep more ethereum in your hot wallet than you need.
-        </Typography>
-
-        <FormControl className={classes.marginTop4} variant="outlined">
-          <InputLabel
-            className={classes.formLabel}
-            htmlFor="outlined-adornment-mnemonic"
-          >
-            Mnemonic
-          </InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-mnemonic"
-            placeholder="Enter mnemonic"
-            type={showMnemonic ? "text" : "password"}
-            value={mnemonic}
-            onChange={(event) =>
-              dispatch({
-                type: LocalAction.SetMnemonic,
-                payload: { string: event.target.value },
-              })
-            }
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  onClick={() => {
-                    dispatch({ type: LocalAction.ToggleMnemonic });
-                  }}
-                  edge="end"
-                >
-                  {showMnemonic ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-        </FormControl>
+        <TextField
+          className={`${classes.textbox} ${classes.marginTop4}`}
+          variant="outlined"
+          label="API Key"
+          placeholder="Enter API key"
+          value={apiKey}
+          onChange={(event) =>
+            dispatch({
+              type: LocalAction.SetAPIKey,
+              payload: { string: event.target.value },
+            })
+          }
+        />
 
         {error && (
           <Typography variant="body2" color="error">
@@ -194,7 +173,7 @@ const SetupMainnet: React.FunctionComponent = () => {
               color="secondary"
               size="large"
               onClick={() => {
-                history.push(Routes.SETUP_INFURA);
+                history.push(Routes.SETUP);
               }}
             >
               Skip
@@ -207,7 +186,7 @@ const SetupMainnet: React.FunctionComponent = () => {
               color="primary"
               size="large"
               onClick={() => {
-                history.push(Routes.SETUP_INFURA);
+                history.push(Routes.SETUP);
               }}
             >
               Continue
@@ -219,4 +198,4 @@ const SetupMainnet: React.FunctionComponent = () => {
   );
 };
 
-export default SetupMainnet;
+export default SetupInfura;
