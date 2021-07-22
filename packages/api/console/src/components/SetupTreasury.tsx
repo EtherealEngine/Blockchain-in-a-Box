@@ -16,9 +16,9 @@ import {
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { ActionResult } from "../models/Action";
 import { IBasePayload, IBooleanPayload, INumberPayload, IStringPayload } from "../models/IPayloads";
-import "../App.css";
 import { useHistory } from "react-router-dom";
 import Routes from "../constants/Routes";
+import "../App.css";
 
 const useStyles = makeStyles((theme) => ({
   parentBox: {
@@ -437,7 +437,7 @@ const SetupTreasury: React.FunctionComponent = () => {
           color="primary"
           size="large"
           onClick={() => {
-            history.push(Routes.SETUP);
+            history.push(Routes.SETUP_MAINNET);
           }}
         >
           Continue

@@ -8,6 +8,7 @@ import Welcome from "./components/Welcome";
 import SetupSidechain from "./components/SetupSidechain";
 import SetupSigningAuthority from "./components/SetupSigningAuthority";
 import SetupTreasury from "./components/SetupTreasury";
+import SetupMainnet from "./components/SetupMainnet";
 
 const Router: React.FunctionComponent = () => {
   return (
@@ -32,6 +33,7 @@ const Router: React.FunctionComponent = () => {
           component={SetupSigningAuthority}
         />
         <Route exact path={Routes.SETUP_TREASURE} component={SetupTreasury} />
+        <Route exact path={Routes.SETUP_MAINNET} component={SetupMainnet} />
       </Switch>
     </Fragment>
   );

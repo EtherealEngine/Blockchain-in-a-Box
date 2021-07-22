@@ -8,9 +8,9 @@ import {
 } from "@material-ui/core";
 import { ActionResult } from "../models/Action";
 import { IBasePayload, IStringPayload } from "../models/IPayloads";
-import "../App.css";
 import { useHistory } from "react-router-dom";
 import Routes from "../constants/Routes";
+import "../App.css";
 
 const useStyles = makeStyles((theme) => ({
   parentBox: {
