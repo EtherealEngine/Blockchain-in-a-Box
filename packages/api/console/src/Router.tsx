@@ -11,6 +11,7 @@ import SetupTreasury from "./components/SetupTreasury";
 import SetupMainnet from "./components/SetupMainnet";
 import SetupInfura from "./components/SetupInfura";
 import SetupPolygon from "./components/SetupPolygon";
+import SetupPolygonVigil from "./components/SetupPolygonVigil";
 
 const Router: React.FunctionComponent = () => {
   return (
@@ -38,6 +39,7 @@ const Router: React.FunctionComponent = () => {
         <Route exact path={Routes.SETUP_MAINNET} component={SetupMainnet} />
         <Route exact path={Routes.SETUP_INFURA} component={SetupInfura} />
         <Route exact path={Routes.SETUP_POLYGON} component={SetupPolygon} />
+        <Route exact path={Routes.SETUP_POLYGON_VIGIL} component={SetupPolygonVigil} />
       </Switch>
     </Fragment>
   );

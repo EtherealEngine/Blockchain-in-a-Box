@@ -10,6 +10,7 @@ const Routes = {
   SETUP_MAINNET: '/setup/mainnet',
   SETUP_INFURA: '/setup/infura',
   SETUP_POLYGON: '/setup/polygon',
+  SETUP_POLYGON_VIGIL: '/setup/polygon-vigil',
 };
 
 export default Routes;
