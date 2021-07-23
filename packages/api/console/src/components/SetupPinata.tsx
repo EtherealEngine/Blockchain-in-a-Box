@@ -39,11 +39,16 @@ const useStyles = makeStyles((theme) => ({
   marginTop4: {
     marginTop: theme.spacing(4),
   },
+  formLabel: {
+    padding: "0 10px",
+    background: "white",
+  },
 }));
 
 // Local state
 interface ILocalState {
   apiKey: string;
+  secretAPIKey: string;
   isLoading: boolean;
   error: string;
 }
@@ -51,6 +56,7 @@ interface ILocalState {
 // Local default state
 const DefaultLocalState: ILocalState = {
   apiKey: "",
+  secretAPIKey: "",
   isLoading: false,
   error: "",
 };
@@ -59,6 +65,7 @@ const DefaultLocalState: ILocalState = {
 const LocalAction = {
   ToggleLoading: "ToggleLoading",
   SetAPIKey: "SetAPIKey",
+  SetSecretAPIKey: "SetSecretAPIKey",
   SetError: "SetError",
 };
 
@@ -80,6 +87,12 @@ const LocalReducer = (
         apiKey: (action.payload as IStringPayload).string,
       };
     }
+    case LocalAction.SetSecretAPIKey: {
+      return {
+        ...state,
+        secretAPIKey: (action.payload as IStringPayload).string,
+      };
+    }
     case LocalAction.SetError: {
       return {
         ...state,
@@ -93,10 +106,10 @@ const LocalReducer = (
   }
 };
 
-const SetupPolygonVigil: React.FunctionComponent = () => {
+const SetupPinata: React.FunctionComponent = () => {
   const classes = useStyles();
   const history = useHistory();
-  const [{ apiKey, isLoading, error }, dispatch] = useReducer(
+  const [{ apiKey, secretAPIKey, isLoading, error }, dispatch] = useReducer(
     LocalReducer,
     DefaultLocalState
   );
@@ -105,17 +118,21 @@ const SetupPolygonVigil: React.FunctionComponent = () => {
     <Grid container justifyContent="center">
       <Grid className={classes.parentBox} item>
         <Typography className={classes.heading} variant="h4">
-          Polygon Vigil Setup
+          Pinata API Setup
         </Typography>
 
         <Typography className={classes.subHeading}>
-          The REST API interacts with Polygon via MaticVigil. You will need an
-          API key from https://rpc.maticvigil.com/
+          The REST API can upload resources tied to ERC721 tokens using IPFS.
+          You will need an API key from Pinata, an IPFS management service. You
+          can obtain an API key at{" "}
+          <a target="_blank" href="https://pinata.cloud/">
+            https://pinata.cloud/
+          </a>
         </Typography>
 
         <Typography className={classes.marginTop2}>
-          MaticVigil is free to use, but you may with to upgrade if you intend
-          on handling a lot of mainnet transactions.
+          Pinata is free to use, but you may with to upgrade if you intend on
+          handling a lot of file uploads.
         </Typography>
 
         <TextField
@@ -127,6 +144,20 @@ const SetupPolygonVigil: React.FunctionComponent = () => {
           onChange={(event) =>
             dispatch({
               type: LocalAction.SetAPIKey,
+              payload: { string: event.target.value },
+            })
+          }
+        />
+
+        <TextField
+          className={`${classes.textbox} ${classes.marginTop4}`}
+          variant="outlined"
+          label="Secret API Key"
+          placeholder="Enter secret API key"
+          value={secretAPIKey}
+          onChange={(event) =>
+            dispatch({
+              type: LocalAction.SetSecretAPIKey,
               payload: { string: event.target.value },
             })
           }
@@ -146,7 +177,7 @@ const SetupPolygonVigil: React.FunctionComponent = () => {
               color="secondary"
               size="large"
               onClick={() => {
-                history.push(Routes.SETUP_PINATA);
+                history.push(Routes.SETUP);
               }}
             >
               Skip
@@ -159,7 +190,7 @@ const SetupPolygonVigil: React.FunctionComponent = () => {
               color="primary"
               size="large"
               onClick={() => {
-                history.push(Routes.SETUP_PINATA);
+                history.push(Routes.SETUP);
               }}
             >
               Continue
@@ -171,4 +202,4 @@ const SetupPolygonVigil: React.FunctionComponent = () => {
   );
 };
 
-export default SetupPolygonVigil;
+export default SetupPinata;
