@@ -177,7 +177,7 @@ const SetupPinata: React.FunctionComponent = () => {
               color="secondary"
               size="large"
               onClick={() => {
-                history.push(Routes.SETUP);
+                history.push(Routes.SETUP_COMPLETED);
               }}
             >
               Skip
@@ -190,7 +190,7 @@ const SetupPinata: React.FunctionComponent = () => {
               color="primary"
               size="large"
               onClick={() => {
-                history.push(Routes.SETUP);
+                history.push(Routes.SETUP_COMPLETED);
               }}
             >
               Continue

@@ -12,6 +12,7 @@ const Routes = {
   SETUP_POLYGON: '/setup/polygon',
   SETUP_POLYGON_VIGIL: '/setup/polygon-vigil',
   SETUP_PINATA: '/setup/pinata',
+  SETUP_COMPLETED: '/setup/completed',
 };
 
 export default Routes;
