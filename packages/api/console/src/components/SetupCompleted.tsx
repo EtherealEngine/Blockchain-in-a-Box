@@ -138,7 +138,7 @@ const SetupCompleted: React.FunctionComponent = () => {
           color="primary"
           size="large"
           onClick={() => {
-            history.push(Routes.SETUP_TREASURE);
+            history.push(Routes.DASHBOARD);
           }}
         >
           Continue

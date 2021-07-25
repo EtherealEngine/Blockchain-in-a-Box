@@ -1,6 +1,7 @@
 const Routes = {
   ROOT: '/',
   DASHBOARD: '/dashboard',
+  DASHBOARD_DEPLOYMENT: '/dashboard/deployment',
   LOGIN: '/login',
   LOGIN_VERIFICATION: '/login-verification',
   SETUP: '/setup',

@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { Switch, Route } from "react-router-dom";
-import Home from "./components/Dashboard";
+import DashboardDeployment from "./components/DashboardDeployment";
 import Login from "./components/Login";
 import LoginVerification from "./components/LoginVerification";
 import Routes from "./constants/Routes";
@@ -14,13 +14,13 @@ import SetupPolygon from "./components/SetupPolygon";
 import SetupPolygonVigil from "./components/SetupPolygonVigil";
 import SetupPinata from "./components/SetupPinata";
 import SetupCompleted from "./components/SetupCompleted";
+import DashboardContainer from "./components/DashboardContainer";
 
 const Router: React.FunctionComponent = () => {
   return (
     <Fragment>
       <Switch>
         <Route exact path={Routes.ROOT} component={Welcome} />
-        <Route exact path={Routes.DASHBOARD} component={Home} />
         <Route exact path={Routes.LOGIN} component={Login} />
         <Route
           exact
@@ -41,9 +41,22 @@ const Router: React.FunctionComponent = () => {
         <Route exact path={Routes.SETUP_MAINNET} component={SetupMainnet} />
         <Route exact path={Routes.SETUP_INFURA} component={SetupInfura} />
         <Route exact path={Routes.SETUP_POLYGON} component={SetupPolygon} />
-        <Route exact path={Routes.SETUP_POLYGON_VIGIL} component={SetupPolygonVigil} />
+        <Route
+          exact
+          path={Routes.SETUP_POLYGON_VIGIL}
+          component={SetupPolygonVigil}
+        />
         <Route exact path={Routes.SETUP_PINATA} component={SetupPinata} />
         <Route exact path={Routes.SETUP_COMPLETED} component={SetupCompleted} />
+        <Route path={Routes.DASHBOARD}>
+          <DashboardContainer>
+            <Route
+              exact
+              path={Routes.DASHBOARD_DEPLOYMENT}
+              component={DashboardDeployment}
+            />
+          </DashboardContainer>
+        </Route>
       </Switch>
     </Fragment>
   );
