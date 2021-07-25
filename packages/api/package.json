@@ -33,7 +33,7 @@
   "dependencies": {
     "@ethereumjs/tx": "^3.2.1",
     "@pinata/sdk": "^1.1.14",
-    "@truffle/hdwallet-provider": "1.4.1",
+    "@truffle/hdwallet-provider": "1.4.2",
     "app-root-path": "^3.0.0",
     "aws-sdk": "^2.750.0",
     "bip39": "^3.0.2",
