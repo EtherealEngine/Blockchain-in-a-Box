@@ -39,15 +39,10 @@ const useStyles = makeStyles((theme) => ({
   marginTop4: {
     marginTop: theme.spacing(4),
   },
-  formLabel: {
-    padding: "0 10px",
-    background: "white",
-  },
 }));
 
 // Local state
 interface ILocalState {
-  projectID: string;
   apiKey: string;
   isLoading: boolean;
   error: string;
@@ -55,7 +50,6 @@ interface ILocalState {
 
 // Local default state
 const DefaultLocalState: ILocalState = {
-  projectID: "",
   apiKey: "",
   isLoading: false,
   error: "",
@@ -64,7 +58,6 @@ const DefaultLocalState: ILocalState = {
 // Local actions
 const LocalAction = {
   ToggleLoading: "ToggleLoading",
-  SetProjectID: "SetProjectID",
   SetAPIKey: "SetAPIKey",
   SetError: "SetError",
 };
@@ -79,12 +72,6 @@ const LocalReducer = (
       return {
         ...state,
         isLoading: !state.isLoading,
-      };
-    }
-    case LocalAction.SetProjectID: {
-      return {
-        ...state,
-        projectID: (action.payload as IStringPayload).string,
       };
     }
     case LocalAction.SetAPIKey: {
@@ -106,10 +93,10 @@ const LocalReducer = (
   }
 };
 
-const SetupInfura: React.FunctionComponent = () => {
+const SetupPolygonVigil: React.FunctionComponent = () => {
   const classes = useStyles();
   const history = useHistory();
-  const [{ projectID, apiKey, isLoading, error }, dispatch] = useReducer(
+  const [{ apiKey, isLoading, error }, dispatch] = useReducer(
     LocalReducer,
     DefaultLocalState
   );
@@ -118,32 +105,18 @@ const SetupInfura: React.FunctionComponent = () => {
     <Grid container justifyContent="center">
       <Grid className={classes.parentBox} item>
         <Typography className={classes.heading} variant="h4">
-          Infura API Setup
+          Polygon Vigil Setup
         </Typography>
 
         <Typography className={classes.subHeading}>
-          The REST API interacts with the mainnet via Infura. You will need an
-          API key from infura.io
+          The REST API interacts with Polygon via MaticVigil. You will need an
+          API key from https://rpc.maticvigil.com/
         </Typography>
 
         <Typography className={classes.marginTop2}>
-          Infura is free to use, but you may with to upgrade if you intend on
-          handling a lot of mainnet transactions.
+          MaticVigil is free to use, but you may with to upgrade if you intend
+          on handling a lot of mainnet transactions.
         </Typography>
-
-        <TextField
-          className={`${classes.textbox} ${classes.marginTop4}`}
-          variant="outlined"
-          label="Project ID"
-          placeholder="Enter project ID"
-          value={projectID}
-          onChange={(event) =>
-            dispatch({
-              type: LocalAction.SetProjectID,
-              payload: { string: event.target.value },
-            })
-          }
-        />
 
         <TextField
           className={`${classes.textbox} ${classes.marginTop4}`}
@@ -173,7 +146,7 @@ const SetupInfura: React.FunctionComponent = () => {
               color="secondary"
               size="large"
               onClick={() => {
-                history.push(Routes.SETUP_POLYGON);
+                history.push(Routes.SETUP_PINATA);
               }}
             >
               Skip
@@ -186,7 +159,7 @@ const SetupInfura: React.FunctionComponent = () => {
               color="primary"
               size="large"
               onClick={() => {
-                history.push(Routes.SETUP_POLYGON);
+                history.push(Routes.SETUP_PINATA);
               }}
             >
               Continue
@@ -198,4 +171,4 @@ const SetupInfura: React.FunctionComponent = () => {
   );
 };
 
-export default SetupInfura;
+export default SetupPolygonVigil;

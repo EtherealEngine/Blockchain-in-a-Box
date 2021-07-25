@@ -47,16 +47,16 @@ const useStyles = makeStyles((theme) => ({
 
 // Local state
 interface ILocalState {
-  projectID: string;
   apiKey: string;
+  secretAPIKey: string;
   isLoading: boolean;
   error: string;
 }
 
 // Local default state
 const DefaultLocalState: ILocalState = {
-  projectID: "",
   apiKey: "",
+  secretAPIKey: "",
   isLoading: false,
   error: "",
 };
@@ -64,8 +64,8 @@ const DefaultLocalState: ILocalState = {
 // Local actions
 const LocalAction = {
   ToggleLoading: "ToggleLoading",
-  SetProjectID: "SetProjectID",
   SetAPIKey: "SetAPIKey",
+  SetSecretAPIKey: "SetSecretAPIKey",
   SetError: "SetError",
 };
 
@@ -81,16 +81,16 @@ const LocalReducer = (
         isLoading: !state.isLoading,
       };
     }
-    case LocalAction.SetProjectID: {
-      return {
-        ...state,
-        projectID: (action.payload as IStringPayload).string,
-      };
-    }
     case LocalAction.SetAPIKey: {
       return {
         ...state,
         apiKey: (action.payload as IStringPayload).string,
+      };
+    }
+    case LocalAction.SetSecretAPIKey: {
+      return {
+        ...state,
+        secretAPIKey: (action.payload as IStringPayload).string,
       };
     }
     case LocalAction.SetError: {
@@ -106,10 +106,10 @@ const LocalReducer = (
   }
 };
 
-const SetupInfura: React.FunctionComponent = () => {
+const SetupPinata: React.FunctionComponent = () => {
   const classes = useStyles();
   const history = useHistory();
-  const [{ projectID, apiKey, isLoading, error }, dispatch] = useReducer(
+  const [{ apiKey, secretAPIKey, isLoading, error }, dispatch] = useReducer(
     LocalReducer,
     DefaultLocalState
   );
@@ -118,32 +118,22 @@ const SetupInfura: React.FunctionComponent = () => {
     <Grid container justifyContent="center">
       <Grid className={classes.parentBox} item>
         <Typography className={classes.heading} variant="h4">
-          Infura API Setup
+          Pinata API Setup
         </Typography>
 
         <Typography className={classes.subHeading}>
-          The REST API interacts with the mainnet via Infura. You will need an
-          API key from infura.io
+          The REST API can upload resources tied to ERC721 tokens using IPFS.
+          You will need an API key from Pinata, an IPFS management service. You
+          can obtain an API key at{" "}
+          <a target="_blank" href="https://pinata.cloud/">
+            https://pinata.cloud/
+          </a>
         </Typography>
 
         <Typography className={classes.marginTop2}>
-          Infura is free to use, but you may with to upgrade if you intend on
-          handling a lot of mainnet transactions.
+          Pinata is free to use, but you may with to upgrade if you intend on
+          handling a lot of file uploads.
         </Typography>
-
-        <TextField
-          className={`${classes.textbox} ${classes.marginTop4}`}
-          variant="outlined"
-          label="Project ID"
-          placeholder="Enter project ID"
-          value={projectID}
-          onChange={(event) =>
-            dispatch({
-              type: LocalAction.SetProjectID,
-              payload: { string: event.target.value },
-            })
-          }
-        />
 
         <TextField
           className={`${classes.textbox} ${classes.marginTop4}`}
@@ -154,6 +144,20 @@ const SetupInfura: React.FunctionComponent = () => {
           onChange={(event) =>
             dispatch({
               type: LocalAction.SetAPIKey,
+              payload: { string: event.target.value },
+            })
+          }
+        />
+
+        <TextField
+          className={`${classes.textbox} ${classes.marginTop4}`}
+          variant="outlined"
+          label="Secret API Key"
+          placeholder="Enter secret API key"
+          value={secretAPIKey}
+          onChange={(event) =>
+            dispatch({
+              type: LocalAction.SetSecretAPIKey,
               payload: { string: event.target.value },
             })
           }
@@ -173,7 +177,7 @@ const SetupInfura: React.FunctionComponent = () => {
               color="secondary"
               size="large"
               onClick={() => {
-                history.push(Routes.SETUP_POLYGON);
+                history.push(Routes.SETUP_COMPLETED);
               }}
             >
               Skip
@@ -186,7 +190,7 @@ const SetupInfura: React.FunctionComponent = () => {
               color="primary"
               size="large"
               onClick={() => {
-                history.push(Routes.SETUP_POLYGON);
+                history.push(Routes.SETUP_COMPLETED);
               }}
             >
               Continue
@@ -198,4 +202,4 @@ const SetupInfura: React.FunctionComponent = () => {
   );
 };
 
-export default SetupInfura;
+export default SetupPinata;

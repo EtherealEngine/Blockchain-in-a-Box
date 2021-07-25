@@ -1,11 +1,16 @@
 import React, { useReducer } from "react";
 import {
   Button,
+  FormControl,
   Grid,
+  IconButton,
+  InputAdornment,
+  InputLabel,
   makeStyles,
-  TextField,
+  OutlinedInput,
   Typography,
 } from "@material-ui/core";
+import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { ActionResult } from "../models/Action";
 import { IBasePayload, IStringPayload } from "../models/IPayloads";
 import { useHistory } from "react-router-dom";
@@ -33,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
   textbox: {
     marginTop: theme.spacing(2),
   },
+  bold: {
+    fontWeight: "bold",
+  },
   marginTop2: {
     marginTop: theme.spacing(2),
   },
@@ -47,16 +55,16 @@ const useStyles = makeStyles((theme) => ({
 
 // Local state
 interface ILocalState {
-  projectID: string;
-  apiKey: string;
+  mnemonic: string;
+  showMnemonic: boolean;
   isLoading: boolean;
   error: string;
 }
 
 // Local default state
 const DefaultLocalState: ILocalState = {
-  projectID: "",
-  apiKey: "",
+  mnemonic: "",
+  showMnemonic: false,
   isLoading: false,
   error: "",
 };
@@ -64,8 +72,8 @@ const DefaultLocalState: ILocalState = {
 // Local actions
 const LocalAction = {
   ToggleLoading: "ToggleLoading",
-  SetProjectID: "SetProjectID",
-  SetAPIKey: "SetAPIKey",
+  SetMnemonic: "SetMnemonic",
+  ToggleMnemonic: "ToggleMnemonic",
   SetError: "SetError",
 };
 
@@ -81,16 +89,16 @@ const LocalReducer = (
         isLoading: !state.isLoading,
       };
     }
-    case LocalAction.SetProjectID: {
+    case LocalAction.SetMnemonic: {
       return {
         ...state,
-        projectID: (action.payload as IStringPayload).string,
+        mnemonic: (action.payload as IStringPayload).string,
       };
     }
-    case LocalAction.SetAPIKey: {
+    case LocalAction.ToggleMnemonic: {
       return {
         ...state,
-        apiKey: (action.payload as IStringPayload).string,
+        showMnemonic: !state.showMnemonic,
       };
     }
     case LocalAction.SetError: {
@@ -106,10 +114,10 @@ const LocalReducer = (
   }
 };
 
-const SetupInfura: React.FunctionComponent = () => {
+const SetupPolygon: React.FunctionComponent = () => {
   const classes = useStyles();
   const history = useHistory();
-  const [{ projectID, apiKey, isLoading, error }, dispatch] = useReducer(
+  const [{ mnemonic, showMnemonic, isLoading, error }, dispatch] = useReducer(
     LocalReducer,
     DefaultLocalState
   );
@@ -118,46 +126,60 @@ const SetupInfura: React.FunctionComponent = () => {
     <Grid container justifyContent="center">
       <Grid className={classes.parentBox} item>
         <Typography className={classes.heading} variant="h4">
-          Infura API Setup
+          Polygon / Matic Private Key Setup
         </Typography>
 
         <Typography className={classes.subHeading}>
-          The REST API interacts with the mainnet via Infura. You will need an
-          API key from infura.io
+          If you want to allow mainnet transactions on the Polygon Matic network
+          you will need to set up a private key.
         </Typography>
 
         <Typography className={classes.marginTop2}>
-          Infura is free to use, but you may with to upgrade if you intend on
-          handling a lot of mainnet transactions.
+          You will need to provide the mnemonic for a wallet that has enough
+          MATIC token in it to mint the contracts. It is recommended that you
+          set this up using Metamask.
         </Typography>
 
-        <TextField
-          className={`${classes.textbox} ${classes.marginTop4}`}
-          variant="outlined"
-          label="Project ID"
-          placeholder="Enter project ID"
-          value={projectID}
-          onChange={(event) =>
-            dispatch({
-              type: LocalAction.SetProjectID,
-              payload: { string: event.target.value },
-            })
-          }
-        />
+        <Typography className={`${classes.marginTop2} ${classes.bold}`}>
+          Never share your private key with anyone.
+        </Typography>
 
-        <TextField
-          className={`${classes.textbox} ${classes.marginTop4}`}
-          variant="outlined"
-          label="API Key"
-          placeholder="Enter API key"
-          value={apiKey}
-          onChange={(event) =>
-            dispatch({
-              type: LocalAction.SetAPIKey,
-              payload: { string: event.target.value },
-            })
-          }
-        />
+        <Typography className={`${classes.marginTop2} ${classes.bold}`}>
+          Never keep more MATIC token in your hot wallet than you need.
+        </Typography>
+
+        <FormControl className={classes.marginTop4} variant="outlined">
+          <InputLabel
+            className={classes.formLabel}
+            htmlFor="outlined-adornment-mnemonic"
+          >
+            Mnemonic
+          </InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-mnemonic"
+            placeholder="Enter mnemonic"
+            type={showMnemonic ? "text" : "password"}
+            value={mnemonic}
+            onChange={(event) =>
+              dispatch({
+                type: LocalAction.SetMnemonic,
+                payload: { string: event.target.value },
+              })
+            }
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={() => {
+                    dispatch({ type: LocalAction.ToggleMnemonic });
+                  }}
+                  edge="end"
+                >
+                  {showMnemonic ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+        </FormControl>
 
         {error && (
           <Typography variant="body2" color="error">
@@ -173,7 +195,7 @@ const SetupInfura: React.FunctionComponent = () => {
               color="secondary"
               size="large"
               onClick={() => {
-                history.push(Routes.SETUP_POLYGON);
+                history.push(Routes.SETUP_POLYGON_VIGIL);
               }}
             >
               Skip
@@ -186,7 +208,7 @@ const SetupInfura: React.FunctionComponent = () => {
               color="primary"
               size="large"
               onClick={() => {
-                history.push(Routes.SETUP_POLYGON);
+                history.push(Routes.SETUP_POLYGON_VIGIL);
               }}
             >
               Continue
@@ -198,4 +220,4 @@ const SetupInfura: React.FunctionComponent = () => {
   );
 };
 
-export default SetupInfura;
+export default SetupPolygon;
