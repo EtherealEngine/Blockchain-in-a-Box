@@ -16,6 +16,7 @@ import SetupPinata from "./components/SetupPinata";
 import SetupCompleted from "./components/SetupCompleted";
 import DashboardContainer from "./components/DashboardContainer";
 import DashboardHome from "./components/DashboardHome";
+import DashboardUsers from "./components/DashboardUsers";
 
 const Router: React.FunctionComponent = () => {
   return (
@@ -55,6 +56,11 @@ const Router: React.FunctionComponent = () => {
               exact
               path={Routes.DASHBOARD_HOME}
               component={DashboardHome}
+            />
+            <Route
+              exact
+              path={Routes.DASHBOARD_USERS}
+              component={DashboardUsers}
             />
             <Route
               exact
