@@ -1,5 +1,4 @@
 import {
-  Divider,
   Drawer,
   List,
   ListItem,
@@ -18,7 +17,8 @@ import {
   Storage,
 } from "@material-ui/icons";
 import React, { ReactElement } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
+import Routes from "../constants/Routes";
 import "../App.css";
 
 const drawerWidth = 240;
@@ -47,43 +47,44 @@ interface MenuItem {
   key: string;
   label: string;
   icon: ReactElement;
-  onClick: () => void;
+  link: string;
 }
 
 const NavigationPanel: React.FunctionComponent = () => {
   const classes = useStyles();
   const history = useHistory();
+  const location = useLocation();
 
   const navigationOptions: MenuItem[] = [
     {
       key: "n1",
       label: "Dashboard",
       icon: <Dashboard />,
-      onClick: () => console.log("Dashboard"),
+      link: Routes.DASHBOARD_HOME,
     },
     {
       key: "n2",
       label: "Users",
       icon: <Person />,
-      onClick: () => console.log("Users"),
+      link: Routes.DASHBOARD_USERS,
     },
     {
       key: "n3",
       label: "Secrets & Security",
       icon: <Security />,
-      onClick: () => console.log("Secrets & Security"),
+      link: Routes.DASHBOARD_SECURITY,
     },
     {
       key: "n4",
       label: "Configuration",
       icon: <Tune />,
-      onClick: () => console.log("Configuration"),
+      link: Routes.DASHBOARD_CONFIGURATION,
     },
     {
       key: "n5",
       label: "Deployments",
       icon: <Storage />,
-      onClick: () => console.log("Deployments"),
+      link: Routes.DASHBOARD_DEPLOYMENT,
     },
   ];
 
@@ -100,9 +101,12 @@ const NavigationPanel: React.FunctionComponent = () => {
         My Organization
       </Typography>
 
-      <List>
+      <List  >
         {navigationOptions.map((option, index) => (
-          <ListItem button key={option.key} onClick={option.onClick}>
+          <ListItem button 
+          key={option.key} 
+          selected={location.pathname === option.link}
+          onClick={() => history.push(option.link)}>
             <ListItemIcon>{option.icon}</ListItemIcon>
             <ListItemText primary={option.label} />
           </ListItem>
