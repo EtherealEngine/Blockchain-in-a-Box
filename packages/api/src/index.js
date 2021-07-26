@@ -1,7 +1,10 @@
 const express = require("express");
 const fileUpload = require("express-fileupload");
 const { addV1Routes } = require("./v1/index.js");
-const { HTTP_PORT, DEVELOPMENT } = require("./common/environment.js");
+console.log("in index");
+const HTTP_PORT = process.env.HTTP_PORT;
+const DEVELOPMENT = !process.env.PRODUCTION;
+
 const createDeployer = require("./deployer");
 
 const app = express();
