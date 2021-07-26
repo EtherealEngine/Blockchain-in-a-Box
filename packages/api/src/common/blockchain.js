@@ -6,15 +6,20 @@ const { hdkey } = require("ethereumjs-wallet");
 const bip39 = require("bip39");
 const { Transaction } = require("@ethereumjs/tx");
 const Common = require ("@ethereumjs/common").default;
-const {
-  INFURA_PROJECT_ID,
-  POLYGON_VIGIL_KEY,
-  ETHEREUM_HOST,
-} = require("./environment.js");
 
-const addresses = require("../config/addresses.js");
-const abis = require("../config/abi.js");
-const ports = require("../config/ports.js");
+const addresses = require("../../config/addresses.js");
+const abis = require("../../config/abi.js");
+const ports = require("../../config/ports.js");
+
+const { Sequelize, Model, DataTypes } = require("sequelize");
+//const Sequelize = require('sequelize');
+
+const sequelize = new Sequelize('dev', process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
+  host: process.env.MYSQL_URL,
+  dialect: 'mysql',
+});
+const { QueryTypes } = require('sequelize');
+
 
 let web3,
   // web3socketProviders,
@@ -45,6 +50,28 @@ const common = Common.forCustomChain(
 );
 
 const loadPromise = (async() => {
+  const asyncGlobal = async() => {
+    let data;
+    try {
+      data = await sequelize.query('SELECT DATA_KEY,DATA_VALUE FROM `ENVIRONMENT_DATA`', {type: sequelize.QueryTypes.SELECT});
+    } catch (err) {
+      console.log(err);
+    }
+    return data;
+  };
+  const globalData = await asyncGlobal();
+  let ETHEREUM_HOST;
+  let INFURA_PROJECT_ID;
+  let POLYGON_VIGIL_KEY;
+  for(let i of globalData){
+    if (i.DATA_KEY=="ETHEREUM_HOST")
+      ETHEREUM_HOST= i.DATA_VALUE;
+      if (i.DATA_KEY=="INFURA_PROJECT_ID")
+      INFURA_PROJECT_ID= i.DATA_VALUE;
+      if (i.DATA_KEY=="POLYGON_VIGIL_KEY")
+      POLYGON_VIGIL_KEY= i.DATA_VALUE;
+  }
+  console.log("in blockchain",ETHEREUM_HOST,INFURA_PROJECT_ID,POLYGON_VIGIL_KEY);
   const ethereumHostAddress =  await new Promise((accept, reject) => {
       dns.resolve4(ETHEREUM_HOST, (err, addresses) => {
         if (!err) {
