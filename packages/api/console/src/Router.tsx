@@ -15,6 +15,7 @@ import SetupPolygonVigil from "./components/SetupPolygonVigil";
 import SetupPinata from "./components/SetupPinata";
 import SetupCompleted from "./components/SetupCompleted";
 import DashboardContainer from "./components/DashboardContainer";
+import DashboardHome from "./components/DashboardHome";
 
 const Router: React.FunctionComponent = () => {
   return (
@@ -50,6 +51,11 @@ const Router: React.FunctionComponent = () => {
         <Route exact path={Routes.SETUP_COMPLETED} component={SetupCompleted} />
         <Route path={Routes.DASHBOARD}>
           <DashboardContainer>
+            <Route
+              exact
+              path={Routes.DASHBOARD_HOME}
+              component={DashboardHome}
+            />
             <Route
               exact
               path={Routes.DASHBOARD_DEPLOYMENT}
