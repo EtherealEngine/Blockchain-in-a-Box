@@ -1,7 +1,6 @@
 const express = require("express");
 const fileUpload = require("express-fileupload");
 const { addV1Routes } = require("./v1/index.js");
-console.log("in index");
 const HTTP_PORT = process.env.HTTP_PORT;
 const DEVELOPMENT = !process.env.PRODUCTION;
 
