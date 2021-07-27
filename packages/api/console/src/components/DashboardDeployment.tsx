@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 import Routes from "../constants/Routes";
 import "../App.css";
 
-const Dashboard: React.FunctionComponent = () => {
+const DashboardDeployment: React.FunctionComponent = () => {
   const history = useHistory();
   return (
     <div>
@@ -17,4 +17,4 @@ const Dashboard: React.FunctionComponent = () => {
   );
 };
 
-export default Dashboard;
+export default DashboardDeployment;

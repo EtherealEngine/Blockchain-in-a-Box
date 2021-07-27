@@ -5,3 +5,13 @@ button {
   color: white;
   text-transform: none;
 }
+.MuiListItem-root.Mui-selected {
+  background-color: white !important;
+  color: #109cf1;
+}
+.MuiListItem-root.Mui-selected .MuiListItemIcon-root {
+  color: #109cf1;
+}
+.MuiTableContainer-root {
+  box-shadow: none !important;
+}

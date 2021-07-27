@@ -1,6 +1,11 @@
 const Routes = {
   ROOT: '/',
   DASHBOARD: '/dashboard',
+  DASHBOARD_HOME: '/dashboard/home',
+  DASHBOARD_USERS: '/dashboard/users',
+  DASHBOARD_SECURITY: '/dashboard/security',
+  DASHBOARD_CONFIGURATION: '/dashboard/configuration',
+  DASHBOARD_DEPLOYMENT: '/dashboard/deployment',
   LOGIN: '/login',
   LOGIN_VERIFICATION: '/login-verification',
   SETUP: '/setup',
