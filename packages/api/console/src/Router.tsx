@@ -18,6 +18,7 @@ import DashboardContainer from "./components/DashboardContainer";
 import DashboardHome from "./components/DashboardHome";
 import DashboardUsers from "./components/DashboardUsers";
 import DashboardSecurity from "./components/DashboardSecurity";
+import DashboardConfigurations from "./components/DashboardConfigurations";
 
 const Router: React.FunctionComponent = () => {
   return (
@@ -67,6 +68,11 @@ const Router: React.FunctionComponent = () => {
               exact
               path={Routes.DASHBOARD_SECURITY}
               component={DashboardSecurity}
+            />
+            <Route
+              exact
+              path={Routes.DASHBOARD_CONFIGURATION}
+              component={DashboardConfigurations}
             />
             <Route
               exact
