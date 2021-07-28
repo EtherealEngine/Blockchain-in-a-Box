@@ -3,11 +3,27 @@ const redisearch = require("redis-redisearch");
 redisearch(redis);
 const { makePromise } = require("./utils.js");
 const { ids } = require("./constants.js");
-const { REDIS_KEY } = require("./environment.js");
+
 
 let redisClient = null;
 let loadPromise = null;
 async function connect(port, host) {
+  const asyncGlobal = async() => {
+    let data;
+    try {
+      data = await sequelize.query('SELECT DATA_KEY,DATA_VALUE FROM `ENVIRONMENT_DATA`', {type: sequelize.QueryTypes.SELECT});
+    } catch (err) {
+      console.log(err);
+    }
+    return data;
+  };
+  const globalData = await asyncGlobal();
+  let REDIS_KEY;
+  for(let i of globalData){
+    if (i.DATA_KEY=="REDIS_KEY")
+      REDIS_KEY= i.DATA_VALUE;
+  }
+  console.log("in redis",REDIS_KEY);
   if (!loadPromise) {
     loadPromise = new Promise((accept, reject) => {
       redisClient = redis.createClient(port, host);
