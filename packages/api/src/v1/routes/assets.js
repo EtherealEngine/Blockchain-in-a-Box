@@ -24,10 +24,12 @@ const {
 } = require("../../common/constants.js");
 const { ResponseStatus } = require("../enums.js");
 
-const DEVELOPMENT = !process.env.PRODUCTION;
-const PRODUCTION = process.env.PRODUCTION;
-const PINATA_API_KEY = process.env.PINATA_API_KEY;
-const PINATA_SECRET_API_KEY = process.env.PINATA_SECRET_API_KEY;
+const {
+  PRODUCTION,
+  DEVELOPMENT,
+  PINATA_API_KEY,
+  PINATA_SECRET_API_KEY
+} = require("../../common/environment.js");
 
 const pinataSDK = require("@pinata/sdk");
 const pinata =
