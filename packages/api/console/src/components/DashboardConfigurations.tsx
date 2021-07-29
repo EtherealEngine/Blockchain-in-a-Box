@@ -15,13 +15,14 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
+    maxWidth: 500,
   },
   button: {
     width: 300,
     marginTop: 10,
   },
   textbox: {
-    width: 300,
+    width: "100%",
     marginTop: theme.spacing(2),
   },
   red: {
@@ -45,6 +46,9 @@ interface ILocalState {
   currencyContractName: string;
   currencyContractSymbol: string;
   currencyMarketCap: string;
+  assetContractName: string;
+  assetContractSymbol: string;
+  assetTokenDescription: string;
   isLoading: boolean;
   error: string;
 }
@@ -56,6 +60,9 @@ const DefaultLocalState: ILocalState = {
   currencyContractName: "",
   currencyContractSymbol: "",
   currencyMarketCap: "",
+  assetContractName: "",
+  assetContractSymbol: "",
+  assetTokenDescription: "",
   isLoading: false,
   error: "",
 };
@@ -68,6 +75,9 @@ const LocalAction = {
   SetCurrencyContractName: "SetCurrencyContractName",
   SetCurrencyContractSymbol: "SetCurrencyContractSymbol",
   SetCurrencyMarketCap: "SetCurrencyMarketCap",
+  SetAssetContractName: "SetAssetContractName",
+  SetAssetContractSymbol: "SetAssetContractSymbol",
+  SetAssetTokenDescription: "SetAssetTokenDescription",
   SetError: "SetError",
 };
 
@@ -113,6 +123,24 @@ const LocalReducer = (
         currencyMarketCap: (action.payload as IStringPayload).string,
       };
     }
+    case LocalAction.SetAssetContractName: {
+      return {
+        ...state,
+        assetContractName: (action.payload as IStringPayload).string,
+      };
+    }
+    case LocalAction.SetAssetContractSymbol: {
+      return {
+        ...state,
+        assetContractSymbol: (action.payload as IStringPayload).string,
+      };
+    }
+    case LocalAction.SetAssetTokenDescription: {
+      return {
+        ...state,
+        assetTokenDescription: (action.payload as IStringPayload).string,
+      };
+    }
     case LocalAction.SetError: {
       return {
         ...state,
@@ -135,6 +163,9 @@ const DashboardConfigurations: React.FunctionComponent = () => {
       currencyContractName,
       currencyContractSymbol,
       currencyMarketCap,
+      assetContractName,
+      assetContractSymbol,
+      assetTokenDescription,
       isLoading,
       error,
     },
@@ -272,6 +303,54 @@ const DashboardConfigurations: React.FunctionComponent = () => {
           })
         }
       />
+
+      <Typography>
+        The ERC721 NFT inventory contract that is included with this chain
+        allows you to set the name, symbol and market cap of coin in
+        circulation. You can leave these as default or provide your own.
+      </Typography>
+
+      <TextField
+          className={classes.textbox}
+          variant="outlined"
+          label="Asset Contract Name"
+          placeholder="Enter asset contract name"
+          value={assetContractName}
+          onChange={(event) =>
+            dispatch({
+              type: LocalAction.SetAssetContractName,
+              payload: { string: event.target.value },
+            })
+          }
+        />
+
+        <TextField
+          className={classes.textbox}
+          variant="outlined"
+          label="Asset Contract Symbol"
+          placeholder="Enter asset contract symbol"
+          value={assetContractSymbol}
+          onChange={(event) =>
+            dispatch({
+              type: LocalAction.SetAssetContractSymbol,
+              payload: { string: event.target.value },
+            })
+          }
+        />
+
+        <TextField
+          className={classes.textbox}
+          variant="outlined"
+          label="Default Asset Token Description (leave blank for none)"
+          placeholder="Enter default asset token description"
+          value={assetTokenDescription}
+          onChange={(event) =>
+            dispatch({
+              type: LocalAction.SetAssetTokenDescription,
+              payload: { string: event.target.value },
+            })
+          }
+        />
 
       {error && (
         <Typography variant="body2" color="error">
