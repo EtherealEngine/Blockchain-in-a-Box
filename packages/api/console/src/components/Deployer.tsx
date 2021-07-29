@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import Terminal from "react-console-emulator";
 import Button from "@material-ui/core/Button";
-
 import { v4 } from "uuid";
 
 interface DeployerProps {
@@ -149,9 +148,13 @@ const Deployer: React.FunctionComponent<DeployerProps> = (
         readOnly
       />
       <Button
-        size="large"
+        style={{
+          width: 300,
+          marginTop: 10,
+        }}
         variant="contained"
         color="primary"
+        size="large"
         onClick={() => exec(target)}
       >
         Deploy

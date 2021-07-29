@@ -5,9 +5,10 @@ const {
   AUTH_TOKEN_SECRET,
   AUTH_SECRET_KEY,
 } = require("../../common/environment.js");
+
 const jwt = require("jsonwebtoken");
 
-function authenticateToken(req, res, next) {  
+ function authenticateToken(req, res, next) {  
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
 
