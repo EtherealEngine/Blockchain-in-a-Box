@@ -23,14 +23,11 @@ const {
   zeroAddress,
 } = require("../../common/constants.js");
 const { ResponseStatus } = require("../enums.js");
-const {
-  PRODUCTION,
-  DEVELOPMENT,
-  PINATA_API_KEY,
-  PINATA_SECRET_API_KEY,
-  MINTING_FEE,
-  MAINNET_MNEMONIC,
-} = require("../../common/environment.js");
+
+const DEVELOPMENT = !process.env.PRODUCTION;
+const PRODUCTION = process.env.PRODUCTION;
+const PINATA_API_KEY = process.env.PINATA_API_KEY;
+const PINATA_SECRET_API_KEY = process.env.PINATA_SECRET_API_KEY;
 
 const pinataSDK = require("@pinata/sdk");
 const pinata =
@@ -189,6 +186,22 @@ async function mintAssets(
     .derivePath(`m/44'/60'/0'/0/0`)
     .getWallet();
   const address = wallet.getAddressString();
+
+  const asyncGlobal = async() => {
+    let data;
+    try {
+      data = await sequelize.query('SELECT DATA_KEY,DATA_VALUE FROM `ENVIRONMENT_DATA`', {type: sequelize.QueryTypes.SELECT});
+    } catch (err) {
+      console.log(err);
+    }
+    return data;
+  };
+  const globalData = await asyncGlobal();
+  let MINTING_FEE;
+  for(let i of globalData){
+    if (i.DATA_KEY=="MINTING_FEE")
+      MINTING_FEE= i.DATA_VALUE;
+  }
 
   if (MINTING_FEE > 0) {
     let allowance = await contracts[network]["Currency"].methods
@@ -393,6 +406,23 @@ async function deleteAsset(req, res) {
       .getHash(assetId)
       .call();
     const randomHash = Math.random().toString(36);
+
+    const asyncGlobal = async() => {
+      let data;
+      try {
+        data = await sequelize.query('SELECT DATA_KEY,DATA_VALUE FROM `ENVIRONMENT_DATA`', {type: sequelize.QueryTypes.SELECT});
+      } catch (err) {
+        console.log(err);
+      }
+      return data;
+    };
+    const globalData = await asyncGlobal();
+    let MAINNET_MNEMONIC;
+    for(let i of globalData){
+      if (i.DATA_KEY=="MAINNET_MNEMONIC")
+        MAINNET_MNEMONIC= i.DATA_VALUE;
+    }
+
     await runSidechainTransaction(MAINNET_MNEMONIC)(
       "Inventory",
       "updateHash",
@@ -421,6 +451,21 @@ async function sendAsset(req, res) {
 
     let status = true;
     let error = null;
+    const asyncGlobal = async() => {
+      let data;
+      try {
+        data = await sequelize.query('SELECT DATA_KEY,DATA_VALUE FROM `ENVIRONMENT_DATA`', {type: sequelize.QueryTypes.SELECT});
+      } catch (err) {
+        console.log(err);
+      }
+      return data;
+    };
+    const globalData = await asyncGlobal();
+    let MAINNET_MNEMONIC;
+    for(let i of globalData){
+      if (i.DATA_KEY=="MAINNET_MNEMONIC")
+        MAINNET_MNEMONIC= i.DATA_VALUE;
+    }
     for (let i = 0; i < quantity; i++) {
       try {
         const isApproved = await contracts.Inventory.methods
@@ -482,6 +527,21 @@ async function signTransfer(req, res, blockchain) {
 async function updatePublicAsset(req, res, { contracts }) {
   const { mnemonic, assetId, resourceHash } = req.body;
   const file = req.files && req.files[0];
+  const asyncGlobal = async() => {
+    let data;
+    try {
+      data = await sequelize.query('SELECT DATA_KEY,DATA_VALUE FROM `ENVIRONMENT_DATA`', {type: sequelize.QueryTypes.SELECT});
+    } catch (err) {
+      console.log(err);
+    }
+    return data;
+  };
+  const globalData = await asyncGlobal();
+  let MAINNET_MNEMONIC;
+  for(let i of globalData){
+    if (i.DATA_KEY=="MAINNET_MNEMONIC")
+      MAINNET_MNEMONIC= i.DATA_VALUE;
+  }
   try {
     if (!bip39.validateMnemonic(mnemonic)) {
       return res.json({
