@@ -4,6 +4,12 @@ redisearch(redis);
 const { makePromise } = require("./utils.js");
 const { ids } = require("./constants.js");
 
+const { Sequelize } = require("sequelize");
+
+const sequelize = new Sequelize('dev', process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
+  host: process.env.MYSQL_URL,
+  dialect: 'mysql',
+});
 
 let redisClient = null;
 let loadPromise = null;
