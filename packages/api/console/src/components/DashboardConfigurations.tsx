@@ -1,6 +1,8 @@
 import {
   Box,
   Button,
+  Checkbox,
+  FormControlLabel,
   makeStyles,
   TextField,
   Typography,
@@ -8,7 +10,12 @@ import {
 import React, { useReducer } from "react";
 import "../App.css";
 import { ActionResult } from "../models/Action";
-import { IBasePayload, IStringPayload } from "../models/IPayloads";
+import {
+  IBasePayload,
+  IBooleanPayload,
+  INumberPayload,
+  IStringPayload,
+} from "../models/IPayloads";
 
 const useStyles = makeStyles((theme) => ({
   rootBox: {
@@ -25,6 +32,9 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     marginTop: theme.spacing(2),
   },
+  mintingFee: {
+    width: 150,
+  },
   red: {
     color: "red",
   },
@@ -34,8 +44,27 @@ const useStyles = makeStyles((theme) => ({
   bold: {
     fontWeight: "bold",
   },
+  marginLeft1: {
+    marginLeft: theme.spacing(1),
+  },
+  marginLeft3: {
+    marginLeft: theme.spacing(3),
+  },
+  marginTop2: {
+    marginTop: theme.spacing(2),
+  },
+  marginTop4: {
+    marginTop: theme.spacing(4),
+  },
+  marginTop6: {
+    marginTop: theme.spacing(6),
+  },
   marginTop8: {
     marginTop: theme.spacing(8),
+  },
+  formLabel: {
+    padding: "0 10px",
+    background: "white",
   },
 }));
 
@@ -49,6 +78,8 @@ interface ILocalState {
   assetContractName: string;
   assetContractSymbol: string;
   assetTokenDescription: string;
+  usersMintAssets: boolean;
+  mintingFee: number;
   isLoading: boolean;
   error: string;
 }
@@ -63,6 +94,8 @@ const DefaultLocalState: ILocalState = {
   assetContractName: "",
   assetContractSymbol: "",
   assetTokenDescription: "",
+  usersMintAssets: false,
+  mintingFee: 10,
   isLoading: false,
   error: "",
 };
@@ -78,6 +111,8 @@ const LocalAction = {
   SetAssetContractName: "SetAssetContractName",
   SetAssetContractSymbol: "SetAssetContractSymbol",
   SetAssetTokenDescription: "SetAssetTokenDescription",
+  SetUsersMintAssets: "SetUsersMintAssets",
+  SetMintingFee: "SetMintingFee",
   SetError: "SetError",
 };
 
@@ -141,6 +176,18 @@ const LocalReducer = (
         assetTokenDescription: (action.payload as IStringPayload).string,
       };
     }
+    case LocalAction.SetUsersMintAssets: {
+      return {
+        ...state,
+        usersMintAssets: (action.payload as IBooleanPayload).boolean,
+      };
+    }
+    case LocalAction.SetMintingFee: {
+      return {
+        ...state,
+        mintingFee: (action.payload as INumberPayload).number,
+      };
+    }
     case LocalAction.SetError: {
       return {
         ...state,
@@ -166,6 +213,8 @@ const DashboardConfigurations: React.FunctionComponent = () => {
       assetContractName,
       assetContractSymbol,
       assetTokenDescription,
+      usersMintAssets,
+      mintingFee,
       isLoading,
       error,
     },
@@ -220,7 +269,7 @@ const DashboardConfigurations: React.FunctionComponent = () => {
       </Button>
 
       <TextField
-        className={classes.textbox}
+        className={`${classes.textbox} ${classes.marginTop8}`}
         variant="outlined"
         label="Organization Name"
         placeholder="Enter organization name"
@@ -233,13 +282,13 @@ const DashboardConfigurations: React.FunctionComponent = () => {
         }
       />
 
-      <Typography>
+      <Typography className={classes.marginTop4}>
         You can configure the domains where the REST API can connect to the Geth
         nodes.
       </Typography>
 
       <TextField
-        className={classes.textbox}
+        className={`${classes.textbox} ${classes.marginTop4}`}
         variant="outlined"
         label="Sidechain URL"
         placeholder="Enter sidechain URL"
@@ -252,18 +301,18 @@ const DashboardConfigurations: React.FunctionComponent = () => {
         }
       />
 
-      <Typography className={classes.bold}>
+      <Typography className={`${classes.bold} ${classes.marginTop4}`}>
         These options cannot be changed without deploying contracts.
       </Typography>
 
-      <Typography>
+      <Typography className={classes.marginTop2}>
         The ERC20 standard currency contract that is included with this chain
         allows you to set the name, symbol and market cap of coin in
         circulation. You can leave these as default or provide your own.
       </Typography>
 
       <TextField
-        className={classes.textbox}
+        className={`${classes.textbox} ${classes.marginTop4}`}
         variant="outlined"
         label="Currency Contract Name"
         placeholder="Enter currency contract name"
@@ -277,7 +326,7 @@ const DashboardConfigurations: React.FunctionComponent = () => {
       />
 
       <TextField
-        className={classes.textbox}
+        className={`${classes.textbox} ${classes.marginTop4}`}
         variant="outlined"
         label="Currency Contract Symbol"
         placeholder="Enter currency contract symbol"
@@ -291,7 +340,7 @@ const DashboardConfigurations: React.FunctionComponent = () => {
       />
 
       <TextField
-        className={classes.textbox}
+        className={`${classes.textbox} ${classes.marginTop4}`}
         variant="outlined"
         label="Currency Market Cap"
         placeholder="Enter currency market cap"
@@ -304,59 +353,115 @@ const DashboardConfigurations: React.FunctionComponent = () => {
         }
       />
 
-      <Typography>
+      <Typography className={classes.marginTop8}>
         The ERC721 NFT inventory contract that is included with this chain
         allows you to set the name, symbol and market cap of coin in
         circulation. You can leave these as default or provide your own.
       </Typography>
 
       <TextField
-          className={classes.textbox}
-          variant="outlined"
-          label="Asset Contract Name"
-          placeholder="Enter asset contract name"
-          value={assetContractName}
-          onChange={(event) =>
-            dispatch({
-              type: LocalAction.SetAssetContractName,
-              payload: { string: event.target.value },
-            })
-          }
-        />
+        className={classes.textbox}
+        variant="outlined"
+        label="Asset Contract Name"
+        placeholder="Enter asset contract name"
+        value={assetContractName}
+        onChange={(event) =>
+          dispatch({
+            type: LocalAction.SetAssetContractName,
+            payload: { string: event.target.value },
+          })
+        }
+      />
 
-        <TextField
-          className={classes.textbox}
-          variant="outlined"
-          label="Asset Contract Symbol"
-          placeholder="Enter asset contract symbol"
-          value={assetContractSymbol}
-          onChange={(event) =>
-            dispatch({
-              type: LocalAction.SetAssetContractSymbol,
-              payload: { string: event.target.value },
-            })
-          }
-        />
+      <TextField
+        className={`${classes.textbox} ${classes.marginTop4}`}
+        variant="outlined"
+        label="Asset Contract Symbol"
+        placeholder="Enter asset contract symbol"
+        value={assetContractSymbol}
+        onChange={(event) =>
+          dispatch({
+            type: LocalAction.SetAssetContractSymbol,
+            payload: { string: event.target.value },
+          })
+        }
+      />
 
-        <TextField
-          className={classes.textbox}
-          variant="outlined"
-          label="Default Asset Token Description (leave blank for none)"
-          placeholder="Enter default asset token description"
-          value={assetTokenDescription}
-          onChange={(event) =>
-            dispatch({
-              type: LocalAction.SetAssetTokenDescription,
-              payload: { string: event.target.value },
-            })
-          }
-        />
+      <TextField
+        className={`${classes.textbox} ${classes.marginTop4}`}
+        variant="outlined"
+        label="Default Asset Token Description (leave blank for none)"
+        placeholder="Enter default asset token description"
+        value={assetTokenDescription}
+        onChange={(event) =>
+          dispatch({
+            type: LocalAction.SetAssetTokenDescription,
+            payload: { string: event.target.value },
+          })
+        }
+      />
+
+      <Typography className={classes.marginTop6}>
+        By default, users can mint assets. If you uncheck this option, only the
+        treasury will be allowed to mint new assets.
+      </Typography>
+
+      <Typography className={classes.marginTop4}>
+        For user-generated content platforms, you should leave this box checked.
+        For a game where users receive preminted assets and cannot mint their
+        own, you should leave this box unchecked.
+      </Typography>
+
+      <FormControlLabel
+        className={`${classes.marginTop4} ${classes.marginLeft1}`}
+        control={
+          <Checkbox
+            color="primary"
+            value={usersMintAssets}
+            onChange={(event) =>
+              dispatch({
+                type: LocalAction.SetUsersMintAssets,
+                payload: { boolean: event.target.value },
+              })
+            }
+          />
+        }
+        label="Users can mint assets"
+      />
+
+      <Typography className={classes.marginTop4}>
+        Users can be charged a fee for minting. The default is 10, to prevent
+        spam, but you can set this to 0 for free minting.
+      </Typography>
+
+      <TextField
+        className={`${classes.mintingFee} ${classes.marginTop4} ${classes.marginLeft3}`}
+        variant="outlined"
+        label="Minting Fee"
+        type="number"
+        value={mintingFee}
+        onChange={(event) =>
+          dispatch({
+            type: LocalAction.SetMintingFee,
+            payload: { number: event.target.value },
+          })
+        }
+      />
 
       {error && (
         <Typography variant="body2" color="error">
           {error}
         </Typography>
       )}
+
+      <Button
+        className={`${classes.button} ${classes.marginTop8}`}
+        variant="contained"
+        color="primary"
+        size="large"
+      >
+        Save Configuration
+      </Button>
     </Box>
   );
 };
