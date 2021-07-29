@@ -223,7 +223,7 @@ const DashboardConfigurations: React.FunctionComponent = () => {
 
   return (
     <Box className={classes.rootBox}>
-      <Typography variant={"h6"}>
+      <Typography variant={"subtitle1"}>
         Infura API Key: <span className={classes.green}>Configured</span>
       </Typography>
       <Typography>
@@ -238,7 +238,7 @@ const DashboardConfigurations: React.FunctionComponent = () => {
         Configure
       </Button>
 
-      <Typography variant={"h6"} className={classes.marginTop8}>
+      <Typography variant={"subtitle1"} className={classes.marginTop8}>
         Matic Vigil API Key: <span className={classes.red}>Not Configured</span>
       </Typography>
       <Typography>
@@ -253,7 +253,7 @@ const DashboardConfigurations: React.FunctionComponent = () => {
         Configure
       </Button>
 
-      <Typography variant={"h6"} className={classes.marginTop8}>
+      <Typography variant={"subtitle1"} className={classes.marginTop8}>
         Pinata API Key: <span className={classes.red}>Not Configured</span>
       </Typography>
       <Typography>
