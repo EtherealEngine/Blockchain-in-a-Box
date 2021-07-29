@@ -26,7 +26,7 @@ const DashboardHome: React.FunctionComponent = () => {
 
   return (
     <Box className={classes.rootBox}>
-      <Typography variant={"h6"}>
+      <Typography variant={"subtitle1"}>
         Sidechain Status: <span className={classes.red}>Not Ready</span>
       </Typography>
       <Typography>You need to deploy the contracts to the chain.</Typography>
@@ -39,7 +39,7 @@ const DashboardHome: React.FunctionComponent = () => {
         Configure Contracts
       </Button>
 
-      <Typography variant={"h6"} className={classes.marginTop8}>
+      <Typography variant={"subtitle1"} className={classes.marginTop8}>
         Mainnet Status: <span className={classes.red}>Not Ready</span>
       </Typography>
       <Typography>
@@ -54,7 +54,7 @@ const DashboardHome: React.FunctionComponent = () => {
         Configuration
       </Button>
 
-      <Typography variant={"h6"} className={classes.marginTop8}>
+      <Typography variant={"subtitle1"} className={classes.marginTop8}>
         Polygon Status: <span className={classes.red}>Not Ready</span>
       </Typography>
       <Typography>

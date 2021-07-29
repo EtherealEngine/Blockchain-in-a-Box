@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "stretch",
-    width: 500,
+    maxWidth: 500,
   },
   heading: {
     textAlign: "center",

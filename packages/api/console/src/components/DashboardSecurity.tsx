@@ -26,7 +26,7 @@ const DashboardSecurity: React.FunctionComponent = () => {
 
   return (
     <Box className={classes.rootBox}>
-      <Typography variant={"h6"}>JWT Signing Keys</Typography>
+      <Typography variant={"subtitle1"}>JWT Signing Keys</Typography>
       <Button
         className={classes.button}
         variant="contained"
@@ -45,7 +45,7 @@ const DashboardSecurity: React.FunctionComponent = () => {
         Regenerate API Keys
       </Button>
 
-      <Typography variant={"h6"} className={classes.marginTop8}>
+      <Typography variant={"subtitle1"} className={classes.marginTop8}>
         Signing Authority
       </Typography>
       <Typography className={classes.marginTop2}>
@@ -69,7 +69,7 @@ const DashboardSecurity: React.FunctionComponent = () => {
         Change Private Key
       </Button>
 
-      <Typography variant={"h6"} className={classes.marginTop8}>
+      <Typography variant={"subtitle1"} className={classes.marginTop8}>
         Treasury
       </Typography>
       <Typography className={classes.marginTop2}>
@@ -93,7 +93,7 @@ const DashboardSecurity: React.FunctionComponent = () => {
         Change Private Key
       </Button>
 
-      <Typography variant={"h6"} className={classes.marginTop8}>
+      <Typography variant={"subtitle1"} className={classes.marginTop8}>
         User Settings
       </Typography>
       <Button

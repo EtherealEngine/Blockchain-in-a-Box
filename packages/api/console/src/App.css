@@ -15,3 +15,6 @@ button {
 .MuiTableContainer-root {
   box-shadow: none !important;
 }
+.MuiTypography-subtitle1 {
+  font-weight: bold !important;
+}

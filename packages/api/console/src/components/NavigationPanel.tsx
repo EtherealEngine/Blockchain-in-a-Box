@@ -16,7 +16,7 @@ import {
   Tune,
   Storage,
 } from "@material-ui/icons";
-import React, { ReactElement } from "react";
+import React, { Fragment, ReactElement } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Routes from "../constants/Routes";
 import "../App.css";
@@ -39,8 +39,16 @@ const useStyles = makeStyles((theme) => ({
   },
   organization: {
     padding: 20,
-    color: '#109CF1'
+    color: "#109CF1",
   },
+  email: {
+    paddingTop: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  userOption: {
+    paddingLeft: 30,
+  }
 }));
 
 interface MenuItem {
@@ -88,6 +96,15 @@ const NavigationPanel: React.FunctionComponent = () => {
     },
   ];
 
+  const userOptions: MenuItem[] = [
+    {
+      key: "u1",
+      label: "Logout",
+      icon: <Fragment />,
+      link: Routes.ROOT,
+    },
+  ];
+
   return (
     <Drawer
       className={classes.drawer}
@@ -101,25 +118,34 @@ const NavigationPanel: React.FunctionComponent = () => {
         My Organization
       </Typography>
 
-      <List  >
+      <List>
         {navigationOptions.map((option, index) => (
-          <ListItem button 
-          key={option.key} 
-          selected={location.pathname === option.link}
-          onClick={() => history.push(option.link)}>
+          <ListItem
+            button
+            key={option.key}
+            selected={location.pathname === option.link}
+            onClick={() => history.push(option.link)}
+          >
             <ListItemIcon>{option.icon}</ListItemIcon>
             <ListItemText primary={option.label} />
           </ListItem>
         ))}
       </List>
 
+      <Typography className={classes.email}>s.ferguson@gmail.com</Typography>
+
       <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxOutlined /> : <MailOutline />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
+        {userOptions.map((option, index) => (
+          <ListItem
+            button
+            key={option.key}
+            selected={location.pathname === option.link}
+            onClick={() => history.push(option.link)}
+          >
+            <ListItemText
+              className={classes.userOption}
+              primary={option.label}
+            />
           </ListItem>
         ))}
       </List>
