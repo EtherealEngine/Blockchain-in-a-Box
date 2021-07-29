@@ -1,9 +1,10 @@
 const { setCorsHeaders } = require("../../common/utils.js");
 const { ResponseStatus } = require("../enums.js");
-
-const DEVELOPMENT = !process.env.PRODUCTION;
-const AUTH_TOKEN_SECRET = process.env.AUTH_TOKEN_SECRET;
-const AUTH_SECRET_KEY = process.env.AUTH_SECRET_KEY;
+const {
+  DEVELOPMENT,
+  AUTH_TOKEN_SECRET,
+  AUTH_SECRET_KEY,
+} = require("../../common/environment.js");
 
 const jwt = require("jsonwebtoken");
 
