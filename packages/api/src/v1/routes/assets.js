@@ -60,6 +60,13 @@ const network = PRODUCTION ? "mainnet" : "testnet";
 
 const { Readable } = require("stream");
 
+const { Sequelize } = require("sequelize");
+
+const sequelize = new Sequelize('dev', process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
+  host: process.env.MYSQL_URL,
+  dialect: 'mysql',
+});
+
 let contracts;
 
 (async function () {
@@ -323,7 +330,7 @@ async function readAsset(req, res) {
   const { assetId } = req.params;
   let o = await getRedisItem(assetId, redisPrefixes.mainnetSidechainAsset);
   let asset = o.Item;
-
+  console.log("in read asset");
   if (DEVELOPMENT) setCorsHeaders(res);
   if (asset) {
     return res.json({ status: ResponseStatus.Success, asset, error: null });
