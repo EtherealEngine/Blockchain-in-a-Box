@@ -37,7 +37,7 @@
     "app-root-path": "^3.0.0",
     "aws-sdk": "^2.750.0",
     "bip39": "^3.0.2",
-    "discord.js": "^12.2.0",
+    "discord.js": "^13.0.0",
     "dotenv": "^10.0.0",
     "ethereumjs-wallet": "^1.0.1",
     "express": "^4.17.1",
