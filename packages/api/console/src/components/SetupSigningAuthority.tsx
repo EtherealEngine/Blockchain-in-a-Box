@@ -174,7 +174,7 @@ const SetupSigningAuthority: React.FunctionComponent = () => {
           Never share your private key with anyone.
         </Typography>
 
-        <FormControl className={classes.marginTop4} variant="outlined">
+        <FormControl className={classes.marginTop4} variant="outlined" required>
           <InputLabel
             className={classes.formLabel}
             htmlFor="outlined-adornment-mnemonic"
@@ -207,7 +207,7 @@ const SetupSigningAuthority: React.FunctionComponent = () => {
           />
         </FormControl>
 
-        <FormControl className={classes.marginTop4} variant="outlined">
+        <FormControl className={classes.marginTop4} variant="outlined" required>
           <InputLabel
             className={classes.formLabel}
             htmlFor="outlined-adornment-twoFAPassword"
