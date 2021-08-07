@@ -16,6 +16,13 @@ const HTTPS_PORT = process.env.HTTPS_PORT;
 
 const ETHEREUM_HOST = process.env.ETHEREUM_HOST;
 
+const SES_REGION = process.env.SES_REGION;
+const SES_ACCESS_ID = process.env.SES_ACCESS_ID;
+const SES_ACCESS_KEY = process.env.SES_ACCESS_KEY;
+const SES_SENDER_ADDRESS = process.env.SES_SENDER_ADDRESS;
+
+const CONSOLE_WEB_URL = process.env.CONSOLE_WEB_URL;
+
 const PINATA_API_KEY = process.env.PINATA_API_KEY;
 const PINATA_SECRET_API_KEY = process.env.PINATA_SECRET_API_KEY;
 
@@ -42,6 +49,11 @@ module.exports = {
   HTTP_PORT,
   HTTPS_PORT,
   ETHEREUM_HOST,
+  SES_REGION,
+  SES_ACCESS_ID,
+  SES_ACCESS_KEY,
+  SES_SENDER_ADDRESS,
+  CONSOLE_WEB_URL,
   PINATA_API_KEY,
   PINATA_SECRET_API_KEY,
   REDIS_HOST,
