@@ -22,5 +22,8 @@ module.exports = (sequelize, Sequelize) =>
     TOKEN: {
       type: Sequelize.STRING,
       allowNull: false,
+    },
+    ORGANIZATION_NAME: {
+      type: Sequelize.STRING,
     }
   });

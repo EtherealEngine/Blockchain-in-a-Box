@@ -46,10 +46,9 @@ async function addAdminRoutes(app) {
    * @summary Get login email for admin
    * @security bearerAuth
    * @return {PlainResponse} 200 - success response
-   * @return {AuthResponse} 401 - authentication error response
    * @param {LoginPayload} request.body.required - LoginPayload object for login
    */
-  app.post("/api/v1/admin/login", authenticateToken, async (req, res) => {
+  app.post("/api/v1/admin/login", async (req, res) => {
     try {
       const { email } = req.body;
 
@@ -58,6 +57,15 @@ async function addAdminRoutes(app) {
         return res.json({
           status: ResponseStatus.Error,
           error: "Email was not found in request body.",
+        });
+      }
+
+      let validEmail = validateEmail(email);
+      // Verify if email was a valid email
+      if (!validEmail) {
+        return res.json({
+          status: ResponseStatus.Error,
+          error: "Email was not a valid email.",
         });
       }
 
@@ -77,7 +85,7 @@ async function addAdminRoutes(app) {
       if (website.endsWith("/") === false) {
         website += "/";
       }
-      website = website + "login?token=" + token;
+      website = website + "login?email=" + email + "&token=" + token;
 
       // Send email with login link and token
       sendMessage(
@@ -101,6 +109,12 @@ async function addAdminRoutes(app) {
       });
     }
   });
+}
+
+function validateEmail(email) {
+  const re =
+    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
 }
 
 module.exports = {
