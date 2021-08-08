@@ -11,7 +11,7 @@ type AdminState = {
 };
 
 const initialState = {
-  loadingMessage: "",
+  loadingMessage: "Getting information",
   loginState: LoggedInState.None,
   email: "",
   loginToken: "",

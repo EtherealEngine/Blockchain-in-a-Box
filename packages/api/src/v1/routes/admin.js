@@ -1,9 +1,9 @@
 const crypto = require("crypto");
 const { ResponseStatus } = require("../enums");
 const { AdminData } = require("../sequelize");
-const { authenticateToken } = require("./auth");
+const { setCorsHeaders } = require("../../common/utils");
 const { sendMessage } = require("../../common/sesClient");
-const { CONSOLE_WEB_URL } = require("../../common/environment");
+const { CONSOLE_WEB_URL, DEVELOPMENT } = require("../../common/environment");
 
 async function addAdminRoutes(app) {
   /**
@@ -20,6 +20,7 @@ async function addAdminRoutes(app) {
    * @return {FirstTimeResponse} 200 - success response
    */
   app.get("/api/v1/admin/firsttime", async (req, res) => {
+    if (DEVELOPMENT) setCorsHeaders(res);
     try {
       let adminCount = await AdminData.count();
 
@@ -49,6 +50,7 @@ async function addAdminRoutes(app) {
    * @param {LoginPayload} request.body.required - LoginPayload object for login
    */
   app.post("/api/v1/admin/login", async (req, res) => {
+    if (DEVELOPMENT) setCorsHeaders(res);
     try {
       const { email } = req.body;
 
@@ -73,9 +75,16 @@ async function addAdminRoutes(app) {
       let token = crypto.randomBytes(48).toString("hex");
 
       // Insert or update database with token
-      let adminObj = await AdminData.findOne({ where: { EMAIL: email } });
+      let adminObj = await AdminData.findOne();
       if (adminObj) {
-        await adminObj.update({ TOKEN: token });
+        if (adminObj.EMAIL === email) {
+          await adminObj.update({ TOKEN: token });
+        } else {
+          return res.json({
+            status: ResponseStatus.Error,
+            error: "Unauthorized email.",
+          });
+        }
       } else {
         await AdminData.create({ EMAIL: email, TOKEN: token });
       }

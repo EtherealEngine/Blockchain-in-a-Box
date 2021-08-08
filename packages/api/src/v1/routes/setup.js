@@ -1,8 +1,9 @@
+const { DEVELOPMENT } = require("../../common/environment");
 const { ResponseStatus } = require("../enums");
 const { authenticateToken } = require("./auth");
+const { setCorsHeaders } = require("../../common/utils");
 
 async function addSetupRoutes(app) {
-
   /**
    * Login payload
    * @typedef {object} LoginPayload
@@ -17,8 +18,9 @@ async function addSetupRoutes(app) {
    * @param {LoginPayload} request.body.required - LoginPayload object for login
    */
   app.post("/api/v1/setup", authenticateToken, async (req, res) => {
+    if (DEVELOPMENT) setCorsHeaders(res);
     try {
-      const { 
+      const {
         organizationName,
         sideChainUrl,
         sideChainMnemonic,
