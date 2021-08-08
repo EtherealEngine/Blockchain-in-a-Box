@@ -2,6 +2,7 @@ const expressJSDocSwagger = require("express-jsdoc-swagger");
 const express = require("express");
 const path = require("path");
 const { addAdminRoutes } = require("./routes/admin.js");
+const { addSetupRoutes } = require("./routes/setup.js");
 const { createWallet } = require("./routes/wallet.js");
 const { handleServerSideAuth, authenticateToken } = require("./routes/auth.js");
 const {
@@ -52,6 +53,7 @@ function addV1Routes(app) {
   expressJSDocSwagger(app)(swaggerOptions);
 
   addAdminRoutes(app);
+  addSetupRoutes(app);
 
   /**
    * Plain response

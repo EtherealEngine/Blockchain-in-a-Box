@@ -377,7 +377,6 @@ const SetupTreasury: React.FunctionComponent = () => {
               payload: { string: event.target.value },
             })
           }
-          required
         />
 
         <Typography className={classes.marginTop6}>
