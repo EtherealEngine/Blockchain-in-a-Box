@@ -1,3 +1,9 @@
+
+export interface AdminPlainResponse {
+  status: string;
+  error: string;
+}
+
 export interface AdminFirstTimeResponse {
   status: string;
   firstTime: boolean;

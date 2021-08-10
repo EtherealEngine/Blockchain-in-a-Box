@@ -11,7 +11,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { ActionResult } from "../models/Action";
 import { IBasePayload, IStringPayload } from "../models/IPayloads";
 import LoadingView from "./LoadingView";
-import { checkFirstTimeLogin } from "../redux/slice/AdminReducer";
+import {
+  checkAdminLogin,
+  checkFirstTimeLogin,
+} from "../redux/slice/AdminReducer";
 import { RootState } from "../redux/RootReducer";
 import { LoggedInState } from "../models/Admin";
 import Routes from "../constants/Routes";
@@ -155,17 +158,13 @@ const Login: React.FunctionComponent = () => {
               dispatch({
                 type: LocalAction.SetError,
                 payload: {
-                  string: "Please enter a valid email"
-                }
-              })
+                  string: "Please enter a valid email",
+                },
+              });
               return;
             }
 
-            if (loginState === LoggedInState.Recurring) {
-              history.push(`${Routes.LOGIN_VERIFICATION}?email=${email}`);
-            } else {
-              history.push(Routes.SETUP);
-            }
+            reduxDispatch(checkAdminLogin(email));
           }}
         >
           {loginState === LoggedInState.Recurring

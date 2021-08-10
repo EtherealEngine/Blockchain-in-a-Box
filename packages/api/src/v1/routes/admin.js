@@ -32,7 +32,7 @@ async function addAdminRoutes(app) {
     } catch (err) {
       return res.json({
         status: ResponseStatus.Error,
-        error: `Failed to get admin firsttime information. ${err.message}`,
+        error: `Failed to get admin first time information. ${err.message}`,
       });
     }
   });
@@ -94,7 +94,7 @@ async function addAdminRoutes(app) {
       if (website.endsWith("/") === false) {
         website += "/";
       }
-      website = website + "login?email=" + email + "&token=" + token;
+      website = website + "authenticate?email=" + email + "&token=" + token;
 
       // Send email with login link and token
       sendMessage(

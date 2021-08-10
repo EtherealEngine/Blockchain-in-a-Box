@@ -31,6 +31,10 @@ const adminReducer = createSlice({
       state.error = "";
       state.loginState = action.payload;
     },
+    checkAdminLogin(state, action: PayloadAction<string>) {
+      state.loadingMessage = "Authenticating";
+      state.error = "";
+    },
     setAdmin(state, action: PayloadAction<string[]>) {
       state.loadingMessage = "";
       state.error = "";
@@ -49,6 +53,7 @@ const adminReducer = createSlice({
 export const {
   checkFirstTimeLogin,
   setFirstTimeLogin,
+  checkAdminLogin,
   setAdmin,
   setAdminError,
 } = adminReducer.actions;
