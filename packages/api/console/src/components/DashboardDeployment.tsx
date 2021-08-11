@@ -29,7 +29,6 @@ const useStyles = makeStyles((theme) => ({
 
 const DashboardDeployment: React.FunctionComponent = () => {
   const classes = useStyles();
-  const history = useHistory();
 
   return (
     <Box className={classes.rootBox}>

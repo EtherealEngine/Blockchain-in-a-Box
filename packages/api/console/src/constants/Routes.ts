@@ -7,6 +7,7 @@ const Routes = {
   DASHBOARD_CONFIGURATION: '/dashboard/configuration',
   DASHBOARD_DEPLOYMENT: '/dashboard/deployment',
   LOGIN: '/login',
+  AUTHENTICATE: '/authenticate',
   LOGIN_VERIFICATION: '/login-verification',
   SETUP: '/setup',
   SETUP_SIDECHAIN: '/setup/sidechain',
@@ -16,7 +17,6 @@ const Routes = {
   SETUP_INFURA: '/setup/infura',
   SETUP_POLYGON: '/setup/polygon',
   SETUP_POLYGON_VIGIL: '/setup/polygon-vigil',
-  SETUP_PINATA: '/setup/pinata',
   SETUP_COMPLETED: '/setup/completed',
 };
 

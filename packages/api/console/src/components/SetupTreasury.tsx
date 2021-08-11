@@ -245,7 +245,7 @@ const SetupTreasury: React.FunctionComponent = () => {
           Never share your private key with anyone.
         </Typography>
 
-        <FormControl className={classes.marginTop4} variant="outlined">
+        <FormControl className={classes.marginTop4} variant="outlined" required>
           <InputLabel
             className={classes.formLabel}
             htmlFor="outlined-adornment-mnemonic"
@@ -296,6 +296,7 @@ const SetupTreasury: React.FunctionComponent = () => {
               payload: { string: event.target.value },
             })
           }
+          required
         />
 
         <TextField
@@ -310,6 +311,7 @@ const SetupTreasury: React.FunctionComponent = () => {
               payload: { string: event.target.value },
             })
           }
+          required
         />
 
         <TextField
@@ -324,6 +326,7 @@ const SetupTreasury: React.FunctionComponent = () => {
               payload: { string: event.target.value },
             })
           }
+          required
         />
 
         <Typography className={classes.marginTop6}>
@@ -344,6 +347,7 @@ const SetupTreasury: React.FunctionComponent = () => {
               payload: { string: event.target.value },
             })
           }
+          required
         />
 
         <TextField
@@ -358,6 +362,7 @@ const SetupTreasury: React.FunctionComponent = () => {
               payload: { string: event.target.value },
             })
           }
+          required
         />
 
         <TextField

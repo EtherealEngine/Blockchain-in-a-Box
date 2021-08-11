@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require('cors');
 const fileUpload = require("express-fileupload");
 const { addV1Routes } = require("./v1/index.js");
 const HTTP_PORT = process.env.HTTP_PORT;
@@ -10,6 +11,8 @@ const app = express();
 
 // websocket deployment console for truffle
 createDeployer(3033);
+
+app.use(cors());
 
 app.use(fileUpload());
 

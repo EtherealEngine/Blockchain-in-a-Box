@@ -1,11 +1,10 @@
 const expressJSDocSwagger = require("express-jsdoc-swagger");
 const express = require("express");
 const path = require("path");
-
+const { addAdminRoutes } = require("./routes/admin.js");
+const { addSetupRoutes } = require("./routes/setup.js");
 const { createWallet } = require("./routes/wallet.js");
-
 const { handleServerSideAuth, authenticateToken } = require("./routes/auth.js");
-
 const {
   listAssets,
   createAsset,
@@ -15,7 +14,6 @@ const {
   readAssetRange,
   signTransfer,
 } = require("./routes/assets.js");
-
 const {
   getBlockchain,
 } = require("../common/blockchain.js");
@@ -28,17 +26,6 @@ let blockchain;
 
 function addV1Routes(app) {
   app.use(express.static(path.join(__dirname, '/../../console/dist')));
-
-  // User API routes
-  require('./routes/loginUser')(app);
-  require('./routes/registerUser')(app);
-  require('./routes/forgotPassword')(app);
-  require('./routes/resetPassword')(app);
-  require('./routes/updatePassword')(app);
-  require('./routes/updatePasswordViaEmail')(app);
-  require('./routes/findUsers')(app);
-  require('./routes/deleteUser')(app);
-  require('./routes/updateUser')(app);
 
   const swaggerOptions = {
     info: {
@@ -65,6 +52,15 @@ function addV1Routes(app) {
 
   expressJSDocSwagger(app)(swaggerOptions);
 
+  addAdminRoutes(app);
+  addSetupRoutes(app);
+
+  /**
+   * Plain response
+   * @typedef {object} PlainResponse
+   * @property {string} status - The status of the request (success/error)
+   * @property {string} error - If the status is error, the error can be read from here
+   */
   /**
    * Authentication payload
    * @typedef {object} AuthPayload

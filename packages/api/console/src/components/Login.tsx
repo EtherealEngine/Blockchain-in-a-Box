@@ -7,11 +7,17 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
+import { useDispatch, useSelector } from "react-redux";
 import { ActionResult } from "../models/Action";
 import { IBasePayload, IStringPayload } from "../models/IPayloads";
-import { timeout } from "../utilities/Utility";
-import Routes from "../constants/Routes";
 import LoadingView from "./LoadingView";
+import {
+  checkAdminLogin,
+  checkFirstTimeLogin,
+} from "../redux/slice/AdminReducer";
+import { RootState } from "../redux/Store";
+import { LoggedInState } from "../models/Admin";
+import { validateEmail } from "../utilities/Utility";
 
 const useStyles = makeStyles((theme) => ({
   parentBox: {
@@ -37,38 +43,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export interface ILoggedInStatePayload extends IBasePayload {
-  key?: string;
-  status: LoggedInState;
-}
-
-export enum LoggedInState {
-  None,
-  FirstTime,
-  Recurring,
-}
-
 // Local state
 interface ILocalState {
   email: string;
-  isLoading: boolean;
-  error: string;
-  status: LoggedInState;
+  localError: string;
 }
 
 // Local default state
 const DefaultLocalState: ILocalState = {
   email: "",
-  isLoading: false,
-  error: "",
-  status: LoggedInState.None,
+  localError: "",
 };
 
 // Local actions
 const LocalAction = {
-  ToggleLoading: "ToggleLoading",
   SetEmail: "SetEmail",
-  SetStatus: "SetStatus",
   SetError: "SetError",
 };
 
@@ -78,30 +67,17 @@ const LocalReducer = (
   action: ActionResult<IBasePayload>
 ): ILocalState => {
   switch (action.type) {
-    case LocalAction.ToggleLoading: {
-      return {
-        ...state,
-        isLoading: !state.isLoading,
-      };
-    }
     case LocalAction.SetEmail: {
       return {
         ...state,
         email: (action.payload as IStringPayload).string,
-      };
-    }
-    case LocalAction.SetStatus: {
-      return {
-        ...state,
-        isLoading: false,
-        status: (action.payload as ILoggedInStatePayload).status,
+        localError: "",
       };
     }
     case LocalAction.SetError: {
       return {
         ...state,
-        isLoading: false,
-        error: (action.payload as IStringPayload).string,
+        localError: (action.payload as IStringPayload).string,
       };
     }
     default: {
@@ -112,68 +88,33 @@ const LocalReducer = (
 
 const Login: React.FunctionComponent = () => {
   const classes = useStyles();
-  const history = useHistory();
-  const [{ email, isLoading, error, status }, dispatch] = useReducer(
+  const reduxDispatch = useDispatch();
+  const { loadingMessage, loginState, error } = useSelector(
+    (state: RootState) => state.admin
+  );
+  const [{ email, localError }, dispatch] = useReducer(
     LocalReducer,
     DefaultLocalState
   );
 
   useEffect(() => {
-    initialize();
+    reduxDispatch(checkFirstTimeLogin());
   }, []);
 
-  const initialize = async () => {
-    dispatch({ type: LocalAction.ToggleLoading });
-
-    await timeout(2000);
-
-    dispatch({
-      type: LocalAction.SetStatus,
-      payload: {
-        status: LoggedInState.FirstTime,
-        // status: LoggedInState.Recurring,
-      },
-    });
-  };
-
-  // const loginUser = async (e: any) => {
-  //   e.preventDefault();
-  //   if (email === "") {
-  //     dispatch({ type: LocalAction.ShowNullError });
-  //   } else {
-  //     try {
-  //       //TODO: This needs to be in API folder.
-  //       const response = await axios.post("http://localhost:3003/loginUser", {
-  //         email,
-  //       });
-  //       localStorage.setItem("JWT", response.data.token);
-  //       dispatch({ type: LocalAction.SetLoggedIn });
-  //     } catch (error) {
-  //       console.error(error.response.data);
-  //       if (
-  //         error.response.data === "bad username" ||
-  //         error.response.data === "passwords do not match"
-  //       ) {
-  //         dispatch({ type: LocalAction.ShowError });
-  //       }
-  //     }
-  //   }
-  // };
-
-  if (isLoading) {
-    return <LoadingView loadingText="Getting information" />;
+  if (loadingMessage) {
+    return <LoadingView loadingText={loadingMessage} />;
   }
 
   return (
     <Grid container justifyContent="center">
       <Grid className={classes.parentBox} item>
         <Typography className={classes.heading} variant="h4">
-          {status === LoggedInState.Recurring
+          {loginState === LoggedInState.Recurring
             ? "Login"
             : "Deployment Successful!"}
         </Typography>
         <Typography className={classes.subHeading}>
-          {status === LoggedInState.Recurring
+          {loginState === LoggedInState.Recurring
             ? "If you are an administrator, you can log in to change API settings."
             : "You’ll need to finalize setup before the chain is ready to use. First, set up an administrator email address."}
         </Typography>
@@ -190,6 +131,7 @@ const Login: React.FunctionComponent = () => {
               payload: { string: event.target.value },
             })
           }
+          required
         />
 
         {error && (
@@ -197,21 +139,35 @@ const Login: React.FunctionComponent = () => {
             {error}
           </Typography>
         )}
+
+        {localError && (
+          <Typography variant="body2" color="error">
+            {localError}
+          </Typography>
+        )}
+
         <Button
           className={classes.button}
           variant="contained"
           color="primary"
           size="large"
           onClick={() => {
-            //TODO: Perform email validation.
-            if (status === LoggedInState.Recurring) {
-              history.push(`${Routes.LOGIN_VERIFICATION}?email=${email}`);
-            } else {
-              history.push(Routes.SETUP);
+            if (validateEmail(email) === false) {
+              dispatch({
+                type: LocalAction.SetError,
+                payload: {
+                  string: "Please enter a valid email",
+                },
+              });
+              return;
             }
+
+            reduxDispatch(checkAdminLogin(email));
           }}
         >
-          {status === LoggedInState.Recurring ? "Login" : "Register Account"}
+          {loginState === LoggedInState.Recurring
+            ? "Login"
+            : "Register Account"}
         </Button>
       </Grid>
     </Grid>

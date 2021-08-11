@@ -102,15 +102,6 @@ const DashboardSecurity: React.FunctionComponent = () => {
         color="primary"
         size="large"
       >
-        Change 2FA Password
-      </Button>
-      <br />
-      <Button
-        className={classes.button}
-        variant="contained"
-        color="primary"
-        size="large"
-      >
         Delete Account
       </Button>
     </Box>

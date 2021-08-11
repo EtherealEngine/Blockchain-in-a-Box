@@ -133,6 +133,7 @@ const SetupSidechain: React.FunctionComponent = () => {
               payload: { string: event.target.value },
             })
           }
+          required
         />
 
         <Typography className={`${classes.subHeading} ${classes.paddedHeading}`}>
@@ -151,6 +152,7 @@ const SetupSidechain: React.FunctionComponent = () => {
               payload: { string: event.target.value },
             })
           }
+          required
         />
 
         {error && (
