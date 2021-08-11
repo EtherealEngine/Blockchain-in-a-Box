@@ -8,8 +8,6 @@ import {
   Typography,
 } from "@material-ui/core";
 import {
-  MailOutline,
-  InboxOutlined,
   Dashboard,
   Person,
   Security,
@@ -20,6 +18,8 @@ import React, { Fragment, ReactElement } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Routes from "../constants/Routes";
 import "../App.css";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/Store";
 
 const drawerWidth = 240;
 
@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
   },
   userOption: {
     paddingLeft: 30,
-  }
+  },
 }));
 
 interface MenuItem {
@@ -62,6 +62,9 @@ const NavigationPanel: React.FunctionComponent = () => {
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
+  const { email, organizationName } = useSelector(
+    (state: RootState) => state.admin
+  );
 
   const navigationOptions: MenuItem[] = [
     {
@@ -115,7 +118,7 @@ const NavigationPanel: React.FunctionComponent = () => {
       anchor="left"
     >
       <Typography className={classes.organization} variant="h5" gutterBottom>
-        My Organization
+        {organizationName}
       </Typography>
 
       <List>
@@ -132,7 +135,7 @@ const NavigationPanel: React.FunctionComponent = () => {
         ))}
       </List>
 
-      <Typography className={classes.email}>s.ferguson@gmail.com</Typography>
+      <Typography className={classes.email}>{email}</Typography>
 
       <List>
         {userOptions.map((option, index) => (

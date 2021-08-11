@@ -7,6 +7,7 @@ const Routes = {
   DASHBOARD_CONFIGURATION: '/dashboard/configuration',
   DASHBOARD_DEPLOYMENT: '/dashboard/deployment',
   LOGIN: '/login',
+  AUTHENTICATE: '/authenticate',
   LOGIN_VERIFICATION: '/login-verification',
   SETUP: '/setup',
   SETUP_SIDECHAIN: '/setup/sidechain',

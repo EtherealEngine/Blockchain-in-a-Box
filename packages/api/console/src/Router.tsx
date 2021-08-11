@@ -1,5 +1,5 @@
-import React, { Fragment } from "react";
-import { Switch, Route } from "react-router-dom";
+import React, { Fragment, useEffect } from "react";
+import { Switch, Route, useLocation, useHistory } from "react-router-dom";
 import DashboardDeployment from "./components/DashboardDeployment";
 import Login from "./components/Login";
 import LoginVerification from "./components/LoginVerification";
@@ -19,13 +19,39 @@ import DashboardHome from "./components/DashboardHome";
 import DashboardUsers from "./components/DashboardUsers";
 import DashboardSecurity from "./components/DashboardSecurity";
 import DashboardConfigurations from "./components/DashboardConfigurations";
+import Authenticate from "./components/Authenticate";
+import { RootState } from "./redux/Store";
+import { useSelector } from "react-redux";
 
 const Router: React.FunctionComponent = () => {
+  const location = useLocation();
+  const history = useHistory();
+  const { accessToken } = useSelector(
+    (state: RootState) => state.admin
+  );
+  const whiteListedRoutes = [
+    Routes.LOGIN,
+    Routes.LOGIN_VERIFICATION,
+    Routes.AUTHENTICATE,
+    Routes.ROOT,
+  ];
+
+  useEffect(() => {
+    if (
+      whiteListedRoutes.includes(location.pathname) === false &&
+      !accessToken
+    ) {
+      console.log("User unauthorized");
+      history.push(Routes.LOGIN);
+    }
+  }, [location.pathname]);
+
   return (
     <Fragment>
       <Switch>
         <Route exact path={Routes.ROOT} component={Welcome} />
         <Route exact path={Routes.LOGIN} component={Login} />
+        <Route exact path={Routes.AUTHENTICATE} component={Authenticate} />
         <Route
           exact
           path={Routes.LOGIN_VERIFICATION}

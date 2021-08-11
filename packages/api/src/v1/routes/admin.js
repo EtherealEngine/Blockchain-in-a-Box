@@ -3,7 +3,8 @@ const { ResponseStatus } = require("../enums");
 const { AdminData } = require("../sequelize");
 const { setCorsHeaders } = require("../../common/utils");
 const { sendMessage } = require("../../common/sesClient");
-const { CONSOLE_WEB_URL, DEVELOPMENT } = require("../../common/environment");
+const { CONSOLE_WEB_URL, DEVELOPMENT, AUTH_SECRET_KEY, AUTH_TOKEN_SECRET } = require("../../common/environment");
+const jwt = require("jsonwebtoken");
 
 async function addAdminRoutes(app) {
   /**
@@ -13,7 +14,6 @@ async function addAdminRoutes(app) {
    * @property {boolean} firstTime - If there is any existing user or first time
    * @property {string} error - If the status is error, the error can be read from here
    */
-  /**
   /**
    * GET /api/v1/admin/firsttime
    * @summary Checks whether there is an existing user or its first time.
@@ -75,18 +75,20 @@ async function addAdminRoutes(app) {
       let token = crypto.randomBytes(48).toString("hex");
 
       // Insert or update database with token
-      let adminObj = await AdminData.findOne();
+      let adminObj = await AdminData.findOne({ where: { EMAIL: email } });
       if (adminObj) {
-        if (adminObj.EMAIL === email) {
-          await adminObj.update({ TOKEN: token });
+        await adminObj.update({ TOKEN: token });
+      } else {
+        let adminCount = await AdminData.count();
+        // Only create if it was first time login.
+        if (adminCount === 0) {
+          await AdminData.create({ EMAIL: email, TOKEN: token });
         } else {
           return res.json({
             status: ResponseStatus.Error,
             error: "Unauthorized email.",
           });
         }
-      } else {
-        await AdminData.create({ EMAIL: email, TOKEN: token });
       }
 
       // Append slash at the end of website url
@@ -109,6 +111,88 @@ async function addAdminRoutes(app) {
 
       return res.json({
         status: ResponseStatus.Success,
+        error: null,
+      });
+    } catch (err) {
+      return res.json({
+        status: ResponseStatus.Error,
+        error: err.message,
+      });
+    }
+  });
+
+  /**
+   * Authentication payload
+   * @typedef {object} AuthenticationPayload
+   * @property {string} email.required - Email address of admin.
+   * @property {string} token.required - Login token of admin. (Received via email)
+   */
+  /**
+   * Authentication response
+   * @typedef {object} AuthenticationResponse
+   * @property {string} status - The status of the request (success/error)
+   * @property {string} accessToken - The access token for api requests
+   * @property {string} organizationName - Organization name of user
+   * @property {string} error - If the status is error, the error can be read from here
+   */
+  /**
+   * GET /api/v1/admin/authentication
+   * @summary Get login token verified
+   * @security bearerAuth
+   * @return {AuthenticationResponse} 200 - success response
+   * @param {AuthenticationPayload} request.body.required - AuthenticationPayload object for authentication
+   */
+  app.post("/api/v1/admin/authentication", async (req, res) => {
+    if (DEVELOPMENT) setCorsHeaders(res);
+    try {
+      const { email, token } = req.body;
+
+      // Verify if email was sent in request body
+      if (!email) {
+        return res.json({
+          status: ResponseStatus.Error,
+          error: "Email was not found in request body. Please login again.",
+        });
+      }
+
+      let validEmail = validateEmail(email);
+      // Verify if email was a valid email
+      if (!validEmail) {
+        return res.json({
+          status: ResponseStatus.Error,
+          error: "Email was not a valid email. Please login again.",
+        });
+      }
+
+      // Verify if token was sent in request body
+      if (!token) {
+        return res.json({
+          status: ResponseStatus.Error,
+          error: "Token was not found in request body. Please login again.",
+        });
+      }
+
+      // Validate login token
+      let adminObj = await AdminData.findOne({ where: { EMAIL: email } });
+      if (!adminObj) {
+        return res.json({
+          status: ResponseStatus.Error,
+          error: "User not found. Please login again.",
+        });
+      }
+      if (!adminObj.TOKEN || adminObj.TOKEN !== token) {
+        return res.json({
+          status: ResponseStatus.Error,
+          error: "Invalid login token. Please login again.",
+        });
+      }
+
+      const accessToken = jwt.sign({ AUTH_SECRET_KEY }, AUTH_TOKEN_SECRET);
+
+      return res.json({
+        status: ResponseStatus.Success,
+        accessToken,
+        organizationName: adminObj.ORGANIZATION_NAME,
         error: null,
       });
     } catch (err) {

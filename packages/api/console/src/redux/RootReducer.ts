@@ -9,6 +9,4 @@ const rootReducer = (history: any) => combineReducers({
   router: connectRouter(history),
 });
 
-export type RootState = ReturnType<typeof rootReducer>;
-
 export default rootReducer;

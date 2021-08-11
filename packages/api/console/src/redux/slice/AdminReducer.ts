@@ -6,7 +6,8 @@ type AdminState = {
   loginState: LoggedInState;
   email: string;
   loginToken: string;
-  authToken: string;
+  accessToken: string;
+  organizationName: string;
   error: string;
 };
 
@@ -15,7 +16,8 @@ const initialState = {
   loginState: LoggedInState.None,
   email: "",
   loginToken: "",
-  authToken: "",
+  accessToken: "",
+  organizationName: "",
   error: "",
 } as AdminState;
 
@@ -35,17 +37,22 @@ const adminReducer = createSlice({
       state.loadingMessage = "Authenticating";
       state.error = "";
     },
-    setAdmin(state, action: PayloadAction<string[]>) {
+    setAdminAuthentication(state, action: PayloadAction<string[]>) {
       state.loadingMessage = "";
       state.error = "";
       state.loginState = LoggedInState.Recurring;
       state.email = action.payload[0];
       state.loginToken = action.payload[1];
-      state.authToken = action.payload[2];
+      state.accessToken = action.payload[2];
+      state.organizationName = action.payload[3];
     },
     setAdminError(state, action: PayloadAction<string>) {
       state.loadingMessage = "";
       state.error = action.payload;
+    },
+    checkAdminAuthentication(state, action: PayloadAction<string[]>) {
+      state.loadingMessage = "Authenticating";
+      state.error = "";
     },
   },
 });
@@ -54,8 +61,9 @@ export const {
   checkFirstTimeLogin,
   setFirstTimeLogin,
   checkAdminLogin,
-  setAdmin,
+  setAdminAuthentication,
   setAdminError,
+  checkAdminAuthentication,
 } = adminReducer.actions;
 
 export default adminReducer.reducer;

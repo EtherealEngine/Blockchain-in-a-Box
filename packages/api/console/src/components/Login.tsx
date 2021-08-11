@@ -15,9 +15,8 @@ import {
   checkAdminLogin,
   checkFirstTimeLogin,
 } from "../redux/slice/AdminReducer";
-import { RootState } from "../redux/RootReducer";
+import { RootState } from "../redux/Store";
 import { LoggedInState } from "../models/Admin";
-import Routes from "../constants/Routes";
 import { validateEmail } from "../utilities/Utility";
 
 const useStyles = makeStyles((theme) => ({
@@ -89,7 +88,6 @@ const LocalReducer = (
 
 const Login: React.FunctionComponent = () => {
   const classes = useStyles();
-  const history = useHistory();
   const reduxDispatch = useDispatch();
   const { loadingMessage, loginState, error } = useSelector(
     (state: RootState) => state.admin
