@@ -12,7 +12,6 @@ import SetupMainnet from "./components/SetupMainnet";
 import SetupInfura from "./components/SetupInfura";
 import SetupPolygon from "./components/SetupPolygon";
 import SetupPolygonVigil from "./components/SetupPolygonVigil";
-import SetupPinata from "./components/SetupPinata";
 import SetupCompleted from "./components/SetupCompleted";
 import DashboardContainer from "./components/DashboardContainer";
 import DashboardHome from "./components/DashboardHome";
@@ -76,7 +75,6 @@ const Router: React.FunctionComponent = () => {
           path={Routes.SETUP_POLYGON_VIGIL}
           component={SetupPolygonVigil}
         />
-        <Route exact path={Routes.SETUP_PINATA} component={SetupPinata} />
         <Route exact path={Routes.SETUP_COMPLETED} component={SetupCompleted} />
         <Route path={Routes.DASHBOARD}>
           <DashboardContainer>

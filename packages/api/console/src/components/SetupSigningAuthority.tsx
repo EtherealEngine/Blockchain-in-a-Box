@@ -12,10 +12,7 @@ import {
 } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { ActionResult } from "../models/Action";
-import {
-  IBasePayload,
-  IStringPayload,
-} from "../models/IPayloads";
+import { IBasePayload, IStringPayload } from "../models/IPayloads";
 import { useHistory } from "react-router-dom";
 import Routes from "../constants/Routes";
 import "../App.css";
@@ -63,8 +60,6 @@ const useStyles = makeStyles((theme) => ({
 interface ILocalState {
   mnemonic: string;
   showMnemonic: boolean;
-  twoFAPassword: string;
-  showTwoFAPassword: boolean;
   isLoading: boolean;
   error: string;
 }
@@ -73,8 +68,6 @@ interface ILocalState {
 const DefaultLocalState: ILocalState = {
   mnemonic: "",
   showMnemonic: false,
-  twoFAPassword: "",
-  showTwoFAPassword: false,
   isLoading: false,
   error: "",
 };
@@ -84,8 +77,6 @@ const LocalAction = {
   ToggleLoading: "ToggleLoading",
   SetMnemonic: "SetMnemonic",
   ToggleMnemonic: "ToggleMnemonic",
-  Set2FAPassword: "Set2FAPassword",
-  Toggle2FAPassword: "Toggle2FAPassword",
   SetError: "SetError",
 };
 
@@ -113,18 +104,6 @@ const LocalReducer = (
         showMnemonic: !state.showMnemonic,
       };
     }
-    case LocalAction.Set2FAPassword: {
-      return {
-        ...state,
-        twoFAPassword: (action.payload as IStringPayload).string,
-      };
-    }
-    case LocalAction.Toggle2FAPassword: {
-      return {
-        ...state,
-        showTwoFAPassword: !state.showTwoFAPassword,
-      };
-    }
     case LocalAction.SetError: {
       return {
         ...state,
@@ -145,8 +124,6 @@ const SetupSigningAuthority: React.FunctionComponent = () => {
     {
       mnemonic,
       showMnemonic,
-      twoFAPassword,
-      showTwoFAPassword,
       isLoading,
       error,
     },
@@ -166,8 +143,7 @@ const SetupSigningAuthority: React.FunctionComponent = () => {
         </Typography>
 
         <Typography className={classes.marginTop2}>
-          You can use the generated mnemonic, or provide your own. Pick a 2FA
-          password that you will remember, but that is hard to guess.
+          You can use the generated mnemonic, or provide your own.
         </Typography>
 
         <Typography className={`${classes.marginTop2} ${classes.bold}`}>
@@ -207,47 +183,10 @@ const SetupSigningAuthority: React.FunctionComponent = () => {
           />
         </FormControl>
 
-        <FormControl className={classes.marginTop4} variant="outlined" required>
-          <InputLabel
-            className={classes.formLabel}
-            htmlFor="outlined-adornment-twoFAPassword"
-          >
-            2FA Password (easy to remember and hard to guess)
-          </InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-twoFAPassword"
-            placeholder="Enter 2FA password"
-            type={showTwoFAPassword ? "text" : "password"}
-            value={twoFAPassword}
-            onChange={(event) =>
-              dispatch({
-                type: LocalAction.Set2FAPassword,
-                payload: { string: event.target.value },
-              })
-            }
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  onClick={() => {
-                    dispatch({ type: LocalAction.Toggle2FAPassword });
-                  }}
-                  edge="end"
-                >
-                  {showTwoFAPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-        </FormControl>
-
         <Typography className={classes.marginTop4}>
           <span className={`${classes.bold} ${classes.red}`}>
-            Write your mnemonic and 2FA password down on paper and store in a
-            secure place.
-          </span>{" "}
-          The 2FA password will be used to view or change your private keys, in
-          the event that your email is compromised. Treat this like a password
-          and <span className={classes.bold}>keep it somewhere safe.</span>
+            Write your mnemonic down on paper and store in a secure place.
+          </span>
         </Typography>
 
         {error && (

@@ -146,7 +146,7 @@ const SetupPolygonVigil: React.FunctionComponent = () => {
               color="secondary"
               size="large"
               onClick={() => {
-                history.push(Routes.SETUP_PINATA);
+                history.push(Routes.SETUP_COMPLETED);
               }}
             >
               Skip
@@ -159,7 +159,7 @@ const SetupPolygonVigil: React.FunctionComponent = () => {
               color="primary"
               size="large"
               onClick={() => {
-                history.push(Routes.SETUP_PINATA);
+                history.push(Routes.SETUP_COMPLETED);
               }}
             >
               Continue

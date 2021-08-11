@@ -24,7 +24,6 @@ async function addSetupRoutes(app) {
         organizationName,
         sideChainUrl,
         sideChainMnemonic,
-        sideChain2fa,
         treasuryMnemonic,
         currencyContractName,
         currencyContractSymbol,
@@ -39,8 +38,6 @@ async function addSetupRoutes(app) {
         infuraApiKey,
         polygonMaticMnemonic,
         polygonVigilApiKey,
-        pinataApiKey,
-        pinataSecretApiKey,
       } = req.body;
 
       // Verify if email was sent in request body
