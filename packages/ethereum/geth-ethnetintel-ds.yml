@@ -6,10 +6,10 @@ metadata:
   labels:
     app: geth
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: geth
+  replicas: 1
   template:
     metadata:
       labels:
@@ -86,6 +86,8 @@ spec:
       - name: init-genesis
         image: ethereum/client-go
         args:
+        - "removedb"
+        - "--datadir=/var/geth;"
         - "init"
         - "--datadir=/var/geth"
         - "/etc/geth/genesis.json"
