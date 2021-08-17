@@ -15,6 +15,14 @@ A Node.js-based REST API, Ethereum node, cache service and smart contracts to de
 
 4. Organizations who wish to build blockchains with other organizations and need a standard and conventional way to do so.
 
+Full GUI managment of a Custodial SideChain
+
+What are sidechains? They are either:
+
+1. Custodial - assets are moved to a parallel chain with its own consensus mechanism & security.
+
+2. Non-custodial - assets are held & state is secured by smart contracts on Ethereum (= can survive an attack of the sidechain).
+
 ## Any Resources to Help Me Learn What's Going On?
 How to Code a Crypto Collectible: ERC-721 ASSET Tutorial (Ethereum)
 https://www.youtube.com/watch?v=YPbgjPPC1d0
