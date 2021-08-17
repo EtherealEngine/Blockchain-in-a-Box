@@ -1,5 +1,6 @@
 # Blockchain-in-a-Box
-A batteries-included ethereum blockchain for bootstrapping the Metaverse.🚀🚀🚀
+
+A batteries-included ethereum blockchain for bootstrapping the Metaverse. 🚀🚀🚀
 
 Includes contracts for identity, inventory, currency and trade. Can be extended for any kind of marketplace application, but the goal is fast, free interoperable transfer of all user data from one server-authoratative platform to another. The ideal use case we imagine is a portal between two separate virtual worlds, sharing user data over the blockchain.
 
