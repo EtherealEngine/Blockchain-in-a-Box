@@ -11,15 +11,14 @@ const addresses = require("../../config/addresses.js");
 const abis = require("../../config/abi.js");
 const ports = require("../../config/ports.js");
 
-const { Sequelize, Model, DataTypes } = require("sequelize");
-//const Sequelize = require('sequelize');
+//const globalv = require("./environment.js").globalData;
+
+const { Sequelize } = require("sequelize");
 
 const sequelize = new Sequelize('dev', process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
   host: process.env.MYSQL_URL,
   dialect: 'mysql',
 });
-const { QueryTypes } = require('sequelize');
-
 
 let web3,
   // web3socketProviders,
@@ -44,7 +43,7 @@ const common = Common.forCustomChain(
   {
     name: 'geth',
     networkId: 1,
-    chainId: 1337,
+    chainId: 33,
   },
   'petersburg',
 );
@@ -72,6 +71,7 @@ const loadPromise = (async() => {
       POLYGON_VIGIL_KEY= i.DATA_VALUE;
   }
   console.log("in blockchain",ETHEREUM_HOST,INFURA_PROJECT_ID,POLYGON_VIGIL_KEY);
+
   const ethereumHostAddress =  await new Promise((accept, reject) => {
       dns.resolve4(ETHEREUM_HOST, (err, addresses) => {
         if (!err) {
@@ -87,7 +87,7 @@ const loadPromise = (async() => {
     }),
   gethNodeUrl = `http://${ethereumHostAddress}`;
   gethNodeWSUrl = `ws://${ethereumHostAddress}`;
-
+  console.log("gethNodeUrl",gethNodeUrl);
   web3 = {
     mainnet: new Web3(
       new Web3.providers.HttpProvider(
@@ -101,11 +101,13 @@ const loadPromise = (async() => {
     ),
 
     testnet: new Web3(new Web3.providers.HttpProvider(
-      `https://rinkeby.infura.io/v3/${INFURA_PROJECT_ID}`
+      //`https://rinkeby.infura.io/v3/${INFURA_PROJECT_ID}`
+      `${gethNodeUrl}`
     )),
 
     testnetsidechain: new Web3(new Web3.providers.HttpProvider(
-      `${gethNodeUrl}:${ports.testnetsidechain}`
+      //`${gethNodeUrl}:${ports.testnetsidechain}`
+      `${gethNodeUrl}`
     )),
 
     polygon: new Web3(
@@ -235,36 +237,70 @@ const transactionQueue = {
 };
 
 const runSidechainTransaction = mnemonic => async (contractName, method, ...args) => {
+  const networkSidechain = process.env.PRODUCTION ? "mainnet" : "testnet";
+
   const seedBuffer = bip39.mnemonicToSeedSync(mnemonic);
   const wallet = hdkey.fromMasterSeed(seedBuffer).derivePath(`m/44'/60'/0'/0/0`).getWallet();
-  const address = wallet.getAddressString();
-  const privateKey = wallet.getPrivateKeyString();
-  const privateKeyBytes = Uint8Array.from(web3['mainnetsidechain'].utils.hexToBytes(privateKey));
-
-  const txData = contracts['mainnetsidechain'][contractName].methods[method](...args);
+  //const signer = new hdkey.Wallet('0x60ca9e30da5b0b98e20ca5eb5be904c3c16f1b5f39cc66a4d66b4db539b8bb5d');
+    
+  //console.log("signer",signer);
+  //const address = wallet.getAddressString();
+  const address = '0xf90c251e42367a6387afecba10b95c97eaf3b287';
+  //const privateKey = wallet.getPrivateKeyString();
+  const privateKey = '0xd99643dec67c96c08d65afe3d2c6a4e6da4e2717cc99fb155096d9f2f4a4434b';
+  //const privateKeyBytes = Uint8Array.from(web3[networkSidechain].utils.hexToBytes(privateKey));
+  const privateKeyBytes = Uint8Array.from(Web3.utils.hexToBytes(privateKey))
+  
+  //const privateKeyBuf = new Buffer(privateKey, 'hex');
+ 
+  const txData = contracts[networkSidechain][contractName].methods[method](...args);
+  
   const data = txData.encodeABI();
-  const gas = await txData.estimateGas({
-    from: address,
-  });
-  let gasPrice = await web3['mainnetsidechain'].eth.getGasPrice();
+  var balance =await web3[networkSidechain].eth.getBalance(address);
+  var gas;
+  try{
+    gas = await txData.estimateGas({from: address});
+} catch (err) {
+  //console.warn(err);
+  //gas = 505931;
+  null;
+}
+  let _to = contracts[networkSidechain][contractName]._address;
+  //let gasPrice = await web3[networkSidechain].eth.getGasPrice();
+  let gasPrice = await web3[networkSidechain].eth.getGasPrice();
   gasPrice = parseInt(gasPrice, 10);
-
-  await transactionQueue.lock();
-  const nonce = await web3['mainnetsidechain'].eth.getTransactionCount(address);
+  //gasPrice = 0;
+  console.log("networkSidechain---",networkSidechain,"balance---",balance,"address---",contracts[networkSidechain][contractName]._address,args[0],"gasPrice---",gasPrice,"gas---",gas,"total---",gas*gasPrice);
+  //await transactionQueue.lock();
+  const nonce = await web3[networkSidechain].eth.getTransactionCount(address);
+  
+  if (contractName=="Currency" && method=="approve")
+    _to = contracts[networkSidechain][contractName]._address;
+  if (contractName=="Inventory" && method=="mint")
+    _to = args[0];
+  
   let tx = Transaction.fromTxData({
-    to: contracts['mainnetsidechain'][contractName]._address,
-    nonce: '0x' + new web3['mainnetsidechain'].utils.BN(nonce).toString(16),
-    gas: '0x' + new web3['mainnetsidechain'].utils.BN(gas).toString(16),
-    gasPrice: '0x' + new web3['mainnetsidechain'].utils.BN(gasPrice).toString(16),
-    gasLimit: '0x' + new web3['mainnetsidechain'].utils.BN(8000000).toString(16),
+    to: _to,
+    nonce: '0x' + new web3[networkSidechain].utils.BN(nonce).toString(16),
+    gas: '0x' + new web3[networkSidechain].utils.BN(gas).toString(16),
+    gasPrice: '0x' + new web3[networkSidechain].utils.BN(gasPrice).toString(16),
+    gasLimit: '0x' + new web3[networkSidechain].utils.BN(8000000).toString(16),
     data,
-  }, {
-    common,
+  },{
+    common: Common.forCustomChain(
+      'mainnet',
+      {
+        name: 'geth',
+        networkId: '*',
+        chainId: 33,
+      },
+      'petersburg',
+    ),
   }).sign(privateKeyBytes);
   const rawTx = '0x' + tx.serialize().toString('hex');
-  // console.log('signed tx', tx, rawTx);
-  const receipt = await web3['mainnetsidechain'].eth.sendSignedTransaction(rawTx);
-  transactionQueue.unlock();
+  const receipt = await web3[networkSidechain].eth.sendSignedTransaction(rawTx);
+  //console.log('receipt', receipt);
+  //transactionQueue.unlock();
   return receipt;
 };
 
