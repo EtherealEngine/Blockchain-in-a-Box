@@ -1,6 +1,8 @@
 const path = require("path");
 const http = require("http");
 const bip39 = require("bip39");
+const axios = require('axios');
+const fetch = require("node-fetch");
 const { hdkey } = require("ethereumjs-wallet");
 const {
   getBlockchain,
@@ -36,7 +38,7 @@ const pinata =
   PINATA_API_KEY && PINATA_API_KEY !== ""
     ? pinataSDK(PINATA_API_KEY, PINATA_SECRET_API_KEY)
     : null;
-
+console.log("pinata",pinata);
 const pinataOptions = {
   pinataOptions: {
     customPinPolicy: {
@@ -172,20 +174,18 @@ async function mintAssets(
   contracts,
   res
 ) {
-  let assetIds, status;
-  
+  let assetIds, status, transactionHash, id;
   let network = "mainnetsidechain";
   if (DEVELOPMENT) {
     network = "testnetsidechain";
   }
-
+  console.log("network",network);
   const fullAmount = {
     t: "uint256",
     v: new web3[network].utils.BN(1e9)
       .mul(new web3[network].utils.BN(1e9))
       .mul(new web3[network].utils.BN(1e9)),
   };
-
   const fullAmountD2 = {
     t: "uint256",
     v: fullAmount.v.div(new web3[network].utils.BN(2)),
@@ -195,6 +195,8 @@ async function mintAssets(
     .derivePath(`m/44'/60'/0'/0/0`)
     .getWallet();
   const address = wallet.getAddressString();
+  //const address = "0x450236394e67d32b421b7f80f0a3d431ca231b00";
+  console.log("address-----------",address); 
 
   const asyncGlobal = async() => {
     let data;
@@ -211,79 +213,105 @@ async function mintAssets(
     if (i.DATA_KEY=="MINTING_FEE")
       MINTING_FEE= i.DATA_VALUE;
   }
-
   if (MINTING_FEE > 0) {
-    let allowance = await contracts[network]["Currency"].methods
+    let allowance ;
+    try {
+     allowance = await contracts[network]["Currency"].methods
       .allowance(address, contracts[network]["Inventory"]._address)
       .call();
+      console.log("allowance",allowance); 
+    }  catch (err) {
+      console.log(err);
+    }
     allowance = new web3[network].utils.BN(allowance, 0);
-    if (allowance.lt(fullAmountD2.v)) {
+    try
+    {
+      
+    //if (allowance.lt(fullAmountD2.v)) {
+    if (true) {
       const result = await runSidechainTransaction(mnemonic)(
         "Currency",
         "approve",
         contracts[network]["Inventory"]._address,
         fullAmount.v
       );
+      console.log("result0",result);
       status = result.status;
+      transactionHash = '0x0';
+      id = -1;
     } else {
       status = true;
     }
-  } else status = true;
-
+    }  catch (err) {
+      console.log(err);
+    }
+  } 
+  else {status = true;
+  }
+  let hash;
+  //const reason = web3[network].utils.hexToAscii('');
+  //console.log("reason", reason);
   if (status) {
     const description = "";
-
     let fileName = resHash.split("/").pop();
-
     let extName = path.extname(fileName).slice(1);
     extName = extName === "" ? "png" : extName;
     extName = extName === "jpeg" ? "jpg" : extName;
-
+    
     fileName = extName ? fileName.slice(0, -(extName.length + 1)) : fileName;
-
-    const { hash } = JSON.parse(Buffer.from(resHash, "utf8").toString("utf8"));
-
+    /*
+    const res = await fetch(resHash, {
+      method: 'POST',
+      body: file,
+    });
+    const j = await res.json();
+    hash = j.hash;
+    */
+    const res = await axios.get(resHash,  { responseType: 'arraybuffer' });
+    hash = Buffer.from(res.data);
+    
     const result = await runSidechainTransaction(mnemonic)(
       "Inventory",
       "mint",
       address,
-      hash,
+      '0x'+hash,
       fileName,
       extName,
       description,
       quantity
     );
     status = result.status;
-
+    transactionHash = result.transactionHash;
+    console.log("result1",result);
+    
+    /*
     const assetId = new web3[network].utils.BN(
       result.logs[0].topics[3].slice(2),
       16
     ).toNumber();
     assetIds = [assetId, assetId + quantity - 1];
+    */
   }
-  return res.json({ status: ResponseStatus.Success, assetIds, error: null });
+  //return res.json({ status: ResponseStatus.Success, assetIds, error: null });
+  return res.json({ status: ResponseStatus.Success, error: null });
 }
 
 async function createAsset(req, res, { web3, contracts }) {
   const { mnemonic, quantity, resourceHash } = req.body;
-
   try {
     const file = req.files && req.files[0];
-
     if (!bip39.validateMnemonic(mnemonic)) {
       return res.json({
         status: ResponseStatus.Error,
         error: "Invalid mnemonic",
       });
     }
-
     if (!resourceHash && !file) {
       return res.json({
         status: ResponseStatus.Error,
         error: "POST did not include a file or resourceHash",
       });
     }
-
     // Check if there are any files -- if there aren't, check if there's a hash
     if (resourceHash && file) {
       return res.json({
@@ -291,7 +319,6 @@ async function createAsset(req, res, { web3, contracts }) {
         error: "POST should include a resourceHash *or* file but not both",
       });
     }
-
     if (file) {
       const readableStream = new Readable({
         read() {
@@ -330,7 +357,6 @@ async function readAsset(req, res) {
   const { assetId } = req.params;
   let o = await getRedisItem(assetId, redisPrefixes.mainnetSidechainAsset);
   let asset = o.Item;
-  console.log("in read asset");
   if (DEVELOPMENT) setCorsHeaders(res);
   if (asset) {
     return res.json({ status: ResponseStatus.Success, asset, error: null });
@@ -457,7 +483,6 @@ async function sendAsset(req, res) {
   try {
     const { fromUserAddress, toUserAddress, assetId } = req.body;
     //const quantity = req.body.quantity ?? 1;
-
     let status = true;
     let error = null;
     const asyncGlobal = async() => {
