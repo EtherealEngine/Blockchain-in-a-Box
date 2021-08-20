@@ -32,6 +32,9 @@ const useStyles = makeStyles((theme) => ({
   subHeading: {
     marginTop: theme.spacing(3),
   },
+  error: {
+    marginTop: theme.spacing(3),
+  },
   button: {
     marginTop: theme.spacing(3),
   },
@@ -67,8 +70,8 @@ interface ILocalState {
 // Local default state
 const DefaultLocalState: ILocalState = {
   mnemonic: "",
-  showMnemonic: false,
-  isLoading: false,
+  showMnemonic: true,
+  isLoading: true,
   error: "",
 };
 
@@ -95,6 +98,8 @@ const LocalReducer = (
     case LocalAction.SetMnemonic: {
       return {
         ...state,
+        error: "",
+        isLoading: false,
         mnemonic: (action.payload as IStringPayload).string,
       };
     }
@@ -190,7 +195,7 @@ const SetupSigningAuthority: React.FunctionComponent = () => {
         </Typography>
 
         {error && (
-          <Typography variant="body2" color="error">
+          <Typography className={classes.error} variant="body2" color="error">
             {error}
           </Typography>
         )}

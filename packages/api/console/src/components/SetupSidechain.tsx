@@ -11,6 +11,8 @@ import { IBasePayload, IStringPayload } from "../models/IPayloads";
 import { useHistory } from "react-router-dom";
 import Routes from "../constants/Routes";
 import "../App.css";
+import { useDispatch } from "react-redux";
+import { configureSidechain } from "../redux/slice/SetupReducer";
 
 const useStyles = makeStyles((theme) => ({
   parentBox: {
@@ -28,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
     marginBottom: theme.spacing(2),
   },
+  error: {
+    marginTop: theme.spacing(3),
+  },
   textbox: {
     marginTop: theme.spacing(2),
   },
@@ -36,14 +41,13 @@ const useStyles = makeStyles((theme) => ({
   },
   paddedHeading: {
     marginTop: theme.spacing(8),
-  }
+  },
 }));
 
 // Local state
 interface ILocalState {
   organizationName: string;
   sidechainURL: string;
-  isLoading: boolean;
   error: string;
 }
 
@@ -51,13 +55,11 @@ interface ILocalState {
 const DefaultLocalState: ILocalState = {
   organizationName: "",
   sidechainURL: "",
-  isLoading: false,
   error: "",
 };
 
 // Local actions
 const LocalAction = {
-  ToggleLoading: "ToggleLoading",
   SetOrganizationName: "SetOrganizationName",
   SetSidechainURL: "SetSidechainURL",
   SetError: "SetError",
@@ -69,28 +71,23 @@ const LocalReducer = (
   action: ActionResult<IBasePayload>
 ): ILocalState => {
   switch (action.type) {
-    case LocalAction.ToggleLoading: {
-      return {
-        ...state,
-        isLoading: !state.isLoading,
-      };
-    }
     case LocalAction.SetOrganizationName: {
       return {
         ...state,
+        error: "",
         organizationName: (action.payload as IStringPayload).string,
       };
     }
     case LocalAction.SetSidechainURL: {
       return {
         ...state,
+        error: "",
         sidechainURL: (action.payload as IStringPayload).string,
       };
     }
     case LocalAction.SetError: {
       return {
         ...state,
-        isLoading: false,
         error: (action.payload as IStringPayload).string,
       };
     }
@@ -103,7 +100,8 @@ const LocalReducer = (
 const SetupSidechain: React.FunctionComponent = () => {
   const classes = useStyles();
   const history = useHistory();
-  const [{ organizationName, sidechainURL, isLoading, error }, dispatch] = useReducer(
+  const reduxDispatch = useDispatch();
+  const [{ organizationName, sidechainURL, error }, dispatch] = useReducer(
     LocalReducer,
     DefaultLocalState
   );
@@ -114,7 +112,7 @@ const SetupSidechain: React.FunctionComponent = () => {
         <Typography className={classes.heading} variant="h4">
           Configure Your Sidechain
         </Typography>
-        
+
         <Typography className={classes.subHeading}>
           Enter a name for the organization that stewards the chain. This won’t
           be displayed to users, this is just to give your dashboards some
@@ -136,8 +134,11 @@ const SetupSidechain: React.FunctionComponent = () => {
           required
         />
 
-        <Typography className={`${classes.subHeading} ${classes.paddedHeading}`}>
-          You can configure the domains where the REST API can connect to the Geth nodes.
+        <Typography
+          className={`${classes.subHeading} ${classes.paddedHeading}`}
+        >
+          You can configure the domains where the REST API can connect to the
+          Geth nodes.
         </Typography>
 
         <TextField
@@ -156,7 +157,7 @@ const SetupSidechain: React.FunctionComponent = () => {
         />
 
         {error && (
-          <Typography variant="body2" color="error">
+          <Typography className={classes.error} variant="body2" color="error">
             {error}
           </Typography>
         )}
@@ -166,6 +167,23 @@ const SetupSidechain: React.FunctionComponent = () => {
           color="primary"
           size="large"
           onClick={() => {
+            if (!organizationName) {
+              dispatch({
+                type: LocalAction.SetError,
+                payload: { string: "Please fill organization name field" },
+              });
+              return;
+            }
+
+            if (!sidechainURL) {
+              dispatch({
+                type: LocalAction.SetError,
+                payload: { string: "Please fill sidechain URL field" },
+              });
+              return;
+            }
+
+            reduxDispatch(configureSidechain([organizationName, sidechainURL]));
             history.push(Routes.SETUP_SIGNING_AUTHORITY);
           }}
         >

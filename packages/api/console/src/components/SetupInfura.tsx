@@ -27,6 +27,9 @@ const useStyles = makeStyles((theme) => ({
   subHeading: {
     marginTop: theme.spacing(3),
   },
+  error: {
+    marginTop: theme.spacing(3),
+  },
   button: {
     width: "100%",
   },
@@ -160,7 +163,7 @@ const SetupInfura: React.FunctionComponent = () => {
         />
 
         {error && (
-          <Typography variant="body2" color="error">
+          <Typography className={classes.error} variant="body2" color="error">
             {error}
           </Typography>
         )}

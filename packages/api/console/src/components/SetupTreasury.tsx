@@ -41,6 +41,9 @@ const useStyles = makeStyles((theme) => ({
   mintingFee: {
     width: 150,
   },
+  error: {
+    marginTop: theme.spacing(3),
+  },
   bold: {
     fontWeight: "bold",
   },
@@ -431,7 +434,7 @@ const SetupTreasury: React.FunctionComponent = () => {
         />
 
         {error && (
-          <Typography variant="body2" color="error">
+          <Typography className={classes.error} variant="body2" color="error">
             {error}
           </Typography>
         )}
