@@ -18,6 +18,8 @@ type SetupState = {
   infuraApiKey: string;
   polygonMaticMnemonic: string;
   polygonVigilApiKey: string;
+  isLoading: boolean;
+  error: string;
 };
 
 const initialState = {
@@ -44,44 +46,91 @@ const setupReducer = createSlice({
   name: "setup",
   initialState,
   reducers: {
-    configureSidechain(state, action: PayloadAction<string[]>) {
-      state.organizationName = action.payload[0];
-      state.sideChainUrl = action.payload[1];
+    setOrganizationName(state, action: PayloadAction<string>) {
+      state.organizationName = action.payload;
     },
-    configureSigningAuthority(state, action: PayloadAction<string>) {
+    setSideChainUrl(state, action: PayloadAction<string>) {
+      state.sideChainUrl = action.payload;
+    },
+    setSideChainMnemonic(state, action: PayloadAction<string>) {
+      state.isLoading = false;
       state.sideChainMnemonic = action.payload;
     },
-    configureTreasury(state, action: PayloadAction<any[]>) {
-      state.treasuryMnemonic = action.payload[0] as string;
-      state.currencyContractName = action.payload[1] as string;
-      state.currencyContractSymbol = action.payload[2] as string;
-      state.currencyContractMarketCap = action.payload[3] as string;
-      state.assetContractName = action.payload[4] as string;
-      state.assetContractSymbol = action.payload[5] as string;
-      state.assetContractDescription = action.payload[6] as string;
-      state.assetMintable = action.payload[7] as boolean;
-      state.mintingFee = action.payload[8] as number;
+    setTreasuryMnemonic(state, action: PayloadAction<string>) {
+      state.isLoading = false;
+      state.treasuryMnemonic = action.payload;
     },
-    configureMainnet(state, action: PayloadAction<string>) {
+    setCurrencyContractName(state, action: PayloadAction<string>) {
+      state.currencyContractName = action.payload;
+    },
+    setCurrencyContractSymbol(state, action: PayloadAction<string>) {
+      state.currencyContractSymbol = action.payload;
+    },
+    setCurrencyContractMarketCap(state, action: PayloadAction<string>) {
+      state.currencyContractMarketCap = action.payload;
+    },
+    setAssetContractName(state, action: PayloadAction<string>) {
+      state.assetContractName = action.payload;
+    },
+    setAssetContractSymbol(state, action: PayloadAction<string>) {
+      state.assetContractSymbol = action.payload;
+    },
+    setAssetContractDescription(state, action: PayloadAction<string>) {
+      state.assetContractDescription = action.payload;
+    },
+    setAssetMintable(state, action: PayloadAction<boolean>) {
+      state.assetMintable = action.payload;
+    },
+    setMintingFee(state, action: PayloadAction<number>) {
+      state.mintingFee = action.payload;
+    },
+    setMainnetMnemonic(state, action: PayloadAction<string>) {
+      state.isLoading = false;
       state.mainnetMnemonic = action.payload;
     },
-    configureInfura(state, action: PayloadAction<string[]>) {
-      state.infuraProjectId = action.payload[0] as string;
-      state.infuraApiKey = action.payload[1] as string;
+    setInfuraProjectId(state, action: PayloadAction<string>) {
+      state.infuraProjectId = action.payload;
     },
-    configurePolygon(state, action: PayloadAction<String>) {
-      state.polygonMaticMnemonic = action.payload as string;
+    setInfuraApiKey(state, action: PayloadAction<string>) {
+      state.infuraApiKey = action.payload;
     },
-    configurePolygonVigil(state, action: PayloadAction<String>) {
-      state.polygonVigilApiKey = action.payload as string;
+    setPolygonMaticMnemonic(state, action: PayloadAction<string>) {
+      state.isLoading = false;
+      state.polygonMaticMnemonic = action.payload;
+    },
+    setPolygonVigilApiKey(state, action: PayloadAction<string>) {
+      state.polygonVigilApiKey = action.payload;
+    },
+    setIsLoading(state, action: PayloadAction<boolean>) {
+      state.isLoading = action.payload;
+    },
+    setError(state, action: PayloadAction<string>) {
+      state.isLoading = false;
+      state.error = action.payload;
     },
   },
 });
 
 export const {
-  configureSidechain,
-  configureSigningAuthority,
-  configureTreasury,
+  setOrganizationName,
+  setSideChainUrl,
+  setSideChainMnemonic,
+  setTreasuryMnemonic,
+  setCurrencyContractName,
+  setCurrencyContractSymbol,
+  setCurrencyContractMarketCap,
+  setAssetContractName,
+  setAssetContractSymbol,
+  setAssetContractDescription,
+  setAssetMintable,
+  setMintingFee,
+  setMainnetMnemonic,
+  setInfuraProjectId,
+  setInfuraApiKey,
+  setPolygonMaticMnemonic,
+  setPolygonVigilApiKey,
+  setIsLoading,
+  setError
 } = setupReducer.actions;
 
 export default setupReducer.reducer;

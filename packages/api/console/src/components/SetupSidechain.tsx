@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useEffect } from "react";
 import {
   Button,
   Grid,
@@ -6,13 +6,16 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import { ActionResult } from "../models/Action";
-import { IBasePayload, IStringPayload } from "../models/IPayloads";
 import { useHistory } from "react-router-dom";
 import Routes from "../constants/Routes";
 import "../App.css";
-import { useDispatch } from "react-redux";
-import { configureSidechain } from "../redux/slice/SetupReducer";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../redux/Store";
+import {
+  setError,
+  setOrganizationName,
+  setSideChainUrl,
+} from "../redux/slice/SetupReducer";
 
 const useStyles = makeStyles((theme) => ({
   parentBox: {
@@ -44,67 +47,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// Local state
-interface ILocalState {
-  organizationName: string;
-  sidechainURL: string;
-  error: string;
-}
-
-// Local default state
-const DefaultLocalState: ILocalState = {
-  organizationName: "",
-  sidechainURL: "",
-  error: "",
-};
-
-// Local actions
-const LocalAction = {
-  SetOrganizationName: "SetOrganizationName",
-  SetSidechainURL: "SetSidechainURL",
-  SetError: "SetError",
-};
-
-// Local reducer
-const LocalReducer = (
-  state: ILocalState,
-  action: ActionResult<IBasePayload>
-): ILocalState => {
-  switch (action.type) {
-    case LocalAction.SetOrganizationName: {
-      return {
-        ...state,
-        error: "",
-        organizationName: (action.payload as IStringPayload).string,
-      };
-    }
-    case LocalAction.SetSidechainURL: {
-      return {
-        ...state,
-        error: "",
-        sidechainURL: (action.payload as IStringPayload).string,
-      };
-    }
-    case LocalAction.SetError: {
-      return {
-        ...state,
-        error: (action.payload as IStringPayload).string,
-      };
-    }
-    default: {
-      return state;
-    }
-  }
-};
-
 const SetupSidechain: React.FunctionComponent = () => {
   const classes = useStyles();
   const history = useHistory();
   const reduxDispatch = useDispatch();
-  const [{ organizationName, sidechainURL, error }, dispatch] = useReducer(
-    LocalReducer,
-    DefaultLocalState
+  const { organizationName, sideChainUrl, error } = useSelector(
+    (state: RootState) => state.setup
   );
+
+  useEffect(() => {
+    reduxDispatch(setError(""));
+  }, []);
 
   return (
     <Grid container justifyContent="center">
@@ -126,10 +79,7 @@ const SetupSidechain: React.FunctionComponent = () => {
           placeholder="Enter organization name"
           value={organizationName}
           onChange={(event) =>
-            dispatch({
-              type: LocalAction.SetOrganizationName,
-              payload: { string: event.target.value },
-            })
+            reduxDispatch(setOrganizationName(event.target.value))
           }
           required
         />
@@ -146,13 +96,8 @@ const SetupSidechain: React.FunctionComponent = () => {
           variant="outlined"
           label="Sidechain URL"
           placeholder="Enter sidechain URL"
-          value={sidechainURL}
-          onChange={(event) =>
-            dispatch({
-              type: LocalAction.SetSidechainURL,
-              payload: { string: event.target.value },
-            })
-          }
+          value={sideChainUrl}
+          onChange={(event) => reduxDispatch(setSideChainUrl(event.target.value))}
           required
         />
 
@@ -168,22 +113,16 @@ const SetupSidechain: React.FunctionComponent = () => {
           size="large"
           onClick={() => {
             if (!organizationName) {
-              dispatch({
-                type: LocalAction.SetError,
-                payload: { string: "Please fill organization name field" },
-              });
+              reduxDispatch(setError("Please fill organization name field"));
               return;
             }
 
-            if (!sidechainURL) {
-              dispatch({
-                type: LocalAction.SetError,
-                payload: { string: "Please fill sidechain URL field" },
-              });
+            if (!sideChainUrl) {
+              reduxDispatch(setError("Please fill sidechain URL field"));
               return;
             }
 
-            reduxDispatch(configureSidechain([organizationName, sidechainURL]));
+            reduxDispatch(setError(""));
             history.push(Routes.SETUP_SIGNING_AUTHORITY);
           }}
         >

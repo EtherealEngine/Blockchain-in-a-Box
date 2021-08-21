@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useEffect, useReducer } from "react";
 import {
   Button,
   FormControl,
@@ -16,6 +16,11 @@ import { IBasePayload, IStringPayload } from "../models/IPayloads";
 import { useHistory } from "react-router-dom";
 import Routes from "../constants/Routes";
 import "../App.css";
+import LoadingView from "./LoadingView";
+import { GetSetupMnemonic, PostSetupVerifyMnemonic } from "../api/SetupApi";
+import { RootState } from "../redux/Store";
+import { useDispatch, useSelector } from "react-redux";
+import { setError, setIsLoading, setSideChainMnemonic } from "../redux/slice/SetupReducer";
 
 const useStyles = makeStyles((theme) => ({
   parentBox: {
@@ -61,26 +66,17 @@ const useStyles = makeStyles((theme) => ({
 
 // Local state
 interface ILocalState {
-  mnemonic: string;
   showMnemonic: boolean;
-  isLoading: boolean;
-  error: string;
 }
 
 // Local default state
 const DefaultLocalState: ILocalState = {
-  mnemonic: "",
   showMnemonic: true,
-  isLoading: true,
-  error: "",
 };
 
 // Local actions
 const LocalAction = {
-  ToggleLoading: "ToggleLoading",
-  SetMnemonic: "SetMnemonic",
   ToggleMnemonic: "ToggleMnemonic",
-  SetError: "SetError",
 };
 
 // Local reducer
@@ -89,31 +85,10 @@ const LocalReducer = (
   action: ActionResult<IBasePayload>
 ): ILocalState => {
   switch (action.type) {
-    case LocalAction.ToggleLoading: {
-      return {
-        ...state,
-        isLoading: !state.isLoading,
-      };
-    }
-    case LocalAction.SetMnemonic: {
-      return {
-        ...state,
-        error: "",
-        isLoading: false,
-        mnemonic: (action.payload as IStringPayload).string,
-      };
-    }
     case LocalAction.ToggleMnemonic: {
       return {
         ...state,
         showMnemonic: !state.showMnemonic,
-      };
-    }
-    case LocalAction.SetError: {
-      return {
-        ...state,
-        isLoading: false,
-        error: (action.payload as IStringPayload).string,
       };
     }
     default: {
@@ -125,15 +100,33 @@ const LocalReducer = (
 const SetupSigningAuthority: React.FunctionComponent = () => {
   const classes = useStyles();
   const history = useHistory();
-  const [
-    {
-      mnemonic,
-      showMnemonic,
-      isLoading,
-      error,
-    },
-    dispatch,
-  ] = useReducer(LocalReducer, DefaultLocalState);
+  const [{ showMnemonic }, dispatch] = useReducer(
+    LocalReducer,
+    DefaultLocalState
+  );
+  const reduxDispatch = useDispatch();
+  const { sideChainMnemonic, isLoading, error } = useSelector(
+    (state: RootState) => state.setup
+  );
+
+  useEffect(() => {
+    reduxDispatch(setError(""));
+    initialize();
+  }, []);
+
+  const initialize = async () => {
+    try {
+      reduxDispatch(setIsLoading(true));
+      const mnemonicResponse = await GetSetupMnemonic();
+      reduxDispatch(setSideChainMnemonic(mnemonicResponse.mnemonic));
+    } catch (err) {
+      reduxDispatch(setError(err.message));
+    }
+  };
+
+  if (isLoading) {
+    return <LoadingView loadingText={"Please wait"} />;
+  }
 
   return (
     <Grid container justifyContent="center">
@@ -166,12 +159,9 @@ const SetupSigningAuthority: React.FunctionComponent = () => {
             id="outlined-adornment-mnemonic"
             placeholder="Enter mnemonic"
             type={showMnemonic ? "text" : "password"}
-            value={mnemonic}
+            value={sideChainMnemonic}
             onChange={(event) =>
-              dispatch({
-                type: LocalAction.SetMnemonic,
-                payload: { string: event.target.value },
-              })
+              reduxDispatch(setSideChainMnemonic(event.target.value))
             }
             endAdornment={
               <InputAdornment position="end">
@@ -205,7 +195,20 @@ const SetupSigningAuthority: React.FunctionComponent = () => {
           variant="contained"
           color="primary"
           size="large"
-          onClick={() => {
+          onClick={async () => {
+            if (!sideChainMnemonic) {
+              reduxDispatch(setError("Please fill mnemonic field"));
+              return;
+            }
+            
+            reduxDispatch(setIsLoading(true));
+            const verifyResponse = await PostSetupVerifyMnemonic(sideChainMnemonic);
+            if (!verifyResponse.isValid) {
+              reduxDispatch(setError("Please enter a valid mnemonic"));
+              return;
+            }
+
+            reduxDispatch(setError(""));
             history.push(Routes.SETUP_TREASURE);
           }}
         >
