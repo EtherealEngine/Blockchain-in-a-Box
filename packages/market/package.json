@@ -86,7 +86,7 @@
     "@types/react-router-dom": "5.1.8",
     "colors": "1.4.0",
     "create-react-component-folder": "0.3.7",
-    "husky": "7.0.1",
+    "husky": "7.0.2",
     "prettier": "2.3.2",
     "yargs": "17.1.1"
   }
