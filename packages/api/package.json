@@ -49,7 +49,7 @@
     "express": "^4.17.1",
     "express-fileupload": "^1.2.1",
     "express-jsdoc-swagger": "^1.6.0",
-    "find-up": "^5.0.0",
+    "find-up": "^6.0.0",
     "form-data": "^4.0.0",
     "form-urlencoded": "^6.0.0",
     "helmet": "^4.0.0",
@@ -82,7 +82,7 @@
   },
   "devDependencies": {
     "forever": "4.0.1",
-    "jest": "27.0.6",
+    "jest": "27.1.0",
     "nodemon": "2.0.10",
     "supertest": "6.1.6"
   },
