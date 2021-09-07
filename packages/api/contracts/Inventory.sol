@@ -2,11 +2,11 @@
 pragma solidity ^0.8.6;
 pragma experimental ABIEncoderV2;
 
-import "./standard/ERC721.sol";
-import "./standard/EnumerableSet.sol";
-import "./standard/ERC721Enumerable.sol";
+import "./ERC721.sol";
+import "./EnumerableSet.sol";
+import "./ERC721Enumerable.sol";
 
-import "./standard/Math.sol";
+import "./Math.sol";
 import "./Currency.sol";
 
 /**
@@ -136,7 +136,7 @@ contract Inventory is ERC721Enumerable {
         ); // Only allowed minters can mint
         require(bytes(hash).length > 0, "hash cannot be empty"); // Hash cannot be empty (minting null items)
         require(count > 0, "count must be greater than zero"); // Count must be 1 or more (cannot mint no items)
-        require(hashToTotalSupply[hash] == 0, "hash already exists"); // Prevent multiple mints of the same file (all files minted must be unique)
+        //require(hashToTotalSupply[hash] == 0, "hash already exists"); // Prevent multiple mints of the same file (all files minted must be unique)
 
         hashToStartAssetId[hash] = nextAssetId + 1; // Increment asset ID by one
 
@@ -169,6 +169,35 @@ contract Inventory is ERC721Enumerable {
                 "mint transfer failed"
             );
         }
+    }
+
+    /**
+     * @dev Mint one non-fungible tokens with this contract
+     * @param to Address of who is receiving the token on mint
+     * Example: 0x08E242bB06D85073e69222aF8273af419d19E4f6
+     * @param hash Hash of the file to mint
+     */
+    function mintSingle(address to, string memory hash) public {
+        hashToStartAssetId[hash] = nextAssetId + 1; // Increment asset ID by one
+
+        uint256 assetId = nextAssetId;
+        _mint(to, assetId);
+        minters[assetId] = to;
+        assetIdToHash[assetId] = hash;
+        hashToTotalSupply[hash] = 1;
+        hashToCollaborators[hash].push(to);
+        
+        if (mintFee != 0) {
+            require(
+                coinContract.transferFrom(
+                    msg.sender,
+                    treasuryAddress,
+                    mintFee
+                ),
+                "mint transfer failed"
+            );
+        }
+        
     }
 
     /**
