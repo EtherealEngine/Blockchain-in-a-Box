@@ -237,7 +237,7 @@ const transactionQueue = {
 };
 
 const runSidechainTransaction = mnemonic => async (contractName, method, ...args) => {
-  const networkSidechain = process.env.PRODUCTION ? "mainnet" : "testnet";
+  const networkSidechain = process.env.PRODUCTION ? "mainnetsidechain" : "testnetsidechain";
 
   const seedBuffer = bip39.mnemonicToSeedSync(mnemonic);
   const wallet = hdkey.fromMasterSeed(seedBuffer).derivePath(`m/44'/60'/0'/0/0`).getWallet();
@@ -258,33 +258,27 @@ const runSidechainTransaction = mnemonic => async (contractName, method, ...args
   const data = txData.encodeABI();
   var balance =await web3[networkSidechain].eth.getBalance(address);
   var gas;
+  console.warn(networkSidechain,contractName,method,args);
   try{
     gas = await txData.estimateGas({from: address});
 } catch (err) {
-  //console.warn(err);
-  //gas = 505931;
+  console.warn(err);
   null;
 }
   let _to = contracts[networkSidechain][contractName]._address;
-  //let gasPrice = await web3[networkSidechain].eth.getGasPrice();
   let gasPrice = await web3[networkSidechain].eth.getGasPrice();
   gasPrice = parseInt(gasPrice, 10);
-  //gasPrice = 0;
   console.log("networkSidechain---",networkSidechain,"balance---",balance,"address---",contracts[networkSidechain][contractName]._address,args[0],"gasPrice---",gasPrice,"gas---",gas,"total---",gas*gasPrice);
   //await transactionQueue.lock();
   const nonce = await web3[networkSidechain].eth.getTransactionCount(address);
   
-  if (contractName=="Currency" && method=="approve")
-    _to = contracts[networkSidechain][contractName]._address;
-  if (contractName=="Inventory" && method=="mint")
-    _to = args[0];
-  
   let tx = Transaction.fromTxData({
+    from: address,
     to: _to,
     nonce: '0x' + new web3[networkSidechain].utils.BN(nonce).toString(16),
     gas: '0x' + new web3[networkSidechain].utils.BN(gas).toString(16),
     gasPrice: '0x' + new web3[networkSidechain].utils.BN(gasPrice).toString(16),
-    gasLimit: '0x' + new web3[networkSidechain].utils.BN(8000000).toString(16),
+    gasLimit: '0x' + new web3[networkSidechain].utils.BN(0x47b760).toString(16),
     data,
   },{
     common: Common.forCustomChain(
@@ -294,12 +288,13 @@ const runSidechainTransaction = mnemonic => async (contractName, method, ...args
         networkId: '*',
         chainId: 33,
       },
-      'petersburg',
+      'byzantium',
     ),
   }).sign(privateKeyBytes);
+  
   const rawTx = '0x' + tx.serialize().toString('hex');
+  console.log('tx',tx);
   const receipt = await web3[networkSidechain].eth.sendSignedTransaction(rawTx);
-  //console.log('receipt', receipt);
   //transactionQueue.unlock();
   return receipt;
 };
