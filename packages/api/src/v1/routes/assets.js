@@ -195,7 +195,6 @@ async function mintAssets(
     .derivePath(`m/44'/60'/0'/0/0`)
     .getWallet();
   const address = wallet.getAddressString();
-  //const address = "0x450236394e67d32b421b7f80f0a3d431ca231b00";
   console.log("address-----------",address); 
 
   const asyncGlobal = async() => {
@@ -219,7 +218,7 @@ async function mintAssets(
      allowance = await contracts[network]["Currency"].methods
       .allowance(address, contracts[network]["Inventory"]._address)
       .call();
-      console.log("allowance",allowance); 
+      console.log("allowance",allowance,"fullAmount.v",fullAmount.v['words']); 
     }  catch (err) {
       console.log(err);
     }
@@ -227,8 +226,7 @@ async function mintAssets(
     try
     {
       
-    //if (allowance.lt(fullAmountD2.v)) {
-    if (true) {
+    if (allowance.lt(fullAmountD2.v)) {
       const result = await runSidechainTransaction(mnemonic)(
         "Currency",
         "approve",
@@ -249,8 +247,7 @@ async function mintAssets(
   else {status = true;
   }
   let hash;
-  //const reason = web3[network].utils.hexToAscii('');
-  //console.log("reason", reason);
+
   if (status) {
     const description = "";
     let fileName = resHash.split("/").pop();
@@ -269,7 +266,7 @@ async function mintAssets(
     */
     const res = await axios.get(resHash,  { responseType: 'arraybuffer' });
     hash = Buffer.from(res.data);
-    
+        
     const result = await runSidechainTransaction(mnemonic)(
       "Inventory",
       "mint",
@@ -280,20 +277,20 @@ async function mintAssets(
       description,
       quantity
     );
+    
     status = result.status;
     transactionHash = result.transactionHash;
     console.log("result1",result);
     
-    /*
+    
     const assetId = new web3[network].utils.BN(
       result.logs[0].topics[3].slice(2),
       16
     ).toNumber();
     assetIds = [assetId, assetId + quantity - 1];
-    */
+    
   }
-  //return res.json({ status: ResponseStatus.Success, assetIds, error: null });
-  return res.json({ status: ResponseStatus.Success, error: null });
+  return res.json({ status: ResponseStatus.Success, assetIds, error: null });
 }
 
 async function createAsset(req, res, { web3, contracts }) {
@@ -482,7 +479,7 @@ async function deleteAsset(req, res) {
 async function sendAsset(req, res) {
   try {
     const { fromUserAddress, toUserAddress, assetId } = req.body;
-    //const quantity = req.body.quantity ?? 1;
+    const quantity = req.body.quantity;
     let status = true;
     let error = null;
     const asyncGlobal = async() => {
