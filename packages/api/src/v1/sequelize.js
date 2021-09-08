@@ -1,11 +1,11 @@
 const dotenv = require('dotenv');
-dotenv.config({
-  path: `./../../.env`,
-});
+dotenv.config();
 const Sequelize = require('sequelize');
+const UserModel = require('./models/user');
 const AdminModel = require('./models/adminData');
 const AddressDataModel = require('./models/addressData');
 const EnvironmentDataModel = require('./models/environmentData');
+const OnboardingDataModel = require('./models/onboardingData');
 
 const sequelize = new Sequelize('dev', process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
   host: process.env.MYSQL_URL,
@@ -13,12 +13,18 @@ const sequelize = new Sequelize('dev', process.env.MYSQL_USER, process.env.MYSQL
 });
 
 const AdminData = AdminModel(sequelize, Sequelize);
+const User = UserModel(sequelize, Sequelize);
 const AddressData = AddressDataModel(sequelize, Sequelize);
 const EnvironmentData = EnvironmentDataModel(sequelize, Sequelize);
+const OnBoardingData = OnboardingDataModel(sequelize, Sequelize);
 
 sequelize.sync().then(() => {
   // eslint-disable-next-line no-console
-  console.log('Blockchain in a box db and tables have been created');
+  console.log('Users db and user table have been created');
+
+  
 });
 
-module.exports = { AdminData, AddressData, EnvironmentData };
+
+
+module.exports = { AdminData, AddressData, EnvironmentData, OnBoardingData  };
