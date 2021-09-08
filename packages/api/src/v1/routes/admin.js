@@ -207,7 +207,7 @@ async function addAdminRoutes(app) {
   app.post("/api/v1/onboarding-data",async (req, res) => {
     console.log(req.body)
     try{
-      OnBoardingData.create(req.body).then( (result) => res.end(JSON.stringify({"Status":200, "Message": "Data Submitted Successfully."})) )
+      OnBoardingData.create(req.body.data).then( (result) => res.end(JSON.stringify({"Status":200, "Message": "Data Submitted Successfully."})) )
     }catch{
       res.end(JSON.stringify({"Status":400, "Message": "Data cannot be fetched."}))
     }
