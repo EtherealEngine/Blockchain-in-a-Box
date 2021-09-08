@@ -5,6 +5,8 @@ const { ResponseStatus } = require("../enums.js");
 const {
   DEVELOPMENT
 } = require("../../common/environment.js");
+const { default: Web3 } = require("web3");
+
 
 // Generates a new mnemonic, private key and public address and hands the mnemonic back
 async function createWallet(req, res) {
@@ -18,11 +20,13 @@ async function createWallet(req, res) {
       .derivePath(`m/44'/60'/0'/0/0`)
       .getWallet();
     const userAddress = wallet.getAddressString();
-    console.log("wallet", wallet);
+    const privateKey = wallet.getPrivateKeyString();
+
     return res.json({
       status: ResponseStatus.Success,
       userMnemonic,
       userAddress,
+      privateKey,
       error: null,
     });
   // } catch (error) {

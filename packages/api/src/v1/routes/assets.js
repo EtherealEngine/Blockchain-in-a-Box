@@ -179,7 +179,6 @@ async function mintAssets(
   if (DEVELOPMENT) {
     network = "testnetsidechain";
   }
-  console.log("network",network);
   const fullAmount = {
     t: "uint256",
     v: new web3[network].utils.BN(1e9)
@@ -218,7 +217,6 @@ async function mintAssets(
      allowance = await contracts[network]["Currency"].methods
       .allowance(address, contracts[network]["Inventory"]._address)
       .call();
-      console.log("allowance",allowance,"fullAmount.v",fullAmount.v['words']); 
     }  catch (err) {
       console.log(err);
     }
@@ -233,7 +231,6 @@ async function mintAssets(
         contracts[network]["Inventory"]._address,
         fullAmount.v
       );
-      console.log("result0",result);
       status = result.status;
       transactionHash = '0x0';
       id = -1;
@@ -280,7 +277,6 @@ async function mintAssets(
     
     status = result.status;
     transactionHash = result.transactionHash;
-    console.log("result1",result);
     
     
     const assetId = new web3[network].utils.BN(
@@ -478,10 +474,11 @@ async function deleteAsset(req, res) {
 
 async function sendAsset(req, res) {
   try {
-    const { fromUserAddress, toUserAddress, assetId } = req.body;
+    const { mnemonic, fromUserAddress, toUserAddress, assetId } = req.body;
     const quantity = req.body.quantity;
     let status = true;
     let error = null;
+    /*
     const asyncGlobal = async() => {
       let data;
       try {
@@ -497,27 +494,30 @@ async function sendAsset(req, res) {
       if (i.DATA_KEY=="MAINNET_MNEMONIC")
         MAINNET_MNEMONIC= i.DATA_VALUE;
     }
+    */
     for (let i = 0; i < quantity; i++) {
       try {
-        const isApproved = await contracts.Inventory.methods
-          .isApprovedForAll(fromUserAddress, contracts["Trade"]._address)
+        const isApproved = await contracts[network].Inventory.methods
+          .isApprovedForAll(fromUserAddress, contracts[network]["Trade"]._address)
           .call();
+
         if (!isApproved) {
-          await runSidechainTransaction(MAINNET_MNEMONIC)(
+          await runSidechainTransaction(mnemonic)(
             "Inventory",
             "setApprovalForAll",
-            contracts["Trade"]._address,
+            contracts[network]["Trade"]._address,
             true
           );
         }
-
-        const result = await runSidechainTransaction(MAINNET_MNEMONIC)(
+        console.log(fromUserAddress,toUserAddress,assetId);
+        const result = await runSidechainTransaction(mnemonic)(
           "Inventory",
           "transferFrom",
           fromUserAddress,
           toUserAddress,
           assetId
         );
+
         status = status && result.status;
       } catch (err) {
         console.warn(err.stack);
