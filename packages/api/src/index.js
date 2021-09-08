@@ -11,7 +11,6 @@ const app = express();
 
 // websocket deployment console for truffle
 createDeployer(3033);
-
 app.use(cors());
 
 app.use(fileUpload());
