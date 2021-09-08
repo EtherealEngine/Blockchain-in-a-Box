@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useReducer } from "react";
 import {
   Button,
   Checkbox,
@@ -15,32 +15,10 @@ import {
 } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { ActionResult } from "../models/Action";
-import {
-  IBasePayload,
-  IBooleanPayload,
-  INumberPayload,
-  IStringPayload,
-} from "../models/IPayloads";
+import { IBasePayload, IBooleanPayload, INumberPayload, IStringPayload } from "../models/IPayloads";
 import { useHistory } from "react-router-dom";
 import Routes from "../constants/Routes";
 import "../App.css";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/Store";
-import {
-  setAssetContractDescription,
-  setAssetContractName,
-  setAssetContractSymbol,
-  setAssetMintable,
-  setCurrencyContractMarketCap,
-  setCurrencyContractName,
-  setCurrencyContractSymbol,
-  setError,
-  setIsLoading,
-  setMintingFee,
-  setTreasuryMnemonic,
-} from "../redux/slice/SetupReducer";
-import { GetSetupMnemonic, PostSetupVerifyMnemonic } from "../api/SetupApi";
-import LoadingView from "./LoadingView";
 
 const useStyles = makeStyles((theme) => ({
   parentBox: {
@@ -62,9 +40,6 @@ const useStyles = makeStyles((theme) => ({
   },
   mintingFee: {
     width: 150,
-  },
-  error: {
-    marginTop: theme.spacing(3),
   },
   bold: {
     fontWeight: "bold",
@@ -98,17 +73,50 @@ const useStyles = makeStyles((theme) => ({
 
 // Local state
 interface ILocalState {
+  treasuryMnemonic: string;
   showMnemonic: boolean;
+  currencyContractName: string;
+  currencyContractSymbol: string;
+  currencyMarketCap: string;
+  assetContractName: string;
+  assetContractSymbol: string;
+  assetTokenDescription: string;
+  usersMintAssets: boolean;
+  mintingFee: number;
+  isLoading: boolean;
+  error: string;
 }
 
 // Local default state
 const DefaultLocalState: ILocalState = {
-  showMnemonic: true,
+  treasuryMnemonic: "",
+  showMnemonic: false,
+  currencyContractName: "",
+  currencyContractSymbol: "",
+  currencyMarketCap: "",
+  assetContractName: "",
+  assetContractSymbol: "",
+  assetTokenDescription: "",
+  usersMintAssets: false,
+  mintingFee: 10,
+  isLoading: false,
+  error: "",
 };
 
 // Local actions
 const LocalAction = {
+  ToggleLoading: "ToggleLoading",
+  SetMnemonic: "SetMnemonic",
   ToggleMnemonic: "ToggleMnemonic",
+  SetCurrencyContractName: "SetCurrencyContractName",
+  SetCurrencyContractSymbol: "SetCurrencyContractSymbol",
+  SetCurrencyMarketCap: "SetCurrencyMarketCap",
+  SetAssetContractName: "SetAssetContractName",
+  SetAssetContractSymbol: "SetAssetContractSymbol",
+  SetAssetTokenDescription: "SetAssetTokenDescription",
+  SetUsersMintAssets: "SetUsersMintAssets",
+  SetMintingFee: "SetMintingFee",
+  SetError: "SetError",
 };
 
 // Local reducer
@@ -117,10 +125,77 @@ const LocalReducer = (
   action: ActionResult<IBasePayload>
 ): ILocalState => {
   switch (action.type) {
+    case LocalAction.ToggleLoading: {
+      return {
+        ...state,
+        isLoading: !state.isLoading,
+      };
+    }
+    case LocalAction.SetMnemonic: {
+      return {
+        ...state,
+        treasuryMnemonic: (action.payload as IStringPayload).string,
+      };
+    }
     case LocalAction.ToggleMnemonic: {
       return {
         ...state,
         showMnemonic: !state.showMnemonic,
+      };
+    }
+    case LocalAction.SetCurrencyContractName: {
+      return {
+        ...state,
+        currencyContractName: (action.payload as IStringPayload).string,
+      };
+    }
+    case LocalAction.SetCurrencyContractSymbol: {
+      return {
+        ...state,
+        currencyContractSymbol: (action.payload as IStringPayload).string,
+      };
+    }
+    case LocalAction.SetCurrencyMarketCap: {
+      return {
+        ...state,
+        currencyMarketCap: (action.payload as IStringPayload).string,
+      };
+    }
+    case LocalAction.SetAssetContractName: {
+      return {
+        ...state,
+        assetContractName: (action.payload as IStringPayload).string,
+      };
+    }
+    case LocalAction.SetAssetContractSymbol: {
+      return {
+        ...state,
+        assetContractSymbol: (action.payload as IStringPayload).string,
+      };
+    }
+    case LocalAction.SetAssetTokenDescription: {
+      return {
+        ...state,
+        assetTokenDescription: (action.payload as IStringPayload).string,
+      };
+    }
+    case LocalAction.SetUsersMintAssets: {
+      return {
+        ...state,
+        usersMintAssets: (action.payload as IBooleanPayload).boolean,
+      };
+    }
+    case LocalAction.SetMintingFee: {
+      return {
+        ...state,
+        mintingFee: (action.payload as INumberPayload).number,
+      };
+    }
+    case LocalAction.SetError: {
+      return {
+        ...state,
+        isLoading: false,
+        error: (action.payload as IStringPayload).string,
       };
     }
     default: {
@@ -132,42 +207,41 @@ const LocalReducer = (
 const SetupTreasury: React.FunctionComponent = () => {
   const classes = useStyles();
   const history = useHistory();
-  const [{ showMnemonic }, dispatch] = useReducer(
-    LocalReducer,
-    DefaultLocalState
-  );
-  const reduxDispatch = useDispatch();
-  const {
-    treasuryMnemonic,
-    currencyContractName,
-    currencyContractSymbol,
-    currencyContractMarketCap,
-    assetContractName,
-    assetContractSymbol,
-    assetContractDescription,
-    assetMintable,
-    mintingFee,
-    isLoading,
-    error,
-  } = useSelector((state: RootState) => state.setup);
+  const [
+    {
+      treasuryMnemonic,
+      showMnemonic,
+      currencyContractName,
+      currencyContractSymbol,
+      currencyMarketCap,
+      assetContractName,
+      assetContractSymbol,
+      assetTokenDescription,
+      usersMintAssets,
+      mintingFee,
+      isLoading,
+      error,
+    },
+    dispatch,
+  ] = useReducer(LocalReducer, DefaultLocalState);
 
-  useEffect(() => {
-    reduxDispatch(setError(""));
-    initialize();
-  }, []);
-
-  const initialize = async () => {
-    try {
-      reduxDispatch(setIsLoading(true));
-      const mnemonicResponse = await GetSetupMnemonic();
-      reduxDispatch(setTreasuryMnemonic(mnemonicResponse.mnemonic));
-    } catch (err) {
-      reduxDispatch(setError(err.message));
+  const goToNextPage = () => {
+    let stateObj = localStorage.getItem('setupData')
+    if (stateObj) {
+      let stateObjData = JSON.parse(stateObj);
+      stateObj = {
+        ...stateObjData, treasuryMnemonic, currencyContractName,
+        currencyContractSymbol,
+        currencyMarketCap,
+        assetContractName,
+        assetContractSymbol,
+        assetTokenDescription,
+        usersMintAssets,
+        mintingFee,
+      }
+      localStorage.setItem('setupData', JSON.stringify(stateObj));
+      history.push(Routes.SETUP_MAINNET);
     }
-  };
-
-  if (isLoading) {
-    return <LoadingView loadingText={"Please wait"} />;
   }
 
   return (
@@ -203,7 +277,10 @@ const SetupTreasury: React.FunctionComponent = () => {
             type={showMnemonic ? "text" : "password"}
             value={treasuryMnemonic}
             onChange={(event) =>
-              reduxDispatch(setTreasuryMnemonic(event.target.value))
+              dispatch({
+                type: LocalAction.SetMnemonic,
+                payload: { string: event.target.value },
+              })
             }
             endAdornment={
               <InputAdornment position="end">
@@ -233,7 +310,10 @@ const SetupTreasury: React.FunctionComponent = () => {
           placeholder="Enter currency contract name"
           value={currencyContractName}
           onChange={(event) =>
-            reduxDispatch(setCurrencyContractName(event.target.value))
+            dispatch({
+              type: LocalAction.SetCurrencyContractName,
+              payload: { string: event.target.value },
+            })
           }
           required
         />
@@ -245,7 +325,10 @@ const SetupTreasury: React.FunctionComponent = () => {
           placeholder="Enter currency contract symbol"
           value={currencyContractSymbol}
           onChange={(event) =>
-            reduxDispatch(setCurrencyContractSymbol(event.target.value))
+            dispatch({
+              type: LocalAction.SetCurrencyContractSymbol,
+              payload: { string: event.target.value },
+            })
           }
           required
         />
@@ -255,9 +338,12 @@ const SetupTreasury: React.FunctionComponent = () => {
           variant="outlined"
           label="Currency Market Cap"
           placeholder="Enter currency market cap"
-          value={currencyContractMarketCap}
+          value={currencyMarketCap}
           onChange={(event) =>
-            reduxDispatch(setCurrencyContractMarketCap(event.target.value))
+            dispatch({
+              type: LocalAction.SetCurrencyMarketCap,
+              payload: { string: event.target.value },
+            })
           }
           required
         />
@@ -275,7 +361,10 @@ const SetupTreasury: React.FunctionComponent = () => {
           placeholder="Enter asset contract name"
           value={assetContractName}
           onChange={(event) =>
-            reduxDispatch(setAssetContractName(event.target.value))
+            dispatch({
+              type: LocalAction.SetAssetContractName,
+              payload: { string: event.target.value },
+            })
           }
           required
         />
@@ -287,7 +376,10 @@ const SetupTreasury: React.FunctionComponent = () => {
           placeholder="Enter asset contract symbol"
           value={assetContractSymbol}
           onChange={(event) =>
-            reduxDispatch(setAssetContractSymbol(event.target.value))
+            dispatch({
+              type: LocalAction.SetAssetContractSymbol,
+              payload: { string: event.target.value },
+            })
           }
           required
         />
@@ -297,9 +389,12 @@ const SetupTreasury: React.FunctionComponent = () => {
           variant="outlined"
           label="Default Asset Token Description (leave blank for none)"
           placeholder="Enter default asset token description"
-          value={assetContractDescription}
+          value={assetTokenDescription}
           onChange={(event) =>
-            reduxDispatch(setAssetContractDescription(event.target.value))
+            dispatch({
+              type: LocalAction.SetAssetTokenDescription,
+              payload: { string: event.target.value },
+            })
           }
         />
 
@@ -323,9 +418,12 @@ const SetupTreasury: React.FunctionComponent = () => {
           control={
             <Checkbox
               color="primary"
-              value={assetMintable}
+              value={usersMintAssets}
               onChange={(event) =>
-                reduxDispatch(setAssetMintable(event.target.checked))
+                dispatch({
+                  type: LocalAction.SetUsersMintAssets,
+                  payload: { boolean: event.target.value },
+                })
               }
             />
           }
@@ -344,12 +442,15 @@ const SetupTreasury: React.FunctionComponent = () => {
           type="number"
           value={mintingFee}
           onChange={(event) =>
-            reduxDispatch(setMintingFee(parseInt(event.target.value)))
+            dispatch({
+              type: LocalAction.SetMintingFee,
+              payload: { number: event.target.value },
+            })
           }
         />
 
         {error && (
-          <Typography className={classes.error} variant="body2" color="error">
+          <Typography variant="body2" color="error">
             {error}
           </Typography>
         )}
@@ -359,46 +460,8 @@ const SetupTreasury: React.FunctionComponent = () => {
           variant="contained"
           color="primary"
           size="large"
-          onClick={async () => {
-            if (!treasuryMnemonic) {
-              reduxDispatch(setError("Please fill mnemonic field"));
-              return;
-            }
-
-            if (!currencyContractName) {
-              reduxDispatch(setError("Please fill currency contract name field"));
-              return;
-            }
-
-            if (!currencyContractSymbol) {
-              reduxDispatch(setError("Please fill currency contract symbol field"));
-              return;
-            }
-
-            if (!currencyContractMarketCap) {
-              reduxDispatch(setError("Please fill currency contract market cap field"));
-              return;
-            }
-            
-            if (!assetContractName) {
-              reduxDispatch(setError("Please fill asset contract name field"));
-              return;
-            }
-            
-            if (!assetContractSymbol) {
-              reduxDispatch(setError("Please fill asset contract symbol field"));
-              return;
-            }
-            
-            reduxDispatch(setIsLoading(true));
-            const verifyResponse = await PostSetupVerifyMnemonic(treasuryMnemonic);
-            if (!verifyResponse.isValid) {
-              reduxDispatch(setError("Please enter a valid mnemonic"));
-              return;
-            }
-
-            reduxDispatch(setError(""));
-            history.push(Routes.SETUP_MAINNET);
+          onClick={() => {
+            goToNextPage()
           }}
         >
           Continue

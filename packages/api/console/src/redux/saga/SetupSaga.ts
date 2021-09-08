@@ -1,15 +1,19 @@
-// /* eslint-disable import/no-anonymous-default-export */
-// import { Action } from "@reduxjs/toolkit";
-// import { END, eventChannel } from "redux-saga";
-// import {
-//   takeLeading,
-//   put,
-//   call,
-//   select,
-//   takeEvery,
-//   take,
-// } from "redux-saga/effects";
-// import { addNotification } from "../slice/SetupReducer";
+/* eslint-disable import/no-anonymous-default-export */
+import { Action } from "@reduxjs/toolkit";
+import { END, eventChannel } from "redux-saga";
+import {
+    takeLeading,
+    put,
+    call,
+    select,
+    takeEvery,
+    take,
+    takeLatest,
+} from "redux-saga/effects";
+import { addNotification, addNotificationSuccess } from "../slice/SetupReducer";
+import {
+    PostSetupData
+} from "../../api/SetupApi";
 
 // function* FetchScenesDataAsync(action: Action) {
 //   if (getScenes.match(action)) {
@@ -39,6 +43,23 @@
 //   }
 // }
 
-// export default function* () {
-//   yield takeLeading(getScenes.type, FetchScenesDataAsync);
-// }
+function* PostSetupDataApiCall(action: Action) {
+    console.log("SETUP SAGS ", action);
+    if (addNotification.match(action)) {
+        const response: any = yield call(
+            PostSetupData,
+            action.payload
+        );
+        console.log("response ", response);
+        yield put(
+            addNotificationSuccess(response)
+        );
+
+    }
+
+}
+
+export default function* () {
+    //   yield takeLeading(getScenes.type, FetchScenesDataAsync);
+    yield takeLatest(addNotification.type, PostSetupDataApiCall)
+}

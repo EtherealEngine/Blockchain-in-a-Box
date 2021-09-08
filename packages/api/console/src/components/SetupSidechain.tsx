@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useReducer, useEffect } from "react";
 import {
   Button,
   Grid,
@@ -6,16 +6,14 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
+import { ActionResult } from "../models/Action";
+import { IBasePayload, IStringPayload } from "../models/IPayloads";
 import { useHistory } from "react-router-dom";
 import Routes from "../constants/Routes";
 import "../App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/Store";
-import {
-  setError,
-  setOrganizationName,
-  setSideChainUrl,
-} from "../redux/slice/SetupReducer";
+
 
 const useStyles = makeStyles((theme) => ({
   parentBox: {
@@ -33,9 +31,6 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
     marginBottom: theme.spacing(2),
   },
-  error: {
-    marginTop: theme.spacing(3),
-  },
   textbox: {
     marginTop: theme.spacing(2),
   },
@@ -44,20 +39,90 @@ const useStyles = makeStyles((theme) => ({
   },
   paddedHeading: {
     marginTop: theme.spacing(8),
-  },
+  }
 }));
+
+// Local state
+interface ILocalState {
+  organizationName: string;
+  sidechainURL: string;
+  isLoading: boolean;
+  error: string;
+}
+
+// Local default state
+const DefaultLocalState: ILocalState = {
+  organizationName: "",
+  sidechainURL: "",
+  isLoading: false,
+  error: "",
+};
+
+// Local actions
+const LocalAction = {
+  ToggleLoading: "ToggleLoading",
+  SetOrganizationName: "SetOrganizationName",
+  SetSidechainURL: "SetSidechainURL",
+  SetError: "SetError",
+};
+
+// Local reducer
+const LocalReducer = (
+  state: ILocalState,
+  action: ActionResult<IBasePayload>
+): ILocalState => {
+  switch (action.type) {
+    case LocalAction.ToggleLoading: {
+      return {
+        ...state,
+        isLoading: !state.isLoading,
+      };
+    }
+    case LocalAction.SetOrganizationName: {
+      return {
+        ...state,
+        organizationName: (action.payload as IStringPayload).string,
+      };
+    }
+    case LocalAction.SetSidechainURL: {
+      return {
+        ...state,
+        sidechainURL: (action.payload as IStringPayload).string,
+      };
+    }
+    case LocalAction.SetError: {
+      return {
+        ...state,
+        isLoading: false,
+        error: (action.payload as IStringPayload).string,
+      };
+    }
+    default: {
+      return state;
+    }
+  }
+};
 
 const SetupSidechain: React.FunctionComponent = () => {
   const classes = useStyles();
   const history = useHistory();
-  const reduxDispatch = useDispatch();
-  const { organizationName, sideChainUrl, error } = useSelector(
-    (state: RootState) => state.setup
+
+  const { email } = useSelector(
+    (state: RootState) => state.admin
   );
 
-  useEffect(() => {
-    reduxDispatch(setError(""));
-  }, []);
+  const [{ organizationName, sidechainURL, isLoading, error }, dispatch] = useReducer(
+    LocalReducer,
+    DefaultLocalState
+  );
+
+
+  const goToNextPage = () => {
+    let setupObj = { organizationName, sidechainURL, email };
+    console.log("TST ", email);
+    localStorage.setItem('setupData', JSON.stringify(setupObj));
+    history.push(Routes.SETUP_SIGNING_AUTHORITY);
+  }
 
   return (
     <Grid container justifyContent="center">
@@ -79,16 +144,16 @@ const SetupSidechain: React.FunctionComponent = () => {
           placeholder="Enter organization name"
           value={organizationName}
           onChange={(event) =>
-            reduxDispatch(setOrganizationName(event.target.value))
+            dispatch({
+              type: LocalAction.SetOrganizationName,
+              payload: { string: event.target.value },
+            })
           }
           required
         />
 
-        <Typography
-          className={`${classes.subHeading} ${classes.paddedHeading}`}
-        >
-          You can configure the domains where the REST API can connect to the
-          Geth nodes.
+        <Typography className={`${classes.subHeading} ${classes.paddedHeading}`}>
+          You can configure the domains where the REST API can connect to the Geth nodes.
         </Typography>
 
         <TextField
@@ -96,13 +161,18 @@ const SetupSidechain: React.FunctionComponent = () => {
           variant="outlined"
           label="Sidechain URL"
           placeholder="Enter sidechain URL"
-          value={sideChainUrl}
-          onChange={(event) => reduxDispatch(setSideChainUrl(event.target.value))}
+          value={sidechainURL}
+          onChange={(event) =>
+            dispatch({
+              type: LocalAction.SetSidechainURL,
+              payload: { string: event.target.value },
+            })
+          }
           required
         />
 
         {error && (
-          <Typography className={classes.error} variant="body2" color="error">
+          <Typography variant="body2" color="error">
             {error}
           </Typography>
         )}
@@ -112,18 +182,7 @@ const SetupSidechain: React.FunctionComponent = () => {
           color="primary"
           size="large"
           onClick={() => {
-            if (!organizationName) {
-              reduxDispatch(setError("Please fill organization name field"));
-              return;
-            }
-
-            if (!sideChainUrl) {
-              reduxDispatch(setError("Please fill sidechain URL field"));
-              return;
-            }
-
-            reduxDispatch(setError(""));
-            history.push(Routes.SETUP_SIGNING_AUTHORITY);
+            goToNextPage()
           }}
         >
           Continue

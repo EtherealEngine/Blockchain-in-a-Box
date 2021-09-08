@@ -1,30 +1,21 @@
 import axios from "axios";
 import Endpoints from "../constants/Endpoints";
-import { SetupMnemonicResponse, SetupVerifyMnemonicResponse } from "../models/Setup";
 
-export const GetSetupMnemonic = async () => {
-  const endpoint = `${Endpoints.HOST}${Endpoints.GET_SETUP_MNEMONIC}`;
-  const response = await axios.get<SetupMnemonicResponse>(endpoint);
-  const responseData = response.data;
 
-  if (responseData.error) {
-    throw responseData.error;
-  }
+export const PostSetupData = async (data: any) => {
+    // const endpoint = `https://reqres.in/api/users`;
+    const endpoint = `${Endpoints.HOST}${Endpoints.SETUP_ORG}`;
+    const body = {
+        data,
+    };
+    console.log("API ", body);
 
-  return responseData;
-};
+    const response = await axios.post<any>(endpoint, body);
+    const responseData = response.data;
 
-export const PostSetupVerifyMnemonic = async (mnemonic: string) => {
-  const endpoint = `${Endpoints.HOST}${Endpoints.POST_SETUP_VERIFY_MNEMONIC}`;
-  const body = {
-    mnemonic,
-  };
-  const response = await axios.post<SetupVerifyMnemonicResponse>(endpoint, body);
-  const responseData = response.data;
+    if (responseData.error) {
+        throw responseData.error;
+    }
 
-  if (responseData.error) {
-    throw responseData.error;
-  }
-
-  return responseData;
+    return responseData;
 };

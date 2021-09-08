@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useReducer } from "react";
 import {
   Button,
   FormControl,
@@ -12,19 +12,10 @@ import {
 } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { ActionResult } from "../models/Action";
-import { IBasePayload } from "../models/IPayloads";
+import { IBasePayload, IStringPayload } from "../models/IPayloads";
 import { useHistory } from "react-router-dom";
 import Routes from "../constants/Routes";
 import "../App.css";
-import { RootState } from "../redux/Store";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  setError,
-  setIsLoading,
-  setPolygonMaticMnemonic,
-} from "../redux/slice/SetupReducer";
-import { GetSetupMnemonic, PostSetupVerifyMnemonic } from "../api/SetupApi";
-import LoadingView from "./LoadingView";
 
 const useStyles = makeStyles((theme) => ({
   parentBox: {
@@ -39,9 +30,6 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
   },
   subHeading: {
-    marginTop: theme.spacing(3),
-  },
-  error: {
     marginTop: theme.spacing(3),
   },
   button: {
@@ -67,17 +55,26 @@ const useStyles = makeStyles((theme) => ({
 
 // Local state
 interface ILocalState {
+  polygonMnemonic: string;
   showMnemonic: boolean;
+  isLoading: boolean;
+  error: string;
 }
 
 // Local default state
 const DefaultLocalState: ILocalState = {
+  polygonMnemonic: "",
   showMnemonic: false,
+  isLoading: false,
+  error: "",
 };
 
 // Local actions
 const LocalAction = {
+  ToggleLoading: "ToggleLoading",
+  SetMnemonic: "SetMnemonic",
   ToggleMnemonic: "ToggleMnemonic",
+  SetError: "SetError",
 };
 
 // Local reducer
@@ -86,10 +83,29 @@ const LocalReducer = (
   action: ActionResult<IBasePayload>
 ): ILocalState => {
   switch (action.type) {
+    case LocalAction.ToggleLoading: {
+      return {
+        ...state,
+        isLoading: !state.isLoading,
+      };
+    }
+    case LocalAction.SetMnemonic: {
+      return {
+        ...state,
+        polygonMnemonic: (action.payload as IStringPayload).string,
+      };
+    }
     case LocalAction.ToggleMnemonic: {
       return {
         ...state,
         showMnemonic: !state.showMnemonic,
+      };
+    }
+    case LocalAction.SetError: {
+      return {
+        ...state,
+        isLoading: false,
+        error: (action.payload as IStringPayload).string,
       };
     }
     default: {
@@ -101,32 +117,20 @@ const LocalReducer = (
 const SetupPolygon: React.FunctionComponent = () => {
   const classes = useStyles();
   const history = useHistory();
-  const [{ showMnemonic }, dispatch] = useReducer(
+  const [{ polygonMnemonic, showMnemonic, isLoading, error }, dispatch] = useReducer(
     LocalReducer,
     DefaultLocalState
   );
-  const reduxDispatch = useDispatch();
-  const { polygonMaticMnemonic, isLoading, error } = useSelector(
-    (state: RootState) => state.setup
-  );
 
-  useEffect(() => {
-    reduxDispatch(setError(""));
-    initialize();
-  }, []);
-
-  const initialize = async () => {
-    try {
-      reduxDispatch(setIsLoading(true));
-      const mnemonicResponse = await GetSetupMnemonic();
-      reduxDispatch(setPolygonMaticMnemonic(mnemonicResponse.mnemonic));
-    } catch (err) {
-      reduxDispatch(setError(err.message));
+  const goToNextPage = () => {
+    let stateObj = localStorage.getItem('setupData');
+    if (stateObj) {
+      let stateObjData = JSON.parse(stateObj)
+      let setupObj = { ...stateObjData, polygonMnemonic };
+      localStorage.setItem('setupData', JSON.stringify(setupObj));
+      history.push(Routes.SETUP_POLYGON_VIGIL);
     }
-  };
 
-  if (isLoading) {
-    return <LoadingView loadingText={"Please wait"} />;
   }
 
   return (
@@ -166,9 +170,12 @@ const SetupPolygon: React.FunctionComponent = () => {
             id="outlined-adornment-mnemonic"
             placeholder="Enter mnemonic"
             type={showMnemonic ? "text" : "password"}
-            value={polygonMaticMnemonic}
+            value={polygonMnemonic}
             onChange={(event) =>
-              reduxDispatch(setPolygonMaticMnemonic(event.target.value))
+              dispatch({
+                type: LocalAction.SetMnemonic,
+                payload: { string: event.target.value },
+              })
             }
             endAdornment={
               <InputAdornment position="end">
@@ -186,7 +193,7 @@ const SetupPolygon: React.FunctionComponent = () => {
         </FormControl>
 
         {error && (
-          <Typography className={classes.error} variant="body2" color="error">
+          <Typography variant="body2" color="error">
             {error}
           </Typography>
         )}
@@ -199,8 +206,6 @@ const SetupPolygon: React.FunctionComponent = () => {
               color="secondary"
               size="large"
               onClick={() => {
-                reduxDispatch(setPolygonMaticMnemonic(""));
-                reduxDispatch(setError(""));
                 history.push(Routes.SETUP_POLYGON_VIGIL);
               }}
             >
@@ -213,23 +218,8 @@ const SetupPolygon: React.FunctionComponent = () => {
               variant="contained"
               color="primary"
               size="large"
-              onClick={async () => {
-                if (!polygonMaticMnemonic) {
-                  reduxDispatch(setError("Please fill mnemonic field"));
-                  return;
-                }
-
-                reduxDispatch(setIsLoading(true));
-                const verifyResponse = await PostSetupVerifyMnemonic(
-                  polygonMaticMnemonic
-                );
-                if (!verifyResponse.isValid) {
-                  reduxDispatch(setError("Please enter a valid mnemonic"));
-                  return;
-                }
-
-                reduxDispatch(setError(""));
-                history.push(Routes.SETUP_POLYGON_VIGIL);
+              onClick={() => {
+                goToNextPage()
               }}
             >
               Continue

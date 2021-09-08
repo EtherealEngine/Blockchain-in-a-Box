@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useEffect } from "react";
 import {
   Button,
   Grid,
@@ -10,6 +10,12 @@ import { IBasePayload, IStringPayload } from "../models/IPayloads";
 import { useHistory } from "react-router-dom";
 import Routes from "../constants/Routes";
 import "../App.css";
+import { useDispatch, useSelector } from "react-redux";
+
+import {
+  addNotification
+} from "../redux/slice/SetupReducer";
+import { RootState } from "../redux/Store";
 
 const useStyles = makeStyles((theme) => ({
   parentBox: {
@@ -24,9 +30,6 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
   },
   subHeading: {
-    marginTop: theme.spacing(3),
-  },
-  error: {
     marginTop: theme.spacing(3),
   },
   button: {
@@ -95,6 +98,8 @@ const LocalReducer = (
 const SetupCompleted: React.FunctionComponent = () => {
   const classes = useStyles();
   const history = useHistory();
+  const reduxDispatch = useDispatch();
+
   const [
     {
       isLoading,
@@ -102,6 +107,37 @@ const SetupCompleted: React.FunctionComponent = () => {
     },
     dispatch,
   ] = useReducer(LocalReducer, DefaultLocalState);
+
+  const { result, notifications } = useSelector(
+    (state: RootState) => state.setup
+  );
+
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem('setupData')
+    }
+  }, [])
+
+  useEffect(() => {
+    if (notifications) {
+      console.log("COMPETE ", result, notifications);
+      if (notifications && notifications['id'])
+        history.push(Routes.DASHBOARD);
+    }
+
+  }, [notifications, result])
+
+  const goToDashboard = () => {
+    let stateObj = localStorage.getItem('setupData');
+    if (stateObj) {
+      let stateObjData = JSON.parse(stateObj)
+
+      reduxDispatch(addNotification(stateObjData))
+      // history.push(Routes.DASHBOARD);
+
+    }
+
+  }
 
   return (
     <Grid container justifyContent="center">
@@ -130,7 +166,7 @@ const SetupCompleted: React.FunctionComponent = () => {
         </Typography>
 
         {error && (
-          <Typography className={classes.error} variant="body2" color="error">
+          <Typography variant="body2" color="error">
             {error}
           </Typography>
         )}
@@ -141,7 +177,7 @@ const SetupCompleted: React.FunctionComponent = () => {
           color="primary"
           size="large"
           onClick={() => {
-            history.push(Routes.DASHBOARD);
+            goToDashboard()
           }}
         >
           Continue
