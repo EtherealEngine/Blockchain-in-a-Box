@@ -1,6 +1,6 @@
 const crypto = require("crypto");
 const { ResponseStatus } = require("../enums");
-const { AdminData } = require("../sequelize");
+const { AdminData, OnBoardingData } = require("../sequelize");
 const { setCorsHeaders } = require("../../common/utils");
 const { sendMessage } = require("../../common/sesClient");
 const { CONSOLE_WEB_URL, DEVELOPMENT, AUTH_SECRET_KEY, AUTH_TOKEN_SECRET } = require("../../common/environment");
@@ -202,6 +202,32 @@ async function addAdminRoutes(app) {
       });
     }
   });
+
+  // Endpoint to get Store data and push it to dev in AWS : Port : 8080
+  app.post("/api/v1/onboarding-data",async (req, res) => {
+    console.log(req.body)
+    try{
+      OnBoardingData.create(req.body).then( (result) => res.end(JSON.stringify({"Status":200, "Message": "Data Submitted Successfully."})) )
+    }catch{
+      res.end(JSON.stringify({"Status":400, "Message": "Data cannot be fetched."}))
+    }
+  })
+
+  // Get data by data_key
+  app.get("/api/v1/onboarding-data",async (req, res) =>{
+    console.log("=>",req.query.email)
+      let data = await OnBoardingData.findOne({ where: { email : req.query.email } });
+      try{
+        if(data.email){
+          res.end(JSON.stringify({"Status" : 200,  "User": data}));
+        }else{
+          res.end(JSON.stringify({"Status":400, "Message": "Data cannot be fetched."}))
+        }
+      }catch{
+        res.end(JSON.stringify({"Status":400, "Message": "Data cannot be fetched."}))
+      }
+      
+  })
 }
 
 function validateEmail(email) {
