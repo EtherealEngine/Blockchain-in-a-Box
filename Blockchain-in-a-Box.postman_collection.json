@@ -1,10 +1,183 @@
 {
 	"info": {
-		"_postman_id": "9360a724-6a9d-478a-8d50-da9ba20f80f1",
+		"_postman_id": "34c93730-98bb-4157-aa84-efc21ca9f920",
 		"name": "Blockchain-in-a-Box",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
+		{
+			"name": "direct",
+			"item": [
+				{
+					"name": "Get Accounts",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"jsonrpc\":\"2.0\",\"method\":\"eth_accounts\",\"params\":[],\"id\":1}"
+						},
+						"url": {
+							"raw": "http://a42f3ac8ef865438ca0b99bd673f4e70-871205895.us-west-1.elb.amazonaws.com",
+							"protocol": "http",
+							"host": [
+								"a42f3ac8ef865438ca0b99bd673f4e70-871205895",
+								"us-west-1",
+								"elb",
+								"amazonaws",
+								"com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get eth coinbase",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"jsonrpc\":\"2.0\",\"method\":\"eth_coinbase\",\"params\":[],\"id\":1}"
+						},
+						"url": {
+							"raw": "http://a42f3ac8ef865438ca0b99bd673f4e70-871205895.us-west-1.elb.amazonaws.com",
+							"protocol": "http",
+							"host": [
+								"a42f3ac8ef865438ca0b99bd673f4e70-871205895",
+								"us-west-1",
+								"elb",
+								"amazonaws",
+								"com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Accounts Balance",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"jsonrpc\":\"2.0\",\"method\":\"eth_getBalance\",\"params\":[\"0xf90c251e42367a6387afecba10b95c97eaf3b287\", \"latest\"],\"id\":1}"
+						},
+						"url": {
+							"raw": "http://a42f3ac8ef865438ca0b99bd673f4e70-871205895.us-west-1.elb.amazonaws.com",
+							"protocol": "http",
+							"host": [
+								"a42f3ac8ef865438ca0b99bd673f4e70-871205895",
+								"us-west-1",
+								"elb",
+								"amazonaws",
+								"com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Accounts Transaction Count",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"jsonrpc\":\"2.0\",\"method\":\"eth_getTransactionCount\",\"params\": [\"0xcaef76d9683b0d5b0f89871afd8a74d41b4363d1\", \"latest\"],\"id\":1}"
+						},
+						"url": {
+							"raw": "http://a42f3ac8ef865438ca0b99bd673f4e70-871205895.us-west-1.elb.amazonaws.com",
+							"protocol": "http",
+							"host": [
+								"a42f3ac8ef865438ca0b99bd673f4e70-871205895",
+								"us-west-1",
+								"elb",
+								"amazonaws",
+								"com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Accounts Transaction Call",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\": [{\r\n  \"from\": \"0xd3cd2e9a759bee835e37e8b5d821c4664b17f61e\",\r\n  \"to\": \"0x199c5d463f842261ca609909da69b52139602aa7\",\r\n  \"gas\": \"0x76c0\",\r\n  \"gasPrice\": \"0x9184e72a000\",\r\n  \"value\": \"0x9184e72a\",\r\n  \"data\": \"0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675\"\r\n},\"latest\"],\"id\":1}"
+						},
+						"url": {
+							"raw": "http://a42f3ac8ef865438ca0b99bd673f4e70-871205895.us-west-1.elb.amazonaws.com",
+							"protocol": "http",
+							"host": [
+								"a42f3ac8ef865438ca0b99bd673f4e70-871205895",
+								"us-west-1",
+								"elb",
+								"amazonaws",
+								"com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Accounts Send Transaction",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"jsonrpc\":\"2.0\",\"method\":\"eth_sendTransaction\",\"params\": [{\r\n  \"from\": \"0xf90c251e42367a6387afecba10b95c97eaf3b287\",\r\n  \"to\": \"0xB324231A79Bc9d6579d84FA536997Ba301D8Cc35\",\r\n  \"gas\": \"0x76c0\",\r\n  \"gasPrice\": \"0x9184e72a000\",\r\n  \"value\": \"0x9184e72a\",\r\n  \"chainId\": \"0x15\"\r\n}],\"id\":1}"
+						},
+						"url": {
+							"raw": "http://a42f3ac8ef865438ca0b99bd673f4e70-871205895.us-west-1.elb.amazonaws.com",
+							"protocol": "http",
+							"host": [
+								"a42f3ac8ef865438ca0b99bd673f4e70-871205895",
+								"us-west-1",
+								"elb",
+								"amazonaws",
+								"com"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
 		{
 			"name": "api/v1/authorizeServer",
 			"request": {
@@ -12,7 +185,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"authSecretKey\": \"[YOUR_AUTH_SECRET_KEY]\"\r\n}",
+					"raw": "{\r\n    \"authSecretKey\": \"secret\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -20,10 +193,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/v1/authorizeServer",
-					"protocol": "http",
+					"raw": "127.0.0.1:8080/api/v1/authorizeServer",
 					"host": [
-						"localhost"
+						"127",
+						"0",
+						"0",
+						"1"
 					],
 					"port": "8080",
 					"path": [
@@ -42,15 +217,18 @@
 				"header": [
 					{
 						"key": "authorization",
-						"value": "Bearer [YOUR_ACCESS_TOKEN]",
+						"value": "Bearer {{YOUR_ACCESS_TOKEN}}",
 						"type": "text"
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8080/api/v1/wallet",
+					"raw": "http://127.0.0.1:8080/api/v1/wallet",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"127",
+						"0",
+						"0",
+						"1"
 					],
 					"port": "8080",
 					"path": [
@@ -69,15 +247,18 @@
 				"header": [
 					{
 						"key": "authorization",
-						"value": "Bearer [YOUR_ACCESS_TOKEN]",
+						"value": "Bearer {{YOUR_ACCESS_TOKEN}}",
 						"type": "text"
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8080/api/v1/assets/:address",
+					"raw": "http://127.0.0.1:8080/api/v1/assets/:address",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"127",
+						"0",
+						"0",
+						"1"
 					],
 					"port": "8080",
 					"path": [
@@ -89,7 +270,7 @@
 					"variable": [
 						{
 							"key": "address",
-							"value": ""
+							"value": "0x70e68c3f8146119fd3b0b0de5324456d73e4a17c"
 						}
 					]
 				}
@@ -142,15 +323,17 @@
 				"header": [
 					{
 						"key": "authorization",
-						"value": "Bearer [YOUR_ACCESS_TOKEN]",
+						"value": "Bearer {{YOUR_ACCESS_TOKEN}}",
 						"type": "text"
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8080/api/v1/asset/:assetId",
-					"protocol": "http",
+					"raw": "127.0.0.1:8080/api/v1/asset/:assetId",
 					"host": [
-						"localhost"
+						"127",
+						"0",
+						"0",
+						"1"
 					],
 					"port": "8080",
 					"path": [
@@ -162,7 +345,7 @@
 					"variable": [
 						{
 							"key": "assetId",
-							"value": ""
+							"value": "1"
 						}
 					]
 				}
@@ -181,12 +364,15 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8080/api/v1/asset/:assetStartId/:assetEndId",
+					"raw": "http://af2fc18b539ee488984fa4e58de37686-1454411376.us-west-1.elb.amazonaws.com/api/v1/asset/:assetStartId/:assetEndId",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"af2fc18b539ee488984fa4e58de37686-1454411376",
+						"us-west-1",
+						"elb",
+						"amazonaws",
+						"com"
 					],
-					"port": "8080",
 					"path": [
 						"api",
 						"v1",
@@ -197,11 +383,11 @@
 					"variable": [
 						{
 							"key": "assetStartId",
-							"value": ""
+							"value": "0"
 						},
 						{
 							"key": "assetEndId",
-							"value": ""
+							"value": "1"
 						}
 					]
 				}
@@ -215,13 +401,13 @@
 				"header": [
 					{
 						"key": "authorization",
-						"value": "Bearer [YOUR_ACCESS_TOKEN]",
+						"value": "Bearer {{YOUR_ACCESS_TOKEN}}",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"mnemonic\": \"string\",\r\n    \"privateData\": \"string\",\r\n    \"resourceHash\": \"string\",\r\n    \"quantity\": 0\r\n}",
+					"raw": "{\r\n    \"mnemonic\": \"follow chronic bunker undo twelve essay recall minimum invite lumber puzzle final\",\r\n    \"resourceHash\": \"https://gateway.pinata.cloud/ipfs/QmRf22bZar3WKmojipms22PkXH1MZGmvsqzQtuSvQE3uhm\",\r\n    \"quantity\": 1\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -229,10 +415,13 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/v1/asset",
+					"raw": "http://127.0.0.1:8080/api/v1/asset",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"127",
+						"0",
+						"0",
+						"1"
 					],
 					"port": "8080",
 					"path": [
@@ -265,12 +454,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/v1/asset",
+					"raw": "http://af2fc18b539ee488984fa4e58de37686-1454411376.us-west-1.elb.amazonaws.com/api/v1/asset",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"af2fc18b539ee488984fa4e58de37686-1454411376",
+						"us-west-1",
+						"elb",
+						"amazonaws",
+						"com"
 					],
-					"port": "8080",
 					"path": [
 						"api",
 						"v1",
@@ -287,13 +479,13 @@
 				"header": [
 					{
 						"key": "authorization",
-						"value": "Bearer [YOUR_ACCESS_TOKEN]",
+						"value": "Bearer {{YOUR_ACCESS_TOKEN}}",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"fromUserAddress\": \"string\",\r\n    \"toUserAddress\": \"string\",\r\n    \"tokenId\": \"string\",\r\n    \"quantity\": 0\r\n}",
+					"raw": "{\r\n    \"mnemonic\": \"follow chronic bunker undo twelve essay recall minimum invite lumber puzzle final\",\r\n    \"fromUserAddress\": \"0xb7311356747c1ac49decec1d92fc63b23a7f6648\",\r\n    \"toUserAddress\": \"0x5e75727a7198e333199e7fbc0254959615553325\",\r\n    \"assetId\": \"2\",\r\n    \"quantity\": 1\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -301,10 +493,13 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/v1/asset/send",
+					"raw": "http://127.0.0.1:8080/api/v1/asset/send",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"127",
+						"0",
+						"0",
+						"1"
 					],
 					"port": "8080",
 					"path": [
@@ -323,10 +518,13 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/v1/asset/signTransfer",
+					"raw": "http://127.0.0.1:8080/api/v1/asset/signTransfer",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"127",
+						"0",
+						"0",
+						"1"
 					],
 					"port": "8080",
 					"path": [
