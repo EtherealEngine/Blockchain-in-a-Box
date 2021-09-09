@@ -284,4 +284,3 @@ module.exports = async function (deployer) {
 
   createAddress(identityAddress,coinAddress,assetAddress,coinProxyAddress,assetProxyAddress,tradeAddress,networkType);
 };
-

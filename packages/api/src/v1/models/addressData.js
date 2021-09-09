@@ -42,7 +42,7 @@ module.exports = (sequelize, Sequelize) => sequelize.define('ADDRESS_DATA', {
     DELETE_FLAG: Sequelize.STRING,
     CREATED_BY: Sequelize.STRING,
     MODIFIED_BY: Sequelize.STRING,
-    CREATED_ON: {
+    /*CREATED_ON: {
       type: 'TIMESTAMP',
       defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       allowNull: false
@@ -51,5 +51,5 @@ module.exports = (sequelize, Sequelize) => sequelize.define('ADDRESS_DATA', {
       type: 'TIMESTAMP',
       defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       allowNull: false
-    },
+    },*/
   });

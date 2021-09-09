@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useReducer } from "react";
 import {
   Button,
   Grid,
@@ -6,12 +6,16 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
+import { ActionResult } from "../models/Action";
+import { IBasePayload, IStringPayload } from "../models/IPayloads";
 import { useHistory } from "react-router-dom";
 import Routes from "../constants/Routes";
 import "../App.css";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/Store";
-import { setError, setInfuraApiKey, setInfuraProjectId } from "../redux/slice/SetupReducer";
+
+import {
+  addNotification
+} from "../redux/slice/SetupReducer";
 
 const useStyles = makeStyles((theme) => ({
   parentBox: {
@@ -26,9 +30,6 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
   },
   subHeading: {
-    marginTop: theme.spacing(3),
-  },
-  error: {
     marginTop: theme.spacing(3),
   },
   button: {
@@ -49,17 +50,90 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// Local state
+interface ILocalState {
+  infuraProjectID: string;
+  infuraApiKey: string;
+  isLoading: boolean;
+  error: string;
+}
+
+// Local default state
+const DefaultLocalState: ILocalState = {
+  infuraProjectID: "",
+  infuraApiKey: "",
+  isLoading: false,
+  error: "",
+};
+
+// Local actions
+const LocalAction = {
+  ToggleLoading: "ToggleLoading",
+  SetProjectID: "SetProjectID",
+  SetAPIKey: "SetAPIKey",
+  SetError: "SetError",
+};
+
+// Local reducer
+const LocalReducer = (
+  state: ILocalState,
+  action: ActionResult<IBasePayload>
+): ILocalState => {
+  switch (action.type) {
+    case LocalAction.ToggleLoading: {
+      return {
+        ...state,
+        isLoading: !state.isLoading,
+      };
+    }
+    case LocalAction.SetProjectID: {
+      return {
+        ...state,
+        infuraProjectID: (action.payload as IStringPayload).string,
+      };
+    }
+    case LocalAction.SetAPIKey: {
+      return {
+        ...state,
+        infuraApiKey: (action.payload as IStringPayload).string,
+      };
+    }
+    case LocalAction.SetError: {
+      return {
+        ...state,
+        isLoading: false,
+        error: (action.payload as IStringPayload).string,
+      };
+    }
+    default: {
+      return state;
+    }
+  }
+};
+
 const SetupInfura: React.FunctionComponent = () => {
+  const reduxDispatch = useDispatch();
+
   const classes = useStyles();
   const history = useHistory();
-  const reduxDispatch = useDispatch();
-  const { infuraProjectId, infuraApiKey, error } = useSelector(
-    (state: RootState) => state.setup
+  const [{ infuraProjectID, infuraApiKey, isLoading, error }, dispatch] = useReducer(
+    LocalReducer,
+    DefaultLocalState
   );
 
-  useEffect(() => {
-    reduxDispatch(setError(""));
-  }, []);
+  const goToNextPage = () => {
+    let stateObj = localStorage.getItem('setupData');
+    if (stateObj) {
+      let stateObjData = JSON.parse(stateObj)
+      let setupObj = { ...stateObjData, infuraProjectID, infuraApiKey };
+      localStorage.setItem('setupData', JSON.stringify(setupObj));
+      // reduxDispatch(addNotification(setupObj))
+      history.push(Routes.SETUP_POLYGON);
+
+    }
+
+  }
+
 
   return (
     <Grid container justifyContent="center">
@@ -83,9 +157,12 @@ const SetupInfura: React.FunctionComponent = () => {
           variant="outlined"
           label="Project ID"
           placeholder="Enter project ID"
-          value={infuraProjectId}
+          value={infuraProjectID}
           onChange={(event) =>
-            reduxDispatch(setInfuraProjectId(event.target.value))
+            dispatch({
+              type: LocalAction.SetProjectID,
+              payload: { string: event.target.value },
+            })
           }
         />
 
@@ -96,12 +173,15 @@ const SetupInfura: React.FunctionComponent = () => {
           placeholder="Enter API key"
           value={infuraApiKey}
           onChange={(event) =>
-            reduxDispatch(setInfuraApiKey(event.target.value))
+            dispatch({
+              type: LocalAction.SetAPIKey,
+              payload: { string: event.target.value },
+            })
           }
         />
 
         {error && (
-          <Typography className={classes.error} variant="body2" color="error">
+          <Typography variant="body2" color="error">
             {error}
           </Typography>
         )}
@@ -114,9 +194,6 @@ const SetupInfura: React.FunctionComponent = () => {
               color="secondary"
               size="large"
               onClick={() => {
-                reduxDispatch(setInfuraProjectId(""));
-                reduxDispatch(setInfuraApiKey(""));
-                reduxDispatch(setError(""));
                 history.push(Routes.SETUP_POLYGON);
               }}
             >
@@ -130,18 +207,7 @@ const SetupInfura: React.FunctionComponent = () => {
               color="primary"
               size="large"
               onClick={() => {
-                if (!infuraProjectId) {
-                  reduxDispatch(setError("Please fill project ID field"));
-                  return;
-                }
-
-                if (!infuraApiKey) {
-                  reduxDispatch(setError("Please fill API key field"));
-                  return;
-                }
-                
-                reduxDispatch(setError(""));
-                history.push(Routes.SETUP_POLYGON);
+                goToNextPage()
               }}
             >
               Continue

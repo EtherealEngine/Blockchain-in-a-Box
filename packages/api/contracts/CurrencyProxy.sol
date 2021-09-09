@@ -3,7 +3,7 @@ pragma solidity ^0.8.6;
 pragma experimental ABIEncoderV2;
 
 import "./Currency.sol";
-import "./standard/IERC721Receiver.sol";
+import "./IERC721Receiver.sol";
 
 /** @title ERC20 Proxy contract.
  * @dev Manages ERC20 assets using the chain owner as a signing oracle for validation and cross-chain transfer

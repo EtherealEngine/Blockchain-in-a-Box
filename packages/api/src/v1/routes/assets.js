@@ -179,7 +179,6 @@ async function mintAssets(
   if (DEVELOPMENT) {
     network = "testnetsidechain";
   }
-  console.log("network",network);
   const fullAmount = {
     t: "uint256",
     v: new web3[network].utils.BN(1e9)
@@ -195,7 +194,6 @@ async function mintAssets(
     .derivePath(`m/44'/60'/0'/0/0`)
     .getWallet();
   const address = wallet.getAddressString();
-  //const address = "0x450236394e67d32b421b7f80f0a3d431ca231b00";
   console.log("address-----------",address); 
 
   const asyncGlobal = async() => {
@@ -219,7 +217,6 @@ async function mintAssets(
      allowance = await contracts[network]["Currency"].methods
       .allowance(address, contracts[network]["Inventory"]._address)
       .call();
-      console.log("allowance",allowance); 
     }  catch (err) {
       console.log(err);
     }
@@ -227,15 +224,13 @@ async function mintAssets(
     try
     {
       
-    //if (allowance.lt(fullAmountD2.v)) {
-    if (true) {
+    if (allowance.lt(fullAmountD2.v)) {
       const result = await runSidechainTransaction(mnemonic)(
         "Currency",
         "approve",
         contracts[network]["Inventory"]._address,
         fullAmount.v
       );
-      console.log("result0",result);
       status = result.status;
       transactionHash = '0x0';
       id = -1;
@@ -249,8 +244,7 @@ async function mintAssets(
   else {status = true;
   }
   let hash;
-  //const reason = web3[network].utils.hexToAscii('');
-  //console.log("reason", reason);
+
   if (status) {
     const description = "";
     let fileName = resHash.split("/").pop();
@@ -269,7 +263,7 @@ async function mintAssets(
     */
     const res = await axios.get(resHash,  { responseType: 'arraybuffer' });
     hash = Buffer.from(res.data);
-    
+        
     const result = await runSidechainTransaction(mnemonic)(
       "Inventory",
       "mint",
@@ -280,20 +274,19 @@ async function mintAssets(
       description,
       quantity
     );
+    
     status = result.status;
     transactionHash = result.transactionHash;
-    console.log("result1",result);
     
-    /*
+    
     const assetId = new web3[network].utils.BN(
       result.logs[0].topics[3].slice(2),
       16
     ).toNumber();
     assetIds = [assetId, assetId + quantity - 1];
-    */
+    
   }
-  //return res.json({ status: ResponseStatus.Success, assetIds, error: null });
-  return res.json({ status: ResponseStatus.Success, error: null });
+  return res.json({ status: ResponseStatus.Success, assetIds, error: null });
 }
 
 async function createAsset(req, res, { web3, contracts }) {
@@ -481,10 +474,11 @@ async function deleteAsset(req, res) {
 
 async function sendAsset(req, res) {
   try {
-    const { fromUserAddress, toUserAddress, assetId } = req.body;
-    //const quantity = req.body.quantity ?? 1;
+    const { mnemonic, fromUserAddress, toUserAddress, assetId } = req.body;
+    const quantity = req.body.quantity;
     let status = true;
     let error = null;
+    /*
     const asyncGlobal = async() => {
       let data;
       try {
@@ -500,27 +494,30 @@ async function sendAsset(req, res) {
       if (i.DATA_KEY=="MAINNET_MNEMONIC")
         MAINNET_MNEMONIC= i.DATA_VALUE;
     }
+    */
     for (let i = 0; i < quantity; i++) {
       try {
-        const isApproved = await contracts.Inventory.methods
-          .isApprovedForAll(fromUserAddress, contracts["Trade"]._address)
+        const isApproved = await contracts[network].Inventory.methods
+          .isApprovedForAll(fromUserAddress, contracts[network]["Trade"]._address)
           .call();
+
         if (!isApproved) {
-          await runSidechainTransaction(MAINNET_MNEMONIC)(
+          await runSidechainTransaction(mnemonic)(
             "Inventory",
             "setApprovalForAll",
-            contracts["Trade"]._address,
+            contracts[network]["Trade"]._address,
             true
           );
         }
-
-        const result = await runSidechainTransaction(MAINNET_MNEMONIC)(
+        console.log(fromUserAddress,toUserAddress,assetId);
+        const result = await runSidechainTransaction(mnemonic)(
           "Inventory",
           "transferFrom",
           fromUserAddress,
           toUserAddress,
           assetId
         );
+
         status = status && result.status;
       } catch (err) {
         console.warn(err.stack);

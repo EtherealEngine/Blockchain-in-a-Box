@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useReducer } from "react";
 import {
   Box,
   Button,
@@ -17,15 +17,6 @@ import { IBasePayload, IStringPayload } from "../models/IPayloads";
 import { useHistory } from "react-router-dom";
 import Routes from "../constants/Routes";
 import "../App.css";
-import LoadingView from "./LoadingView";
-import {
-  setError,
-  setIsLoading,
-  setMainnetMnemonic,
-} from "../redux/slice/SetupReducer";
-import { GetSetupMnemonic, PostSetupVerifyMnemonic } from "../api/SetupApi";
-import { RootState } from "../redux/Store";
-import { useDispatch, useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   parentBox: {
@@ -42,11 +33,8 @@ const useStyles = makeStyles((theme) => ({
   subHeading: {
     marginTop: theme.spacing(3),
   },
-  error: {
-    marginTop: theme.spacing(3),
-  },
   button: {
-    width: "100%",
+    width: "100%"
   },
   bold: {
     fontWeight: "bold",
@@ -65,17 +53,26 @@ const useStyles = makeStyles((theme) => ({
 
 // Local state
 interface ILocalState {
+  mainnetMnemonic: string;
   showMnemonic: boolean;
+  isLoading: boolean;
+  error: string;
 }
 
 // Local default state
 const DefaultLocalState: ILocalState = {
-  showMnemonic: true,
+  mainnetMnemonic: "",
+  showMnemonic: false,
+  isLoading: false,
+  error: "",
 };
 
 // Local actions
 const LocalAction = {
+  ToggleLoading: "ToggleLoading",
+  SetMnemonic: "SetMnemonic",
   ToggleMnemonic: "ToggleMnemonic",
+  SetError: "SetError",
 };
 
 // Local reducer
@@ -84,10 +81,29 @@ const LocalReducer = (
   action: ActionResult<IBasePayload>
 ): ILocalState => {
   switch (action.type) {
+    case LocalAction.ToggleLoading: {
+      return {
+        ...state,
+        isLoading: !state.isLoading,
+      };
+    }
+    case LocalAction.SetMnemonic: {
+      return {
+        ...state,
+        mainnetMnemonic: (action.payload as IStringPayload).string,
+      };
+    }
     case LocalAction.ToggleMnemonic: {
       return {
         ...state,
         showMnemonic: !state.showMnemonic,
+      };
+    }
+    case LocalAction.SetError: {
+      return {
+        ...state,
+        isLoading: false,
+        error: (action.payload as IStringPayload).string,
       };
     }
     default: {
@@ -99,32 +115,20 @@ const LocalReducer = (
 const SetupMainnet: React.FunctionComponent = () => {
   const classes = useStyles();
   const history = useHistory();
-  const [{ showMnemonic }, dispatch] = useReducer(
+  const [{ mainnetMnemonic, showMnemonic, isLoading, error }, dispatch] = useReducer(
     LocalReducer,
     DefaultLocalState
   );
-  const reduxDispatch = useDispatch();
-  const { mainnetMnemonic, isLoading, error } = useSelector(
-    (state: RootState) => state.setup
-  );
 
-  useEffect(() => {
-    reduxDispatch(setError(""));
-    initialize();
-  }, []);
-
-  const initialize = async () => {
-    try {
-      reduxDispatch(setIsLoading(true));
-      const mnemonicResponse = await GetSetupMnemonic();
-      reduxDispatch(setMainnetMnemonic(mnemonicResponse.mnemonic));
-    } catch (err) {
-      reduxDispatch(setError(err.message));
+  const goToNextPage = () => {
+    let stateObj = localStorage.getItem('setupData');
+    if (stateObj) {
+      let stateObjData = JSON.parse(stateObj)
+      let setupObj = { ...stateObjData, mainnetMnemonic };
+      localStorage.setItem('setupData', JSON.stringify(setupObj));
+      history.push(Routes.SETUP_INFURA);
     }
-  };
 
-  if (isLoading) {
-    return <LoadingView loadingText={"Please wait"} />;
   }
 
   return (
@@ -167,7 +171,10 @@ const SetupMainnet: React.FunctionComponent = () => {
             type={showMnemonic ? "text" : "password"}
             value={mainnetMnemonic}
             onChange={(event) =>
-              reduxDispatch(setMainnetMnemonic(event.target.value))
+              dispatch({
+                type: LocalAction.SetMnemonic,
+                payload: { string: event.target.value },
+              })
             }
             endAdornment={
               <InputAdornment position="end">
@@ -185,7 +192,7 @@ const SetupMainnet: React.FunctionComponent = () => {
         </FormControl>
 
         {error && (
-          <Typography className={classes.error} variant="body2" color="error">
+          <Typography variant="body2" color="error">
             {error}
           </Typography>
         )}
@@ -198,8 +205,6 @@ const SetupMainnet: React.FunctionComponent = () => {
               color="secondary"
               size="large"
               onClick={() => {
-                reduxDispatch(setMainnetMnemonic(""));
-                reduxDispatch(setError(""));
                 history.push(Routes.SETUP_INFURA);
               }}
             >
@@ -212,23 +217,8 @@ const SetupMainnet: React.FunctionComponent = () => {
               variant="contained"
               color="primary"
               size="large"
-              onClick={async () => {
-                if (!mainnetMnemonic) {
-                  reduxDispatch(setError("Please fill mnemonic field"));
-                  return;
-                }
-
-                reduxDispatch(setIsLoading(true));
-                const verifyResponse = await PostSetupVerifyMnemonic(
-                  mainnetMnemonic
-                );
-                if (!verifyResponse.isValid) {
-                  reduxDispatch(setError("Please enter a valid mnemonic"));
-                  return;
-                }
-
-                reduxDispatch(setError(""));
-                history.push(Routes.SETUP_INFURA);
+              onClick={() => {
+                goToNextPage()
               }}
             >
               Continue
