@@ -6,7 +6,7 @@ EXPOSE 80
 EXPOSE 443
 EXPOSE 8443
 COPY package*.json ./
-RUN sudo npm install
+RUN npm install
 COPY . .
 
 CMD [ "npm", "run", "start" ]
