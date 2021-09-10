@@ -1,8 +1,11 @@
 const expressJSDocSwagger = require("express-jsdoc-swagger");
 const express = require("express");
 const path = require("path");
-const { addAdminRoutes } = require("./routes/admin.js");
+const { AdminRoutes } = require("./routes/adminRoute.js");
 const { addSetupRoutes } = require("./routes/setup.js");
+const { environmentRoutes } = require("./routes/environmentRoute")
+const { AddressRoutes } = require("./routes/addressRoute")
+const { UserRoutes} = require("./routes/userRoute")
 const { createWallet } = require("./routes/wallet.js");
 
 const { handleServerSideAuth, authenticateToken } = require("./routes/auth.js");
@@ -66,8 +69,11 @@ function addV1Routes(app) {
   };
 
   expressJSDocSwagger(app)(swaggerOptions);
-  addAdminRoutes(app);
+  AdminRoutes(app);
   addSetupRoutes(app);
+  environmentRoutes(app)
+  AddressRoutes(app)
+  UserRoutes(app)
   /**
    * Authentication payload
    * @typedef {object} AuthPayload

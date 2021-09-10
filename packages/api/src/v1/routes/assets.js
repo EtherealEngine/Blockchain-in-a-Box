@@ -199,7 +199,7 @@ async function mintAssets(
   const asyncGlobal = async() => {
     let data;
     try {
-      data = await sequelize.query('SELECT DATA_KEY,DATA_VALUE FROM `ENVIRONMENT_DATA`', {type: sequelize.QueryTypes.SELECT});
+      data = await sequelize.query('SELECT dataKey,dataValue FROM `ENVIRONMENT_DATA`', {type: sequelize.QueryTypes.SELECT});
     } catch (err) {
       console.log(err);
     }
@@ -208,8 +208,8 @@ async function mintAssets(
   const globalData = await asyncGlobal();
   let MINTING_FEE;
   for(let i of globalData){
-    if (i.DATA_KEY=="MINTING_FEE")
-      MINTING_FEE= i.DATA_VALUE;
+    if (i.dataKey=="MINTING_FEE")
+      MINTING_FEE= i.dataValue;
   }
   if (MINTING_FEE > 0) {
     let allowance ;
@@ -438,7 +438,7 @@ async function deleteAsset(req, res) {
     const asyncGlobal = async() => {
       let data;
       try {
-        data = await sequelize.query('SELECT DATA_KEY,DATA_VALUE FROM `ENVIRONMENT_DATA`', {type: sequelize.QueryTypes.SELECT});
+        data = await sequelize.query('SELECT dataKey,dataValue FROM `ENVIRONMENT_DATA`', {type: sequelize.QueryTypes.SELECT});
       } catch (err) {
         console.log(err);
       }
@@ -447,8 +447,8 @@ async function deleteAsset(req, res) {
     const globalData = await asyncGlobal();
     let MAINNET_MNEMONIC;
     for(let i of globalData){
-      if (i.DATA_KEY=="MAINNET_MNEMONIC")
-        MAINNET_MNEMONIC= i.DATA_VALUE;
+      if (i.dataKey=="MAINNET_MNEMONIC")
+        MAINNET_MNEMONIC= i.dataValue;
     }
 
     await runSidechainTransaction(MAINNET_MNEMONIC)(
@@ -482,7 +482,7 @@ async function sendAsset(req, res) {
     const asyncGlobal = async() => {
       let data;
       try {
-        data = await sequelize.query('SELECT DATA_KEY,DATA_VALUE FROM `ENVIRONMENT_DATA`', {type: sequelize.QueryTypes.SELECT});
+        data = await sequelize.query('SELECT dataKey,dataValue FROM `ENVIRONMENT_DATA`', {type: sequelize.QueryTypes.SELECT});
       } catch (err) {
         console.log(err);
       }
@@ -491,8 +491,8 @@ async function sendAsset(req, res) {
     const globalData = await asyncGlobal();
     let MAINNET_MNEMONIC;
     for(let i of globalData){
-      if (i.DATA_KEY=="MAINNET_MNEMONIC")
-        MAINNET_MNEMONIC= i.DATA_VALUE;
+      if (i.dataKey=="MAINNET_MNEMONIC")
+        MAINNET_MNEMONIC= i.dataValue;
     }
     */
     for (let i = 0; i < quantity; i++) {
@@ -561,7 +561,7 @@ async function updatePublicAsset(req, res, { contracts }) {
   const asyncGlobal = async() => {
     let data;
     try {
-      data = await sequelize.query('SELECT DATA_KEY,DATA_VALUE FROM `ENVIRONMENT_DATA`', {type: sequelize.QueryTypes.SELECT});
+      data = await sequelize.query('SELECT dataKey,dataValue FROM `ENVIRONMENT_DATA`', {type: sequelize.QueryTypes.SELECT});
     } catch (err) {
       console.log(err);
     }
@@ -570,8 +570,8 @@ async function updatePublicAsset(req, res, { contracts }) {
   const globalData = await asyncGlobal();
   let MAINNET_MNEMONIC;
   for(let i of globalData){
-    if (i.DATA_KEY=="MAINNET_MNEMONIC")
-      MAINNET_MNEMONIC= i.DATA_VALUE;
+    if (i.dataKey=="MAINNET_MNEMONIC")
+      MAINNET_MNEMONIC= i.dataValue;
   }
   try {
     if (!bip39.validateMnemonic(mnemonic)) {

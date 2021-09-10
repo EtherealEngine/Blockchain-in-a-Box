@@ -52,7 +52,7 @@ const loadPromise = (async() => {
   const asyncGlobal = async() => {
     let data;
     try {
-      data = await sequelize.query('SELECT DATA_KEY,DATA_VALUE FROM `ENVIRONMENT_DATA`', {type: sequelize.QueryTypes.SELECT});
+      data = await sequelize.query('SELECT dataKey,dataValue FROM `ENVIRONMENT_DATA`', {type: sequelize.QueryTypes.SELECT});
     } catch (err) {
       console.log(err);
     }
@@ -63,12 +63,12 @@ const loadPromise = (async() => {
   let INFURA_PROJECT_ID;
   let POLYGON_VIGIL_KEY;
   for(let i of globalData){
-    if (i.DATA_KEY=="ETHEREUM_HOST")
-      ETHEREUM_HOST= i.DATA_VALUE;
-      if (i.DATA_KEY=="INFURA_PROJECT_ID")
-      INFURA_PROJECT_ID= i.DATA_VALUE;
-      if (i.DATA_KEY=="POLYGON_VIGIL_KEY")
-      POLYGON_VIGIL_KEY= i.DATA_VALUE;
+    if (i.dataKey=="ETHEREUM_HOST")
+      ETHEREUM_HOST= i.dataValue;
+      if (i.dataKey=="INFURA_PROJECT_ID")
+      INFURA_PROJECT_ID= i.dataValue;
+      if (i.dataKey=="POLYGON_VIGIL_KEY")
+      POLYGON_VIGIL_KEY= i.dataValue;
   }
   console.log("in blockchain",ETHEREUM_HOST,INFURA_PROJECT_ID,POLYGON_VIGIL_KEY);
 

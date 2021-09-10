@@ -19,7 +19,7 @@ const { QueryTypes } = require('sequelize');
   async function getPastEvents(){
     let data;
     try {
-      data = await sequelize.query('SELECT DATA_KEY,DATA_VALUE FROM `ENVIRONMENT_DATA`', {type: sequelize.QueryTypes.SELECT});
+      data = await sequelize.query('SELECT dataKey,dataValue FROM `ENVIRONMENT_DATA`', {type: sequelize.QueryTypes.SELECT});
       //console.log("data",data);
       return data;
     } catch (err) {

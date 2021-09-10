@@ -30,26 +30,22 @@
  */
 
 module.exports = (sequelize, Sequelize) => sequelize.define('ADDRESS_DATA', {
-  NETWORK_TYPE: {
+  email : {
+    type: Sequelize.STRING,
+    primaryKey: true
+    },
+  networkType: {
       type: Sequelize.STRING,
       primaryKey: true
     },
-    IDENTITY_VALUE: Sequelize.STRING,
-    CURRENCY_VALUE: Sequelize.STRING,
-    CURRENCY_PROXY_VALUE: Sequelize.STRING,
-    INVENTORY_PROXY_VALUE: Sequelize.STRING,
-    TRADE_VALUE: Sequelize.STRING,
-    DELETE_FLAG: Sequelize.STRING,
-    CREATED_BY: Sequelize.STRING,
-    MODIFIED_BY: Sequelize.STRING,
-    /*CREATED_ON: {
-      type: 'TIMESTAMP',
-      defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-      allowNull: false
-    },
-    MODIFIED_ON: {
-      type: 'TIMESTAMP',
-      defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-      allowNull: false
-    },*/
+    identityValue: Sequelize.STRING,
+    currencyValue: Sequelize.STRING,
+    currencyProxyValue: Sequelize.STRING,
+    inventoryProxyValue: Sequelize.STRING,
+    tradeValue: Sequelize.STRING,
+    deleteFlag: Sequelize.STRING,
+    createdBy: Sequelize.STRING,
+    modifiedBy: Sequelize.STRING,
+  },{
+    timestamps: false
   });

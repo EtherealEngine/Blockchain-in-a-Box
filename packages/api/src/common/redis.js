@@ -17,7 +17,7 @@ async function connect(port, host) {
   const asyncGlobal = async() => {
     let data;
     try {
-      data = await sequelize.query('SELECT DATA_KEY,DATA_VALUE FROM `ENVIRONMENT_DATA`', {type: sequelize.QueryTypes.SELECT});
+      data = await sequelize.query('SELECT dataKey,dataValue FROM `ENVIRONMENT_DATA`', {type: sequelize.QueryTypes.SELECT});
     } catch (err) {
       console.log(err);
     }
@@ -26,8 +26,8 @@ async function connect(port, host) {
   const globalData = await asyncGlobal();
   let REDIS_KEY;
   for(let i of globalData){
-    if (i.DATA_KEY=="REDIS_KEY")
-      REDIS_KEY= i.DATA_VALUE;
+    if (i.dataKey=="REDIS_KEY")
+      REDIS_KEY= i.dataValue;
   }
   console.log("in redis",REDIS_KEY);
   if (!loadPromise) {

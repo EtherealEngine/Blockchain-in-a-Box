@@ -2,8 +2,7 @@ module.exports = (sequelize, Sequelize) =>
   sequelize.define("ONBOARDING_DATA", {
     email: {
       type: Sequelize.STRING,
-      primaryKey: true,
-      allowNull: false
+      primaryKey: true
     },
     assetContractName:{
         type: Sequelize.STRING,
@@ -54,6 +53,15 @@ module.exports = (sequelize, Sequelize) =>
       type: Sequelize.STRING,
     },
     usersMintAssets: {
+      type: Sequelize.STRING,
+    },
+    sidechainContractDeployed: {
+      type: Sequelize.STRING,
+    },
+    mainnetContractDeployed: {
+      type: Sequelize.STRING,
+    },
+    polygonContractDeployed: {
       type: Sequelize.STRING,
     }
   },{

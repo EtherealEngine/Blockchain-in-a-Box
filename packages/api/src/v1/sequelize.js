@@ -1,7 +1,7 @@
 const dotenv = require('dotenv');
 dotenv.config();
 const Sequelize = require('sequelize');
-const UserModel = require('./models/user');
+const UserModel = require('./models/usersData');
 const AdminModel = require('./models/adminData');
 const AddressDataModel = require('./models/addressData');
 const EnvironmentDataModel = require('./models/environmentData');
@@ -13,7 +13,7 @@ const sequelize = new Sequelize('dev', process.env.MYSQL_USER, process.env.MYSQL
 });
 
 const AdminData = AdminModel(sequelize, Sequelize);
-const User = UserModel(sequelize, Sequelize);
+const UserData = UserModel(sequelize, Sequelize);
 const AddressData = AddressDataModel(sequelize, Sequelize);
 const EnvironmentData = EnvironmentDataModel(sequelize, Sequelize);
 const OnBoardingData = OnboardingDataModel(sequelize, Sequelize);
@@ -27,4 +27,4 @@ sequelize.sync().then(() => {
 
 
 
-module.exports = { AdminData, AddressData, EnvironmentData, OnBoardingData  };
+module.exports = { AdminData, AddressData, EnvironmentData, OnBoardingData, UserData  };

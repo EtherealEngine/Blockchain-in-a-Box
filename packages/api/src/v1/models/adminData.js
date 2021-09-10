@@ -15,15 +15,15 @@
 
 module.exports = (sequelize, Sequelize) =>
   sequelize.define("ADMIN_DATA", {
-    EMAIL: {
+    email: {
       type: Sequelize.STRING,
       primaryKey: true,
     },
-    TOKEN: {
+    token: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    ORGANIZATION_NAME: {
+    organizationName: {
       type: Sequelize.STRING,
     }
   });

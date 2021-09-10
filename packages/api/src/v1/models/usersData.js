@@ -29,16 +29,27 @@
  *         - password
  */
 
-module.exports = (sequelize, Sequelize) => sequelize.define('ENVIRONMENT_DATA', {
-    dataKey: {
-      type: Sequelize.STRING, 
-      primaryKey: true
+module.exports = (sequelize, Sequelize) => sequelize.define('USER_DATE', {
+    userEmail: {
+      type: Sequelize.STRING,
+      primaryKey: true,
     },
-    dataValue: Sequelize.STRING,
-    oldDataValue: Sequelize.STRING,
-    deleteFlag: Sequelize.STRING,
-    createdBy: Sequelize.STRING,
-    modifiedBy: Sequelize.STRING,
+    firstName: Sequelize.STRING,
+    lastName: Sequelize.STRING,
+    email: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      primaryKey: true,
+    },
+    username: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    resetPasswordToken: Sequelize.STRING,
+    resetPasswordExpires:{
+      type: Sequelize.DATE,
+      defaultValue: Sequelize.NOW
+    },
   },{
     timestamps: false
   });

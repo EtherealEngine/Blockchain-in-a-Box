@@ -3,8 +3,8 @@ POST http://localhost:3003/registerUser HTTP/1.1
 content-type: application/json
 
 {
-  "first_name": "Test",
-  "last_name": "User",
+  "firstName": "Test",
+  "lastName": "User",
   "email": "testing@email.com",
   "username": "rest-client-tester",
   "password": "testing123"
@@ -35,8 +35,8 @@ Authorization: jwt eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..1hxJif-bLXux_fu6KG6Lh-d
 
 {
   "username": "rest-client-test",
-  "first_name": "Tester",
-  "last_name": "User",
+  "firstName": "Tester",
+  "lastName": "User",
   "email": "testing@email.com"
 }
 
