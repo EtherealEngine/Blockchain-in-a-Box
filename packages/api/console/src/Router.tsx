@@ -41,7 +41,7 @@ const Router: React.FunctionComponent = () => {
       !accessToken
     ) {
       console.log("User unauthorized");
-      history.push(Routes.LOGIN);
+      // history.push(Routes.LOGIN);
     }
   }, [location.pathname]);
 

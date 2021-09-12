@@ -121,6 +121,7 @@ const Login: React.FunctionComponent = () => {
 
         <TextField
           className={classes.textbox}
+          error={Boolean(error)}
           variant="outlined"
           label="Administrator Email address"
           placeholder="Enter email address"

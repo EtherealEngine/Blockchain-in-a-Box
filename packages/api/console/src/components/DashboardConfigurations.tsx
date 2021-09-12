@@ -7,7 +7,7 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import React, { useReducer } from "react";
+import React, { useReducer, useEffect } from "react";
 import "../App.css";
 import { ActionResult } from "../models/Action";
 import {
@@ -16,6 +16,17 @@ import {
   INumberPayload,
   IStringPayload,
 } from "../models/IPayloads";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getSideChainUrl,
+  getSideChainUrlSuccess
+} from "../redux/slice/DashboardReducer";
+import { RootState } from "../redux/Store";
+import LoadingView from "./LoadingView";
+import {
+  addNotification
+} from "../redux/slice/SetupReducer";
+
 
 const useStyles = makeStyles((theme) => ({
   rootBox: {
@@ -82,6 +93,7 @@ interface ILocalState {
   mintingFee: number;
   isLoading: boolean;
   error: string;
+  data: any
 }
 
 // Local default state
@@ -98,11 +110,13 @@ const DefaultLocalState: ILocalState = {
   mintingFee: 10,
   isLoading: false,
   error: "",
+  data: {}
 };
 
 // Local actions
 const LocalAction = {
   ToggleLoading: "ToggleLoading",
+  SETLOADVALUE: "Setloadvalue",
   SetOrganizationName: "SetOrganizationName",
   SetSidechainURL: "SetSidechainURL",
   SetCurrencyContractName: "SetCurrencyContractName",
@@ -121,6 +135,8 @@ const LocalReducer = (
   state: ILocalState,
   action: ActionResult<IBasePayload>
 ): ILocalState => {
+  console.log("action.payload ", action.payload);
+
   switch (action.type) {
     case LocalAction.ToggleLoading: {
       return {
@@ -195,6 +211,24 @@ const LocalReducer = (
         error: (action.payload as IStringPayload).string,
       };
     }
+    case LocalAction.SETLOADVALUE: {
+      let { data } = action.payload
+
+      return {
+        ...state,
+        assetContractName: data?.assetContractName,
+        organizationName: data?.organizationName,
+        sidechainURL: data?.sidechainURL,
+        currencyContractName: data?.currencyContractName,
+        currencyContractSymbol: data?.currencyContractSymbol,
+        currencyMarketCap: data?.currencyMarketCap,
+        assetContractSymbol: data?.assetContractSymbol,
+        assetTokenDescription: data?.assetTokenDescription,
+        usersMintAssets: data?.usersMintAssets === "false" ? false : true,
+        mintingFee: data?.mintingFee,
+
+      };
+    }
     default: {
       return state;
     }
@@ -220,8 +254,62 @@ const DashboardConfigurations: React.FunctionComponent = () => {
     },
     dispatch,
   ] = useReducer(LocalReducer, DefaultLocalState);
+  const reduxDispatch = useDispatch();
+
+  const { sideChaninLoading, getSideChainUrlData } = useSelector(
+    (state: RootState) => state.dashboard
+  );
+  const { notifications, setupLoader } = useSelector(
+    (state: RootState) => state.setup
+  );
+
+  const getSideChainData = () => {
+    reduxDispatch(getSideChainUrl())
+  }
+
+  useEffect(() => {
+    getSideChainData();
+  }, []);
+
+  useEffect(() => {
+    if (getSideChainUrlData && getSideChainUrlData['email']) {
+      console.log("getSideChainUrlData ", getSideChainUrlData);
+      dispatch({
+        type: LocalAction.SETLOADVALUE,
+        payload: { data: getSideChainUrlData },
+      })
+    }
+  }, [getSideChainUrlData]);
+
+  const saveConfig = () => {
+    let stateObj = {
+      ...getSideChainUrlData,
+      organizationName,
+      sidechainURL,
+      currencyContractName,
+      currencyContractSymbol,
+      currencyMarketCap,
+      assetContractName,
+      assetContractSymbol,
+      assetTokenDescription,
+      usersMintAssets,
+      mintingFee,
+    }
+
+    reduxDispatch(addNotification(stateObj));
+  }
+
+
+  if (sideChaninLoading || setupLoader) {
+    return (<>
+      <div>
+        <LoadingView loadingText={"Loading"} />
+      </div>
+    </>);
+  }
 
   return (
+
     <Box className={classes.rootBox}>
       <Typography variant={"subtitle1"}>
         Infura API Key: <span className={classes.green}>Configured</span>
@@ -418,6 +506,7 @@ const DashboardConfigurations: React.FunctionComponent = () => {
           <Checkbox
             color="primary"
             value={usersMintAssets}
+            checked={usersMintAssets}
             onChange={(event) =>
               dispatch({
                 type: LocalAction.SetUsersMintAssets,
@@ -459,6 +548,9 @@ const DashboardConfigurations: React.FunctionComponent = () => {
         variant="contained"
         color="primary"
         size="large"
+        onClick={() => {
+          saveConfig()
+        }}
       >
         Save Configuration
       </Button>

@@ -42,6 +42,7 @@ const adminReducer = createSlice({
       state.error = "";
       state.loginState = LoggedInState.Recurring;
       state.email = action.payload[0];
+      localStorage.setItem("email", action.payload[0]);
       state.loginToken = action.payload[1];
       state.accessToken = action.payload[2];
       state.organizationName = action.payload[3];

@@ -1,6 +1,10 @@
 import { Box, Button, makeStyles, Typography } from "@material-ui/core";
 import React from "react";
 import "../App.css";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../redux/Store";
+import LoadingView from "./LoadingView";
+
 
 const useStyles = makeStyles((theme) => ({
   rootBox: {
@@ -19,15 +23,34 @@ const useStyles = makeStyles((theme) => ({
   marginTop12: {
     marginTop: theme.spacing(12),
   },
+  green: {
+    color: "#00CF5F",
+  },
 }));
 
 const DashboardHome: React.FunctionComponent = () => {
   const classes = useStyles();
+  const { sideChaninLoading, getSideChainUrlData } = useSelector(
+    (state: RootState) => state.dashboard
+  );
+
+  if (sideChaninLoading) {
+    return (<>
+      <div>
+        <LoadingView loadingText={"Loading"} />
+      </div>
+    </>);
+  }
+
 
   return (
     <Box className={classes.rootBox}>
       <Typography variant={"subtitle1"}>
-        Sidechain Status: <span className={classes.red}>Not Ready</span>
+        Sidechain Status:
+        {
+          getSideChainUrlData?.sidechainContractDeployed == "true" ? (<span className={classes.green}>Configured</span>) : <span className={classes.red}>Not Ready</span>
+        }
+
       </Typography>
       <Typography>You need to deploy the contracts to the chain.</Typography>
       <Button
@@ -40,7 +63,10 @@ const DashboardHome: React.FunctionComponent = () => {
       </Button>
 
       <Typography variant={"subtitle1"} className={classes.marginTop8}>
-        Mainnet Status: <span className={classes.red}>Not Ready</span>
+        Mainnet Status:
+        {
+          (getSideChainUrlData?.mainnetContractDeployed == "true" && getSideChainUrlData?.infuraApiKey) ? (<span className={classes.green}>Configured</span>) : <span className={classes.red}>Not Ready</span>
+        }
       </Typography>
       <Typography>
         You need to add an Infura API key and deploy contracts to mainnet.
@@ -55,7 +81,10 @@ const DashboardHome: React.FunctionComponent = () => {
       </Button>
 
       <Typography variant={"subtitle1"} className={classes.marginTop8}>
-        Polygon Status: <span className={classes.red}>Not Ready</span>
+        Polygon Status:
+        {
+          (getSideChainUrlData?.polygonContractDeployed == "true" && getSideChainUrlData?.polygonApiKey) ? (<span className={classes.green}>Configured</span>) : <span className={classes.red}>Not Ready</span>
+        }
       </Typography>
       <Typography>
         You need to add a MaticVigil API key and deploy contracts to Polygon.

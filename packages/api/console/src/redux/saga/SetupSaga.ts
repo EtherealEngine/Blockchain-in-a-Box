@@ -50,10 +50,13 @@ function* PostSetupDataApiCall(action: Action) {
             PostSetupData,
             action.payload
         );
-        console.log("response ", response);
-        yield put(
-            addNotificationSuccess(response)
-        );
+        console.log("response ", { ...response, ...action.payload });
+        if (response['Status'] == 200) {
+            yield put(
+                addNotificationSuccess({ ...action.payload, 'Status': 200 })
+            );
+        }
+
 
     }
 
