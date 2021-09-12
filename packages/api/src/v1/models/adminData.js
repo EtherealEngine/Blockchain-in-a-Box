@@ -26,4 +26,6 @@ module.exports = (sequelize, Sequelize) =>
     organizationName: {
       type: Sequelize.STRING,
     }
+  },{
+      timestamps: false
   });

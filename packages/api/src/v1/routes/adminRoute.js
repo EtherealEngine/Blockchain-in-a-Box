@@ -79,16 +79,12 @@ async function AdminRoutes(app) {
       if (adminObj) {
         await adminObj.update({ token: token });
       } else {
-        let adminCount = await AdminData.count();
-        // Only create if it was first time login.
-        if (adminCount === 0) {
-          await AdminData.create({ email: email, token: token });
-        } else {
-          return res.json({
-            status: ResponseStatus.Error,
-            error: "Unauthorized email.",
-          });
-        }
+        await AdminData.create({ email: email, token: token });
+        return res.json({
+          status: "User created in the database",
+          error: undefined,
+        });
+		 
       }
 
       // Append slash at the end of website url
