@@ -63,6 +63,15 @@ module.exports = (sequelize, Sequelize) =>
     },
     polygonContractDeployed: {
       type: Sequelize.STRING,
+    },
+    pinataApiKey: {
+      type: Sequelize.STRING,
+    },
+    pinataApiSecretKey: {
+      type: Sequelize.STRING,
+    },
+    maticVigilKey: {
+      type: Sequelize.STRING,
     }
   },{
     timestamps: false
