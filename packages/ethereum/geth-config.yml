@@ -16,6 +16,7 @@ data:
         "constantinopleBlock": 0,
         "petersburgBlock": 0,
         "istanbulBlock": 0,
+        "londonBlock": 0,
         "clique": {
           "period": 15,
           "epoch": 30000

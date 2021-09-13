@@ -23,22 +23,27 @@ spec:
       containers:
       - name: geth
         image: ethereum/client-go
+        imagePullPolicy: "Always"
         ports:
         - containerPort: 8545
         - containerPort: 30303
         args:
         - "--datadir=/var/geth"
         - "--networkid=15"
-        - "--rpc"
-        - "--rpcaddr=0.0.0.0"
-        - "--rpcapi=admin,db,eth,debug,miner,net,shh,txpool,personal,web3"
-        - "--rpccorsdomain=*"
-        - "--rpcvhosts=*"
+        - "--http"
+        - "--http.addr=0.0.0.0"
+        - "--http.api=admin,db,eth,debug,miner,net,shh,txpool,personal,web3"
+        - "--http.corsdomain=*"
+        - "--http.vhosts=*"
         - "--allow-insecure-unlock"
         # - "-verbosity=6"
         resources:
           requests:
-            cpu: 100m
+            memory: "512Mi"
+            cpu: "0.5"
+          limits:
+            memory: "1024Mi"
+            cpu: "1"
         volumeMounts:
         - name: geth-data
           mountPath: /var/geth
@@ -50,6 +55,7 @@ spec:
           timeoutSeconds: 5
       - name: geth-ethnetintel
         image: kairen/ethnetintel
+        imagePullPolicy: "Always"
         env:
         - name: NAME_PREFIX
           valueFrom:
@@ -67,6 +73,7 @@ spec:
           value: "8545"
       - name: geth-auto-peer
         image: kairen/auto-peer
+        imagePullPolicy: "Always"
         env:
         - name: SERVICE_NAME
           value: "geth"
@@ -85,6 +92,7 @@ spec:
       initContainers:
       - name: init-genesis
         image: ethereum/client-go
+        imagePullPolicy: "Always"
         args:
         - "removedb"
         - "--datadir=/var/geth;"
