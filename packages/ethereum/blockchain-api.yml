@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: blockchain-api
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: blockchain-api
@@ -17,3 +17,10 @@ spec:
         image: swpnit/blockchain-api:latest
         ports:
         - containerPort: 8080
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: ".5"
+          limits:
+            memory: "2048Mi"
+            cpu: "2"
