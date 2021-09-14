@@ -6,7 +6,8 @@ const Endpoints = {
   POST_ADMIN_AUTHENTICATION: '/api/v1/admin/authentication',
   SETUP_ORG: "/api/v1/onboarding-data/",
   // ONBOARDING_DATA: "/api/v1/onboarding-data?email=devjeetroychowdhury@gmail.com"
-  ONBOARDING_DATA: "/api/v1/onboarding-data"
+  ONBOARDING_DATA: "/api/v1/onboarding-data",
+  ADD_USER: "/api/v1/user-data"
 };
 
 export default Endpoints;

@@ -12,12 +12,15 @@ import {
   TextField,
   Grid
 } from "@material-ui/core";
-import React from "react";
+import React, { useEffect } from "react";
 import "../App.css";
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import { grey } from "@material-ui/core/colors";
+import { useDispatch, useSelector } from "react-redux";
+import { addUserDetails, getUserList } from "../redux/slice/DashboardReducer";
+import { RootState } from "../redux/Store";
 
 const useStyles = makeStyles((theme) => ({
   rootBox: {
@@ -39,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     // border: '2px solid #000',
     boxShadow: theme.shadows[5],
-    padding: theme.spacing(10, 15, 15),
+    padding: theme.spacing(5, 5, 5),
   },
   textbox: {
     marginTop: theme.spacing(2),
@@ -66,8 +69,15 @@ const useStyles = makeStyles((theme) => ({
 
 const DashboardUsers: React.FunctionComponent = () => {
   const classes = useStyles();
+  const reduxDispatch = useDispatch();
+
+  const { userDataLoading, userSavedSuccesssfully } = useSelector((state: RootState) => state.dashboard)
 
   const [open, setOpen] = React.useState(false);
+
+  const [userData, setUserData] = React.useState(
+    { userEmail: "", username: "", firstName: "", lastName: "", password: "" }
+  );
 
   const handleOpen = () => {
     setOpen(true);
@@ -76,6 +86,21 @@ const DashboardUsers: React.FunctionComponent = () => {
   const handleClose = () => {
     setOpen(false);
   };
+
+  useEffect(() => {
+    if (userSavedSuccesssfully && open) {
+      handleClose()
+      reduxDispatch(getUserList())
+    }
+  }, [userSavedSuccesssfully])
+
+  useEffect(() => {
+    reduxDispatch(getUserList())
+  }, []);
+
+  const saveUserData = e => {
+    reduxDispatch(addUserDetails(userData))
+  }
 
 
   return (
@@ -117,6 +142,7 @@ const DashboardUsers: React.FunctionComponent = () => {
                   required
                   fullWidth
                   style={{ width: 400 }}
+                  onChange={(e) => setUserData({ ...userData, username: e.target.value })}
                 />
 
                 <TextField
@@ -127,24 +153,49 @@ const DashboardUsers: React.FunctionComponent = () => {
                   required
                   fullWidth
                   style={{ width: 400 }}
+                  onChange={(e) => setUserData({ ...userData, userEmail: e.target.value })}
                 />
 
                 <TextField
                   className={classes.textbox}
                   variant="outlined"
-                  label="Role"
-                  placeholder="Enter user role"
+                  label="First Name"
+                  placeholder="Enter user First Name"
                   required
                   fullWidth
                   style={{ width: 400 }}
+                  onChange={(e) => setUserData({ ...userData, firstName: e.target.value })}
                 />
+
+                <TextField
+                  className={classes.textbox}
+                  variant="outlined"
+                  label="Last Name"
+                  placeholder="Enter user Last Name"
+                  required
+                  fullWidth
+                  style={{ width: 400 }}
+                  onChange={(e) => setUserData({ ...userData, lastName: e.target.value })}
+                />
+
+                <TextField
+                  className={classes.textbox}
+                  variant="outlined"
+                  label="Password"
+                  placeholder="Enter user Password"
+                  required
+                  fullWidth
+                  style={{ width: 400 }}
+                  onChange={(e) => setUserData({ ...userData, password: e.target.value })}
+                />
+
 
                 <Button
                   className={classes.buttonSubmit}
                   variant="contained"
                   color="primary"
                   size="large"
-
+                  onClick={saveUserData}
                 >
                   Submit
                 </Button>

@@ -107,7 +107,7 @@ const SetupPolygonVigil: React.FunctionComponent = () => {
       let stateObjData = JSON.parse(stateObj)
       let setupObj = { ...stateObjData, polygonApiKey };
       localStorage.setItem('setupData', JSON.stringify(setupObj));
-      history.push(Routes.SETUP_COMPLETED);
+      history.push(Routes.SETUP_PINATA);
 
     }
 

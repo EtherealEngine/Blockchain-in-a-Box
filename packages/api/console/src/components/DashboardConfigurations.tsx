@@ -312,7 +312,10 @@ const DashboardConfigurations: React.FunctionComponent = () => {
 
     <Box className={classes.rootBox}>
       <Typography variant={"subtitle1"}>
-        Infura API Key: <span className={classes.green}>Configured</span>
+        Infura API Key:
+        {
+          getSideChainUrlData?.infuraApiKey ? (<span className={classes.green}>Configured</span>) : <span className={classes.red}>Not Ready</span>
+        }
       </Typography>
       <Typography>
         You need to add an Infura API key and deploy contracts to mainnet.
@@ -327,7 +330,10 @@ const DashboardConfigurations: React.FunctionComponent = () => {
       </Button>
 
       <Typography variant={"subtitle1"} className={classes.marginTop8}>
-        Matic Vigil API Key: <span className={classes.red}>Not Configured</span>
+        Matic Vigil API Key:
+        {
+          getSideChainUrlData?.polygonApiKey ? (<span className={classes.green}>Configured</span>) : <span className={classes.red}>Not Ready</span>
+        }
       </Typography>
       <Typography>
         You need to add a MaticVigil API key and deploy contracts to Polygon.
@@ -342,7 +348,10 @@ const DashboardConfigurations: React.FunctionComponent = () => {
       </Button>
 
       <Typography variant={"subtitle1"} className={classes.marginTop8}>
-        Pinata API Key: <span className={classes.red}>Not Configured</span>
+        Pinata API Key:
+        {
+          getSideChainUrlData?.pinataApiKey ? (<span className={classes.green}>Configured</span>) : <span className={classes.red}>Not Ready</span>
+        }
       </Typography>
       <Typography>
         You need to add a Pinata API key to host files on IPFS.
