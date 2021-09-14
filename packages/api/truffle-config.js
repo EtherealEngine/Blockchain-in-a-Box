@@ -6,19 +6,20 @@ require("dotenv").config();
 module.exports = {
   contracts_directory: "./contracts",
   networks: {
+    /*
     development: {
       host: "a42f3ac8ef865438ca0b99bd673f4e70-871205895.us-west-1.elb.amazonaws.com", // Localhost (default: none)
       port: 80, // Standard Ethereum port (default: none)
       network_id: "*", // Any network (default: none)
       timeoutBlocks: 20000,
       networkCheckTimeout: 200000,
-    },
-    /*
+    },*/
+    
     development: {
       host: "127.0.0.1", // Localhost (default: none)
       port: 7545, // Standard Ethereum port (default: none)
       network_id: "*", // Any network (default: none)
-    },*/
+    },
     testnet: {
       host: "localhost",
       provider: () =>
