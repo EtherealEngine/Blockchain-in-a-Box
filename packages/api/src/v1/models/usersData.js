@@ -36,6 +36,7 @@ module.exports = (sequelize, Sequelize) => sequelize.define('USER_DATE', {
     },
     firstName: Sequelize.STRING,
     lastName: Sequelize.STRING,
+    userRole: Sequelize.STRING,
     email: {
       type: Sequelize.STRING,
       allowNull: false,
