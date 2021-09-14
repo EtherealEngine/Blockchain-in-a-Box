@@ -21,6 +21,7 @@ import { grey } from "@material-ui/core/colors";
 import { useDispatch, useSelector } from "react-redux";
 import { addUserDetails, getUserList } from "../redux/slice/DashboardReducer";
 import { RootState } from "../redux/Store";
+import EditIcon from '@material-ui/icons/Edit';
 
 const useStyles = makeStyles((theme) => ({
   rootBox: {
@@ -71,13 +72,17 @@ const DashboardUsers: React.FunctionComponent = () => {
   const classes = useStyles();
   const reduxDispatch = useDispatch();
 
-  const { userDataLoading, userSavedSuccesssfully } = useSelector((state: RootState) => state.dashboard)
+  const { userDataLoading, userSavedSuccesssfully, userList } = useSelector((state: RootState) => state.dashboard)
 
   const [open, setOpen] = React.useState(false);
 
   const [userData, setUserData] = React.useState(
     { userEmail: "", username: "", firstName: "", lastName: "", password: "" }
   );
+
+  useEffect(() => {
+    reduxDispatch(getUserList())
+  }, [])
 
   const handleOpen = () => {
     setOpen(true);
@@ -211,20 +216,25 @@ const DashboardUsers: React.FunctionComponent = () => {
           <TableHead>
             <TableRow>
               <TableCell>Email</TableCell>
-              <TableCell>Role</TableCell>
+              <TableCell>First Name</TableCell>
+              <TableCell>Last Name</TableCell>
+              <TableCell>User Name</TableCell>
+              {/* <TableCell>Action</TableCell> */}
             </TableRow>
           </TableHead>
           <TableBody>
-            {Array(8)
-              .fill(0)
-              .map((row, index) => (
-                <TableRow key={index}>
-                  <TableCell component="th" scope="row">
-                    user{index}@gmail.com
-                  </TableCell>
-                  <TableCell>Role {index}</TableCell>
-                </TableRow>
-              ))}
+            {userList && userList.map((row: any, index) => (
+              <TableRow key={index}>
+
+                <TableCell>{row.userEmail}</TableCell>
+                <TableCell>{row.firstName}</TableCell>
+                <TableCell>{row.lastName}</TableCell>
+                <TableCell>{row.username}</TableCell>
+                {/* <TableCell>
+                  <EditIcon />
+                </TableCell> */}
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>

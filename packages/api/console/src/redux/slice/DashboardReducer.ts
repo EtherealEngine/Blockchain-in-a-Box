@@ -56,7 +56,7 @@ const dashboardReducer = createSlice({
             state.userListLoading = false
         },
         getUserListFaliure(state, action: PayloadAction<any>) {
-            // state.userList = action.payload;
+            state.userList = [...action.payload.Data] as any;
             state.userListLoading = false
         }
 
