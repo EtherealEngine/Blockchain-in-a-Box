@@ -16,7 +16,7 @@ async function UserRoutes(app){
   
     app.get("/api/v1/user-data", async (req,res,next)=>{
         let email  = req.query.email
-        let data = await UserData.findOne({ where: { email: email } });
+        let data = await UserData.findAll({ where: { email: email } });
         if(data)
             res.end(JSON.stringify({"Status":200, "Data":data}))
         else

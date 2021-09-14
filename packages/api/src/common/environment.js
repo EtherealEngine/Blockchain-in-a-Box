@@ -15,8 +15,7 @@ const sequelize = new Sequelize('dev', process.env.MYSQL_USER, process.env.MYSQL
 });
 const { QueryTypes } = require('sequelize');
 
-//(async() => {
-  async function getPastEvents(){
+  async function getGlobal(){
     let data;
     try {
       data = await sequelize.query('SELECT dataKey,dataValue FROM `ENVIRONMENT_DATA`', {type: sequelize.QueryTypes.SELECT});
@@ -27,32 +26,8 @@ const { QueryTypes } = require('sequelize');
     }
   };
 
-  //Save response on a variable
-  const globalData = getPastEvents();
-  //return await asyncGlobal();
-  /*
-  globalData.then(function(result) {
-    for (i in result )
-    {
-      console.log("result 1",result[i]); 
-    }
-  });
-  */
-  //console.log("globalData",getPastEvents());
-//})();
-//console.log("globalData",globalData);
-
-/*
-const express = require("express");
-const fetch = require("node-fetch");
-
-var request = require('request');
-
-request('https://pq3j3a4qg8.execute-api.us-west-1.amazonaws.com/prod/environment', function (error, response, body) {
-    if (!error && response.statusCode === 200) {
-      }
-})
-*/
+  const globalData = getGlobal();
+ 
 
 const INFURA_PROJECT_ID = process.env.INFURA_PROJECT_ID;
 const AUTH_TOKEN_SECRET = process.env.AUTH_TOKEN_SECRET;

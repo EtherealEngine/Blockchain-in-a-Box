@@ -7,12 +7,11 @@ const bip39 = require("bip39");
 const { Transaction } = require("@ethereumjs/tx");
 const Common = require ("@ethereumjs/common").default;
 
-const addresses = require("../../config/addresses.js");
+//const addresses = require("../../config/addresses.js");
 const abis = require("../../config/abi.js");
 const ports = require("../../config/ports.js");
 
-//const globalv = require("./environment.js").globalData;
-
+const network = process.env.PRODUCTION ? "mainnetsidechain" : "testnetsidechain";
 const { Sequelize } = require("sequelize");
 
 const sequelize = new Sequelize('dev', process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
@@ -70,7 +69,23 @@ const loadPromise = (async() => {
       if (i.dataKey=="POLYGON_VIGIL_KEY")
       POLYGON_VIGIL_KEY= i.dataValue;
   }
-  console.log("in blockchain",ETHEREUM_HOST,INFURA_PROJECT_ID,POLYGON_VIGIL_KEY);
+
+  const asyncAddress = async() => {
+    let data;
+    try {
+      data = await sequelize.query('SELECT identityValue,currencyValue,inventoryValue,currencyProxyValue,inventoryProxyValue,tradeValue FROM `ADDRESS_DATA` WHERE networkType=?', {type: sequelize.QueryTypes.SELECT,replacements: [network]});
+    } catch (err) {
+      console.log(err);
+    }
+    return data;
+  };
+  const addressData = await asyncAddress();
+  let IDENTITY_ADDRESS = addressData[0]['identityValue'];
+  let CURRENCY_ADDRESS = addressData[0]['currencyValue'];
+  let CURRENCYPROXY_ADDRESS = addressData[0]['currencyProxyValue'];
+  let INVENTORY_ADDRESS = addressData[0]['inventoryValue'];
+  let INVENTORYPROXY_ADDRESS = addressData[0]['inventoryProxyValue'];
+  let TRADE_ADDRESS = addressData[0]['tradeValue'];
 
   const ethereumHostAddress =  await new Promise((accept, reject) => {
       dns.resolve4(ETHEREUM_HOST, (err, addresses) => {
@@ -126,28 +141,32 @@ const loadPromise = (async() => {
   //   polygon: `wss://rpc-webverse-mainnet.maticvigil.com/v1/${POLYGON_VIGIL_KEY}`,
   // };
   contracts = {};
-  BlockchainNetworks.forEach((network) => {
-    contracts[network] = {
-      Identity: new web3[network].eth.Contract(
-        abis.Identity,
-        addresses[network].Identity
-      ),
-      Currency: new web3[network].eth.Contract(abis.Currency, addresses[network].Currency),
-      CurrencyProxy: new web3[network].eth.Contract(
-        abis.CurrencyProxy,
-        addresses[network].CurrencyProxy
-      ),
-      Inventory: new web3[network].eth.Contract(abis.Inventory, addresses[network].Inventory),
-      InventoryProxy: new web3[network].eth.Contract(
-        abis.InventoryProxy,
-        addresses[network].InventoryProxy
-      ),
-      Trade: new web3[network].eth.Contract(
-        abis.Trade,
-        addresses[network].Trade
-      ),
-    };
-  });
+  contracts[network] = {
+    Identity: new web3[network].eth.Contract(
+      abis.Identity,
+      IDENTITY_ADDRESS
+    ),
+    Currency: new web3[network].eth.Contract(
+      abis.Currency, 
+      CURRENCY_ADDRESS
+    ),
+    CurrencyProxy: new web3[network].eth.Contract(
+      abis.CurrencyProxy,
+      CURRENCYPROXY_ADDRESS
+    ),
+    Inventory: new web3[network].eth.Contract(
+      abis.Inventory, 
+      INVENTORY_ADDRESS
+    ),
+    InventoryProxy: new web3[network].eth.Contract(
+      abis.InventoryProxy,
+      INVENTORYPROXY_ADDRESS
+    ),
+    Trade: new web3[network].eth.Contract(
+      abis.Trade,
+      TRADE_ADDRESS
+    ),
+  };
 })();
 
 async function getPastEvents({
@@ -172,7 +191,7 @@ async function getPastEvents({
 async function getBlockchain() {
   await loadPromise;
   return {
-    addresses,
+    //addresses,
     abis,
     web3,
     web3sockets,
@@ -185,6 +204,7 @@ async function getBlockchain() {
   };
 }
 
+/*
 function makeWeb3WebsocketContract(chainName, contractName) {
   const web3socketProvider = new Web3.providers.WebsocketProvider(
     web3socketProviderUrls[chainName]
@@ -214,6 +234,7 @@ function makeWeb3WebsocketContract(chainName, contractName) {
 
   return web3socketContract;
 }
+*/
 
 const transactionQueue = {
   running: false,
@@ -237,7 +258,7 @@ const transactionQueue = {
 };
 
 const runSidechainTransaction = mnemonic => async (contractName, method, ...args) => {
-  const networkSidechain = process.env.PRODUCTION ? "mainnetsidechain" : "testnetsidechain";
+  
   const seedBuffer = bip39.mnemonicToSeedSync(mnemonic);
   const wallet = hdkey.fromMasterSeed(seedBuffer).derivePath(`m/44'/60'/0'/0/0`).getWallet();
   console.log(contractName,method);
@@ -245,11 +266,11 @@ const runSidechainTransaction = mnemonic => async (contractName, method, ...args
   //const address = '0xf90c251e42367a6387afecba10b95c97eaf3b287';
   const privateKey = wallet.getPrivateKeyString();
   //const privateKey = '0xd99643dec67c96c08d65afe3d2c6a4e6da4e2717cc99fb155096d9f2f4a4434b';
-  const privateKeyBytes = Uint8Array.from(web3[networkSidechain].utils.hexToBytes(privateKey));
+  const privateKeyBytes = Uint8Array.from(web3[network].utils.hexToBytes(privateKey));
    
-  const txData = contracts[networkSidechain][contractName].methods[method](...args);
+  const txData = contracts[network][contractName].methods[method](...args);
   const data = txData.encodeABI();
-  var balance =await web3[networkSidechain].eth.getBalance(address);
+  var balance =await web3[network].eth.getBalance(address);
   var gas;
 
   try{
@@ -258,20 +279,20 @@ const runSidechainTransaction = mnemonic => async (contractName, method, ...args
   console.warn(err);
   null;
 }
-  let _to = contracts[networkSidechain][contractName]._address;
-  let gasPrice = await web3[networkSidechain].eth.getGasPrice();
+  let _to = contracts[network][contractName]._address;
+  let gasPrice = await web3[network].eth.getGasPrice();
   gasPrice = parseInt(gasPrice, 10);
-  console.log("networkSidechain---",networkSidechain,"balance---",balance,"address---",contracts[networkSidechain][contractName]._address,args[0],"gasPrice---",gasPrice,"gas---",gas,"total---",gas*gasPrice);
+  console.log("network---",network,"from address---",address,"to address---",_to,"balance---",balance,"contract address---",contracts[network][contractName]._address,"gasPrice---",gasPrice,"gas---",gas,"total---",gas*gasPrice);
   //await transactionQueue.lock();
-  const nonce = await web3[networkSidechain].eth.getTransactionCount(address);
+  const nonce = await web3[network].eth.getTransactionCount(address);
   
   let tx = Transaction.fromTxData({
     from: address,
     to: _to,
-    nonce: '0x' + new web3[networkSidechain].utils.BN(nonce).toString(16),
-    gas: '0x' + new web3[networkSidechain].utils.BN(gas).toString(16),
-    gasPrice: '0x' + new web3[networkSidechain].utils.BN(gasPrice).toString(16),
-    gasLimit: '0x' + new web3[networkSidechain].utils.BN(0x47b760).toString(16),
+    nonce: '0x' + new web3[network].utils.BN(nonce).toString(16),
+    gas: '0x' + new web3[network].utils.BN(gas).toString(16),
+    gasPrice: '0x' + new web3[network].utils.BN(gasPrice).toString(16),
+    gasLimit: '0x' + new web3[network].utils.BN(0x47b760).toString(16),
     data,
   },{
     common: Common.forCustomChain(
@@ -285,7 +306,7 @@ const runSidechainTransaction = mnemonic => async (contractName, method, ...args
     ),
   }).sign(privateKeyBytes);
   const rawTx = '0x' + tx.serialize().toString('hex');
-  const receipt = await web3[networkSidechain].eth.sendSignedTransaction(rawTx);
+  const receipt = await web3[network].eth.sendSignedTransaction(rawTx);
   //transactionQueue.unlock();
   return receipt;
 };
@@ -293,6 +314,6 @@ const runSidechainTransaction = mnemonic => async (contractName, method, ...args
 module.exports = {
   getBlockchain,
   getPastEvents,
-  makeWeb3WebsocketContract,
+  //makeWeb3WebsocketContract,
   runSidechainTransaction,
 };

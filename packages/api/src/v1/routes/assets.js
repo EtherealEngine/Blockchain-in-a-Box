@@ -58,7 +58,7 @@ const pinataOptions = {
 
 const redisClient = getRedisClient();
 
-const network = PRODUCTION ? "mainnet" : "testnet";
+const network = process.env.PRODUCTION ? "mainnetsidechain" : "testnetsidechain";
 
 const { Readable } = require("stream");
 
@@ -175,10 +175,11 @@ async function mintAssets(
   res
 ) {
   let assetIds, status, transactionHash, id;
+/*
   let network = "mainnetsidechain";
   if (DEVELOPMENT) {
     network = "testnetsidechain";
-  }
+  }*/
   const fullAmount = {
     t: "uint256",
     v: new web3[network].utils.BN(1e9)
