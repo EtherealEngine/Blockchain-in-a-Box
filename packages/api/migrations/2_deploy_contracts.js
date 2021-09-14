@@ -1,7 +1,7 @@
-const find = require('find-up');
+//const find = require('find-up');
 const { Sequelize, Model, DataTypes } = require("sequelize");
-
-console.log("in deploy contract");
+const email = process.argv[6];
+console.log("in deploy contract for ",email);
 const sequelize = new Sequelize('dev', process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
   host: process.env.MYSQL_URL,
   dialect: 'mysql',
@@ -40,7 +40,7 @@ module.exports = async function (deployer) {
   const asyncCheck = async(networkType) => {
     let data;
     try {
-      data = await sequelize.query('SELECT count(1) cnt FROM `ADDRESS_DATA` WHERE NETWORK_TYPE=?', {type: sequelize.QueryTypes.SELECT,replacements: [networkType]});
+      data = await sequelize.query('SELECT count(1) cnt FROM `ADDRESS_DATA` WHERE networkType=?', {type: sequelize.QueryTypes.SELECT,replacements: [networkType]});
     } catch (err) {
       console.log(err);
     }
@@ -48,14 +48,14 @@ module.exports = async function (deployer) {
   };
   var checkData = await asyncCheck(networkType);
   checkData=JSON.stringify(checkData);
-  if (parseInt(checkData.substring(8,9)) >0)
-    return console.error("Contract already deployed for",networkType,"network");
+  //if (parseInt(checkData.substring(8,9)) >0)
+  //  return console.error("Contract already deployed for",networkType,"network");
 
   //setup environment variable from DB
   const asyncGlobal = async() => {
     let data;
     try {
-      data = await sequelize.query('SELECT DATA_KEY,DATA_VALUE FROM `ENVIRONMENT_DATA`', {type: sequelize.QueryTypes.SELECT});
+      data = await sequelize.query('SELECT dataKey,dataValue FROM `ENVIRONMENT_DATA`', {type: sequelize.QueryTypes.SELECT});
     } catch (err) {
       console.log(err);
     }
@@ -83,46 +83,46 @@ module.exports = async function (deployer) {
   let ASSET_BASE_URI;
   let MINTING_FEE;
   for(let i of globalData){
-    if (i.DATA_KEY=="DEVELOPMENT_SIGNER_ADDRESS")
-      DEVELOPMENT_SIGNER_ADDRESS= i.DATA_VALUE;
-    if (i.DATA_KEY=="DEVELOPMENT_TREASURY_ADDRESS")
-      DEVELOPMENT_TREASURY_ADDRESS= i.DATA_VALUE;
-    if (i.DATA_KEY=="MAINNET_SIGNER_ADDRESS")
-      MAINNET_SIGNER_ADDRESS= i.DATA_VALUE;
-    if (i.DATA_KEY=="MAINNET_TREASURY_ADDRESS")
-      MAINNET_TREASURY_ADDRESS= i.DATA_VALUE;
-    if (i.DATA_KEY=="MAINNET_SIDECHAIN_SIGNER_ADDRESS")
-      MAINNET_SIDECHAIN_SIGNER_ADDRESS= i.DATA_VALUE;
-    if (i.DATA_KEY=="MAINNET_SIDECHAIN_TREASURY_ADDRESS")
-      MAINNET_SIDECHAIN_TREASURY_ADDRESS= i.DATA_VALUE;
-    if (i.DATA_KEY=="POLYGON_SIGNER_ADDRESS")
-      POLYGON_SIGNER_ADDRESS= i.DATA_VALUE;
-    if (i.DATA_KEY=="POLYGON_TREASURY_ADDRESS")
-      POLYGON_TREASURY_ADDRESS= i.DATA_VALUE;
-    if (i.DATA_KEY=="TESTNET_POLYGON_SIGNER_ADDRESS")
-      TESTNET_POLYGON_SIGNER_ADDRESS= i.DATA_VALUE;
-    if (i.DATA_KEY=="TESTNET_POLYGON_TREASURY_ADDRESS")
-      TESTNET_POLYGON_TREASURY_ADDRESS= i.DATA_VALUE;
-    if (i.DATA_KEY=="TESTNET_SIGNER_ADDRESS")
-      TESTNET_SIGNER_ADDRESS= i.DATA_VALUE;
-    if (i.DATA_KEY=="TESTNET_TREASURY_ADDRESS")
-      TESTNET_TREASURY_ADDRESS= i.DATA_VALUE;
-    if (i.DATA_KEY=="TESTNET_SIDECHAIN_SIGNER_ADDRESS")
-      TESTNET_SIDECHAIN_SIGNER_ADDRESS= i.DATA_VALUE;
-    if (i.DATA_KEY=="TESTNET_SIDECHAIN_TREASURY_ADDRESS")
-      TESTNET_SIDECHAIN_TREASURY_ADDRESS= i.DATA_VALUE;
-    if (i.DATA_KEY=="COIN_CONTRACT_SYMBOL")
-      COIN_CONTRACT_SYMBOL= i.DATA_VALUE;
-    if (i.DATA_KEY=="CURRENCY_MARKET_CAP")
-      CURRENCY_MARKET_CAP= i.DATA_VALUE;
-    if (i.DATA_KEY=="ASSET_CONTRACT_SYMBOL")
-      ASSET_CONTRACT_SYMBOL= i.DATA_VALUE;
-    if (i.DATA_KEY=="ASSETS_ARE_MINTABLE")
-      ASSETS_ARE_MINTABLE= i.DATA_VALUE;
-    if (i.DATA_KEY=="ASSET_BASE_URI")
-      ASSET_BASE_URI= i.DATA_VALUE;
-    if (i.DATA_KEY=="MINTING_FEE")
-      MINTING_FEE= i.DATA_VALUE;
+    if (i.dataKey=="DEVELOPMENT_SIGNER_ADDRESS")
+      DEVELOPMENT_SIGNER_ADDRESS= i.dataValue;
+    if (i.dataKey=="DEVELOPMENT_TREASURY_ADDRESS")
+      DEVELOPMENT_TREASURY_ADDRESS= i.dataValue;
+    if (i.dataKey=="MAINNET_SIGNER_ADDRESS")
+      MAINNET_SIGNER_ADDRESS= i.dataValue;
+    if (i.dataKey=="MAINNET_TREASURY_ADDRESS")
+      MAINNET_TREASURY_ADDRESS= i.dataValue;
+    if (i.dataKey=="MAINNET_SIDECHAIN_SIGNER_ADDRESS")
+      MAINNET_SIDECHAIN_SIGNER_ADDRESS= i.dataValue;
+    if (i.dataKey=="MAINNET_SIDECHAIN_TREASURY_ADDRESS")
+      MAINNET_SIDECHAIN_TREASURY_ADDRESS= i.dataValue;
+    if (i.dataKey=="POLYGON_SIGNER_ADDRESS")
+      POLYGON_SIGNER_ADDRESS= i.dataValue;
+    if (i.dataKey=="POLYGON_TREASURY_ADDRESS")
+      POLYGON_TREASURY_ADDRESS= i.dataValue;
+    if (i.dataKey=="TESTNET_POLYGON_SIGNER_ADDRESS")
+      TESTNET_POLYGON_SIGNER_ADDRESS= i.dataValue;
+    if (i.dataKey=="TESTNET_POLYGON_TREASURY_ADDRESS")
+      TESTNET_POLYGON_TREASURY_ADDRESS= i.dataValue;
+    if (i.dataKey=="TESTNET_SIGNER_ADDRESS")
+      TESTNET_SIGNER_ADDRESS= i.dataValue;
+    if (i.dataKey=="TESTNET_TREASURY_ADDRESS")
+      TESTNET_TREASURY_ADDRESS= i.dataValue;
+    if (i.dataKey=="TESTNET_SIDECHAIN_SIGNER_ADDRESS")
+      TESTNET_SIDECHAIN_SIGNER_ADDRESS= i.dataValue;
+    if (i.dataKey=="TESTNET_SIDECHAIN_TREASURY_ADDRESS")
+      TESTNET_SIDECHAIN_TREASURY_ADDRESS= i.dataValue;
+    if (i.dataKey=="COIN_CONTRACT_SYMBOL")
+      COIN_CONTRACT_SYMBOL= i.dataValue;
+    if (i.dataKey=="CURRENCY_MARKET_CAP")
+      CURRENCY_MARKET_CAP= i.dataValue;
+    if (i.dataKey=="ASSET_CONTRACT_SYMBOL")
+      ASSET_CONTRACT_SYMBOL= i.dataValue;
+    if (i.dataKey=="ASSETS_ARE_MINTABLE")
+      ASSETS_ARE_MINTABLE= i.dataValue;
+    if (i.dataKey=="ASSET_BASE_URI")
+      ASSET_BASE_URI= i.dataValue;
+    if (i.dataKey=="MINTING_FEE")
+      MINTING_FEE= i.dataValue;
   }
 
   // Currency
@@ -272,15 +272,54 @@ module.exports = async function (deployer) {
   console.log("*******************************");
 
 //insert contract address into DB
-  async function createAddress(identityAddress,coinAddress,assetAddress,coinProxyAddress,assetProxyAddress,tradeAddress,networkType) {
-    const address = await sequelize.query(
-    'INSERT ADDRESS_DATA(IDENTITY_VALUE,CURRENCY_VALUE,INVENTORY_VALUE,CURRENCY_PROXY_VALUE,INVENTORY_PROXY_VALUE,TRADE_VALUE,NETWORK_TYPE) VALUES (?,?,?,?,?,?,?)',
+async function deleteAddress(networkType,email) {
+  await sequelize.query(
+    'DELETE FROM ADDRESS_DATA WHERE networkType=? AND email=?',
+    {
+      type: sequelize.QueryTypes.DELETE,
+      replacements: [networkType,email],
+    },
+    );
+}
+
+async function createAddress(identityAddress,coinAddress,assetAddress,coinProxyAddress,assetProxyAddress,tradeAddress,networkType,email) {
+    await sequelize.query(
+    'INSERT ADDRESS_DATA(identityValue,currencyValue,inventoryValue,currencyProxyValue,inventoryProxyValue,tradeValue,networkType,email) VALUES (?,?,?,?,?,?,?,?)',
     {
       type: sequelize.QueryTypes.INSERT,
-      replacements: [identityAddress,coinAddress,assetAddress,coinProxyAddress,assetProxyAddress,tradeAddress,networkType],
+      replacements: [identityAddress,coinAddress,assetAddress,coinProxyAddress,assetProxyAddress,tradeAddress,networkType,email],
     },
     );
   }
 
-  createAddress(identityAddress,coinAddress,assetAddress,coinProxyAddress,assetProxyAddress,tradeAddress,networkType);
+  async function updateOnboard(networkType,email) {
+    
+    if (networkType=="development")
+      await sequelize.query(
+        'UPDATE ONBOARDING_DATA SET sidechainContractDeployed=\'true\' WHERE email=?',
+        {
+          type: sequelize.QueryTypes.UPDATE,
+          replacements: [email],
+        },
+        );
+    if (networkType=="mainnet")
+      await sequelize.query(
+        'UPDATE ONBOARDING_DATA SET mainnetContractDeployed=\'true\' WHERE email=?',
+        {
+          type: sequelize.QueryTypes.UPDATE,
+          replacements: [email],
+        },
+        );
+    if (networkType=="polygon")
+      await sequelize.query(
+        'UPDATE ONBOARDING_DATA SET polygonContractDeployed=\'true\' WHERE email=?',
+        {
+          type: sequelize.QueryTypes.UPDATE,
+          replacements: [email],
+        },
+        );
+  }
+  await updateOnboard(networkType,email);
+  await deleteAddress(networkType,email);
+  await createAddress(identityAddress,coinAddress,assetAddress,coinProxyAddress,assetProxyAddress,tradeAddress,networkType,email);
 };
