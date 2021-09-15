@@ -193,14 +193,15 @@
 					}
 				},
 				"url": {
-					"raw": "127.0.0.1:8080/api/v1/authorizeServer",
+					"raw": "http://af2fc18b539ee488984fa4e58de37686-1454411376.us-west-1.elb.amazonaws.com/api/v1/authorizeServer",
+					"protocol": "http",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"af2fc18b539ee488984fa4e58de37686-1454411376",
+						"us-west-1",
+						"elb",
+						"amazonaws",
+						"com"
 					],
-					"port": "8080",
 					"path": [
 						"api",
 						"v1",
@@ -222,15 +223,15 @@
 					}
 				],
 				"url": {
-					"raw": "http://127.0.0.1:8080/api/v1/wallet",
+					"raw": "http://af2fc18b539ee488984fa4e58de37686-1454411376.us-west-1.elb.amazonaws.com/api/v1/wallet",
 					"protocol": "http",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"af2fc18b539ee488984fa4e58de37686-1454411376",
+						"us-west-1",
+						"elb",
+						"amazonaws",
+						"com"
 					],
-					"port": "8080",
 					"path": [
 						"api",
 						"v1",
@@ -252,15 +253,15 @@
 					}
 				],
 				"url": {
-					"raw": "http://127.0.0.1:8080/api/v1/assets/:address",
+					"raw": "http://af2fc18b539ee488984fa4e58de37686-1454411376.us-west-1.elb.amazonaws.com/api/v1/assets/:address",
 					"protocol": "http",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"af2fc18b539ee488984fa4e58de37686-1454411376",
+						"us-west-1",
+						"elb",
+						"amazonaws",
+						"com"
 					],
-					"port": "8080",
 					"path": [
 						"api",
 						"v1",
@@ -270,7 +271,7 @@
 					"variable": [
 						{
 							"key": "address",
-							"value": "0x70e68c3f8146119fd3b0b0de5324456d73e4a17c"
+							"value": "0x37595b7599a7df4e91660a49a7b50ddc2c97efac"
 						}
 					]
 				}
@@ -278,19 +279,18 @@
 			"response": []
 		},
 		{
-			"name": "api/v1/assets/:address/:mainnetAddress",
+			"name": "NA api/v1/assets/:address/:mainnetAddress",
 			"request": {
 				"method": "GET",
 				"header": [
 					{
 						"key": "authorization",
-						"value": "Bearer [YOUR_ACCESS_TOKEN]",
+						"value": "Bearer {{YOUR_ACCESS_TOKEN}}",
 						"type": "text"
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8080/api/v1/assets/:address/:mainnetAddress",
-					"protocol": "http",
+					"raw": "localhost:8080/api/v1/assets/:address/:mainnetAddress",
 					"host": [
 						"localhost"
 					],
@@ -305,11 +305,11 @@
 					"variable": [
 						{
 							"key": "address",
-							"value": ""
+							"value": null
 						},
 						{
 							"key": "mainnetAddress",
-							"value": ""
+							"value": null
 						}
 					]
 				}
@@ -328,14 +328,15 @@
 					}
 				],
 				"url": {
-					"raw": "127.0.0.1:8080/api/v1/asset/:assetId",
+					"raw": "http://af2fc18b539ee488984fa4e58de37686-1454411376.us-west-1.elb.amazonaws.com/api/v1/asset/:assetId",
+					"protocol": "http",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"af2fc18b539ee488984fa4e58de37686-1454411376",
+						"us-west-1",
+						"elb",
+						"amazonaws",
+						"com"
 					],
-					"port": "8080",
 					"path": [
 						"api",
 						"v1",
@@ -407,7 +408,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"mnemonic\": \"follow chronic bunker undo twelve essay recall minimum invite lumber puzzle final\",\r\n    \"resourceHash\": \"https://gateway.pinata.cloud/ipfs/QmRf22bZar3WKmojipms22PkXH1MZGmvsqzQtuSvQE3uhm\",\r\n    \"quantity\": 1\r\n}",
+					"raw": "{\r\n    \"mnemonic\": \"capital dinosaur wide relief section atom above opera scrap club install menu\",\r\n    \"resourceHash\": \"https://gateway.pinata.cloud/ipfs/QmRf22bZar3WKmojipms22PkXH1MZGmvsqzQtuSvQE3uhm\",\r\n    \"quantity\": 1\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -415,15 +416,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8080/api/v1/asset",
+					"raw": "http://af2fc18b539ee488984fa4e58de37686-1454411376.us-west-1.elb.amazonaws.com/api/v1/asset",
 					"protocol": "http",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"af2fc18b539ee488984fa4e58de37686-1454411376",
+						"us-west-1",
+						"elb",
+						"amazonaws",
+						"com"
 					],
-					"port": "8080",
 					"path": [
 						"api",
 						"v1",
@@ -485,7 +486,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"mnemonic\": \"follow chronic bunker undo twelve essay recall minimum invite lumber puzzle final\",\r\n    \"fromUserAddress\": \"0xb7311356747c1ac49decec1d92fc63b23a7f6648\",\r\n    \"toUserAddress\": \"0x5e75727a7198e333199e7fbc0254959615553325\",\r\n    \"assetId\": \"2\",\r\n    \"quantity\": 1\r\n}",
+					"raw": "{\r\n    \"mnemonic\": \"capital dinosaur wide relief section atom above opera scrap club install menu\",\r\n    \"fromUserAddress\": \"0x4e5a45b5f5fb9349c1114893e9587e31b2dfab5a\",\r\n    \"toUserAddress\": \"0x37595b7599a7df4e91660a49a7b50ddc2c97efac\",\r\n    \"assetId\": \"7\",\r\n    \"quantity\": 1\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -493,15 +494,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8080/api/v1/asset/send",
+					"raw": "http://af2fc18b539ee488984fa4e58de37686-1454411376.us-west-1.elb.amazonaws.com/api/v1/asset/send",
 					"protocol": "http",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"af2fc18b539ee488984fa4e58de37686-1454411376",
+						"us-west-1",
+						"elb",
+						"amazonaws",
+						"com"
 					],
-					"port": "8080",
 					"path": [
 						"api",
 						"v1",
@@ -513,7 +514,7 @@
 			"response": []
 		},
 		{
-			"name": "api/v1/asset/signTransfer",
+			"name": "NA api/v1/asset/signTransfer",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -532,6 +533,305 @@
 						"v1",
 						"asset",
 						"signTransfer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST api/v1/onboarding-data",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"data\": {\n        \"organizationName\": \"hello\",\n        \"sidechainURL\": \"http://localhost:3000/setup\",\n        \"email\": \"devjeetroychowdhury@gmail.com\",\n        \"signingAuthorityMnemonic\": \"merr ee\",\n        \"treasuryMnemonic\": \"ddddd\",\n        \"currencyContractName\": \"ceee\",\n        \"currencyContractSymbol\": \"c\",\n        \"currencyMarketCap\": \"11111111\",\n        \"assetContractName\": \"dddd\",\n        \"assetContractSymbol\": \"d\",\n        \"assetTokenDescription\": \"asdasd\",\n        \"usersMintAssets\": \"false\",\n        \"mintingFee\": 10,\n        \"mainnetMnemonic\": \"wewewew\",\n        \"infuraProjectID\": \"wewewe\",\n        \"infuraApiKey\": \"wewewew\",\n        \"polygonMnemonic\": \"qwewqewqe\",\n        \"polygonApiKey\": \"wewqeq\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://af2fc18b539ee488984fa4e58de37686-1454411376.us-west-1.elb.amazonaws.com/api/v1/onboarding-data/",
+					"protocol": "http",
+					"host": [
+						"af2fc18b539ee488984fa4e58de37686-1454411376",
+						"us-west-1",
+						"elb",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"onboarding-data",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET api/v1/onboarding-data",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://af2fc18b539ee488984fa4e58de37686-1454411376.us-west-1.elb.amazonaws.com/api/v1/onboarding-data?email=devjeetroychowdhury@gmail.com",
+					"protocol": "http",
+					"host": [
+						"af2fc18b539ee488984fa4e58de37686-1454411376",
+						"us-west-1",
+						"elb",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"onboarding-data"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "devjeetroychowdhury@gmail.com"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET api/v1/address-data",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://af2fc18b539ee488984fa4e58de37686-1454411376.us-west-1.elb.amazonaws.com/api/v1/address-data?email=devjeetroychowdhury@gmail.com&networkType=development",
+					"protocol": "http",
+					"host": [
+						"af2fc18b539ee488984fa4e58de37686-1454411376",
+						"us-west-1",
+						"elb",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"address-data"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "devjeetroychowdhury@gmail.com"
+						},
+						{
+							"key": "networkType",
+							"value": "development"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET api/v1/user-data",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://af2fc18b539ee488984fa4e58de37686-1454411376.us-west-1.elb.amazonaws.com/api/v1/user-data?email=devjeetroychowdhury@gmail.com",
+					"protocol": "http",
+					"host": [
+						"af2fc18b539ee488984fa4e58de37686-1454411376",
+						"us-west-1",
+						"elb",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user-data"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "devjeetroychowdhury@gmail.com"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET api/v1/environment-data",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://af2fc18b539ee488984fa4e58de37686-1454411376.us-west-1.elb.amazonaws.com/api/v1/environment-data",
+					"protocol": "http",
+					"host": [
+						"af2fc18b539ee488984fa4e58de37686-1454411376",
+						"us-west-1",
+						"elb",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"environment-data"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST api/v1/environment-data",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"dataKey\": \"test\",\n    \"dataValue\": \"test\",\n    \"createdBy\": \"test\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://af2fc18b539ee488984fa4e58de37686-1454411376.us-west-1.elb.amazonaws.com/api/v1/environment-data",
+					"protocol": "http",
+					"host": [
+						"af2fc18b539ee488984fa4e58de37686-1454411376",
+						"us-west-1",
+						"elb",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"environment-data"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST api/v1/user-data",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"userEmail\":\"test@gmail.com\",\"username\": \"swpnit\",\"firstName\":\"Test\",\"email\":\"test2@gmail.com\",\"lastName\":\"merr\",\"password\": \"test\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://af2fc18b539ee488984fa4e58de37686-1454411376.us-west-1.elb.amazonaws.com/api/v1/user-data",
+					"protocol": "http",
+					"host": [
+						"af2fc18b539ee488984fa4e58de37686-1454411376",
+						"us-west-1",
+						"elb",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user-data"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST api/v1/truffle-data",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"devjeetroychowdhury@gmail.com\",\n    \"networkType\": \"development\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://af2fc18b539ee488984fa4e58de37686-1454411376.us-west-1.elb.amazonaws.com/api/v1/truffle-data",
+					"protocol": "http",
+					"host": [
+						"af2fc18b539ee488984fa4e58de37686-1454411376",
+						"us-west-1",
+						"elb",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"truffle-data"
 					]
 				}
 			},
