@@ -49,7 +49,19 @@ module.exports = (sequelize, Sequelize) =>
     signingAuthorityMnemonic: {
       type: Sequelize.STRING,
     },
+    signingAuthorityPrivateKey: {
+      type: Sequelize.STRING,
+    },
+    signingAuthorityAddress: {
+      type: Sequelize.STRING,
+    },
     treasuryMnemonic: {
+      type: Sequelize.STRING,
+    },
+    treasuryPrivateKey: {
+      type: Sequelize.STRING,
+    },
+    treasuryAddress: {
       type: Sequelize.STRING,
     },
     usersMintAssets: {

@@ -79,9 +79,46 @@ let contracts;
 // Takes an account as input
 async function listAssets(req, res, web3) {
   const { address, mainnetAddress } = req.params;
-
+  const asyncGlobal = async() => {
+    let data;
+    try {
+      data = await sequelize.query('SELECT dataKey,dataValue FROM `ENVIRONMENT_DATA`', {type: sequelize.QueryTypes.SELECT});
+    } catch (err) {
+      console.log(err);
+    }
+    return data;
+  };
+  const globalData = await asyncGlobal();
+  let MINTING_FEE;
+  let ASSET_CONTRACT_NAME;
+  for(let i of globalData){
+    if (i.dataKey=="MINTING_FEE")
+      MINTING_FEE= i.dataValue;
+    if (i.dataKey=="ASSET_CONTRACT_NAME")
+      ASSET_CONTRACT_NAME= i.dataValue;
+  }
   if (DEVELOPMENT) setCorsHeaders(res);
   try {
+        let balance ;
+        try {
+          balance = await contracts[network]["Inventory"].methods
+          .balanceOf(address)
+          .call();
+        }  catch (err) {
+          console.log(err);
+        }
+        //console.log("step 3",balance);
+
+        let assets ;
+        try {
+          assets = await contracts[network]["Inventory"].methods
+          .getAssetIdsOf(address)
+          .call();
+        }  catch (err) {
+          console.log(err);
+        }
+        //console.log("step 4",assets);
+    /*
     const [mainnetAssets, sidechainAssets] = await Promise.all([
       (async () => {
         if (!mainnetAddress) return [];
@@ -155,9 +192,12 @@ async function listAssets(req, res, web3) {
         }
         return true;
       });
+    */  
     return res.json({
       status: ResponseStatus.Success,
-      assets: JSON.stringify(assets),
+      assetName: ASSET_CONTRACT_NAME,
+      assets: assets,
+      balance: balance,
       error: null,
     });
   } catch (error) {
@@ -208,9 +248,12 @@ async function mintAssets(
   };
   const globalData = await asyncGlobal();
   let MINTING_FEE;
+  let ASSET_CONTRACT_NAME;
   for(let i of globalData){
     if (i.dataKey=="MINTING_FEE")
       MINTING_FEE= i.dataValue;
+    if (i.dataKey=="ASSET_CONTRACT_NAME")
+      ASSET_CONTRACT_NAME= i.dataValue;
   }
   if (MINTING_FEE > 0) {
     let allowance ;

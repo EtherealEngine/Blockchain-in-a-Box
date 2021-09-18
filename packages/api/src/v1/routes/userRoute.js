@@ -4,15 +4,34 @@ const { UserData } = require("../sequelize");
 async function UserRoutes(app){
 
     app.post("/api/v1/user-data", (req,res,next)=>{
-            try{
-                UserData.create(req.body).then(resp=>{
-                    res.end(JSON.stringify({"Status":200, "Message": "Data Submitted Successfully."}))
-                })
-            }catch{
-                res.end(JSON.stringify({"Status":400, "Message": "Data cannot be submitted."}))
-            }
-        
-    })
+        if (DEVELOPMENT) setCorsHeaders(res);
+        let website = CONSOLE_WEB_URL;
+         // Generate token
+        let token = crypto.randomBytes(48).toString("hex");
+        // Append slash at the end of website url
+        if (website.endsWith("/") === false) {
+            website += "/";
+        }
+        try{
+            UserData.create(req.body).then(resp=>{
+                website = `${website}authenticate?email=${req.body.email}&token=${token}&user=yes&admin=no&landing=dashboard`;
+                // Send email with login link and token
+            sendMessage(
+                req.body.email,
+                "Login | Blockchain in a box",
+                `Greetings! you can access Blockchain in a box console from:\n\n
+                ${website}`,
+                `<h1>Login Information</h1>
+                <p>Greetings! you can access Blockchain in a box console from:</p>
+                <a href=${website}>${website}</a>`
+            );
+            res.end(JSON.stringify({"Status":200, "Message": "Data Submitted Successfully."}))
+            })
+        }catch{
+            res.end(JSON.stringify({"Status":400, "Message": "Data cannot be submitted."}))
+        }
+    
+})
   
     app.get("/api/v1/user-data", async (req,res,next)=>{
         let email  = req.query.email

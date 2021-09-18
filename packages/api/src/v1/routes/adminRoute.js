@@ -1,10 +1,11 @@
 const crypto = require("crypto");
 const { ResponseStatus } = require("../enums");
-const { AdminData, OnBoardingData } = require("../sequelize");
+const { AdminData, OnBoardingData, UserData } = require("../sequelize");
 const { setCorsHeaders } = require("../../common/utils");
 const { sendMessage } = require("../../common/sesClient");
 const { CONSOLE_WEB_URL, DEVELOPMENT, AUTH_SECRET_KEY, AUTH_TOKEN_SECRET } = require("../../common/environment");
 const jwt = require("jsonwebtoken");
+const onboardingData = require("../models/onboardingData");
 
 async function AdminRoutes(app) {
   /**
@@ -49,7 +50,7 @@ async function AdminRoutes(app) {
    * @return {PlainResponse} 200 - success response
    * @param {LoginPayload} request.body.required - LoginPayload object for login
    */
-  app.post("/api/v1/admin/login", async (req, res) => {
+   app.post("/api/v1/admin/login", async (req, res) => {
     if (DEVELOPMENT) setCorsHeaders(res);
     try {
       const { email } = req.body;
@@ -70,30 +71,41 @@ async function AdminRoutes(app) {
           error: "Email was not a valid email.",
         });
       }
-
+      
       // Generate token
       let token = crypto.randomBytes(48).toString("hex");
-
-      // Insert or update database with token
-      let adminObj = await AdminData.findOne({ where: { email: email } });
-      if (adminObj) {
-        await adminObj.update({ token: token });
-      } else {
-        await AdminData.create({ email: email, token: token });
-        return res.json({
-          status: "User created in the database",
-          error: undefined,
-        });
-		 
-      }
-
-      // Append slash at the end of website url
       let website = CONSOLE_WEB_URL;
+      // Append slash at the end of website url
       if (website.endsWith("/") === false) {
         website += "/";
       }
-      website = website + "authenticate?email=" + email + "&token=" + token;
 
+      let userObj = await UserData.findOne({where : { userEmail : email }})
+      let adminObj = await AdminData.findOne({where : { email }})
+
+      if(userObj === null && adminObj === null){
+        await AdminData.create({ email, token })
+        website = `${website}authenticate?email=${email}&token=${token}&user=no&admin=yes&landing=onboarding`
+      }
+      else if(userObj!== null && adminObj === null){
+        await userObj.update({ token })
+        website = `${website}authenticate?email=${email}&token=${token}&user=yes&admin=no&landing=dashboard`
+      }
+      else if(userObj === null && adminObj !== null){
+
+        await adminObj.update({ token })
+
+        var isOnboarded = await OnBoardingData.findOne({ where: { email  } });
+        if(isOnboarded === null ){
+          website = `${website}authenticate?email=${email}&token=${token}&user=no&admin=yes&landing=onboarding`
+        }else{
+          website = `${website}authenticate?email=${email}&token=${token}&user=no&admin=yes&landing=dashboard`
+        }
+      }else{
+        res.end("Something went wrong! Try again after sometime.")
+      }
+
+      
       // Send email with login link and token
       sendMessage(
         email,
@@ -236,6 +248,7 @@ async function AdminRoutes(app) {
       }
       
   })
+
 }
 
 function validateEmail(email) {

@@ -1,7 +1,15 @@
 const exec = require("child_process").exec;
 
+
 async function TruffleRoutes(app){
 
+    function sleep(milliseconds) {
+        const date = Date.now();
+        let currentDate = null;
+        do {
+          currentDate = Date.now();
+        } while (currentDate - date < milliseconds);
+      }
 
     app.post("/api/v1/truffle-data", async (req,res,next)=>{
         const { email, networkType } = req.body;
@@ -21,6 +29,7 @@ async function TruffleRoutes(app){
                 }*/
                 console.log(`stdout: ${stdout}`);
             })
+            sleep(500000);
             res.end(JSON.stringify(child));
         }
         if (networkType=="mainnet")
