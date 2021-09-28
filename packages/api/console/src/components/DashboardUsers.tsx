@@ -10,7 +10,11 @@ import {
   TableHead,
   TableRow,
   TextField,
-  Grid
+  Grid,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select
 } from "@material-ui/core";
 import React, { useEffect } from "react";
 import "../App.css";
@@ -64,6 +68,10 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
     background: "grey"
   },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 130,
+  }
 }));
 
 
@@ -77,7 +85,7 @@ const DashboardUsers: React.FunctionComponent = () => {
   const [open, setOpen] = React.useState(false);
 
   const [userData, setUserData] = React.useState(
-    { userEmail: "", username: "", firstName: "", lastName: "", password: "" }
+    { userEmail: "", username: "", firstName: "", lastName: "", password: "", userRole: "user" }
   );
 
   useEffect(() => {
@@ -106,6 +114,41 @@ const DashboardUsers: React.FunctionComponent = () => {
   const saveUserData = e => {
     reduxDispatch(addUserDetails(userData))
   }
+
+  const renderUserTable = () => {
+    return (
+      <TableContainer component={Paper}>
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <TableCell>Email</TableCell>
+              <TableCell>First Name</TableCell>
+              <TableCell>Last Name</TableCell>
+              <TableCell>User Name</TableCell>
+              <TableCell>Role</TableCell>
+              {/* <TableCell>Action</TableCell> */}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {userList && userList.map((row: any, index) => (
+              <TableRow key={index}>
+
+                <TableCell>{row.userEmail}</TableCell>
+                <TableCell>{row.firstName}</TableCell>
+                <TableCell>{row.lastName}</TableCell>
+                <TableCell>{row.username}</TableCell>
+                <TableCell>{row.userRole}</TableCell>
+                {/* <TableCell>
+                <EditIcon />
+              </TableCell> */}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    )
+  }
+
 
 
   return (
@@ -195,6 +238,20 @@ const DashboardUsers: React.FunctionComponent = () => {
                 />
 
 
+                <FormControl className={classes.formControl}>
+                  <InputLabel id="demo-simple-select-label">Role</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={userData.userRole}
+                    onChange={(e) => setUserData({ ...userData, userRole: e.target.value })}
+                  >
+                    <MenuItem value={"user"}>User</MenuItem>
+                    <MenuItem value={"admin"}>Admin</MenuItem>
+                  </Select>
+                </FormControl>
+
+
                 <Button
                   className={classes.buttonSubmit}
                   variant="contained"
@@ -211,33 +268,10 @@ const DashboardUsers: React.FunctionComponent = () => {
         </Fade>
       </Modal>
 
-      <TableContainer component={Paper}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell>Email</TableCell>
-              <TableCell>First Name</TableCell>
-              <TableCell>Last Name</TableCell>
-              <TableCell>User Name</TableCell>
-              {/* <TableCell>Action</TableCell> */}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {userList && userList.map((row: any, index) => (
-              <TableRow key={index}>
+      {
+        renderUserTable()
+      }
 
-                <TableCell>{row.userEmail}</TableCell>
-                <TableCell>{row.firstName}</TableCell>
-                <TableCell>{row.lastName}</TableCell>
-                <TableCell>{row.username}</TableCell>
-                {/* <TableCell>
-                  <EditIcon />
-                </TableCell> */}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
     </Box>
   );
 };

@@ -7,7 +7,8 @@ const Endpoints = {
   SETUP_ORG: "/api/v1/onboarding-data/",
   // ONBOARDING_DATA: "/api/v1/onboarding-data?email=devjeetroychowdhury@gmail.com"
   ONBOARDING_DATA: "/api/v1/onboarding-data",
-  ADD_USER: "/api/v1/user-data"
+  ADD_USER: "/api/v1/user-data",
+  DEPLOYMENT: "/api/v1/truffle-data"
 };
 
 export default Endpoints;

@@ -3,13 +3,17 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 type SetupState = {
   setupLoader: boolean
   notifications: any;
-  result: Object
+  result: Object,
+  deploymentLoading: boolean,
+  deploymentStatus: any
 };
 
 const initialState = {
   notifications: {},
   result: {},
-  setupLoader: false
+  setupLoader: false,
+  deploymentLoading: false,
+  deploymentStatus: {}
 } as SetupState;
 
 const setupReducer = createSlice({
@@ -34,9 +38,21 @@ const setupReducer = createSlice({
       state.setupLoader = false;
 
     },
+
+    setDeployment(state, action: PayloadAction<any>) {
+      state.deploymentLoading = true;
+    },
+    deploymentSuccess(state, action: PayloadAction<any>) {
+      state.notifications = action.payload;
+      state.deploymentLoading = false;
+    },
+    deploymentFaliure(state, action: PayloadAction<any>) {
+      state.deploymentStatus = action.payload;
+      state.deploymentLoading = false;
+    }
   },
 });
 
-export const { addNotification, removeNotification, addNotificationSuccess } = setupReducer.actions;
+export const { addNotification, removeNotification, addNotificationSuccess, setDeployment, deploymentSuccess, deploymentFaliure } = setupReducer.actions;
 
 export default setupReducer.reducer;

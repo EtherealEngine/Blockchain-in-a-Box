@@ -39,8 +39,27 @@ const Authenticate: React.FunctionComponent = () => {
   useEffect(() => {
     const email = queryParams.email ? (queryParams.email as string) : "";
     const token = queryParams.token ? (queryParams.token as string) : "";
+    const user = queryParams.user ? (queryParams.user as string) : "";
+    const admin = queryParams.admin ? (queryParams.admin as string) : "";
+    const landing = queryParams.landing ? (queryParams.landing as string) : "";
 
-    dispatch(checkAdminAuthentication([email, token]));
+    console.log(user, admin, landing);
+    localStorage.setItem('email', email)
+
+    if (admin === 'yes') {
+      localStorage.setItem('userType', 'admin');
+    }
+    if (user === 'yes') {
+      localStorage.setItem('userType', 'user');
+    }
+    if (admin === 'yes' && landing !== 'dashboard') {
+      history.push(Routes.SETUP)
+    } else {
+      history.push(Routes.DASHBOARD)
+    }
+
+
+    // dispatch(checkAdminAuthentication([email, token]));
   }, []);
 
   if (loadingMessage) {

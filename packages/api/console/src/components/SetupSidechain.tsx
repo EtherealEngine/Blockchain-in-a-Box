@@ -13,6 +13,7 @@ import Routes from "../constants/Routes";
 import "../App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/Store";
+import axios from "axios";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -106,7 +107,18 @@ const LocalReducer = (
 const SetupSidechain: React.FunctionComponent = () => {
   const classes = useStyles();
   const history = useHistory();
-  const [sideChainError, setsideChainError] = useState({ orgNameValue: false, sidechainURLvalid: false })
+  const [sideChainError, setsideChainError] = useState({ orgNameValue: false, sidechainURLvalid: false });
+
+  useEffect(() => {
+    (async () => {
+      let respn = await axios.post("http://af2fc18b539ee488984fa4e58de37686-1454411376.us-west-1.elb.amazonaws.com/api/v1/authorizeServer", { "authSecretKey": "secret" });
+      let { data } = await respn
+      if (data.status === "success") {
+        localStorage.setItem("accessToken", data.accessToken);
+      }
+    })()
+
+  }, [])
 
   const { email } = useSelector(
     (state: RootState) => state.admin
@@ -119,8 +131,14 @@ const SetupSidechain: React.FunctionComponent = () => {
 
 
   const goToNextPage = () => {
+    let emailData: string | undefined = "";
     if (organizationName && sidechainURL && validateUrl(sidechainURL)) {
-      let setupObj = { organizationName, sidechainURL, email };
+      if (!email) {
+        emailData = localStorage.getItem('email')?.trim();
+      } else {
+        emailData = email;
+      }
+      let setupObj = { organizationName, sidechainURL, email: emailData };
       console.log("TST ", email);
       localStorage.setItem('setupData', JSON.stringify(setupObj));
       history.push(Routes.SETUP_SIGNING_AUTHORITY);

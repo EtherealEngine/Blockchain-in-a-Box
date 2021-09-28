@@ -12,13 +12,15 @@ import {
 } from "redux-saga/effects";
 import {
     getSideChainUrlSuccess, getSideChainUrl, getSideChainUrlFaliure, addUserDetails,
-    addUserDetailsFailure, addUserDetailsSuccess, getUserList, getUserListFaliure, getUserListSuccess
+    addUserDetailsFailure, addUserDetailsSuccess, getUserList, getUserListFaliure, getUserListSuccess,
 } from "../slice/DashboardReducer";
 import {
     AddUserDataApi,
     GetSideChaninData,
-    GetUserListData
+    GetUserListData,
+    DeploymentAPI
 } from "../../api/DashboardApi";
+import { addNotificationSuccess, setDeployment, deploymentSuccess, deploymentFaliure } from "../slice/SetupReducer";
 
 function* GetSideChainFormData(action: Action) {
     console.log("DASHBOARD SAGS ", action);
@@ -86,9 +88,34 @@ function* GetUserList(action: Action) {
 
 }
 
+function* PostDeployment(action: Action) {
+    console.log("deplo saga ", action);
+
+    if (setDeployment.match(action)) {
+        try {
+            const response: any = yield call(
+                DeploymentAPI, action.payload
+            );
+            console.log("response ", response);
+            yield put(
+                deploymentSuccess(response.User)
+            );
+
+        } catch (error) {
+            yield put(
+                addUserDetailsFailure(error)
+            );
+        }
+
+    }
+
+}
+
 export default function* () {
     //   yield takeLeading(getScenes.type, FetchScenesDataAsync);
     yield takeLatest(getSideChainUrl.type, GetSideChainFormData);
     yield takeLatest(addUserDetails.type, AddUserData);
-    yield takeLatest(getUserList.type, GetUserList)
+    yield takeLatest(getUserList.type, GetUserList);
+    yield takeLatest(setDeployment.type, PostDeployment);
+
 }

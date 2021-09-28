@@ -29,6 +29,10 @@ const Welcome = () => {
   const classes = useStyles();
   const history = useHistory();
 
+  const openUrl = (e, url) => {
+    window.open(url, '_blank');
+  }
+
   return (
     <Grid container justifyContent="center" >
       <Grid className={classes.parentBox} item>
@@ -53,14 +57,14 @@ const Welcome = () => {
             variant="contained"
             color="secondary"
             size="large"
-            onClick={() => console.log("EthStats Dashboard clicked")}>
+            onClick={(e) => openUrl(e, "http://a76ab76cfc49440a594d947189734303-848168955.us-west-1.elb.amazonaws.com")}>
             EthStats Dashboard
           </Button>
           <Button className={classes.button}
             variant="contained"
             color="secondary"
             size="large"
-            onClick={() => console.log("Remix IDE")}>
+            onClick={(e) => openUrl(e, "http://a04d1d57d648441d793c178bfae2784e-1027067517.us-west-1.elb.amazonaws.com")}>
             Remix IDE
           </Button>
         </Box>

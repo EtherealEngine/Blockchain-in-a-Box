@@ -1,9 +1,10 @@
 import { Box, Button, makeStyles, Typography } from "@material-ui/core";
-import React from "react";
+import React, { useEffect } from "react";
 import "../App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/Store";
 import LoadingView from "./LoadingView";
+import { getSideChainUrl } from "../redux/slice/DashboardReducer";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -30,9 +31,18 @@ const useStyles = makeStyles((theme) => ({
 
 const DashboardHome: React.FunctionComponent = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
   const { sideChaninLoading, getSideChainUrlData } = useSelector(
     (state: RootState) => state.dashboard
   );
+
+  const getSideChainData = () => {
+    dispatch(getSideChainUrl())
+  }
+  useEffect(() => {
+    getSideChainData();
+  }, []);
 
   if (sideChaninLoading) {
     return (<>
@@ -53,61 +63,61 @@ const DashboardHome: React.FunctionComponent = () => {
 
       </Typography>
       <Typography>You need to deploy the contracts to the chain.</Typography>
-      <Button
+      {/* <Button
         className={classes.button}
         variant="contained"
         color="primary"
         size="large"
       >
         Configure Contracts
-      </Button>
+      </Button> */}
 
       <Typography variant={"subtitle1"} className={classes.marginTop8}>
         Mainnet Status:
         {
-          (getSideChainUrlData?.mainnetContractDeployed == "true" && getSideChainUrlData?.infuraApiKey) ? (<span className={classes.green}>Configured</span>) : <span className={classes.red}>Not Ready</span>
+          (getSideChainUrlData?.mainnetContractDeployed == "true" && getSideChainUrlData?.infuraApiKey) ? (<span className={classes.green}>Configured ({getSideChainUrlData.infuraApiKey})</span>) : <span className={classes.red}>Not Ready</span>
         }
       </Typography>
       <Typography>
         You need to add an Infura API key and deploy contracts to mainnet.
       </Typography>
-      <Button
+      {/* <Button
         className={classes.button}
         variant="contained"
         color="primary"
         size="large"
       >
         Configuration
-      </Button>
+      </Button> */}
 
       <Typography variant={"subtitle1"} className={classes.marginTop8}>
         Polygon Status:
         {
-          (getSideChainUrlData?.polygonContractDeployed == "true" && getSideChainUrlData?.polygonApiKey) ? (<span className={classes.green}>Configured</span>) : <span className={classes.red}>Not Ready</span>
+          (getSideChainUrlData?.polygonContractDeployed == "true" && getSideChainUrlData?.polygonApiKey) ? (<span className={classes.green}>Configured ({getSideChainUrlData.polygonApiKey})</span>) : <span className={classes.red}>Not Ready</span>
         }
       </Typography>
       <Typography>
         You need to add a MaticVigil API key and deploy contracts to Polygon.
       </Typography>
-      <Button
+      {/* <Button
         className={classes.button}
         variant="contained"
         color="primary"
         size="large"
       >
         Configuration
-      </Button>
+      </Button> */}
 
       <br />
 
-      <Button
+      {/* <Button
         className={`${classes.button} ${classes.marginTop12}`}
         variant="contained"
         color="secondary"
         size="large"
       >
         View Ethstats Dashboard
-      </Button>
+      </Button> */}
     </Box>
   );
 };

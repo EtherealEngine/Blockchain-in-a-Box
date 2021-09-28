@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useEffect, useReducer } from "react";
 import {
   Button,
   FormControl,
@@ -16,6 +16,7 @@ import { IBasePayload, IStringPayload } from "../models/IPayloads";
 import { useHistory } from "react-router-dom";
 import Routes from "../constants/Routes";
 import "../App.css";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   parentBox: {
@@ -60,6 +61,10 @@ const useStyles = makeStyles((theme) => ({
 interface ILocalState {
   signingAuthorityMnemonic: string;
   showMnemonic: boolean;
+  showPrivateKey: boolean;
+  showAddress: boolean;
+  signingAuthorityPrivateKey: string
+  signingAuthorityAddress: string
   isLoading: boolean;
   error: string;
 }
@@ -68,6 +73,10 @@ interface ILocalState {
 const DefaultLocalState: ILocalState = {
   signingAuthorityMnemonic: "",
   showMnemonic: false,
+  showPrivateKey: false,
+  showAddress: false,
+  signingAuthorityAddress: "",
+  signingAuthorityPrivateKey: "",
   isLoading: false,
   error: "",
 };
@@ -77,6 +86,10 @@ const LocalAction = {
   ToggleLoading: "ToggleLoading",
   SetMnemonic: "SetMnemonic",
   ToggleMnemonic: "ToggleMnemonic",
+  TogglePrivateKey: "TogglePrivateKey",
+  SetPrivateKey: "SetPrivateKey",
+  SetAddress: "SetAddress",
+  ToogleAddress: "ToogleAddress",
   SetError: "SetError",
 };
 
@@ -104,6 +117,30 @@ const LocalReducer = (
         showMnemonic: !state.showMnemonic,
       };
     }
+    case LocalAction.TogglePrivateKey: {
+      return {
+        ...state,
+        showPrivateKey: !state.showPrivateKey,
+      };
+    }
+    case LocalAction.ToogleAddress: {
+      return {
+        ...state,
+        showAddress: !state.showAddress,
+      };
+    }
+    case LocalAction.SetPrivateKey: {
+      return {
+        ...state,
+        signingAuthorityPrivateKey: (action.payload as IStringPayload).string,
+      };
+    }
+    case LocalAction.SetAddress: {
+      return {
+        ...state,
+        signingAuthorityAddress: (action.payload as IStringPayload).string,
+      };
+    }
     case LocalAction.SetError: {
       return {
         ...state,
@@ -124,11 +161,50 @@ const SetupSigningAuthority: React.FunctionComponent = () => {
     {
       signingAuthorityMnemonic,
       showMnemonic,
+      showPrivateKey,
+      signingAuthorityPrivateKey,
+      showAddress,
+      signingAuthorityAddress,
       isLoading,
       error,
     },
     dispatch,
   ] = useReducer(LocalReducer, DefaultLocalState);
+
+  useEffect(() => {
+    (async () => {
+      let accessToken = localStorage.getItem('accessToken');
+      let bearer = `Bearer ${accessToken}`
+      const headers = {
+        'Content-Type': 'application/json',
+        'authorization': bearer
+      }
+      let resp = await axios.post(`http://af2fc18b539ee488984fa4e58de37686-1454411376.us-west-1.elb.amazonaws.com/api/v1/wallet`, {}, { headers });
+      let { data } = await resp;
+      console.log("DATA ", data);
+      if (data.status === "success") {
+        let stateObj = localStorage.getItem('setupData');
+        if (stateObj) {
+          let stateObjData = JSON.parse(stateObj);
+          dispatch({
+            type: LocalAction.SetMnemonic,
+            payload: { string: data.userMnemonic },
+          })
+          dispatch({
+            type: LocalAction.SetPrivateKey,
+            payload: { string: data.privateKey },
+          });
+          dispatch({
+            type: LocalAction.SetAddress,
+            payload: { string: data.userAddress },
+          })
+          stateObj = { ...stateObjData, userMnemonic: data.userMnemonic, userAddress: data.userAddress, privateKey: data.privateKey }
+          localStorage.setItem('setupData', JSON.stringify(stateObj));
+        }
+      }
+
+    })()
+  }, [])
 
   const goToNextPage = () => {
     let stateObj = localStorage.getItem('setupData')
@@ -172,6 +248,7 @@ const SetupSigningAuthority: React.FunctionComponent = () => {
             placeholder="Enter mnemonic"
             type={showMnemonic ? "text" : "password"}
             value={signingAuthorityMnemonic}
+            readOnly={true}
             onChange={(event) =>
               dispatch({
                 type: LocalAction.SetMnemonic,
@@ -187,6 +264,74 @@ const SetupSigningAuthority: React.FunctionComponent = () => {
                   edge="end"
                 >
                   {showMnemonic ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+        </FormControl>
+
+        <FormControl className={classes.marginTop4} variant="outlined" required>
+          <InputLabel
+            className={classes.formLabel}
+            htmlFor="outlined-adornment-mnemonic"
+          >
+            Authority Private Key
+          </InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-mnemonic"
+            placeholder="Authority Private Key"
+            type={showPrivateKey ? "text" : "password"}
+            value={signingAuthorityPrivateKey}
+            readOnly={true}
+            onChange={(event) =>
+              dispatch({
+                type: LocalAction.SetPrivateKey,
+                payload: { string: event.target.value },
+              })
+            }
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={() => {
+                    dispatch({ type: LocalAction.TogglePrivateKey });
+                  }}
+                  edge="end"
+                >
+                  {showMnemonic ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+        </FormControl>
+
+        <FormControl className={classes.marginTop4} variant="outlined" required>
+          <InputLabel
+            className={classes.formLabel}
+            htmlFor="outlined-adornment-mnemonic"
+          >
+            Authority Address
+          </InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-mnemonic"
+            placeholder="Authority Address"
+            type={showAddress ? "text" : "password"}
+            value={signingAuthorityAddress}
+            readOnly={true}
+            onChange={(event) =>
+              dispatch({
+                type: LocalAction.SetAddress,
+                payload: { string: event.target.value },
+              })
+            }
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={() => {
+                    dispatch({ type: LocalAction.ToogleAddress });
+                  }}
+                  edge="end"
+                >
+                  {showAddress ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
               </InputAdornment>
             }

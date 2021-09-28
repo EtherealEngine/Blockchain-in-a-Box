@@ -5,6 +5,8 @@ let email = localStorage.getItem('email')
 
 export const GetSideChaninData = async () => {
     // const endpoint = `https://reqres.in/api/users`;
+    console.log("EMAIL ", email);
+
 
     const endpoint = `${Endpoints.HOST}${Endpoints.ONBOARDING_DATA}?email=${email}`;
 
@@ -46,6 +48,26 @@ export const AddUserDataApi = async (data: any) => {
 
     const response = await axios.post<any>(endpoint, data);
     console.log("USER DATA ", response);
+
+    const responseData = response.data;
+
+    if (responseData.error) {
+        throw responseData.error;
+    }
+
+    return responseData;
+};
+
+export const DeploymentAPI = async (data: any) => {
+    // const endpoint = `https://reqres.in/api/users`;
+    const endpoint = `${Endpoints.HOST}${Endpoints.DEPLOYMENT}`;
+
+    data = { networkType: data, email }
+
+
+
+    const response = await axios.post<any>(endpoint, data);
+    console.log("DEPLOYMENT", response);
 
     const responseData = response.data;
 

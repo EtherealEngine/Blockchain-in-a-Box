@@ -314,56 +314,56 @@ const DashboardConfigurations: React.FunctionComponent = () => {
       <Typography variant={"subtitle1"}>
         Infura API Key:
         {
-          getSideChainUrlData?.infuraApiKey ? (<span className={classes.green}>Configured</span>) : <span className={classes.red}>Not Ready</span>
+          getSideChainUrlData?.infuraApiKey ? (<span className={classes.green}>Configured ({getSideChainUrlData.infuraApiKey})</span>) : <span className={classes.red}>Not Ready</span>
         }
       </Typography>
       <Typography>
         You need to add an Infura API key and deploy contracts to mainnet.
       </Typography>
-      <Button
+      {/* <Button
         className={classes.button}
         variant="contained"
         color="primary"
         size="large"
       >
         Configure
-      </Button>
+      </Button> */}
 
       <Typography variant={"subtitle1"} className={classes.marginTop8}>
         Matic Vigil API Key:
         {
-          getSideChainUrlData?.polygonApiKey ? (<span className={classes.green}>Configured</span>) : <span className={classes.red}>Not Ready</span>
+          getSideChainUrlData?.polygonApiKey ? (<span className={classes.green}>Configured ({getSideChainUrlData.maticVigilKey})</span>) : <span className={classes.red}>Not Ready</span>
         }
       </Typography>
       <Typography>
         You need to add a MaticVigil API key and deploy contracts to Polygon.
       </Typography>
-      <Button
+      {/* <Button
         className={classes.button}
         variant="contained"
         color="primary"
         size="large"
       >
         Configure
-      </Button>
+      </Button> */}
 
       <Typography variant={"subtitle1"} className={classes.marginTop8}>
         Pinata API Key:
         {
-          getSideChainUrlData?.pinataApiKey ? (<span className={classes.green}>Configured</span>) : <span className={classes.red}>Not Ready</span>
+          getSideChainUrlData?.pinataApiKey ? (<span className={classes.green}>Configured ({getSideChainUrlData.pinataApiKey})</span>) : <span className={classes.red}>Not Ready</span>
         }
       </Typography>
       <Typography>
         You need to add a Pinata API key to host files on IPFS.
       </Typography>
-      <Button
+      {/* <Button
         className={classes.button}
         variant="contained"
         color="primary"
         size="large"
       >
         Configure
-      </Button>
+      </Button> */}
 
       <TextField
         className={`${classes.textbox} ${classes.marginTop8}`}

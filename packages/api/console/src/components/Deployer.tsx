@@ -90,8 +90,8 @@ const Deployer: React.FunctionComponent<DeployerProps> = (
     }
   }
 
-  class Stdout {}
-  class Stderr {}
+  class Stdout { }
+  class Stderr { }
 
   class Child {
     uuid: string;
@@ -147,7 +147,7 @@ const Deployer: React.FunctionComponent<DeployerProps> = (
         welcomeMessage={"Ready to deploy contracts on " + target}
         readOnly
       />
-      <Button
+      {/* <Button
         style={{
           width: 300,
           marginTop: 10,
@@ -158,7 +158,7 @@ const Deployer: React.FunctionComponent<DeployerProps> = (
         onClick={() => exec(target)}
       >
         Deploy
-      </Button>
+      </Button> */}
     </div>
   );
 };

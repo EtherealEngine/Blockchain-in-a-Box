@@ -1,6 +1,9 @@
 import { Box, Button, makeStyles, Typography } from "@material-ui/core";
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import "../App.css";
+import { getSideChainUrl } from "../redux/slice/DashboardReducer";
+import { RootState } from "../redux/Store";
 
 const useStyles = makeStyles((theme) => ({
   rootBox: {
@@ -23,35 +26,50 @@ const useStyles = makeStyles((theme) => ({
 
 const DashboardSecurity: React.FunctionComponent = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const { notifications, deploymentLoading } = useSelector(
+    (state: RootState) => state.setup
+  );
+  const { sideChaninLoading, getSideChainUrlData } = useSelector(
+    (state: RootState) => state.dashboard
+  );
+
+  const getSideChainData = () => {
+    dispatch(getSideChainUrl())
+  }
+  useEffect(() => {
+    getSideChainData();
+  }, []);
+
 
   return (
     <Box className={classes.rootBox}>
       <Typography variant={"subtitle1"}>JWT Signing Keys</Typography>
-      <Button
+      {/* <Button
         className={classes.button}
         variant="contained"
         color="primary"
         size="large"
       >
         View API Key
-      </Button>
+      </Button> */}
       <br />
-      <Button
+      {/* <Button
         className={classes.button}
         variant="contained"
         color="primary"
         size="large"
       >
         Regenerate API Keys
-      </Button>
+      </Button> */}
 
       <Typography variant={"subtitle1"} className={classes.marginTop8}>
         Signing Authority
       </Typography>
       <Typography className={classes.marginTop2}>
-        Address: 0xebDeFbB0B1efc88603BF3Ea7DCac4d11628Fb862
+        Address: {getSideChainUrlData.signingAuthorityAddress}
       </Typography>
-      <Button
+      {/* <Button
         className={classes.button}
         variant="contained"
         color="primary"
@@ -67,15 +85,15 @@ const DashboardSecurity: React.FunctionComponent = () => {
         size="large"
       >
         Change Private Key
-      </Button>
+      </Button> */}
 
       <Typography variant={"subtitle1"} className={classes.marginTop8}>
         Treasury
       </Typography>
       <Typography className={classes.marginTop2}>
-        Address: 0xebDeFbB0B1efc88603BF3Ea7DCac4d11628Fb862
+        Address: {getSideChainUrlData.treasuryAddress}
       </Typography>
-      <Button
+      {/* <Button
         className={classes.button}
         variant="contained"
         color="primary"
@@ -91,19 +109,19 @@ const DashboardSecurity: React.FunctionComponent = () => {
         size="large"
       >
         Change Private Key
-      </Button>
+      </Button> */}
 
       <Typography variant={"subtitle1"} className={classes.marginTop8}>
         User Settings
       </Typography>
-      <Button
+      {/* <Button
         className={classes.button}
         variant="contained"
         color="primary"
         size="large"
       >
         Delete Account
-      </Button>
+      </Button> */}
     </Box>
   );
 };
