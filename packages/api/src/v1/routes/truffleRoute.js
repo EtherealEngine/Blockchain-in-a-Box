@@ -1,15 +1,8 @@
 const exec = require("child_process").exec;
+const { OnBoardingData } = require("../sequelize");
 
 
 async function TruffleRoutes(app){
-
-    function sleep(milliseconds) {
-        const date = Date.now();
-        let currentDate = null;
-        do {
-          currentDate = Date.now();
-        } while (currentDate - date < milliseconds);
-      }
 
     app.post("/api/v1/truffle-data", async (req,res,next)=>{
         const { email, networkType } = req.body;
@@ -18,34 +11,27 @@ async function TruffleRoutes(app){
             child = exec('npm run deploy-dev-reset '+email,function(error, stdout, stderr){
                 
                 console.log("=>");
-                /*
-                if (error) {
-                    console.log(`error: ${error.message}`);
-                    return;
-                }
-                if (stderr) {
-                    console.log(`stderr: ${stderr}`);
-                    return;
-                }*/
                 console.log(`stdout: ${stdout}`);
             })
-            sleep(500000);
-            res.end(JSON.stringify(child));
+            setTimeout(async function(){ 
+            let data = await OnBoardingData.findOne({ where: { email : req.body.email } });
+            try{
+                if(data.email){
+                res.end(JSON.stringify({"Status" : 200,  "User": data}));
+                }else{
+                res.end(JSON.stringify({"Status":400, "Message": "Data cannot be fetched."}))
+                }
+            }catch{
+                res.end(JSON.stringify({"Status":400, "Message": "Data cannot be fetched."}))
+            } }, 20000);
+
+            
         }
         if (networkType=="mainnet")
         {
             child = exec('npm run deploy-mainnet-reset',function(error, stdout, stderr){
                 
                 console.log("=>");
-                /*
-                if (error) {
-                    console.log(`error: ${error.message}`);
-                    return;
-                }
-                if (stderr) {
-                    console.log(`stderr: ${stderr}`);
-                    return;
-                }*/
                 console.log(`stdout: ${stdout}`);
             })
             res.end(JSON.stringify(child));
@@ -55,15 +41,6 @@ async function TruffleRoutes(app){
             child = exec('npm run deploy-polygon-reset',function(error, stdout, stderr){
                 
                 console.log("=>");
-                /*
-                if (error) {
-                    console.log(`error: ${error.message}`);
-                    return;
-                }
-                if (stderr) {
-                    console.log(`stderr: ${stderr}`);
-                    return;
-                }*/
                 console.log(`stdout: ${stdout}`);
             })
             res.end(JSON.stringify(child));

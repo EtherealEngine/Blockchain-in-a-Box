@@ -1,5 +1,11 @@
 const { permittedCrossDomainPolicies } = require("helmet");
 const { UserData } = require("../sequelize");
+const { CONSOLE_WEB_URL, DEVELOPMENT, AUTH_SECRET_KEY, AUTH_TOKEN_SECRET } = require("../../common/environment");
+const { setCorsHeaders } = require("../../common/utils.js");
+const crypto = require("crypto");
+const { ResponseStatus } = require("../enums");
+const jwt = require("jsonwebtoken");
+const { sendMessage } = require("../../common/sesClient");
 
 async function UserRoutes(app){
 
@@ -14,10 +20,12 @@ async function UserRoutes(app){
         }
         try{
             UserData.create(req.body).then(resp=>{
-                website = `${website}authenticate?email=${req.body.email}&token=${token}&user=yes&admin=no&landing=dashboard`;
+                website = `${website}authenticate?email=${req.body.userEmail}&token=${token}&user=yes&admin=no&landing=dashboard`;
+                console.log(req.body.userEmail);
+
                 // Send email with login link and token
             sendMessage(
-                req.body.email,
+                req.body.userEmail,
                 "Login | Blockchain in a box",
                 `Greetings! you can access Blockchain in a box console from:\n\n
                 ${website}`,

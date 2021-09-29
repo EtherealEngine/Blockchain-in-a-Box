@@ -106,3 +106,9 @@ dist
 build/
 *package-lock.json
 dev/docker/data/db
+packages/api/src/v1/models/.DS_Store
+packages/api/src/v1/.DS_Store
+packages/api/src/.DS_Store
+packages/api/.DS_Store
+packages/.DS_Store
+.DS_Store
