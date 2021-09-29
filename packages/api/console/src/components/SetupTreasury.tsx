@@ -326,7 +326,7 @@ const SetupTreasury: React.FunctionComponent = () => {
     if (stateObj) {
       let stateObjData = JSON.parse(stateObj);
       stateObj = {
-        ...stateObjData, treasuryMnemonic, currencyContractName,
+        ...stateObjData, treasuryMnemonic, treasuryPrivateKey, treasuryAddress, currencyContractName,
         currencyContractSymbol,
         currencyMarketCap,
         assetContractName,

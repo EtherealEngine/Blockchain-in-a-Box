@@ -332,7 +332,7 @@ const DashboardConfigurations: React.FunctionComponent = () => {
       <Typography variant={"subtitle1"} className={classes.marginTop8}>
         Matic Vigil API Key:
         {
-          getSideChainUrlData?.polygonApiKey ? (<span className={classes.green}>Configured ({getSideChainUrlData.maticVigilKey})</span>) : <span className={classes.red}>Not Ready</span>
+          getSideChainUrlData?.polygonApiKey ? (<span className={classes.green}>Configured ({getSideChainUrlData.polygonApiKey})</span>) : <span className={classes.red}>Not Ready</span>
         }
       </Typography>
       <Typography>

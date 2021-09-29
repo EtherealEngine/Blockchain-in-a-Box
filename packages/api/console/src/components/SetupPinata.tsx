@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 // Local state
 interface ILocalState {
     pinataApiKey: string;
-    pinataSecrectApiKey: string;
+    pinataApiSecretKey: string;
     isLoading: boolean;
     error: string;
 }
@@ -61,7 +61,7 @@ interface ILocalState {
 // Local default state
 const DefaultLocalState: ILocalState = {
     pinataApiKey: "",
-    pinataSecrectApiKey: "",
+    pinataApiSecretKey: "",
     isLoading: false,
     error: "",
 };
@@ -95,7 +95,7 @@ const LocalReducer = (
         case LocalAction.SetAPIKey: {
             return {
                 ...state,
-                pinataSecrectApiKey: (action.payload as IStringPayload).string,
+                pinataApiSecretKey: (action.payload as IStringPayload).string,
             };
         }
         case LocalAction.SetError: {
@@ -116,7 +116,7 @@ const SetupPinata: React.FunctionComponent = () => {
 
     const classes = useStyles();
     const history = useHistory();
-    const [{ pinataApiKey, pinataSecrectApiKey, isLoading, error }, dispatch] = useReducer(
+    const [{ pinataApiKey, pinataApiSecretKey, isLoading, error }, dispatch] = useReducer(
         LocalReducer,
         DefaultLocalState
     );
@@ -125,7 +125,7 @@ const SetupPinata: React.FunctionComponent = () => {
         let stateObj = localStorage.getItem('setupData');
         if (stateObj) {
             let stateObjData = JSON.parse(stateObj)
-            let setupObj = { ...stateObjData, pinataApiKey, pinataSecrectApiKey };
+            let setupObj = { ...stateObjData, pinataApiKey, pinataApiSecretKey };
             localStorage.setItem('setupData', JSON.stringify(setupObj));
             // reduxDispatch(addNotification(setupObj))
             history.push(Routes.SETUP_COMPLETED);
@@ -171,7 +171,7 @@ const SetupPinata: React.FunctionComponent = () => {
                     variant="outlined"
                     label="Secrect API key"
                     placeholder="Secrect API key"
-                    value={pinataSecrectApiKey}
+                    value={pinataApiSecretKey}
                     onChange={(event) =>
                         dispatch({
                             type: LocalAction.SetAPIKey,

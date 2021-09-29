@@ -198,7 +198,7 @@ const SetupSigningAuthority: React.FunctionComponent = () => {
             type: LocalAction.SetAddress,
             payload: { string: data.userAddress },
           })
-          stateObj = { ...stateObjData, userMnemonic: data.userMnemonic, userAddress: data.userAddress, privateKey: data.privateKey }
+          stateObj = { ...stateObjData, signingAuthorityMnemonic: data.userMnemonic, signingAuthorityAddress: data.userAddress, signingAuthorityPrivateKey: data.privateKey }
           localStorage.setItem('setupData', JSON.stringify(stateObj));
         }
       }
@@ -210,7 +210,7 @@ const SetupSigningAuthority: React.FunctionComponent = () => {
     let stateObj = localStorage.getItem('setupData')
     if (stateObj) {
       let stateObjData = JSON.parse(stateObj);
-      stateObj = { ...stateObjData, signingAuthorityMnemonic }
+      stateObj = { ...stateObjData, signingAuthorityMnemonic, signingAuthorityAddress, signingAuthorityPrivateKey }
       localStorage.setItem('setupData', JSON.stringify(stateObj));
       history.push(Routes.SETUP_TREASURE);
     }

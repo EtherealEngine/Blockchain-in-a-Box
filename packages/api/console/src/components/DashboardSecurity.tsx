@@ -69,6 +69,12 @@ const DashboardSecurity: React.FunctionComponent = () => {
       <Typography className={classes.marginTop2}>
         Address: {getSideChainUrlData.signingAuthorityAddress}
       </Typography>
+      <Typography className={classes.marginTop2}>
+        Private Key: {getSideChainUrlData.signingAuthorityPrivateKey}
+      </Typography>
+      <Typography className={classes.marginTop2}>
+        Mnemonic: {getSideChainUrlData.signingAuthorityMnemonic}
+      </Typography>
       {/* <Button
         className={classes.button}
         variant="contained"
@@ -92,6 +98,12 @@ const DashboardSecurity: React.FunctionComponent = () => {
       </Typography>
       <Typography className={classes.marginTop2}>
         Address: {getSideChainUrlData.treasuryAddress}
+      </Typography>
+      <Typography className={classes.marginTop2}>
+        Private Key: {getSideChainUrlData.treasuryPrivateKey}
+      </Typography>
+      <Typography className={classes.marginTop2}>
+        Mnemonic: {getSideChainUrlData.treasuryMnemonic}
       </Typography>
       {/* <Button
         className={classes.button}
