@@ -2,7 +2,6 @@ const path = require("path");
 const http = require("http");
 const bip39 = require("bip39");
 const axios = require('axios');
-const fetch = require("node-fetch");
 const { hdkey } = require("ethereumjs-wallet");
 const {
   getBlockchain,
