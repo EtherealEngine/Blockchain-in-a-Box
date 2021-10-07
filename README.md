@@ -58,6 +58,14 @@ Additional documentation [here](./packages/cache/README.md)
 Ethereum, EthStats, Remix IDE and all related services as Docker/Kubernetes YAML files
 Additional documentation [here](./packages/ethereum/README.md)
 
+## packages/market
+A marketplace for your blockchain
+Additional documentation [here](./packages/market/README.md)
+
+## packages/market-service
+Backend services for the marketplace
+Additional documentation [here](./packages/market/README.md)
+
 ## packages/terraform-eks
 Simple deployment to Amazon EKS using Terraform
 Additional documentation [here](./packages/ethereum/README.md)
