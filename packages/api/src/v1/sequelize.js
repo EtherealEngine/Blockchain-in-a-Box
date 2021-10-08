@@ -6,6 +6,7 @@ const AdminModel = require('./models/adminData');
 const AddressDataModel = require('./models/addressData');
 const EnvironmentDataModel = require('./models/environmentData');
 const OnboardingDataModel = require('./models/onboardingData');
+const TimerDataModel = require("./models/timerData");
 
 const sequelize = new Sequelize('dev', process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
   host: process.env.MYSQL_URL,
@@ -17,6 +18,7 @@ const UserData = UserModel(sequelize, Sequelize);
 const AddressData = AddressDataModel(sequelize, Sequelize);
 const EnvironmentData = EnvironmentDataModel(sequelize, Sequelize);
 const OnBoardingData = OnboardingDataModel(sequelize, Sequelize);
+const TimerData = TimerDataModel(sequelize, Sequelize);
 
 sequelize.sync().then(() => {
   // eslint-disable-next-line no-console
@@ -27,4 +29,4 @@ sequelize.sync().then(() => {
 
 
 
-module.exports = { AdminData, AddressData, EnvironmentData, OnBoardingData, UserData  };
+module.exports = { AdminData, AddressData, EnvironmentData, OnBoardingData, UserData, TimerData };

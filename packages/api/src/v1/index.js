@@ -5,6 +5,7 @@ const { AdminRoutes } = require("./routes/adminRoute.js");
 const { addSetupRoutes } = require("./routes/setup.js");
 const { environmentRoutes } = require("./routes/environmentRoute")
 const { AddressRoutes } = require("./routes/addressRoute")
+const { TimerRoutes} = require("./routes/timerRoute")
 const { UserRoutes} = require("./routes/userRoute")
 const { createWallet } = require("./routes/wallet.js");
 const { TruffleRoutes } = require("./routes/truffleRoute")
@@ -76,6 +77,7 @@ function addV1Routes(app) {
   environmentRoutes(app)
   AddressRoutes(app)
   UserRoutes(app)
+  TimerRoutes(app)
   TruffleRoutes(app)
 
   /**
