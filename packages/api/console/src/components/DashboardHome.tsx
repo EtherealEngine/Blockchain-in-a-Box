@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/Store";
 import LoadingView from "./LoadingView";
 import { getSideChainUrl } from "../redux/slice/DashboardReducer";
+import Timer from "./Timer";
 
 
 const useStyles = makeStyles((theme) => ({

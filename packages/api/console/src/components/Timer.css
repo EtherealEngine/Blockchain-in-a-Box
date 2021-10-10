@@ -1,0 +1,75 @@
+.Timers {
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  #display {
+    margin-bottom: 20px;
+  }
+  #display span {
+    font-size: 36px;
+  }
+  #buttons button:nth-child(2) {
+    margin-left: 8px;
+  }
+  
+  button {
+    font-size: 16px;
+    background-color: rgb(217, 60, 35);
+    color: #fff;
+    border-radius: 8px;
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: rgb(173, 47, 28);
+  }
+  button:active {
+    background-color: rgb(130, 35, 21);
+  }
+  button:focus {
+    outline: 0;
+  }
+
+  .makeStyles-marginTop4-15{
+    padding-right: 57px !important;
+  }
+
+  .info-details{
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+  }
+
+  .border {
+    font-size: 1.6rem;
+    place-items: center;
+    padding: 1rem;
+    margin-top: 25px;
+  }
+  .full-withradius {
+    position: relative;
+    background: #fff;
+  
+    /*The background extends to the outside edge of the padding. No background is drawn beneath the border.*/
+    background-clip: padding-box;
+  
+    border: solid 8px transparent;
+    border-radius: 0.8rem;
+  }
+
+  
+  .full-withradius:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    margin: -8px; /* same as border width */
+    border-radius: inherit; /* inherit container box's radius */
+    background: linear-gradient(to left, turquoise, greenyellow);
+  }
+  

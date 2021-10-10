@@ -97,6 +97,12 @@ const NavigationPanel: React.FunctionComponent = () => {
       icon: <Storage />,
       link: Routes.DASHBOARD_DEPLOYMENT,
     },
+    {
+      key: "n6",
+      label: "Realtime Payment",
+      icon: <Storage />,
+      link: Routes.TIMER,
+    },
   ];
 
   const userOptions: MenuItem[] = [

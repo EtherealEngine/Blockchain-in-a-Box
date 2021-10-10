@@ -20,6 +20,8 @@ import DashboardHome from "./components/DashboardHome";
 import DashboardUsers from "./components/DashboardUsers";
 import DashboardSecurity from "./components/DashboardSecurity";
 import DashboardConfigurations from "./components/DashboardConfigurations";
+import Timer from "./components/Timer";
+
 import Authenticate from "./components/Authenticate";
 import { RootState } from "./redux/Store";
 import { useSelector } from "react-redux";
@@ -109,6 +111,11 @@ const Router: React.FunctionComponent = () => {
               exact
               path={Routes.DASHBOARD_DEPLOYMENT}
               component={DashboardDeployment}
+            />
+             <Route
+              exact
+              path={Routes.TIMER}
+              component={Timer}
             />
           </DashboardContainer>
         </Route>

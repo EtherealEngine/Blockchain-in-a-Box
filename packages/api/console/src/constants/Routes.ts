@@ -19,6 +19,7 @@ const Routes = {
   SETUP_POLYGON_VIGIL: '/setup/polygon-vigil',
   SETUP_PINATA: '/setup/pinata-api',
   SETUP_COMPLETED: '/setup/completed',
+  TIMER: '/dashboard/timer',
 };
 
 export default Routes;
