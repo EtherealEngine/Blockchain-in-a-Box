@@ -77,12 +77,12 @@
     ]
   },
   "devDependencies": {
-    "@storybook/addon-actions": "^6.3.1",
-    "@storybook/addon-essentials": "^6.3.1",
-    "@storybook/addon-links": "^6.3.1",
-    "@storybook/node-logger": "^6.3.1",
+    "@storybook/addon-actions": "6.3.12",
+    "@storybook/addon-essentials": "6.3.12",
+    "@storybook/addon-links": "6.3.12",
+    "@storybook/node-logger": "6.3.12",
     "@storybook/preset-create-react-app": "^3.1.6",
-    "@storybook/react": "^6.3.1",
+    "@storybook/react": "6.3.12",
     "@types/react-router-dom": "^5.1.7",
     "colors": "^1.4.0",
     "create-react-component-folder": "^0.3.7",
