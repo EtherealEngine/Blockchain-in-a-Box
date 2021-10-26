@@ -1,0 +1,45 @@
+{
+  "name": "@fluuuid/nft-contracts",
+  "version": "1.1.0",
+  "description": "nft contracts for NFT marketplace prototype",
+  "main": "index.js",
+  "author": "Silvio Paganini <silvio@fluuu.id>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@openzeppelin/contracts-upgradeable": "^4.3.1",
+    "@openzeppelin/truffle-upgrades": "^1.8.0",
+    "@truffle/hdwallet-provider": "^1.4.1",
+    "@types/bn.js": "^5.1.0",
+    "@types/chai": "^4.2.21",
+    "@types/mocha": "^8.2.3",
+    "colors": "^1.4.0",
+    "dotenv": "^10.0.0",
+    "ethers": "^5.4.1",
+    "minimist": "^1.2.5",
+    "node-fetch": "^2.6.1",
+    "truffle": "^5.3.14"
+  },
+  "peerDependencies":{
+    "@typechain/truffle-v5": "^5.0.0"
+  },
+  "scripts": {
+    "generate-types": "npx typechain --target=truffle-v5 'build/contracts/*.json'",
+    "lint": "prettier --write './**/*.{js,jsx,ts,tsx}'",
+    "test": "truffle test",
+    "coverage": "truffle run coverage",
+    "populate": "truffle exec devops/mint.js",
+    "populate:rinkeby": "truffle exec --network rinkeby devops/mint.js",
+    "migrate": "truffle migrate --network development --reset",
+    "migrate:populate": "truffle migrate --network development --reset && yarn populate",
+    "migrate:rinkeby": "truffle migrate --network rinkeby --reset"
+  },
+  "devDependencies": {
+    "@openzeppelin/test-helpers": "^0.5.12",
+    "prettier": "^2.3.2",
+    "solidity-coverage": "^0.7.16",
+    "ts-node": "^10.1.0",
+    "typechain": "^5.1.1",
+    "typescript": "^4.3.5"
+  }
+}
