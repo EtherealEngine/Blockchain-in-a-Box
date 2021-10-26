@@ -43,7 +43,7 @@
     "zustand": "^3.5.5"
   },
   "resolutions": {
-    "babel-loader": "8.1.0"
+    "babel-loader": "8.2.3"
   },
   "scripts": {
     "postinstall": "husky install",
