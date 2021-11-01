@@ -4,6 +4,8 @@ NODE_ENV=development
 
 BROWSER=chrome
 
+#for ubuntu
+
 BROWSER=/usr/bin/google-chrome-stable
 
 REACT_APP_SERVICE_URL=http://localhost:4000/dev
