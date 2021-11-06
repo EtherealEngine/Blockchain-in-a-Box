@@ -6,28 +6,30 @@ custom:
     includeModules: true
   serverless-offline:
     httpPort: 4000
-  customDomain:
-    apiType: rest
-    autoDomain: true
-    basePath: ${self:provider.stage}
-    createRoute53Record: true
-    certificateArn: ${env:CERTIFICATE_ARN }
-    domainName: ${env:DOMAIN_NAME }
-    endpointType: 'edge'
-    hostedZoneId:  ${env:ZONE_ID }
-    securityPolicy: tls_1_2
+  # for direct upload commented this section
+  #customDomain:
+    #apiType: rest
+    #autoDomain: false
+    #basePath: ${self:provider.stage}
+    #createRoute53Record: true
+    #certificateArn: ${env:CERTIFICATE_ARN }
+    #domainName: ${env:DOMAIN_NAME }
+    #endpointType: 'edge'
+    #hostedZoneId:  ${env:ZONE_ID }
+    #securityPolicy: tls_1_2
 
+# for direct upload commented this section
 plugins:
   - serverless-webpack
   - serverless-offline
-  - serverless-domain-manager
+#  - serverless-domain-manager
 
 provider:
   apiName: marketplace-service
   name: aws
   runtime: nodejs14.x
   stage: ${opt:stage, 'dev'}
-  region: us-east-1
+  region: us-west-1
   lambdaHashingVersion: 20201221
   apiGateway:
     shouldStartNameWithService: true
