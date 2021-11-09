@@ -83,7 +83,7 @@
     "@storybook/node-logger": "6.3.12",
     "@storybook/preset-create-react-app": "4.0.0",
     "@storybook/react": "6.3.12",
-    "@types/react-router-dom": "5.3.1",
+    "@types/react-router-dom": "5.3.2",
     "colors": "1.4.0",
     "create-react-component-folder": "0.3.7",
     "husky": "7.0.4",
