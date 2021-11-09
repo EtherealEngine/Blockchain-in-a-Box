@@ -1,3 +1,10 @@
+# NFT Market AWS Serverless Lambda Service 
+
+![GitHub](https://img.shields.io/github/license/silviopaganini/nft-market-service?style=round)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=round)](https://github.com/prettier/prettier)
+![](https://img.shields.io/badge/Typescript-💪-blue)
+
+To use together with [NFT Marketplace](https://github.com/silviopaganini/nft-market)
 
 ## Installation
 
@@ -13,15 +20,15 @@ npm install
 env file required
 
 ```yml
-IPFS_HOST=ipfs.infura.io
-IPFS_PROTOCOL=https
-IPFS_PORT=5001
-APIETHERSCAN=USFF5FBG7QXESVII5GX8SIXXCZW6VRY3W8
-DOMAIN_NAME=your.domain.for.your.api.com
-CERTIFICATE_ARN 
-ZONE_ID
-IPFS_INFURA_PROJECT_ID=1wH8HCOBYnmdOGcC25ElTRMk4A3
-IPFS_INFURA_SECRET=997d6a2c25c5dc93e418de4bb852cd42
+IPFS_HOST: ipfs.infura.io
+IPFS_PROTOCOL: https
+IPFS_PORT: 5001
+APIETHERSCAN: 
+DOMAIN_NAME: your.domain.for.your.api.com
+CERTIFICATE_ARN: 
+ZONE_ID: 
+IPFS_INFURA_PROJECT_ID: 
+IPFS_INFURA_SECRET:
 ```
 
 ## Running locally sls offline 
@@ -29,9 +36,3 @@ IPFS_INFURA_SECRET=997d6a2c25c5dc93e418de4bb852cd42
 ```
 npm start
 ```
-
-## To show/change your tokens
-
-Please change content of 
-
-db/index.ts
