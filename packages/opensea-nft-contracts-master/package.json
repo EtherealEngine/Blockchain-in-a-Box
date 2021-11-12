@@ -9,7 +9,7 @@
   "dependencies": {
     "@openzeppelin/contracts-upgradeable": "4.3.2",
     "@openzeppelin/truffle-upgrades": "1.11.0",
-    "@truffle/hdwallet-provider": "^1.4.1",
+    "@truffle/hdwallet-provider": "1.6.0",
     "@types/bn.js": "^5.1.0",
     "@types/chai": "4.2.22",
     "@types/mocha": "^8.2.3",
