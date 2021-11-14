@@ -58,7 +58,7 @@ const useAppState = create<StateContext>((set, get) => ({
       if (!deployedNetwork) {
         throw new Error('The network you selected is no supported yet.')
       }
-      deployedNetwork.address = "0x6a18a01499a1126c216c70b1aa6e64afaf96f9a6"
+      deployedNetwork.address = "0xfd111fa38528663e670a1174d654c0797fcd4d01"
       const { address } = deployedNetwork
       const contract = new Contract(address, NFTT.abi, library.getSigner())
 
