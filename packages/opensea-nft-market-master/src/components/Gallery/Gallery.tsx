@@ -39,9 +39,9 @@ const Gallery = () => {
         // console.log("FETCH ", pdata,backUpPData);
         let cat: any = [];
         let traitobj: any = {
-          base: [],
-          eyes: [],
-          mouth: [],
+          height: [],
+          weight: [],
+          age: [],
           level: [],
           stamina: [],
           personality: []
@@ -52,9 +52,10 @@ const Gallery = () => {
           let attr = data.attributes;
           attr.forEach((av: any, index: number) => {
             if (traitobj[av['trait_type']] != undefined && traitobj[av['trait_type']] instanceof Array) {
-              // console.log("av ", av['trait_type'], traitobj[av['trait_type']]);
-              if (!traitobj[av['trait_type']].includes(av['value']))
-                traitobj[av['trait_type']].push(av['value'])
+              // if (!traitobj[av['trait_type']].includes(av['value']))
+              //   traitobj[av['trait_type']].push(av['value'])
+              if (!traitobj[av['trait_type']].some((x:any)=> x.value===av['value']))
+                traitobj[av['trait_type']].push({value:av['value'],clicked:false})
 
             }
           })
@@ -194,6 +195,16 @@ const Gallery = () => {
 
   }
 
+  const selectedTrait = (ky:any,data:any,ix:number) => {
+    console.log(data,traitcategories,ix);
+
+    traitcategories[ky][ix].clicked = true;
+    console.log(traitcategories);
+    setTraitCategories(traitcategories)
+    
+    
+  }
+
   function dynamicSort(property: any) {
     var sortOrder = 1;
     if (property[0] === "-") {
@@ -235,9 +246,9 @@ const Gallery = () => {
         {
          traitcategories && Object.keys(traitcategories).map((ky: any, index: number) => {
             return (
-              <div>
+              <div style={{display:"flex",paddingBottom:"8px",borderBottom:"1px solid grey",paddingTop:"9px"}}>
                 
-                <Heading as="div" sx={{ color: 'lightGray' }}>
+                <Heading as="div" sx={{ color: 'lightGray', fontWeight:"bolder" }}>
                   {ky.toUpperCase()}:
                 </Heading>
                 <Flex ml={3}>
@@ -253,8 +264,8 @@ const Gallery = () => {
                     Price
                   </Button> */}
                   {
-                    traitcategories[ky].map((data:any,ix:number) => <div 
-                    style={{display:"inline-block", padding:"0 25px", height:"38px",lineHeight:"38px",fontSize:"15px",borderRadius:"25px",backgroundColor:"#524f4f"}}>{data}</div>)
+                    traitcategories[ky].map((data:any,ix:number) => <div onClick={(e)=>selectedTrait(ky,data,ix)}
+                    style={{display:"inline-block", padding:"0 25px", height:"38px",lineHeight:"38px",fontSize:"15px",borderRadius:"25px",backgroundColor:data.clicked === true?"#0074cc": "#524f4f",cursor:"pointer"}}>{data.value}</div>)
                   }
                 </Flex>
                 
