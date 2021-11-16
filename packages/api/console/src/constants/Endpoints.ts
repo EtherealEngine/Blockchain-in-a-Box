@@ -1,6 +1,6 @@
 const Endpoints = {
-  // HOST: 'http://localhost:8080',
-  HOST: 'http://af2fc18b539ee488984fa4e58de37686-1454411376.us-west-1.elb.amazonaws.com',
+   HOST: 'http://localhost:8080',
+  //HOST: 'http://af2fc18b539ee488984fa4e58de37686-1454411376.us-west-1.elb.amazonaws.com',
   GET_ADMIN_FIRSTTIME: '/api/v1/admin/firsttime',
   POST_ADMIN_LOGIN: '/api/v1/admin/login',
   POST_ADMIN_AUTHENTICATION: '/api/v1/admin/authentication',
