@@ -48,7 +48,7 @@ async function sendMessage(toAddress, subject, message, messageHtml) {
     return data; // For unit tests.
   } catch (err) {
     console.log("Error", err);
-    throw err;
+    //throw err;
   }
 }
 

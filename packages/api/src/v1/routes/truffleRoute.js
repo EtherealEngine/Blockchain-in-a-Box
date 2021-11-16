@@ -14,12 +14,12 @@ async function TruffleRoutes(app){
                 console.log(`stdout: ${stdout}`);
             })
             setTimeout(async function(){ 
-            let data = await OnBoardingData.findOne({ where: { email : req.body.email } });
             try{
+                let data = await OnBoardingData.findOne({ where: { email : req.body.email } });
                 if(data.email){
-                res.end(JSON.stringify({"Status" : 200,  "User": data}));
+                    res.end(JSON.stringify({"Status" : 200,  "User": data}));
                 }else{
-                res.end(JSON.stringify({"Status":400, "Message": "Data cannot be fetched."}))
+                    res.end(JSON.stringify({"Status":400, "Message": "Data cannot be fetched."}))
                 }
             }catch{
                 res.end(JSON.stringify({"Status":400, "Message": "Data cannot be fetched."}))
@@ -36,6 +36,7 @@ async function TruffleRoutes(app){
             })
             res.end(JSON.stringify(child));
         }
+        
         if (networkType=="polygon")
         {
             child = exec('npm run deploy-polygon-reset',function(error, stdout, stderr){
@@ -44,6 +45,10 @@ async function TruffleRoutes(app){
                 console.log(`stdout: ${stdout}`);
             })
             res.end(JSON.stringify(child));
+        }
+
+        if(networkType == null){
+            res.end(JSON.stringify({"Status":400, "Message": "Data cannot be fetched."}))
         }
     })
 

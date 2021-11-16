@@ -23,6 +23,8 @@ async function environmentRoutes(app) {
                 dataKey, dataValue, createdBy
             }).then(resp=>{
                 res.end(JSON.stringify({"Status":200, "Message": "Data Submitted Successfully."}))
+            }).catch(err=>{
+                res.end(JSON.stringify({"Status":400, "Message": "Data cannot be submitted."}))    
             })
         }catch{
             res.end(JSON.stringify({"Status":400, "Message": "Data cannot be submitted."}))
