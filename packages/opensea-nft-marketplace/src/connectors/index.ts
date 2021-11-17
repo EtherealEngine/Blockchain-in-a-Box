@@ -14,13 +14,13 @@ import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 
 export enum ConnectorNames {
   Metamask = 'Metamask',
-  WalletConnect = 'WalletConnect'
+  WalletConnect = 'WalletConnect',
 }
 
 const POLLING_INTERVAL = 12000
 const RPC_URLS: { [chainId: number]: string } = {
   1: process.env.REACT_APP_RPC_URL_1 as string,
-  4: process.env.REACT_APP_RPC_URL_4 as string
+  4: process.env.REACT_APP_RPC_URL_4 as string,
 }
 
 export const injected = new InjectedConnector({ supportedChainIds: [5777, 1337, 4] })
@@ -35,11 +35,11 @@ export const injected = new InjectedConnector({ supportedChainIds: [5777, 1337, 
 
 export const walletconnect = new WalletConnectConnector({
   qrcode: true,
-  /*pollingInterval: POLLING_INTERVAL,*/
+  pollingInterval: POLLING_INTERVAL,
   infuraId: process.env.REACT_APP_INFURA_ID,
   rpc: { 4: RPC_URLS[4] },
   chainId: 4,
-  supportedChainIds: [4]
+  supportedChainIds: [4],
 })
 
 // export const walletlink = new WalletLinkConnector({
@@ -92,7 +92,7 @@ export const walletconnect = new WalletConnectConnector({
 export const connectorsByName: { [connectorName in ConnectorNames]: any } = {
   [ConnectorNames.Metamask]: injected,
   // [ConnectorNames.Network]: network,
-  [ConnectorNames.WalletConnect]: walletconnect
+  [ConnectorNames.WalletConnect]: walletconnect,
   // [ConnectorNames.WalletLink]: walletlink,
   // [ConnectorNames.Ledger]: ledger,
   // [ConnectorNames.Trezor]: trezor,

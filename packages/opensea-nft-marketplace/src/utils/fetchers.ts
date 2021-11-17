@@ -5,7 +5,7 @@ export const fetcherETHUSD = async (url: string) => {
     const { setEthPrice } = useAppState.getState()
 
     const {
-      result: { ethusd }
+      result: { ethusd },
     } = await (await fetch(url)).json()
     setEthPrice(ethusd)
   } catch (e) {
@@ -17,7 +17,7 @@ export const fetcherMetadata = async (url: string) => {
   try {
     return await (await fetch(url)).json()
   } catch (e) {
-    return { error: (e as any).message }
+    return { error: e.message }
   }
 }
 
@@ -28,6 +28,6 @@ export const fetchOwner = async (id: string) => {
 
     return await contract?.ownerOf(id)
   } catch (e) {
-    return { error: (e as any).message }
+    return { error: e.message }
   }
 }

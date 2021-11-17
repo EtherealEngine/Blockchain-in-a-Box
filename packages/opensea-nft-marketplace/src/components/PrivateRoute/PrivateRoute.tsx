@@ -11,7 +11,12 @@ type PrivateRouteProps = {
 const PrivateRoute = ({ component: Component, path }: PrivateRouteProps) => {
   const { isAuthenticated } = useAppState()
 
-  return <Route path={path} render={(props) => (isAuthenticated ? <Component {...props} /> : <Redirect to="/" />)} />
+  return (
+    <Route
+      path={path}
+      render={props => (isAuthenticated ? <Component {...props} /> : <Redirect to="/" />)}
+    />
+  )
 }
 
 export { PrivateRoute }

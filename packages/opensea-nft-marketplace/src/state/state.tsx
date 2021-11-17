@@ -52,12 +52,13 @@ const useAppState = create<StateContext>((set, get) => ({
             return id
         }
       }
-      const deployedNetwork = NFTT.networks[String(networkid(chainId)) as keyof typeof NFTT.networks]
+      const deployedNetwork =
+        NFTT.networks[String(networkid(chainId)) as keyof typeof NFTT.networks]
 
       if (!deployedNetwork) {
         throw new Error('The network you selected is no supported yet.')
       }
-      deployedNetwork.address = '0xfd111fa38528663e670a1174d654c0797fcd4d01'
+      deployedNetwork.address = "0xfd111fa38528663e670a1174d654c0797fcd4d01"
       const { address } = deployedNetwork
       const contract = new Contract(address, NFTT.abi, library.getSigner())
 
@@ -70,8 +71,8 @@ const useAppState = create<StateContext>((set, get) => ({
         contractDetails: {
           name,
           symbol,
-          address
-        }
+          address,
+        },
       })
     } catch (e) {
       console.log(e)
@@ -90,7 +91,7 @@ const useAppState = create<StateContext>((set, get) => ({
 
       set({
         isAuthenticated: true,
-        user: { address: address || user?.address || '', balance, ownedTokens }
+        user: { address: address || user?.address || '', balance, ownedTokens },
       })
     } catch (e) {
       console.log(e)
@@ -98,7 +99,8 @@ const useAppState = create<StateContext>((set, get) => ({
   },
   setTokensOnSale: (tokensOnSale: TokenProps[]) => set({ tokensOnSale: tokensOnSale }),
   setEthPrice: (ethPrice: string) => set({ ethPrice: ethPrice }),
-  setActivatingConnector: (activatingConnector: any) => set({ activatingConnector: activatingConnector }),
+  setActivatingConnector: (activatingConnector: any) =>
+    set({ activatingConnector: activatingConnector }),
   setTransaction: (transaction: any) => set({ transaction: transaction }),
 
   //
@@ -117,7 +119,7 @@ const useAppState = create<StateContext>((set, get) => ({
 
       const ownedTokens: Map<string, TokenProps> = new Map()
       await Promise.all(
-        results.map(async (current) => {
+        results.map(async current => {
           const ownerToken = await contract.ownerOf(current.args?.tokenId)
 
           if (ownerToken === userAddress) {
@@ -128,7 +130,7 @@ const useAppState = create<StateContext>((set, get) => ({
               id,
               name,
               price,
-              uri
+              uri,
             })
           }
         })
@@ -194,7 +196,7 @@ const useAppState = create<StateContext>((set, get) => ({
       if (!user) throw new Error('No user found')
 
       const tx = await contract['safeTransferFrom(address,address,uint256)'](user.address, to, id, {
-        from: user.address
+        from: user.address,
       })
 
       // console.log(tx)
@@ -202,7 +204,7 @@ const useAppState = create<StateContext>((set, get) => ({
     } catch (e) {
       console.log(e)
     }
-  }
+  },
 }))
 
 export { useAppState }
