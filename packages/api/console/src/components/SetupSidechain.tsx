@@ -8,7 +8,7 @@ import {
 } from "@material-ui/core";
 import { ActionResult } from "../models/Action";
 import { IBasePayload, IStringPayload } from "../models/IPayloads";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Routes from "../constants/Routes";
 import "../App.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -106,7 +106,7 @@ const LocalReducer = (
 
 const SetupSidechain: React.FunctionComponent = () => {
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [sideChainError, setsideChainError] = useState({ orgNameValue: false, sidechainURLvalid: false });
 
   useEffect(() => {
@@ -141,7 +141,7 @@ const SetupSidechain: React.FunctionComponent = () => {
       let setupObj = { organizationName, sidechainURL, email: emailData };
       console.log("TST ", email);
       localStorage.setItem('setupData', JSON.stringify(setupObj));
-      history.push(Routes.SETUP_SIGNING_AUTHORITY);
+      navigate(Routes.SETUP_SIGNING_AUTHORITY);
     }
 
   }

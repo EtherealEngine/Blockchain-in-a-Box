@@ -15,7 +15,7 @@ import {
   Storage,
 } from "@material-ui/icons";
 import React, { Fragment, ReactElement } from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Routes from "../constants/Routes";
 import "../App.css";
 import { useSelector } from "react-redux";
@@ -60,7 +60,7 @@ interface MenuItem {
 
 const NavigationPanel: React.FunctionComponent = () => {
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
   const { email, organizationName } = useSelector(
     (state: RootState) => state.admin
@@ -133,7 +133,7 @@ const NavigationPanel: React.FunctionComponent = () => {
             button
             key={option.key}
             selected={location.pathname === option.link}
-            onClick={() => history.push(option.link)}
+            onClick={() => navigate(option.link)}
           >
             <ListItemIcon>{option.icon}</ListItemIcon>
             <ListItemText primary={option.label} />
@@ -149,7 +149,7 @@ const NavigationPanel: React.FunctionComponent = () => {
             button
             key={option.key}
             selected={location.pathname === option.link}
-            onClick={() => history.push(option.link)}
+            onClick={() => navigate(option.link)}
           >
             <ListItemText
               className={classes.userOption}

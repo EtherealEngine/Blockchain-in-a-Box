@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   TextField,
   Grid,

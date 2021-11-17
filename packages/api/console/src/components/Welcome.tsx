@@ -1,6 +1,6 @@
 import { Box, Button, Grid, makeStyles, Typography } from '@material-ui/core';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import '../App.css'
 import Routes from '../constants/Routes';
 
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Welcome = () => {
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const openUrl = (e, url) => {
     window.open(url, '_blank');
@@ -43,7 +43,7 @@ const Welcome = () => {
             variant="contained"
             color="primary"
             size="large"
-            onClick={() => history.push(Routes.LOGIN)}>
+            onClick={() => navigate(Routes.LOGIN)}>
             Adminstrator Login
           </Button>
           <Button className={classes.button}
