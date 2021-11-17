@@ -19,22 +19,35 @@ async function UserRoutes(app){
             website += "/";
         }
         try{
-            UserData.create(req.body).then(resp=>{
-                website = `${website}authenticate?email=${req.body.userEmail}&token=${token}&user=yes&admin=no&landing=dashboard`;
-                console.log(req.body.userEmail);
 
-                // Send email with login link and token
-            sendMessage(
-                req.body.userEmail,
-                "Login | Blockchain in a box",
-                `Greetings! you can access Blockchain in a box console from:\n\n
-                ${website}`,
-                `<h1>Login Information</h1>
-                <p>Greetings! you can access Blockchain in a box console from:</p>
-                <a href=${website}>${website}</a>`
-            );
-            res.end(JSON.stringify({"Status":200, "Message": "Data Submitted Successfully."}))
-            })
+        UserData.findOne({
+                where: {
+                  userEmail: req.body.userEmail || "",
+                },
+              }).then(userData=>{
+                if(userData == null){
+                    UserData.create(req.body).then(resp=>{
+                        website = `${website}authenticate?email=${req.body.userEmail}&token=${token}&user=yes&admin=no&landing=dashboard`;
+                        console.log(req.body.userEmail);
+    
+                        // Send email with login link and token
+                        sendMessage(
+                            req.body.userEmail,
+                            "Login | Blockchain in a box",
+                            `Greetings! you can access Blockchain in a box console from:\n\n
+                            ${website}`,
+                            `<h1>Login Information</h1>
+                            <p>Greetings! you can access Blockchain in a box console from:</p>
+                            <a href=${website}>${website}</a>`
+                        );
+                        res.end(JSON.stringify({"Status":200, "Message": "Data Submitted Successfully."}))
+                    }).catch(function (err) {
+                        res.end(JSON.stringify({"Status":400, "Message": "Data cannot be submitted."}))
+                    })
+                }else{
+                    res.end(JSON.stringify({"Status":401, "Message": "User already exist."}))
+                }
+              })
         }catch{
             res.end(JSON.stringify({"Status":400, "Message": "Data cannot be submitted."}))
         }
@@ -42,12 +55,16 @@ async function UserRoutes(app){
 })
   
     app.get("/api/v1/user-data", async (req,res,next)=>{
-        let email  = req.query.email
-        let data = await UserData.findAll({ where: { email: email } });
-        if(data)
-            res.end(JSON.stringify({"Status":200, "Data":data}))
-        else
-            res.end(JSON.stringify({"Status":400, "Message": "Data cannot be fetched."}))
+        try{
+                let email  = req.query.email
+                let data = await UserData.findAll({ where: { email: email } });
+                if(data)
+                    res.end(JSON.stringify({"Status":200, "Data":data}))
+                else
+                    res.end(JSON.stringify({"Status":400, "Message": "Data cannot be fetched."}))
+            }catch (err){
+                res.end(JSON.stringify({"Status":400, "Message": "Data cannot be fetched."}))
+            }
     })
     
 }

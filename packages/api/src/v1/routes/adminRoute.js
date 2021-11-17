@@ -229,15 +229,15 @@ async function AdminRoutes(app) {
      
       OnBoardingData.create(req.body.data).then( (result) => res.end(JSON.stringify({"Status":200, "Message": "Data Submitted Successfully."})) )
     }catch{
-      res.end(JSON.stringify({"Status":400, "Message": "Data cannot be fetched."}))
+      res.end(JSON.stringify({"Status":400, "Message": "Data cannot be submitted."}))
     }
   })
 
   // Get data by dataKey
   app.get("/api/v1/onboarding-data",async (req, res) =>{
     console.log("=>",req.query.email)
-      let data = await OnBoardingData.findOne({ where: { email : req.query.email } });
       try{
+        let data = await OnBoardingData.findOne({ where: { email : req.query.email } });
         if(data.email){
           res.end(JSON.stringify({"Status" : 200,  "User": data}));
         }else{
