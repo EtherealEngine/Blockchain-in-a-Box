@@ -1,31 +1,20 @@
 {
-  "name": "@xrengine/nft-marketplace",
+  "name": "@fluuuid/nft-marketplace",
   "version": "2.0.0",
   "homepage": "https://nft.s2paganini.com",
   "dependencies": {
     "@ethersproject/constants": "^5.4.0",
     "@ethersproject/providers": "^5.4.0",
     "@fluuuid/nft-contracts": "silviopaganini/nft-contracts",
-<<<<<<< HEAD:packages/opensea-nft-marketplace/package.json
     "@sentry/react": "^6.8.0",
     "@sentry/tracing": "^6.8.0",
     "@testing-library/jest-dom": "^5.14.1",
-=======
-    "@sentry/react": "6.15.0",
-    "@sentry/tracing": "6.15.0",
-    "@testing-library/jest-dom": "5.15.0",
->>>>>>> 40f6bb8dc3ca2292840075b0b3ac5d2135c4b362:packages/opensea-nft-market-master/package.json
     "@testing-library/react": "^12.0.0",
     "@testing-library/user-event": "^13.1.9",
     "@types/jest": "^26.0.23",
     "@types/node": "^16.3.0",
-<<<<<<< HEAD:packages/opensea-nft-marketplace/package.json
     "@types/react": "^17.0.11",
     "@types/react-dom": "^17.0.8",
-=======
-    "@types/react": "17.0.35",
-    "@types/react-dom": "17.0.11",
->>>>>>> 40f6bb8dc3ca2292840075b0b3ac5d2135c4b362:packages/opensea-nft-market-master/package.json
     "@web3-react/abstract-connector": "^6.0.7",
     "@web3-react/authereum-connector": "^6.2.0",
     "@web3-react/core": "^6.1.9",
@@ -41,7 +30,6 @@
     "@web3-react/trezor-connector": "^6.1.9",
     "@web3-react/walletconnect-connector": "^6.2.0",
     "@web3-react/walletlink-connector": "^6.2.2",
-    "babel-loader": "^8.1.0",
     "ethers": "^5.4.0",
     "jazzicon": "^1.5.0",
     "react": "^17.0.1",
@@ -58,6 +46,7 @@
     "babel-loader": "8.1.0"
   },
   "scripts": {
+    "postinstall": "husky install",
     "start": "export PORT=4000 && react-scripts start",
     "d:start": "doppler run yarn start",
     "build": "react-scripts build",
@@ -97,7 +86,7 @@
     "@types/react-router-dom": "^5.1.7",
     "colors": "^1.4.0",
     "create-react-component-folder": "^0.3.7",
-    "husky": "^7.0.4",
+    "husky": "^7.0.1",
     "prettier": "^2.3.2",
     "yargs": "^17.0.1"
   }
