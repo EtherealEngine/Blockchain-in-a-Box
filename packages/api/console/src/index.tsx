@@ -7,13 +7,16 @@ import { defaultTheme } from "./utilities/MuiThemes";
 import { Provider } from "react-redux";
 import store, { history } from "./redux/Store";
 import "./index.css";
+import {BrowserRouter as Router} from 'react-router-dom';
 
 const render = () => {
   ReactDOM.render(
     <Provider store={store}>
       <ThemeProvider theme={defaultTheme}>
         <ConnectedRouter history={history}>
-          <App />
+          <Router>
+            <App />
+          </Router>
         </ConnectedRouter>
       </ThemeProvider>
     </Provider>,

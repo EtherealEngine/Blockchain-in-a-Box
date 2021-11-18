@@ -13,7 +13,7 @@ import {
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { ActionResult } from "../models/Action";
 import { IBasePayload, IStringPayload } from "../models/IPayloads";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Routes from "../constants/Routes";
 import "../App.css";
 
@@ -116,7 +116,7 @@ const LocalReducer = (
 
 const SetupPolygon: React.FunctionComponent = () => {
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [{ polygonMnemonic, showMnemonic, isLoading, error }, dispatch] = useReducer(
     LocalReducer,
     DefaultLocalState
@@ -128,7 +128,7 @@ const SetupPolygon: React.FunctionComponent = () => {
       let stateObjData = JSON.parse(stateObj)
       let setupObj = { ...stateObjData, polygonMnemonic };
       localStorage.setItem('setupData', JSON.stringify(setupObj));
-      history.push(Routes.SETUP_POLYGON_VIGIL);
+      navigate(Routes.SETUP_POLYGON_VIGIL);
     }
 
   }
@@ -206,7 +206,7 @@ const SetupPolygon: React.FunctionComponent = () => {
               color="secondary"
               size="large"
               onClick={() => {
-                history.push(Routes.SETUP_POLYGON_VIGIL);
+                navigate(Routes.SETUP_POLYGON_VIGIL);
               }}
             >
               Skip

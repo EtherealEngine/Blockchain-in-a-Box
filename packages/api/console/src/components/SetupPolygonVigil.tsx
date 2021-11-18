@@ -8,7 +8,7 @@ import {
 } from "@material-ui/core";
 import { ActionResult } from "../models/Action";
 import { IBasePayload, IStringPayload } from "../models/IPayloads";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Routes from "../constants/Routes";
 import "../App.css";
 
@@ -95,7 +95,7 @@ const LocalReducer = (
 
 const SetupPolygonVigil: React.FunctionComponent = () => {
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [{ polygonApiKey, isLoading, error }, dispatch] = useReducer(
     LocalReducer,
     DefaultLocalState
@@ -107,7 +107,7 @@ const SetupPolygonVigil: React.FunctionComponent = () => {
       let stateObjData = JSON.parse(stateObj)
       let setupObj = { ...stateObjData, polygonApiKey };
       localStorage.setItem('setupData', JSON.stringify(setupObj));
-      history.push(Routes.SETUP_PINATA);
+      navigate(Routes.SETUP_PINATA);
 
     }
 

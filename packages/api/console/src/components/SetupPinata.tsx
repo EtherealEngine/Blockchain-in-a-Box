@@ -8,7 +8,7 @@ import {
 } from "@material-ui/core";
 import { ActionResult } from "../models/Action";
 import { IBasePayload, IStringPayload } from "../models/IPayloads";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Routes from "../constants/Routes";
 import "../App.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -115,7 +115,7 @@ const SetupPinata: React.FunctionComponent = () => {
     const reduxDispatch = useDispatch();
 
     const classes = useStyles();
-    const history = useHistory();
+    const navigate = useNavigate();
     const [{ pinataApiKey, pinataApiSecretKey, isLoading, error }, dispatch] = useReducer(
         LocalReducer,
         DefaultLocalState
@@ -128,7 +128,7 @@ const SetupPinata: React.FunctionComponent = () => {
             let setupObj = { ...stateObjData, pinataApiKey, pinataApiSecretKey };
             localStorage.setItem('setupData', JSON.stringify(setupObj));
             // reduxDispatch(addNotification(setupObj))
-            history.push(Routes.SETUP_COMPLETED);
+            navigate(Routes.SETUP_COMPLETED);
 
         }
 
@@ -194,7 +194,7 @@ const SetupPinata: React.FunctionComponent = () => {
                             color="secondary"
                             size="large"
                             onClick={() => {
-                                history.push(Routes.SETUP_POLYGON);
+                                navigate(Routes.SETUP_POLYGON);
                             }}
                         >
                             Skip

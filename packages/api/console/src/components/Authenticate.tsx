@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Grid, makeStyles } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import queryString from "query-string";
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Authenticate: React.FunctionComponent = () => {
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
   const { loadingMessage, error } = useSelector(
@@ -53,9 +53,9 @@ const Authenticate: React.FunctionComponent = () => {
       localStorage.setItem('userType', 'user');
     }
     if (admin === 'yes' && landing !== 'dashboard') {
-      history.push(Routes.SETUP)
+      navigate(Routes.SETUP)
     } else {
-      history.push(Routes.DASHBOARD)
+      navigate(Routes.DASHBOARD)
     }
 
 
@@ -74,7 +74,7 @@ const Authenticate: React.FunctionComponent = () => {
           retryMessage="Goto Login"
           onRetry={() => {
             dispatch(checkFirstTimeLogin());
-            history.push(Routes.LOGIN);
+            navigate(Routes.LOGIN);
           }}
         />
       </Grid>

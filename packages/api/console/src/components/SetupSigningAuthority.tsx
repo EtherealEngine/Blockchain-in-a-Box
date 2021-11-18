@@ -13,7 +13,7 @@ import {
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { ActionResult } from "../models/Action";
 import { IBasePayload, IStringPayload } from "../models/IPayloads";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Routes from "../constants/Routes";
 import "../App.css";
 import axios from "axios";
@@ -156,7 +156,7 @@ const LocalReducer = (
 
 const SetupSigningAuthority: React.FunctionComponent = () => {
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [
     {
       signingAuthorityMnemonic,
@@ -212,7 +212,7 @@ const SetupSigningAuthority: React.FunctionComponent = () => {
       let stateObjData = JSON.parse(stateObj);
       stateObj = { ...stateObjData, signingAuthorityMnemonic, signingAuthorityAddress, signingAuthorityPrivateKey }
       localStorage.setItem('setupData', JSON.stringify(stateObj));
-      history.push(Routes.SETUP_TREASURE);
+      navigate(Routes.SETUP_TREASURE);
     }
   }
 

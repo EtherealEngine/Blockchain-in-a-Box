@@ -111,7 +111,7 @@ const DashboardUsers: React.FunctionComponent = () => {
     reduxDispatch(getUserList())
   }, []);
 
-  const saveUserData = e => {
+  const saveUserData = (e) => {
     reduxDispatch(addUserDetails(userData))
   }
 

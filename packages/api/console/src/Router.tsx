@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from "react";
-import { Switch, Route, useLocation, useHistory } from "react-router-dom";
+import { Routes as ReactRoutes, Route, useLocation, useNavigate } from "react-router-dom";
 import DashboardDeployment from "./components/DashboardDeployment";
 import Login from "./components/Login";
 import LoginVerification from "./components/LoginVerification";
@@ -28,7 +28,7 @@ import { useSelector } from "react-redux";
 
 const Router: React.FunctionComponent = () => {
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { accessToken } = useSelector(
     (state: RootState) => state.admin
   );
@@ -45,81 +45,70 @@ const Router: React.FunctionComponent = () => {
       !accessToken
     ) {
       console.log("User unauthorized");
-      //history.push(Routes.LOGIN);
+      navigate(Routes.LOGIN);
     }
   }, [location.pathname]);
 
   return (
     <Fragment>
-      <Switch>
-        <Route exact path={Routes.ROOT} component={Welcome} />
-        <Route exact path={Routes.LOGIN} component={Login} />
-        <Route exact path={Routes.AUTHENTICATE} component={Authenticate} />
+      <ReactRoutes>
+        <Route path={Routes.ROOT}  element={<Welcome/>} />
+        <Route path={Routes.LOGIN} element={<Login/>} />
+        <Route path={Routes.AUTHENTICATE} element={<Authenticate/>} />
         <Route
-          exact
           path={Routes.LOGIN_VERIFICATION}
-          component={LoginVerification}
+          element={<LoginVerification/>}
         />
         <Route
-          exact
-          path={[Routes.SETUP, Routes.SETUP_SIDECHAIN]}
-          component={SetupSidechain}
+          path={Routes.SETUP_SIDECHAIN}
+          element={<SetupSidechain/>}
         />
         <Route
-          exact
           path={Routes.SETUP_SIGNING_AUTHORITY}
-          component={SetupSigningAuthority}
+          element={<SetupSigningAuthority/>}
         />
-        <Route exact path={Routes.SETUP_TREASURE} component={SetupTreasury} />
-        <Route exact path={Routes.SETUP_MAINNET} component={SetupMainnet} />
-        <Route exact path={Routes.SETUP_INFURA} component={SetupInfura} />
-        <Route exact path={Routes.SETUP_POLYGON} component={SetupPolygon} />
+        <Route path={Routes.SETUP_TREASURE} element={<SetupTreasury/>} />
+        <Route path={Routes.SETUP_MAINNET} element={<SetupMainnet/>} />
+        <Route path={Routes.SETUP_INFURA} element={<SetupInfura/>} />
+        <Route path={Routes.SETUP_POLYGON} element={<SetupPolygon/>} />
         <Route
-          exact
           path={Routes.SETUP_POLYGON_VIGIL}
-          component={SetupPolygonVigil}
+          element={<SetupPolygonVigil/>}
         />
         <Route
-          exact
           path={Routes.SETUP_PINATA}
-          component={SetupPinata}
+          element={<SetupPinata/>}
         />
-        <Route exact path={Routes.SETUP_COMPLETED} component={SetupCompleted} />
-        <Route path={Routes.DASHBOARD}>
-          <DashboardContainer>
+        <Route path={Routes.SETUP_COMPLETED} element={<SetupCompleted/>} />
+        <Route path={Routes.DASHBOARD} element={<DashboardContainer>
+          <ReactRoutes>
             <Route
-              exact
               path={Routes.DASHBOARD_HOME}
-              component={DashboardHome}
+              element={<DashboardHome/>}
             />
             <Route
-              exact
               path={Routes.DASHBOARD_USERS}
-              component={DashboardUsers}
+              element={<DashboardUsers/>}
             />
             <Route
-              exact
               path={Routes.DASHBOARD_SECURITY}
-              component={DashboardSecurity}
+              element={<DashboardSecurity/>}
             />
             <Route
-              exact
               path={Routes.DASHBOARD_CONFIGURATION}
-              component={DashboardConfigurations}
+              element={<DashboardConfigurations/>}
             />
             <Route
-              exact
               path={Routes.DASHBOARD_DEPLOYMENT}
-              component={DashboardDeployment}
+              element={<DashboardDeployment/>}
             />
              <Route
-              exact
               path={Routes.TIMER}
-              component={Timer}
+              element={<Timer/>}
             />
-          </DashboardContainer>
-        </Route>
-      </Switch>
+            </ReactRoutes>
+          </DashboardContainer>} />        
+      </ReactRoutes>
     </Fragment>
   );
 };

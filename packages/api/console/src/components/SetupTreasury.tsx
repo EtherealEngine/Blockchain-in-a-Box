@@ -16,7 +16,7 @@ import {
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { ActionResult } from "../models/Action";
 import { IBasePayload, IBooleanPayload, INumberPayload, IStringPayload } from "../models/IPayloads";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Routes from "../constants/Routes";
 import "../App.css";
 import axios from "axios";
@@ -243,7 +243,7 @@ const LocalReducer = (
 
 const SetupTreasury: React.FunctionComponent = () => {
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [
     {
       treasuryMnemonic,
@@ -336,7 +336,7 @@ const SetupTreasury: React.FunctionComponent = () => {
         mintingFee,
       }
       localStorage.setItem('setupData', JSON.stringify(stateObj));
-      history.push(Routes.SETUP_MAINNET);
+      navigate(Routes.SETUP_MAINNET);
     }
   }
 

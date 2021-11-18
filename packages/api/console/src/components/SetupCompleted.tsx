@@ -7,7 +7,7 @@ import {
 } from "@material-ui/core";
 import { ActionResult } from "../models/Action";
 import { IBasePayload, IStringPayload } from "../models/IPayloads";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Routes from "../constants/Routes";
 import "../App.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -97,7 +97,7 @@ const LocalReducer = (
 
 const SetupCompleted: React.FunctionComponent = () => {
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const reduxDispatch = useDispatch();
 
   const [
@@ -122,7 +122,7 @@ const SetupCompleted: React.FunctionComponent = () => {
     if (notifications) {
       console.log("COMPETE ", result, notifications);
       if (notifications && notifications['Status'] == 200)
-        history.push(Routes.DASHBOARD);
+      navigate(Routes.DASHBOARD);
     }
 
   }, [notifications, result])
@@ -133,7 +133,7 @@ const SetupCompleted: React.FunctionComponent = () => {
       let stateObjData = JSON.parse(stateObj)
 
       reduxDispatch(addNotification(stateObjData))
-      // history.push(Routes.DASHBOARD);
+      // navigate(Routes.DASHBOARD);
 
     }
 

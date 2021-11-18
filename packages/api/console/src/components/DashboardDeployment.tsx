@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Deployer from "./Deployer";
 import { Box, Button, makeStyles, Typography } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { setDeployment } from "../redux/slice/SetupReducer";
