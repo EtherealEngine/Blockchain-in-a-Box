@@ -7,7 +7,7 @@ const { environmentRoutes } = require("./routes/environmentRoute")
 const { AddressRoutes } = require("./routes/addressRoute")
 const { TimerRoutes} = require("./routes/timerRoute")
 const { UserRoutes} = require("./routes/userRoute")
-const { createWallet } = require("./routes/wallet.js");
+const { createWallet,sendTransactionAsset } = require("./routes/wallet.js");
 const { TruffleRoutes } = require("./routes/truffleRoute")
 
 
@@ -273,6 +273,20 @@ function addV1Routes(app) {
    */
   app.post("/api/v1/asset/signTransfer", async (req, res) => {
     return await signTransfer(req, res, blockchain);
+  });
+
+  /**
+   * POST /api/v1/send
+   * @summary Send amount from one user to another
+   * @security bearerAuth
+   * @return {AssetStatusResponse} 200 - success response
+   * @return {AuthResponse} 401 - authentication error response
+   * @param {string} fromUserAddress.required - Asset sent by this user (public address)
+   * @param {string} toUserAddress.required - Asset received by this user (public address)
+   * @param {string} amount.required - Asset received by this user (public address)
+   */
+   app.post("/api/v1/send", authenticateToken, async (req, res) => {
+    return await sendTransactionAsset(req, res, blockchain);
   });
 }
 
