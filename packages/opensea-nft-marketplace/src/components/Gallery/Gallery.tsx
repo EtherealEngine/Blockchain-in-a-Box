@@ -36,7 +36,7 @@ const Gallery = () => {
         let pdata = await data.json();
         setbackUpPData([...pdata])
         setPlayerData([...pdata])
-        // console.log("FETCH ", pdata,backUpPData);
+        console.log("FETCH ", pdata,backUpPData);
         let cat: any = [];
         let traitobj: any = {
           height: [],
@@ -61,7 +61,7 @@ const Gallery = () => {
           })
           // if(!cat.includes(data.))
         });
-        console.log("CATEGORY ", traitobj);
+        console.log("CATEGORY ", traitobj, pdata);
         setTraitCategories(traitobj)
 
       })
@@ -109,6 +109,7 @@ const Gallery = () => {
       console.log("Search ", filteredData);
 
       setbackUpPData([...filteredData])
+      console.log("backUpPData ", backUpPData);
     }
     else {
       console.log("backUpPData ", backUpPData);
@@ -159,6 +160,7 @@ const Gallery = () => {
       )
     console.log(tokenData);
     setbackUpPData([...backUpPData])
+    console.log("backUpPData ", backUpPData);
 
   }
 
@@ -172,6 +174,8 @@ const Gallery = () => {
         backUpPData.sort(dynamicSort(data));
         console.log("AFT ", backUpPData);
         setbackUpPData([...backUpPData])
+        console.log("backUpPData ", backUpPData);
+
       }
       else {
         filterData('asc')
@@ -185,6 +189,8 @@ const Gallery = () => {
         backUpPData.sort(dynamicSort("-" + data));
         console.log("AFT ", backUpPData);
         setbackUpPData([...backUpPData])
+        console.log("backUpPData ", backUpPData);
+
       } else {
         filterData('des')
       }
@@ -204,20 +210,21 @@ const Gallery = () => {
 
   const selectedTrait = (ky:any,data:any,ix:number) => {
     resetClickValue()
+    console.log(data);
 
     traitcategories[ky][ix].clicked = true;
-    let selectedData = resetData.filter((da:any) => da.attributes.some((x:any) => (x['trait_type']==ky && x['value']==data.value)))
-    console.log(selectedData);
+    console.log("backUpPData bf",backUpPData);
+    backUpPData = resetData.filter((da:any) => da.attributes.some((x:any) => (x['trait_type']==ky && x['value']==data.value)))
     setTraitCategories(traitcategories);
-    setbackUpPData(selectedData)
-
-    
-    
+    setbackUpPData([...backUpPData])
+    console.log("backUpPData af",backUpPData);
   }
 
   const resetTrait = () => {
     resetClickValue()
     setbackUpPData(resetData)
+    console.log("backUpPData ", backUpPData);
+
   }
 
   function dynamicSort(property: any) {
@@ -315,6 +322,7 @@ const Gallery = () => {
 
       </Flex>
       <Grid gap={4} columns={['1fr 1fr', '1fr 1fr', '1fr 1fr 1fr']}>
+        {console.log("render ", backUpPData)}
         {backUpPData.length > 0 && backUpPData
           // ?.sort((a: any, b: any) =>
           //   order === 'alpha'
@@ -324,7 +332,7 @@ const Gallery = () => {
           //     : Number(utils.formatEther(a.price.sub(b.price)))
           // )
           ?.map((i: any, index: number) => (
-            <Token onBuy={!user?.ownedTokens.find(t => t.id === i.id)} token={i} key={index} />
+            <Token  onBuy={!user?.ownedTokens.find(t => t.id === i.id)} token={i} key={index} />
 
             // <Token pdata={tokenData[index]} onBuy={!user?.ownedTokens.find(t => t.id === tokenData[index].id)} token={tokenData[index]} key={index} ind={index} />
           ))}

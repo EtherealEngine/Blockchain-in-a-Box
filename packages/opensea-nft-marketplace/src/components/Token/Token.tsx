@@ -279,7 +279,9 @@ export type TokenProps = {
   id: string
   uri: string
   price: BigNumber
-  name: string
+  name: string,
+  image?:string,
+  attributes?:[]
 }
 
 export type TokenCompProps = {
@@ -323,6 +325,7 @@ const Token = ({ token, isOnSale, onTransfer, onBuy, onSale }: TokenCompProps) =
 
   const { data: owner } = useSWR(token.id, fetchOwner)
   const { data } = useSWR(`${METADATA_API}/token/${token.id}`, fetcherMetadata)
+  // const data = token
   
   let tokenPriceEth = ""
   if(token.price){
@@ -338,7 +341,7 @@ const Token = ({ token, isOnSale, onTransfer, onBuy, onSale }: TokenCompProps) =
 
   if (!data.name) return null
 
-  console.log("tokn data ", data);
+  console.log("tokn data ", data, token);
   
 
   return (
@@ -491,7 +494,7 @@ const Token = ({ token, isOnSale, onTransfer, onBuy, onSale }: TokenCompProps) =
         )}
          <div style={{marginTop:"5px"}}>
               {
-                data && data.attributes && data.attributes.map((attr:any) => {
+                token && token.attributes && token.attributes.map((attr:any) => {
                   return (
                     <div style={{width:"max-content",marginBottom:"4px", borderRadius:"5px",padding:"6px",backgroundColor:"#576e5a"}}>
                       {attr.trait_type.toUpperCase()} : {attr.value}
