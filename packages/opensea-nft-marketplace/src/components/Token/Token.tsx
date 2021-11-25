@@ -341,17 +341,17 @@ const Token = ({ token, isOnSale, onTransfer, onBuy, onSale }: TokenCompProps) =
 
   if (!data.name) return null
 
-  console.log("tokn data ", data, token);
+  // console.log("tokn data ", data, token);
   
 
   return (
     <Card variant="nft">
       <Image
         sx={{ width: '100%', bg: 'white', borderBottom: '1px solid black', height:"270px" }}
-        src={data.image}
+        src={token.image}
       />
       <Box p={3} pt={2}>
-        <Heading as="h2"> {data.name}</Heading>
+        <Heading as="h2"> {token.name}</Heading>
         <Divider variant="divider.nft" />
         <Box>
           <Text sx={{ color: 'lightBlue', fontSize: 1, fontWeight: 'bold' }}>Price</Text>
