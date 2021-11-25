@@ -1,5 +1,5 @@
 import { Flex, Heading, Box } from 'theme-ui'
-import { useNavigate } from 'react-router'
+import { useHistory } from 'react-router'
 import { EtherSymbol } from '@ethersproject/constants'
 import { useAppState } from '../../state'
 import { Identicon } from '..'
@@ -12,7 +12,7 @@ export type UserMenuProps = {
 const UserMenu = () => {
   const { user, isAuthenticated } = useAppState()
 
-  const navigate = useNavigate()
+  const history = useHistory()
 
   return (
     <Flex sx={{ ml: 'auto', justifySelf: 'flex-end' }}>
@@ -29,7 +29,7 @@ const UserMenu = () => {
           </Box>
           <Box
             onClick={() => {
-              navigate('/profile')
+              history.push('/profile')
             }}
             sx={{
               cursor: 'pointer',

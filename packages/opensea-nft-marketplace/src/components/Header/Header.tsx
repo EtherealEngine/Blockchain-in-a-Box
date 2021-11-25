@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from 'react-router'
+import { useHistory, useLocation } from 'react-router'
 import { Box, NavLink, Flex, Heading, Image, Text } from 'theme-ui'
 import { useAppState } from '../../state'
 import { UserMenu } from '..'
@@ -8,7 +8,7 @@ export type HeaderProps = {
 }
 
 const Header = () => {
-  const navigate = useNavigate()
+  const history = useHistory()
   const location = useLocation()
 
   const { user, isAuthenticated } = useAppState()
@@ -18,7 +18,7 @@ const Header = () => {
       <Flex sx={{ alignItems: 'center', p: 3 }} as="nav">
         <Image
           onClick={() => {
-            navigate('/')
+            history.push('/')
           }}
           sx={{ width: 50, cursor: 'pointer' }}
           src="/static/logo.png"
@@ -36,7 +36,7 @@ const Header = () => {
               pointerEvents: location.pathname === '/' ? 'none' : 'visible',
               color: location.pathname === '/' ? 'green' : 'white',
             }}
-            onClick={() => navigate('/')}
+            onClick={() => history.push('/')}
           >
             Marketplace
           </NavLink>
@@ -46,7 +46,7 @@ const Header = () => {
               pointerEvents: location.pathname === '/profile' ? 'none' : 'visible',
               color: location.pathname === '/profile' ? 'green' : 'white',
             }}
-            onClick={() => navigate('/profile')}
+            onClick={() => history.push('/profile')}
           >
             Profile
           </NavLink>
