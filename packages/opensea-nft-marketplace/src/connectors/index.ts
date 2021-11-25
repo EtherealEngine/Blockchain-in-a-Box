@@ -35,7 +35,7 @@ export const injected = new InjectedConnector({ supportedChainIds: [5777, 1337, 
 
 export const walletconnect = new WalletConnectConnector({
   qrcode: true,
-  pollingInterval: POLLING_INTERVAL,
+  /*pollingInterval: POLLING_INTERVAL,*/
   infuraId: process.env.REACT_APP_INFURA_ID,
   rpc: { 4: RPC_URLS[4] },
   chainId: 4,
