@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@openzeppelin/test-helpers": "0.5.15",
-    "prettier": "^2.3.2",
+    "prettier": "2.5.0",
     "solidity-coverage": "0.7.17",
     "ts-node": "10.4.0",
     "typechain": "6.0.2",
