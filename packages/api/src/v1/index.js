@@ -7,7 +7,7 @@ const { environmentRoutes } = require("./routes/environmentRoute")
 const { AddressRoutes } = require("./routes/addressRoute")
 const { TimerRoutes} = require("./routes/timerRoute")
 const { UserRoutes} = require("./routes/userRoute")
-const { createWallet,sendTransactionAsset } = require("./routes/wallet.js");
+const { createWallet,sendTransactionWallet,showTransactionWallet } = require("./routes/wallet.js");
 const { TruffleRoutes } = require("./routes/truffleRoute")
 
 
@@ -285,9 +285,25 @@ function addV1Routes(app) {
    * @param {string} toUserAddress.required - Asset received by this user (public address)
    * @param {string} amount.required - Asset received by this user (public address)
    */
-   app.post("/api/v1/send", authenticateToken, async (req, res) => {
-    return await sendTransactionAsset(req, res, blockchain);
-  });
+   app.post("/api/v1/wallet/send", authenticateToken, async (req, res) => {
+    return await sendTransactionWallet(req, res);
+  }); 
+  
+  /**
+   * GET /api/v1/assets/:address/:mainnetAddress
+   * @summary List assets for a user
+   * @security bearerAuth
+   * @return {AssetListResponse} 200 - success response
+   * @return {AuthResponse} 401 - authentication error response
+   * @param {string} address.path.required - Address of the user to list assets for
+   * @param {string} mainnetAddress.path.optional - Mainnet address of the user to list assets for (optional)
+   */
+   app.get(
+    "/api/v1/wallet/balance/:address/?", authenticateToken, async (req, res) => {
+      return await showTransactionWallet(req, res);
+    }
+  );
+
 }
 
 module.exports = {

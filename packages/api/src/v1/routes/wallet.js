@@ -9,7 +9,8 @@ const { default: Web3 } = require("web3");
 const {
   getBlockchain,
   runSidechainTransaction,
-  runSidechainWalletTransaction
+  runSidechainWalletTransaction,
+  runSidechainWalletBalance
 } = require("../../common/blockchain.js");
 
 // Generates a new mnemonic, private key and public address and hands the mnemonic back
@@ -43,7 +44,7 @@ async function createWallet(req, res) {
   // }
 }
 
-async function sendTransactionAsset(req, res) {
+async function sendTransactionWallet(req, res) {
   try {
     const { mnemonic, fromUserAddress, toUserAddress, amount } = req.body;
     let status = true;
@@ -85,7 +86,36 @@ async function sendTransactionAsset(req, res) {
   }
 }
 
+async function showTransactionWallet(req, res) {
+  try {
+    console.log(req.params);
+    const { address } = req.params;
+    let status = true;
+    let error = null;
+    
+      try {
+        const result = await runSidechainWalletBalance(address)();
+        return res.json({
+          status: ResponseStatus.Success,
+          message: "Balance " + result,
+          error: null,
+        });
+      } catch (err) {
+        console.warn(err.stack);
+        status = false;
+        error = err;
+      }
+  } catch (error) {
+    return res.json({
+      status: ResponseStatus.Error,
+      message: "Error getting Balance",
+      error: error,
+    });
+  }
+}
+
 module.exports = {
   createWallet,
-  sendTransactionAsset
+  sendTransactionWallet,
+  showTransactionWallet
 };
