@@ -259,20 +259,11 @@ const transactionQueue = {
 
 const runSidechainWalletBalance = UserAddress => async () => {
   
-  //const seedBuffer = bip39.mnemonicToSeedSync(mnemonic);
-  //const wallet = hdkey.fromMasterSeed(seedBuffer).derivePath(`m/44'/60'/0'/0/0`).getWallet();
-  //const address = wallet.getAddressString();
-  //const address = '0xf90c251e42367a6387afecba10b95c97eaf3b287';
-  //const privateKey = wallet.getPrivateKeyString();
-  //const privateKey = '0xd99643dec67c96c08d65afe3d2c6a4e6da4e2717cc99fb155096d9f2f4a4434b';
-  //const privateKeyBytes = Uint8Array.from(web3[network].utils.hexToBytes(privateKey));
-   
-  //const txData = contracts[network][contractName].methods[method](...args);
-  //const data = txData.encodeABI();
   var balance =await web3[network].eth.getBalance(UserAddress);
 
-  //transactionQueue.unlock();
-  return balance;
+  console.log("balance", web3[network].utils.fromWei(balance, "ether")+" ETH");
+
+  return web3[network].utils.fromWei(balance, "ether");
 };
 
 

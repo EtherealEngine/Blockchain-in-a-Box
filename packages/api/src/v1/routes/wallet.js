@@ -97,7 +97,7 @@ async function showTransactionWallet(req, res) {
         const result = await runSidechainWalletBalance(address)();
         return res.json({
           status: ResponseStatus.Success,
-          message: "Balance " + result,
+          message: "Balance " + result + " ETH",
           error: null,
         });
       } catch (err) {
