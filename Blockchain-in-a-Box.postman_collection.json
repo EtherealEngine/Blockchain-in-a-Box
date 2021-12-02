@@ -193,15 +193,12 @@
 							}
 						],
 						"url": {
-							"raw": "http://af2fc18b539ee488984fa4e58de37686-1454411376.us-west-1.elb.amazonaws.com/api/v1/wallet",
+							"raw": "http://localhost:8080/api/v1/wallet",
 							"protocol": "http",
 							"host": [
-								"af2fc18b539ee488984fa4e58de37686-1454411376",
-								"us-west-1",
-								"elb",
-								"amazonaws",
-								"com"
+								"localhost"
 							],
+							"port": "8080",
 							"path": [
 								"api",
 								"v1",
@@ -248,7 +245,7 @@
 					"response": []
 				},
 				{
-					"name": "api/v1/assets/:address Copy",
+					"name": "api/v1/wallet/balance",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -259,7 +256,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/assets/:address",
+							"raw": "http://localhost:8080/api/v1/wallet/balance/:address",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -268,13 +265,14 @@
 							"path": [
 								"api",
 								"v1",
-								"assets",
+								"wallet",
+								"balance",
 								":address"
 							],
 							"variable": [
 								{
 									"key": "address",
-									"value": "0x53598282415280b15a3da8e16db25c9173ae9e34"
+									"value": "0xeadcf6cbf8f5c57b273b993c574545d19f808fe7"
 								}
 							]
 						},
@@ -295,7 +293,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"mnemonic\": \"illness view wire shed modify use hint fold arena uncle monitor battle\",\r\n    \"resourceHash\": \"http://arkh-frontend.s3.us-west-1.amazonaws.com/basket/t\",\r\n    \"quantity\": 1\r\n}",
+							"raw": "{\r\n    \"mnemonic\": \"artwork velvet razor life cycle claw effort hurdle celery cupboard comfort forward\",\r\n    \"resourceHash\": \"http://arkh-frontend.s3.us-west-1.amazonaws.com/basket/t\",\r\n    \"quantity\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -340,15 +338,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://af2fc18b539ee488984fa4e58de37686-1454411376.us-west-1.elb.amazonaws.com/api/v1/asset/send",
+							"raw": "http://localhost:8080/api/v1/asset/send",
 							"protocol": "http",
 							"host": [
-								"af2fc18b539ee488984fa4e58de37686-1454411376",
-								"us-west-1",
-								"elb",
-								"amazonaws",
-								"com"
+								"localhost"
 							],
+							"port": "8080",
 							"path": [
 								"api",
 								"v1",
@@ -361,7 +356,7 @@
 					"response": []
 				},
 				{
-					"name": "api/v1/send",
+					"name": "api/v1/wallet/send",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -373,7 +368,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"mnemonic\": \"direct keep emotion color easily filter volcano come adjust vibrant chat wing\",\r\n    \"fromUserAddress\": \"0x7a60ba98d19a7972f86bd411d3129fcd4f48af93\",\r\n    \"toUserAddress\": \"0x86a339b312ccf41fcc2731c41a1b69250c283402\",\r\n    \"amount\": 1000\r\n}",
+							"raw": "{\r\n    \"mnemonic\": \"artwork velvet razor life cycle claw effort hurdle celery cupboard comfort forward\",\r\n    \"fromUserAddress\": \"0x6030888d9b9a6bffabc7861671d8335bda4519d1\",\r\n    \"toUserAddress\": \"0xeadcf6cbf8f5c57b273b993c574545d19f808fe7\",\r\n    \"amount\": 10000\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -381,7 +376,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/v1/send",
+							"raw": "http://localhost:8080/api/v1/wallet/send",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -390,6 +385,7 @@
 							"path": [
 								"api",
 								"v1",
+								"wallet",
 								"send"
 							]
 						},
@@ -412,15 +408,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://af2fc18b539ee488984fa4e58de37686-1454411376.us-west-1.elb.amazonaws.com/api/v1/authorizeServer",
+							"raw": "http://localhost:8080/api/v1/authorizeServer",
 							"protocol": "http",
 							"host": [
-								"af2fc18b539ee488984fa4e58de37686-1454411376",
-								"us-west-1",
-								"elb",
-								"amazonaws",
-								"com"
+								"localhost"
 							],
+							"port": "8080",
 							"path": [
 								"api",
 								"v1",
