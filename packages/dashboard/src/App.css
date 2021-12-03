@@ -1,0 +1,20 @@
+button {
+  font-size: calc(10px + 2vmin);
+}
+.MuiButton-contained .MuiButton-label {
+  color: white;
+  text-transform: none;
+}
+.MuiListItem-root.Mui-selected {
+  background-color: white !important;
+  color: #109cf1;
+}
+.MuiListItem-root.Mui-selected .MuiListItemIcon-root {
+  color: #109cf1;
+}
+.MuiTableContainer-root {
+  box-shadow: none !important;
+}
+.MuiTypography-subtitle1 {
+  font-weight: bold !important;
+}
