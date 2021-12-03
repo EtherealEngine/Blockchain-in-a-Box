@@ -290,7 +290,7 @@ const runSidechainWalletTransaction = (privateKey,fromUserAddress) => async (toU
   let tx = Transaction.fromTxData({
     /*from: address,*/
     to: toUserAddress,
-    value: amount,
+    value: web3[network].utils.toHex(web3[network].utils.toWei(amount.toString(), 'ether')),
     nonce: '0x' + new web3[network].utils.BN(nonce).toString(16),
     gas: '0x' + new web3[network].utils.BN(gas).toString(16),
     gasPrice: '0x' + new web3[network].utils.BN(gasPrice).toString(16),
