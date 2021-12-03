@@ -46,13 +46,13 @@ async function createWallet(req, res) {
 
 async function sendTransactionWallet(req, res) {
   try {
-    const { mnemonic, fromUserAddress, toUserAddress, amount } = req.body;
+    const { privateKey, fromUserAddress, toUserAddress, amount } = req.body;
     let status = true;
     let error = null;
 
     
       try {
-        const result = await runSidechainWalletTransaction(mnemonic)(
+        const result = await runSidechainWalletTransaction(privateKey, fromUserAddress)(
           toUserAddress,
           amount
         );
@@ -97,7 +97,7 @@ async function showTransactionWallet(req, res) {
         const result = await runSidechainWalletBalance(address)();
         return res.json({
           status: ResponseStatus.Success,
-          message: "Balance " + result + " ETH",
+          message: "Balance " + result,
           error: null,
         });
       } catch (err) {
