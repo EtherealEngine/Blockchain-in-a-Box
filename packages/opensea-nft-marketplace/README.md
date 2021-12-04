@@ -6,7 +6,7 @@ NODE_ENV=development
 
 BROWSER=chrome
 
-REACT_APP_SERVICE_URL=https://kt105wr4m9.execute-api.us-west-1.amazonaws.com/prod
+REACT_APP_SERVICE_URL=https://arkh-frontend.s3.us-west-1.amazonaws.com/basket
 
 REACT_APP_RPC_URL_1=http://0.0.0.0:7545
 

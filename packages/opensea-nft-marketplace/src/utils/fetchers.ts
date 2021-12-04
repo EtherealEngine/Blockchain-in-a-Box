@@ -1,5 +1,5 @@
 import { useAppState } from '../state'
-
+/*
 export const fetcherETHUSD = async (url: string) => {
   try {
     const { setEthPrice } = useAppState.getState()
@@ -12,7 +12,7 @@ export const fetcherETHUSD = async (url: string) => {
     console.log(e)
   }
 }
-
+*/
 export const fetcherMetadata = async (url: string) => {
   try {
     return await (await fetch(url)).json()

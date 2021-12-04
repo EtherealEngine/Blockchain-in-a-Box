@@ -27,11 +27,11 @@ const Gallery = () => {
   let [resetData, setResetata] = useState(([] as any | undefined));
   let [traitcategories, setTraitCategories] = useState(([] as any | undefined));
   const [mounted, setMounted] = useState(false)
-  const { data } = useSWR(mounted ? `${METADATA_API}/token` : null, fetcherMetadata)
+  const { data } = useSWR(mounted ? `${METADATA_API}` : null, fetcherMetadata)
   // const { data } = useSWR(`${METADATA_API}/token/${data?.id}`, fetcherMetadata)
   useEffect(() => {
     setMounted(true);
-    fetch("https://kt105wr4m9.execute-api.us-west-1.amazonaws.com/prod/token")
+    fetch("https://arkh-frontend.s3.us-west-1.amazonaws.com/basket/token.json")
       .then(async data => {
         let pdata = await data.json();
         setbackUpPData([...pdata])
