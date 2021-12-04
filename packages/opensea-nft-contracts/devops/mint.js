@@ -7,29 +7,32 @@ const NFTT = artifacts.require('NFTT.sol')
 const path = require('path')
 const fs = require('fs')
 const argv = require('minimist')(process.argv.slice(2), { string: ['nfts'] })
-
-const { SERVICE_URL } = "http://localhost:4000/dev"
-
 const start = async callback => {
   try {
+    /*
     const objectsToBeMinted = []
 
-    const currentTokens = await (await fetch(`http://localhost:4000/dev/token`)).json()
+    const currentTokens = await (await fetch(`https://arkh-frontend.s3.us-west-1.amazonaws.com/basket/token.json`)).json()
     const currentIndex = currentTokens.length
+    console.log("currentIndex",currentIndex)
     const AMOUNT = currentTokens.length
-
+    */
     const accounts = () =>
       new HDWalletProvider({
         mnemonic: process.env.KEY_MNEMONIC,
         providerOrUrl: process.env.WALLET_PROVIDER_URL,
       })
-    //const FROM = "0x390ad305547FAa1A1C9E5502982E9636979efF73"
+    //const FROM = "0x390ad305547FAa1A1C9E5502982E9636979efF73" //rinkeby
+    //const FROM = "0x4Fa2360cFbCCf89ADC434621EEBb0B5490b3Ac94"  //dev
     const FROM = ethers.utils.getAddress(accounts().getAddresses()[0])
     console.log("FROM",FROM);
-    for (let i = currentIndex; i < currentIndex + AMOUNT; i++) {
+
+    /*
+    for (let i = 1; i <= currentIndex; i++) {
       objectsToBeMinted.push(`Player${i}`)
     }
     console.log("FROM 2",objectsToBeMinted);
+    */
     /*
     const mintAssetsOnIPFS = await (
       await fetch(`http://localhost:4000/dev/mint`, {
@@ -38,7 +41,7 @@ const start = async callback => {
       })
     ).json()*/
     const contract = await NFTT.deployed()
-    const price = '.01'
+    const price = '.001'
     console.log("FROM 4");
     const priceWei = utils.parseEther(price)
     const ipfsURLs = []
@@ -57,14 +60,11 @@ const start = async callback => {
       })
     )*/
     
-    const mintAssetsOnIPFS = [{ name: 'Player5', path: 'https://gateway.pinata.cloud/ipfs/QmSpiATZRZvp1xPAuDepPBSjRgScZZDprDRNsNsMQcpEFb' },
-                              { name: 'Player6', path: 'https://gateway.pinata.cloud/ipfs/QmR8gUQSdNJvpUjFXGp5TFWC7ktWmsqYY77PUytvicymSv' },
-                              { name: 'Player7', path: 'https://gateway.pinata.cloud/ipfs/QmYLAMmL3V3ShxcYjHkm52syoiHxzvuUoigU4QsYUQn2i1' },
-                              { name: 'Player8', path: 'https://gateway.pinata.cloud/ipfs/QmSTRW49RrFW4X4dXrKJNRLhCzVmr7NzjgyPLSuceKiead' },
-                              { name: 'Player9', path: 'https://gateway.pinata.cloud/ipfs/QmUEBJ17YyKDzh4ZJEBoN3gSWfaQwx4zVwyjvojm1CZKaJ' }]
+    const mintAssetsOnIPFS = [{ name: 'Player38', path: 'https://arkh-frontend.s3.us-west-1.amazonaws.com/basket-image/Player38.png' },
+                              { name: 'Player39', path: 'https://arkh-frontend.s3.us-west-1.amazonaws.com/basket-image/Player39.png' }]
     const mintedTokens = await Promise.all(
       mintAssetsOnIPFS.map(async token => {
-        console.log(token.name);
+        console.log(token.name,token.path);
         ipfsURLs.push({
           name: token.name,
           image: `${token.path}`,
@@ -81,12 +81,12 @@ const start = async callback => {
     const mintedTokens = await Promise.all(contract.mintCollectable(FROM, "https://gateway.pinata.cloud/ipfs/QmUEBJ17YyKDzh4ZJEBoN3gSWfaQwx4zVwyjvojm1CZKaJ", "Player 2", priceWei, true, {
       from: FROM,
     }));
-    */
+    
     const content = `export const tokenProps = ${JSON.stringify([...currentTokens, ...ipfsURLs])}`
 
     const file = path.resolve(__dirname, '../', 'db.ts')
     await fs.writeFileSync(file, content)
-
+    */
     console.log(colors.green(`⚡️ Tokens created: ${colors.white(mintedTokens.length)}`))
     callback()
     process.exit(0)

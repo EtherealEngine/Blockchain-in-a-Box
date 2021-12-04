@@ -260,26 +260,18 @@ const transactionQueue = {
 const runSidechainWalletBalance = UserAddress => async () => {
   
   var balance =await web3[network].eth.getBalance(UserAddress);
-
-  console.log("balance", web3[network].utils.fromWei(balance, "ether")+" ETH");
-
-  return web3[network].utils.fromWei(balance, "ether");
+  return web3[network].utils.fromWei(balance, "ether")+" ETH";
 };
 
 
-const runSidechainWalletTransaction = mnemonic => async (toUserAddress,amount) => {
+const runSidechainWalletTransaction = (privateKey,fromUserAddress) => async (toUserAddress,amount) => {
   
-  const seedBuffer = bip39.mnemonicToSeedSync(mnemonic);
-  const wallet = hdkey.fromMasterSeed(seedBuffer).derivePath(`m/44'/60'/0'/0/0`).getWallet();
-  const address = wallet.getAddressString();
-  //const address = '0xf90c251e42367a6387afecba10b95c97eaf3b287';
-  const privateKey = wallet.getPrivateKeyString();
-  //const privateKey = '0xd99643dec67c96c08d65afe3d2c6a4e6da4e2717cc99fb155096d9f2f4a4434b';
-  const privateKeyBytes = Uint8Array.from(web3[network].utils.hexToBytes(privateKey));
+  let privKey = "0x"+privateKey;
+  const privateKeyBytes = Uint8Array.from(web3[network].utils.hexToBytes(privKey));
    
   //const txData = contracts[network][contractName].methods[method](...args);
   //const data = txData.encodeABI();
-  var balance =await web3[network].eth.getBalance(address);
+  console.log("from account before deductions ", await runSidechainWalletBalance(fromUserAddress)());
   var gas=30000000;
 /*
   try{
@@ -291,14 +283,14 @@ const runSidechainWalletTransaction = mnemonic => async (toUserAddress,amount) =
   //let _to = contracts[network][contractName]._address;
   let gasPrice = await web3[network].eth.getGasPrice();
   gasPrice = parseInt(gasPrice, 1);
-  console.log("network---",network,"from address---",address,"to address---",toUserAddress,"amount---",amount,"gasPrice---",gasPrice,"gas---",gas,"total---",gas*gasPrice);
+  console.log("network---",network,"from address---",fromUserAddress,"to address---",toUserAddress,"amount---",amount,"gasPrice---",gasPrice,"gas---",gas,"total---",gas*gasPrice);
   //await transactionQueue.lock();
-  const nonce = await web3[network].eth.getTransactionCount(address);
+  const nonce = await web3[network].eth.getTransactionCount(fromUserAddress);
   
   let tx = Transaction.fromTxData({
     /*from: address,*/
     to: toUserAddress,
-    value: amount,
+    value: web3[network].utils.toHex(web3[network].utils.toWei(amount.toString(), 'ether')),
     nonce: '0x' + new web3[network].utils.BN(nonce).toString(16),
     gas: '0x' + new web3[network].utils.BN(gas).toString(16),
     gasPrice: '0x' + new web3[network].utils.BN(gasPrice).toString(16),
@@ -320,6 +312,8 @@ const runSidechainWalletTransaction = mnemonic => async (toUserAddress,amount) =
   const receipt = await web3[network].eth.sendSignedTransaction(rawTx);
   console.log("receipt",receipt);
   //transactionQueue.unlock();
+  console.log("From account after deduction ", await runSidechainWalletBalance(fromUserAddress)());
+  console.log("To account once credited", await runSidechainWalletBalance(toUserAddress)());
   return receipt;
 };
 
