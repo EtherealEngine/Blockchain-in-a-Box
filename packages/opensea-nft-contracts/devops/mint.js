@@ -41,7 +41,7 @@ const start = async callback => {
       })
     ).json()*/
     const contract = await NFTT.deployed()
-    const price = '.001'
+    const price = '.02'
     console.log("FROM 4");
     const priceWei = utils.parseEther(price)
     const ipfsURLs = []
@@ -60,8 +60,8 @@ const start = async callback => {
       })
     )*/
     
-    const mintAssetsOnIPFS = [{ name: 'Player38', path: 'https://arkh-frontend.s3.us-west-1.amazonaws.com/basket-image/Player38.png' },
-                              { name: 'Player39', path: 'https://arkh-frontend.s3.us-west-1.amazonaws.com/basket-image/Player39.png' }]
+    const mintAssetsOnIPFS = [{ name: 'Player41', path: 'https://arkh-frontend.s3.us-west-1.amazonaws.com/basket-image/Player41.png' },
+                              { name: 'Player42', path: 'https://arkh-frontend.s3.us-west-1.amazonaws.com/basket-image/Player42.png' }]
     const mintedTokens = await Promise.all(
       mintAssetsOnIPFS.map(async token => {
         console.log(token.name,token.path);
