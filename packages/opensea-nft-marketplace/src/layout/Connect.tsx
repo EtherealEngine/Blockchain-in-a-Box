@@ -9,8 +9,8 @@ import { UserRejectedRequestError as UserRejectedRequestErrorWalletConnect } fro
 import { Container, Text, Heading } from 'theme-ui'
 import useSWR from 'swr'
 import { useEagerConnect, useInactiveListener } from '../hooks/web3'
-import { ETHSCAN_API } from '../utils'
-import { fetcherETHUSD } from '../utils/fetchers'
+//import { ETHSCAN_API } from '../utils'
+//import { fetcherETHUSD } from '../utils/fetchers'
 import { useAppState } from '../state'
 
 function getErrorMessage(error: Error) {
@@ -45,7 +45,7 @@ const Connect: FC = ({ children }) => {
     )
   )
 
-  useSWR(ETHSCAN_API, fetcherETHUSD)
+  //useSWR(ETHSCAN_API, fetcherETHUSD)
 
   useEffect(() => {
     if (!chainId || !account || !library) return
