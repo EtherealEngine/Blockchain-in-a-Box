@@ -324,7 +324,7 @@ const Token = ({ token, isOnSale, onTransfer, onBuy, onSale }: TokenCompProps) =
   }
 
   const { data: owner } = useSWR(token.id, fetchOwner)
-  const { data } = useSWR(`${METADATA_API}/token/${token.id}`, fetcherMetadata)
+  const { data } = useSWR(`${METADATA_API}/${token.id}`, fetcherMetadata)
   // const data = token
   
   let tokenPriceEth = ""
