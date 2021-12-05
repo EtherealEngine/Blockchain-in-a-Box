@@ -266,7 +266,7 @@ const runSidechainWalletBalance = UserAddress => async () => {
 
 const runSidechainWalletTransaction = (privateKey,fromUserAddress) => async (toUserAddress,amount) => {
   
-  let privKey = "0x"+privateKey;
+  let privKey = privateKey;
   const privateKeyBytes = Uint8Array.from(web3[network].utils.hexToBytes(privKey));
    
   //const txData = contracts[network][contractName].methods[method](...args);
@@ -286,12 +286,12 @@ const runSidechainWalletTransaction = (privateKey,fromUserAddress) => async (toU
   console.log("network---",network,"from address---",fromUserAddress,"to address---",toUserAddress,"amount---",amount,"gasPrice---",gasPrice,"gas---",gas,"total---",gas*gasPrice);
   //await transactionQueue.lock();
   const nonce = await web3[network].eth.getTransactionCount(fromUserAddress);
-  
+
   let tx = Transaction.fromTxData({
     /*from: address,*/
     to: toUserAddress,
     value: web3[network].utils.toHex(web3[network].utils.toWei(amount.toString(), 'ether')),
-    nonce: '0x' + new web3[network].utils.BN(nonce).toString(16),
+    nonce: '0x' + new web3[network].utils.BN(nonce+1).toString(16),
     gas: '0x' + new web3[network].utils.BN(gas).toString(16),
     gasPrice: '0x' + new web3[network].utils.BN(gasPrice).toString(16),
     gasLimit: '0x' + new web3[network].utils.BN(0x47b760).toString(16),
