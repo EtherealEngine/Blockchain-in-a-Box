@@ -18,12 +18,14 @@
     "ethers": "^5.4.1",
     "minimist": "^1.2.5",
     "node-fetch": "2.6.6",
+    "ssl-root-cas": "^1.3.1",
     "truffle": "5.4.22"
   },
-  "peerDependencies":{
+  "peerDependencies": {
     "@typechain/truffle-v5": "^5.0.0 || ^6.0.0"
   },
   "scripts": {
+    "start": "node app.js",
     "generate-types": "npx typechain --target=truffle-v5 'build/contracts/*.json'",
     "lint": "prettier --write './**/*.{js,jsx,ts,tsx}'",
     "test": "truffle test",
@@ -41,5 +43,8 @@
     "ts-node": "10.4.0",
     "typechain": "6.0.5",
     "typescript": "4.5.2"
+  },
+  "directories": {
+    "test": "test"
   }
 }
