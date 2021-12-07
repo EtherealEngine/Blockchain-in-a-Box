@@ -14,6 +14,6 @@
 
 8. Here are some screenshots:
 
-![Image](/Image1.png?raw=true&sanitize=true)
+![Image](/packages/IC-Development/frontend/Image2.png?raw=true&sanitize=true)
 
-![Image](/Image2.png?raw=true&sanitize=true)
+![Image](/packages/IC-Development/frontend/Image1.png?raw=true&sanitize=true)
