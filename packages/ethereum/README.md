@@ -18,7 +18,7 @@ cd ethereum
 
 **Step 2: Apply the setup script**
 ```
-kubectl apply -f geth-config.yml -f geth-svc.yml -f geth-ds.yml -f geth-ethnetintel-ds.yml -f ethstats-dashboard-dp.yml -f remix-dp.yml -f remix-loadbalancer.yml -f ethstats-dashboard-loadbalancer.yml -f ethstats-dashboard-loadbalancer.yml -f geth-loadbalancer.yml -f blockchain-api.yml -f blockchain-api-loadbalancer.yml
+kubectl apply -f geth-config.yml -f geth-svc.yml -f geth-ethnetintel-ds.yml -f ethstats-dashboard-dp.yml -f remix-dp.yml -f remix-loadbalancer.yml -f ethstats-dashboard-loadbalancer.yml -f ethstats-dashboard-loadbalancer.yml -f geth-loadbalancer.yml -f blockchain-api.yml -f blockchain-api-loadbalancer.yml
 ```
 
 **Step 3: Test commands**
@@ -101,7 +101,7 @@ kubectl apply -f https://raw.githubusercontent.com/hashicorp/learn-terraform-pro
 
 kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep service-controller-token | awk '{print $1}')
 
-kubectl apply -f geth-config.yml -f geth-svc.yml -f geth-ds.yml -f geth-ethnetintel-ds.yml -f ethstats-dashboard-dp.yml -f remix-dp.yml -f remix-loadbalancer.yml -f ethstats-dashboard-loadbalancer.yml -f ethstats-dashboard-loadbalancer.yml -f geth-loadbalancer.yml -f blockchain-api.yml -f blockchain-api-loadbalancer.yml
+kubectl apply -f geth-config.yml -f geth-svc.yml -f geth-ethnetintel-ds.yml -f ethstats-dashboard-dp.yml -f remix-dp.yml -f remix-loadbalancer.yml -f ethstats-dashboard-loadbalancer.yml -f ethstats-dashboard-loadbalancer.yml -f geth-loadbalancer.yml -f blockchain-api.yml -f blockchain-api-loadbalancer.yml
 
 kubectl get po,svc -o wide
 
@@ -149,7 +149,7 @@ cd kubereum-master
 
 **Step 2: Apply the different setup script**
 
-kubectl apply -f geth-config.yml -f geth-svc.yml -f geth-ds.yml -f geth-ethnetintel-ds.yml -f ethstats-dashboard-dp.yml -f remix-dp.yml -f remix-loadbalancer.yml -f ethstats-dashboard-loadbalancer.yml -f ethstats-dashboard-loadbalancer.yml -f geth-loadbalancer.yml -f blockchain-api.yml -f blockchain-api-loadbalancer.yml
+kubectl apply -f geth-config.yml -f geth-svc.yml -f geth-ethnetintel-ds.yml -f ethstats-dashboard-dp.yml -f remix-dp.yml -f remix-loadbalancer.yml -f ethstats-dashboard-loadbalancer.yml -f ethstats-dashboard-loadbalancer.yml -f geth-loadbalancer.yml -f blockchain-api.yml -f blockchain-api-loadbalancer.yml
 
 **Step 3: Test**
 
@@ -203,7 +203,7 @@ kubectl cluster-info
 minikube service list
 kubectl config use-context minikube
 
-kubectl apply -f geth-config.yml -f geth-svc.yml -f geth-ds.yml -f geth-ethnetintel-ds.yml -f ethstats-dashboard-dp.yml -f remix-dp.yml -f remix-loadbalancer.yml -f ethstats-dashboard-loadbalancer.yml -f ethstats-dashboard-loadbalancer.yml -f geth-loadbalancer.yml -f blockchain-api.yml -f blockchain-api-loadbalancer.yml
+kubectl apply -f geth-config.yml -f geth-svc.yml -f geth-ethnetintel-ds.yml -f ethstats-dashboard-dp.yml -f remix-dp.yml -f remix-loadbalancer.yml -f ethstats-dashboard-loadbalancer.yml -f ethstats-dashboard-loadbalancer.yml -f geth-loadbalancer.yml -f blockchain-api.yml -f blockchain-api-loadbalancer.yml
 
 minikube tunnel
 
