@@ -1,0 +1,15 @@
+html {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #121212;
+  color: #e1e8fd;
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  font-family: 'Inter', 'Roboto', 'Helvetica', sans-serif;
+  box-sizing: inherit;
+}
