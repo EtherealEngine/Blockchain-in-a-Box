@@ -35,6 +35,8 @@ run_node:
 			--rpcaddr=0.0.0.0 \
 	    --rpcapi=admin,db,eth,debug,miner,net,shh,txpool,personal,web3 \
 	    --rpccorsdomain=*
+		--rpcvhosts=*
+        --allow-insecure-unlock
 
 console:
 	@echo "Login to console ..."
