@@ -725,9 +725,9 @@ dependencies = [
 
 [[package]]
 name = "ic-kit"
-version = "0.4.2"
+version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b077a78c36560d88ed736bde16bf8e87cbc1476d1ef3efd6511a121817518164"
+checksum = "2a0d4a05326865a582add1d6bcdec2b5d2af0415a12f6ef2431f3e93e52c347a"
 dependencies = [
  "async-std",
  "futures",
