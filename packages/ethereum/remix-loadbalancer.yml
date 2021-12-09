@@ -5,7 +5,7 @@ metadata:
 spec:
   type: LoadBalancer
   selector:
-    app: solidity
+    app: remix
   ports:
     - protocol: TCP
       port: 80
