@@ -17,6 +17,8 @@ const start = async callback => {
     console.log("currentIndex",currentIndex)
     const AMOUNT = currentTokens.length
     */
+   let playerId= argv._[2]
+   console.log("Player Name:",playerId)
     const accounts = () =>
       new HDWalletProvider({
         mnemonic: process.env.KEY_MNEMONIC,
@@ -60,8 +62,7 @@ const start = async callback => {
       })
     )*/
     
-    const mintAssetsOnIPFS = [{ name: 'Player41', path: 'https://arkh-frontend.s3.us-west-1.amazonaws.com/basket-image/Player41.png' },
-                              { name: 'Player42', path: 'https://arkh-frontend.s3.us-west-1.amazonaws.com/basket-image/Player42.png' }]
+    const mintAssetsOnIPFS = [{ name: `Player${playerId}`, path: `https://arkh-frontend.s3.us-west-1.amazonaws.com/basket-image/Player${playerId}.png` }]
     const mintedTokens = await Promise.all(
       mintAssetsOnIPFS.map(async token => {
         console.log(token.name,token.path);
