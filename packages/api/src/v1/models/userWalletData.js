@@ -29,31 +29,14 @@
  *         - password
  */
 
-module.exports = (sequelize, Sequelize) => sequelize.define('USER_DATA', {
-    userEmail: {
+module.exports = (sequelize, Sequelize) => sequelize.define('USER_WALLET_DATA', {
+    userId: {
       type: Sequelize.STRING,
       primaryKey: true,
     },
-    firstName: Sequelize.STRING,
-    lastName: Sequelize.STRING,
-    userRole: Sequelize.STRING,
     userMnemonic: Sequelize.STRING,
     userAddress: Sequelize.STRING,
     userPrivateKey: Sequelize.STRING,
-    email: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      primaryKey: true,
-    },
-    username: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    resetPasswordToken: Sequelize.STRING,
-    resetPasswordExpires:{
-      type: Sequelize.DATE,
-      defaultValue: Sequelize.NOW
-    },
   },{
     timestamps: false
   });

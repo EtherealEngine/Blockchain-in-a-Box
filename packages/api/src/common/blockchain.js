@@ -62,7 +62,7 @@ const loadPromise = (async() => {
   let INFURA_PROJECT_ID;
   let POLYGON_VIGIL_KEY;
   for(let i of globalData){
-    if (i.dataKey=="ETHEREUM_HOST")
+      if (i.dataKey=="ETHEREUM_HOST")
       ETHEREUM_HOST= i.dataValue;
       if (i.dataKey=="INFURA_PROJECT_ID")
       INFURA_PROJECT_ID= i.dataValue;

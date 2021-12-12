@@ -6,7 +6,7 @@ const crypto = require("crypto");
 const { ResponseStatus } = require("../enums");
 const jwt = require("jsonwebtoken");
 const { sendMessage } = require("../../common/sesClient");
-
+const { createWalletInternal } = require("../routes/wallet.js");
 async function UserRoutes(app){
 
     app.post("/api/v1/user-data", (req,res,next)=>{
@@ -26,24 +26,28 @@ async function UserRoutes(app){
                 },
               }).then(userData=>{
                 if(userData == null){
-                    UserData.create(req.body).then(resp=>{
-                        website = `${website}authenticate?email=${req.body.userEmail}&token=${token}&user=yes&admin=no&landing=dashboard`;
-                        console.log(req.body.userEmail);
-    
-                        // Send email with login link and token
-                        sendMessage(
-                            req.body.userEmail,
-                            "Login | Blockchain in a box",
-                            `Greetings! you can access Blockchain in a box console from:\n\n
-                            ${website}`,
-                            `<h1>Login Information</h1>
-                            <p>Greetings! you can access Blockchain in a box console from:</p>
-                            <a href=${website}>${website}</a>`
-                        );
-                        res.end(JSON.stringify({"Status":200, "Message": "Data Submitted Successfully."}))
-                    }).catch(function (err) {
-                        res.end(JSON.stringify({"Status":400, "Message": "Data cannot be submitted."}))
-                    })
+                    createWalletInternal().then(walletData=>{
+                        console.log(walletData);
+                        let {userMnemonic,userAddress,privateKey} = walletData;
+                        let userData = {...req.body,userMnemonic,userAddress,userPrivateKey:privateKey};
+                        UserData.create(userData).then(resp=>{
+                            website = `${website}authenticate?email=${userData.userEmail}&token=${token}&user=yes&admin=no&landing=dashboard`;
+                            console.log(userData.userEmail);
+                            // Send email with login link and token
+                            sendMessage(
+                                userData.userEmail,
+                                "Login | Blockchain in a box",
+                                `Greetings! you can access Blockchain in a box console from:\n\n
+                                ${website}`,
+                                `<h1>Login Information</h1>
+                                <p>Greetings! you can access Blockchain in a box console from:</p>
+                                <a href=${website}>${website}</a>`
+                            );
+                            res.end(JSON.stringify({"Status":200, "Message": "Data Submitted Successfully."}))
+                        }).catch(function (err) {
+                            res.end(JSON.stringify({"Status":400, "Message": "Data cannot be submitted."}))
+                        })
+                    });
                 }else{
                     res.end(JSON.stringify({"Status":401, "Message": "User already exist."}))
                 }
