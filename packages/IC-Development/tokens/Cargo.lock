@@ -699,9 +699,9 @@ dependencies = [
 
 [[package]]
 name = "ic-cdk"
-version = "0.3.2"
+version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0584eb389b9182ee3be53a44f0123d478426a7ef4fcc2d98c2e3716f654e1c92"
+checksum = "606276ed1ce363eb9ccaf492e36fb40425417dcd4598f261d47e0ed6a1309faa"
 dependencies = [
  "candid",
  "cfg-if",
