@@ -11,11 +11,13 @@ const {
   makePromise,
   setCorsHeaders,
 } = require("../../common/utils.js");
+/*
 const {
   getRedisItem,
   parseRedisItems,
   getRedisClient,
 } = require("../../common/redis.js");
+*/
 const {
   redisPrefixes,
   mainnetSignatureMessage,
@@ -55,7 +57,7 @@ const pinataOptions = {
   },
 };
 
-const redisClient = getRedisClient();
+//const redisClient = getRedisClient();
 
 const network = process.env.PRODUCTION ? "mainnetsidechain" : "testnetsidechain";
 

@@ -1,3 +1,4 @@
+#!/bin/bash
 FROM node:16
 WORKDIR /usr/src/app
 ENV PRODUCTION=true

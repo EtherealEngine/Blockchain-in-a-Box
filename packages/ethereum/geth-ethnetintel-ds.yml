@@ -39,10 +39,10 @@ spec:
         # - "-verbosity=6"
         resources:
           requests:
-            memory: "512Mi"
+            memory: "1024Mi"
             cpu: "0.5"
           limits:
-            memory: "1024Mi"
+            memory: "2048Mi"
             cpu: "1"
         volumeMounts:
         - name: geth-data

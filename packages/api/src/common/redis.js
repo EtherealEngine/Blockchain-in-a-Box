@@ -1,6 +1,7 @@
 const redis = require("redis");
 const redisearch = require("redis-redisearch");
 redisearch(redis);
+rejson(redis);
 const { makePromise } = require("./utils.js");
 const { ids } = require("./constants.js");
 

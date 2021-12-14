@@ -7,6 +7,7 @@ const { environmentRoutes } = require("./routes/environmentRoute")
 const { AddressRoutes } = require("./routes/addressRoute")
 const { TimerRoutes} = require("./routes/timerRoute")
 const { UserRoutes} = require("./routes/userRoute")
+const { UserWalletRoutes} = require("./routes/userWalletRoute")
 const { createWallet,sendTransactionWallet,showTransactionWallet } = require("./routes/wallet.js");
 const { TruffleRoutes } = require("./routes/truffleRoute")
 
@@ -79,6 +80,7 @@ function addV1Routes(app) {
   UserRoutes(app)
   TimerRoutes(app)
   TruffleRoutes(app)
+  UserWalletRoutes(app)
 
   /**
    * Authentication payload

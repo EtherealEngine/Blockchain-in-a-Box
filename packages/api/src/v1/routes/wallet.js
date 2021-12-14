@@ -13,6 +13,36 @@ const {
   runSidechainWalletBalance
 } = require("../../common/blockchain.js");
 
+async function createWalletInternal() {
+  
+    const userMnemonic = bip39.generateMnemonic();
+    console.log("Responding with mnemonic")
+    console.log(userMnemonic);
+    const wallet = hdkey
+      .fromMasterSeed(bip39.mnemonicToSeedSync(userMnemonic))
+      .derivePath(`m/44'/60'/0'/0/0`)
+      .getWallet();
+    const userAddress = wallet.getAddressString();
+    const privateKey = wallet.getPrivateKeyString();
+    return {
+      status: ResponseStatus.Success,
+      userMnemonic,
+      userAddress,
+      privateKey,
+      error: null,
+    };
+    /*
+    return res.json({
+      status: ResponseStatus.Success,
+      userMnemonic,
+      userAddress,
+      privateKey,
+      error: null,
+    });
+    */
+  
+}
+
 // Generates a new mnemonic, private key and public address and hands the mnemonic back
 async function createWallet(req, res) {
   if (DEVELOPMENT) setCorsHeaders(res);
@@ -116,6 +146,7 @@ async function showTransactionWallet(req, res) {
 
 module.exports = {
   createWallet,
+  createWalletInternal,
   sendTransactionWallet,
   showTransactionWallet
 };
