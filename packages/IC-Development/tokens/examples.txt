@@ -17,3 +17,11 @@ dfx ledger --network ic top-up 4iifb-aqaaa-aaaam-aaaoa-cai --amount .011
 dfx deploy --network ic --argument='(principal "fmkex-6viyx-ddaaz-dahpf-5pyj5-l5ru3-7tc6d-ibwc3-3v4bu-q4dv3-iae", "BSKT", "BasketBall game", principal "fmkex-6viyx-ddaaz-dahpf-5pyj5-l5ru3-7tc6d-ibwc3-3v4bu-q4dv3-iae")'
 dfx canister --network ic call nft nameDip721
 dfx canister --network ic call nft get_check
+
+dfx canister --network ic call nft mintDip721 '(principal "fmkex-6viyx-ddaaz-dahpf-5pyj5-l5ru3-7tc6d-ibwc3-3v4bu-q4dv3-iae", vec{record {data=vec{1};key_val_data=vec{record{key="s3_url"; val=variant{TextContent="https://xrengine-marketplace.s3.us-west-1.amazonaws.com/playersassets/Player9.png"}}};purpose=variant{Preview=null}}})'
+
+dfx canister --network ic call  nft getMetadataDip721 '(1)'
+
+dfx canister --network ic call nft totalSupplyDip721
+
+
