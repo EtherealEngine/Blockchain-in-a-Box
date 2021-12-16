@@ -236,7 +236,7 @@
 							"variable": [
 								{
 									"key": "address",
-									"value": "0x53598282415280b15a3da8e16db25c9173ae9e34"
+									"value": "0x6030888d9b9a6bffabc7861671d8335bda4519d1"
 								}
 							]
 						},
@@ -245,7 +245,7 @@
 					"response": []
 				},
 				{
-					"name": "api/v1/wallet/balance",
+					"name": "api/v1/wallet/balance/:address",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -272,7 +272,7 @@
 							"variable": [
 								{
 									"key": "address",
-									"value": "0xeadcf6cbf8f5c57b273b993c574545d19f808fe7"
+									"value": "0x86A339b312ccf41fCC2731c41a1b69250C283402"
 								}
 							]
 						},
@@ -368,7 +368,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"mnemonic\": \"artwork velvet razor life cycle claw effort hurdle celery cupboard comfort forward\",\r\n    \"fromUserAddress\": \"0x6030888d9b9a6bffabc7861671d8335bda4519d1\",\r\n    \"toUserAddress\": \"0xeadcf6cbf8f5c57b273b993c574545d19f808fe7\",\r\n    \"amount\": 10000\r\n}",
+							"raw": "{\r\n    \"privateKey\": \"fc2efe6cefee14c70bd81d51ef5c86cb99afe3475ba9b13cb73c56819e062245\",\r\n    \"fromUserAddress\": \"0x7A60bA98d19A7972f86bD411d3129fcD4f48Af93\",\r\n    \"toUserAddress\": \"0x86A339b312ccf41fCC2731c41a1b69250C283402\",\r\n    \"amount\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -386,6 +386,44 @@
 								"api",
 								"v1",
 								"wallet",
+								"send"
+							]
+						},
+						"description": "Send minted assets to others"
+					},
+					"response": []
+				},
+				{
+					"name": "api/v1/user-wallet/send",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "Bearer {{YOUR_ACCESS_TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fromUserId\": \"0x7A60bA98d19A7972f86bD411d3129fcD4f48Af93\",\r\n    \"toUserId\": \"0x86A339b312ccf41fCC2731c41a1b69250C283402\",\r\n    \"amount\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/user-wallet/send",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"user-wallet",
 								"send"
 							]
 						},
@@ -594,6 +632,45 @@
 					"response": []
 				},
 				{
+					"name": "GET api/v1/user-wallet-data",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/user-wallet-data?userId=devjeetroychowdhury",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"user-wallet-data"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "devjeetroychowdhury"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "GET api/v1/search-user-data",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -765,6 +842,42 @@
 								"api",
 								"v1",
 								"initiate-timer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST api/v1/user-wallet-date",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{YOUR_ACCESS_TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": \"devjeetroychowdhury\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/user-wallet-data",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"user-wallet-data"
 							]
 						}
 					},

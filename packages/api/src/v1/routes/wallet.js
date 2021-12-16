@@ -74,6 +74,49 @@ async function createWallet(req, res) {
   // }
 }
 
+async function sendTransactionUserWallet(req, res) {
+  try {
+
+    const { fromUserId, toUserId, amount } = req.body;
+    let status = true;
+    let error = null;
+
+      /*
+      try {
+        const result = await runSidechainWalletTransaction(privateKey, fromUserAddress)(
+          toUserAddress,
+          amount
+        );
+
+        status = status && result.status;
+      } catch (err) {
+        console.warn(err.stack);
+        status = false;
+        error = err;
+      }
+    */
+    if (status) {
+      return res.json({
+        status: ResponseStatus.Success,
+        message: "Transferred to " + toUserAddress,
+        error: null,
+      });
+    } else {
+      return res.json({
+        status: ResponseStatus.Error,
+        message: "Transfer request could not be fulfilled: " + status,
+        error: error,
+      });
+    }
+  } catch (error) {
+    return res.json({
+      status: ResponseStatus.Error,
+      message: "Error sending asset",
+      error: error,
+    });
+  }
+}
+
 async function sendTransactionWallet(req, res) {
   try {
     const { privateKey, fromUserAddress, toUserAddress, amount } = req.body;
@@ -148,5 +191,6 @@ module.exports = {
   createWallet,
   createWalletInternal,
   sendTransactionWallet,
-  showTransactionWallet
+  showTransactionWallet,
+  sendTransactionUserWallet
 };

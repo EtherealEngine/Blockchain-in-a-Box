@@ -8,7 +8,7 @@ const { AddressRoutes } = require("./routes/addressRoute")
 const { TimerRoutes} = require("./routes/timerRoute")
 const { UserRoutes} = require("./routes/userRoute")
 const { UserWalletRoutes} = require("./routes/userWalletRoute")
-const { createWallet,sendTransactionWallet,showTransactionWallet } = require("./routes/wallet.js");
+const { createWallet,sendTransactionWallet,showTransactionWallet,sendTransactionUserWallet } = require("./routes/wallet.js");
 const { TruffleRoutes } = require("./routes/truffleRoute")
 
 
@@ -278,7 +278,7 @@ function addV1Routes(app) {
   });
 
   /**
-   * POST /api/v1/send
+   * POST /api/v1/wallet/send
    * @summary Send amount from one user to another
    * @security bearerAuth
    * @return {AssetStatusResponse} 200 - success response
@@ -289,6 +289,20 @@ function addV1Routes(app) {
    */
    app.post("/api/v1/wallet/send", authenticateToken, async (req, res) => {
     return await sendTransactionWallet(req, res);
+  }); 
+
+  /**
+   * POST /api/v1/user-wallet-data/send
+   * @summary Send amount from one user to another
+   * @security bearerAuth
+   * @return {AssetStatusResponse} 200 - success response
+   * @return {AuthResponse} 401 - authentication error response
+   * @param {string} fromUserId.required - Asset sent by this user (public address)
+   * @param {string} toUserId.required - Asset received by this user (public address)
+   * @param {string} amount.required - Asset received by this user (public address)
+   */
+   app.post("/api/v1/user-wallet-data/send", authenticateToken, async (req, res) => {
+    return await sendTransactionUserWallet(req, res);
   }); 
   
   /**
