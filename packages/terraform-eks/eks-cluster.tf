@@ -1,7 +1,7 @@
 module "eks" {
   source          = "terraform-aws-modules/eks/aws"
   cluster_name    = local.cluster_name
-  cluster_version = "1.20"
+  cluster_version = "1.21"
   subnets         = module.vpc.private_subnets
 
   tags = {
@@ -31,6 +31,13 @@ module "eks" {
       additional_security_group_ids = [aws_security_group.blockchain_prod_worker_group_mgmt_two.id]
       asg_desired_capacity          = 1
     },
+    {
+      name                          = "blockchain-prod-worker-group-3"
+      instance_type                 = "t3a.medium"
+      additional_userdata           = "echo foo bar"
+      additional_security_group_ids = [aws_security_group.blockchain_prod_worker_group_mgmt_three.id]
+      asg_desired_capacity          = 1
+    }
   ]
 }
 
