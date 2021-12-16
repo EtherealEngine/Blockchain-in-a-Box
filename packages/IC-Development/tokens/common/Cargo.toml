@@ -9,6 +9,6 @@ crc32fast = "1.3.0"
 ic-kit = "0.4.3"
 ic-cdk = "0.3.3"
 ic-types = "0.2.2"
-hex = {version = "0.4.2", features = ["serde"] }
+hex = {version = "0.4.3", features = ["serde"] }
 serde = { version="1.0.131", features = ["derive"] }
 sha2 = "0.10.0"
