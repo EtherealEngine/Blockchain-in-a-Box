@@ -31,12 +31,14 @@ const Gallery = () => {
   // const { data } = useSWR(`${METADATA_API}/token/${data?.id}`, fetcherMetadata)
   useEffect(() => {
     setMounted(true);
-    fetch("https://arkh-frontend.s3.us-west-1.amazonaws.com/basket/token.json")
+    fetch(`${METADATA_API}`)
+    //fetch(`https://arkh-frontend.s3.us-west-1.amazonaws.com/basket/token.json`)
       .then(async data => {
         let pdata = await data.json();
-        setbackUpPData([...pdata])
-        setPlayerData([...pdata])
-        console.log("FETCH ", pdata,backUpPData);
+        // console.log("FETCH ", pdata["data"]);
+        setbackUpPData([...pdata["data"]])
+        setPlayerData([...pdata["data"]])
+        // console.log("FETCH ", pdata["data"],backUpPData);
         let cat: any = [];
         let traitobj: any = {
           height: [],
@@ -47,9 +49,9 @@ const Gallery = () => {
           personality: []
         }
         let dispobj: any = {}
-        pdata.forEach((data: any) => {
+        pdata["data"].forEach((data: any) => {
 
-          let attr = data.attributes;
+          let attr = data.metadata;
           attr.forEach((av: any, index: number) => {
             if (traitobj[av['trait_type']] != undefined && traitobj[av['trait_type']] instanceof Array) {
               // if (!traitobj[av['trait_type']].includes(av['value']))
@@ -61,7 +63,7 @@ const Gallery = () => {
           })
           // if(!cat.includes(data.))
         });
-        console.log("CATEGORY ", traitobj, pdata);
+        console.log("CATEGORY ", traitobj, pdata["data"]);
         setTraitCategories(traitobj)
 
       })
@@ -214,7 +216,7 @@ const Gallery = () => {
 
     traitcategories[ky][ix].clicked = true;
     console.log("backUpPData bf",backUpPData);
-    backUpPData = resetData.filter((da:any) => da.attributes.some((x:any) => (x['trait_type']==ky && x['value']==data.value)))
+    backUpPData = resetData.filter((da:any) => da.metadata.some((x:any) => (x['trait_type']==ky && x['value']==data.value)))
     setTraitCategories(traitcategories);
     setbackUpPData([...backUpPData])
     console.log("backUpPData af",backUpPData);
@@ -265,7 +267,7 @@ const Gallery = () => {
       </Flex> */}
       <div >
         
-      <Accordian title="TRAIT">
+      <Accordian title="Properties">
      
         {
          traitcategories && Object.keys(traitcategories).map((ky: any, index: number) => {

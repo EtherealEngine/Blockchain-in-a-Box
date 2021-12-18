@@ -280,8 +280,8 @@ export type TokenProps = {
   uri: string
   price: BigNumber
   name: string,
-  image?:string,
-  attributes?:[]
+  url?:string,
+  metadata?:[]
 }
 
 export type TokenCompProps = {
@@ -324,9 +324,9 @@ const Token = ({ token, isOnSale, onTransfer, onBuy, onSale }: TokenCompProps) =
   }
 
   const { data: owner } = useSWR(token.id, fetchOwner)
-  const { data } = useSWR(`${METADATA_API}/${token.id}`, fetcherMetadata)
+  const { data } = useSWR(`${METADATA_API}?name=Player${token.id}`, fetcherMetadata)
   // const data = token
-  
+  console.log(data)
   let tokenPriceEth = ""
   if(token.price){
      tokenPriceEth = formatPriceEth(token.price, ethPrice)
@@ -339,7 +339,7 @@ const Token = ({ token, isOnSale, onTransfer, onBuy, onSale }: TokenCompProps) =
       </Card>
     )
 
-  if (!data.name) return null
+  // if (!data.name) return null
 
   // console.log("tokn data ", data, token);
   
@@ -348,7 +348,7 @@ const Token = ({ token, isOnSale, onTransfer, onBuy, onSale }: TokenCompProps) =
     <Card variant="nft">
       <Image
         sx={{ width: '100%', bg: 'white', borderBottom: '1px solid black', height:"270px" }}
-        src={token.image}
+        src={token.url}
       />
       <Box p={3} pt={2}>
         <Heading as="h2"> {token.name}</Heading>
@@ -356,7 +356,7 @@ const Token = ({ token, isOnSale, onTransfer, onBuy, onSale }: TokenCompProps) =
         <Box>
           <Text sx={{ color: 'lightBlue', fontSize: 1, fontWeight: 'bold' }}>Price</Text>
           <Heading as="h3" sx={{ color: 'green', m: 0, fontWeight: 'bold' }}>
-            {constants.EtherSymbol} {Number(utils.formatEther(token.price)).toFixed(2)}{' '}
+            {constants.EtherSymbol} {Number(token.price).toFixed(2)}{' '}
             <Text sx={{ color: 'navy' }} as="span" variant="text.body">
               ({tokenPriceEth})
             </Text>
@@ -475,12 +475,12 @@ const Token = ({ token, isOnSale, onTransfer, onBuy, onSale }: TokenCompProps) =
             <Button
               sx={{
                 opacity: !!user?.ownedTokens.find(
-                  a => utils.formatUnits(a.id) === utils.formatUnits(token.id)
+                  a => a.id === token.id
                 )
                   ? 0.5
                   : 1,
                 pointerEvents: !!user?.ownedTokens.find(
-                  a => utils.formatUnits(a.id) === utils.formatUnits(token.id)
+                  a => a.id === token.id
                 )
                   ? 'none'
                   : 'visible',
@@ -494,7 +494,7 @@ const Token = ({ token, isOnSale, onTransfer, onBuy, onSale }: TokenCompProps) =
         )}
          <div style={{marginTop:"5px"}}>
               {
-                token && token.attributes && token.attributes.map((attr:any) => {
+                token && token.metadata && token.metadata.map((attr:any) => {
                   return (
                     <div style={{width:"max-content",marginBottom:"4px", borderRadius:"5px",padding:"6px",backgroundColor:"#576e5a"}}>
                       {attr.trait_type.toUpperCase()} : {attr.value}
