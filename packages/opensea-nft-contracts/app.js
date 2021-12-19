@@ -4,12 +4,17 @@ const https = require("https")
 const app = express()
 const exec = require("child_process").exec
 const port = 3000
+require ('dotenv').config()
+const xrengineApi = process.env.XRENGINE_API
+const imageApi = process.env.IMAGE_API
+
 
 /*
 *
 * Author : DRC
 * Aim : APIfication
 */ 
+
 
 app.use(express.json())
 
@@ -24,7 +29,7 @@ app.post('/initiate-minting', async (req, res) => {
     });
 
     // Checking if player exist
-    let playerData = await axios.get(`https://127.0.0.1:3030/inventory-item?name=Player${playerId}`,{
+    let playerData = await axios.get(`${xrengineApi}/inventory-item?name=Player${playerId}`,{
             httpsAgent: agent
     })
     
@@ -38,7 +43,7 @@ app.post('/initiate-minting', async (req, res) => {
         
 
             // From inventory item type, fetch by type=player
-        let resp = await axios.get("https://127.0.0.1:3030/inventory-item-type?inventoryItemType=player",
+        let resp = await axios.get(`${xrengineApi}/inventory-item-type?inventoryItemType=player`,
         {
             httpsAgent: agent
         })
@@ -47,7 +52,7 @@ app.post('/initiate-minting', async (req, res) => {
         let id = resp.data.data[0].inventoryItemTypeId
         try{
             // Get data from AWS S3 bucket, parse and insert
-            let meta = await axios.get(`https://arkh-frontend.s3.us-west-1.amazonaws.com/basket/${playerId}`)
+            let meta = await axios.get(`${imageApi}/${playerId}`)
             const metadata = meta.data
             let obj ={
                 "name" : metadata.name,
@@ -56,7 +61,7 @@ app.post('/initiate-minting', async (req, res) => {
                 "metadata" : metadata.attributes,
                 "inventoryItemTypeId" : id
             }
-            axios.post("https://127.0.0.1:3030/inventory-item", obj, {
+            axios.post(`${xrengineApi}/inventory-item`, obj, {
                 httpsAgent: agent
             }).then((response)=>{
                     res.end(JSON.stringify(response.data))
@@ -68,7 +73,7 @@ app.post('/initiate-minting', async (req, res) => {
         try{
             console.log("in update")
             // Get data from AWS S3 bucket, parse and insert
-            let meta = await axios.get(`https://arkh-frontend.s3.us-west-1.amazonaws.com/basket/${playerId}`)
+            let meta = await axios.get(`${imageApi}/${playerId}`)
             const metadata = meta.data
             let obj ={
                 "name" : metadata.name,
@@ -76,7 +81,7 @@ app.post('/initiate-minting', async (req, res) => {
                 "description" : metadata.description,
                 "metadata" : metadata.attributes
             }
-            axios.patch(`https://127.0.0.1:3030/inventory-item?inventoryItemId=${PLAYER_DATA.inventoryItemId}`, obj, {
+            axios.patch(`${xrengineApi}/inventory-item?inventoryItemId=${PLAYER_DATA.inventoryItemId}`, obj, {
                 httpsAgent: agent
             }).then((response)=>{
                     res.end(JSON.stringify(response.data))
@@ -89,4 +94,5 @@ app.post('/initiate-minting', async (req, res) => {
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
+  console.log(xrengineApi,imageApi)
 })
