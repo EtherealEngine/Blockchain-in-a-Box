@@ -29,7 +29,7 @@
  *         - password
  */
 
-module.exports = (sequelize, Sequelize) => sequelize.define('ENVIRONMENT_DATA', {
+module.exports = (sequelize, Sequelize) => sequelize.define("ENVIRONMENT_DATA", {
     dataKey: {
       type: Sequelize.STRING, 
       primaryKey: true

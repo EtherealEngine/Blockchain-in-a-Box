@@ -16,15 +16,15 @@ module.exports = {
     },*/
     
     development: {
-      host: "127.0.0.1", // Localhost (default: none)
+      host: process.env.DEVELOPMENT_URL, // Localhost (default: none)
       port: 7545, // Standard Ethereum port (default: none)
       network_id: "*", // Any network (default: none)
     },
     testnet: {
-      host: "localhost",
+      host: process.env.TESTNET_URL,
       provider: () =>
         new HDWalletProvider(
-          process.env.testnet,
+          process.env.TESTNET_MNEMONIC,
           "https://rinkeby.infura.io/v3/" + process.env.INFURA_PROJECT_ID
         ),
       network_id: 4,
@@ -35,7 +35,7 @@ module.exports = {
       host: process.env.TESTNET_SIDECHAIN_URL,
       provider: () =>
         new HDWalletProvider(
-          process.env.mainnetsidechain,
+          process.env.TESTNET_SIDECHAIN_MNEMONIC,
           "http://" + process.env.TESTNET_SIDECHAIN_URL
         ),
       port: 8486,
@@ -44,7 +44,7 @@ module.exports = {
     testnetpolygon: {
       provider: () =>
         new HDWalletProvider(
-          process.env.testnetpolygon,
+          process.env.TESTNET_POLYGON_MNEMONIC,
           `https://rpc-mumbai.matic.today`
         ),
       network_id: 80001,
@@ -55,7 +55,7 @@ module.exports = {
     },
     mainnet: {
       host: "", // TODO: Add me
-      provider: () => new HDWalletProvider(process.env.mainnet, ""),
+      provider: () => new HDWalletProvider(process.env.MAINNET_MNEMONIC, ""),
       port: 8485,
       network_id: "1338",
       networkCheckTimeout: 10000,
@@ -64,7 +64,7 @@ module.exports = {
       host: process.env.MAINNET_SIDECHAIN_URL,
       provider: () =>
         new HDWalletProvider(
-          process.env.mainnetsidechain,
+          process.env.MAINNET_SIDECHAIN_MNEMONIC,
           "http://" +  process.env.MAINNET_SIDECHAIN_URL
         ),
       port: 8485,
@@ -74,7 +74,7 @@ module.exports = {
     polygon: {
       provider: () =>
         new HDWalletProvider(
-          process.env.polygon,
+          process.env.POLYGON_MNEMONIC,
           `https://rpc-mainnet.polygon.network`
         ),
       network_id: 137,

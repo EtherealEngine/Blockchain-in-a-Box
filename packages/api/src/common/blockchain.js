@@ -14,10 +14,16 @@ const ports = require("../../config/ports.js");
 const network = process.env.PRODUCTION ? "mainnetsidechain" : "testnetsidechain";
 const { Sequelize } = require("sequelize");
 
-const sequelize = new Sequelize('dev', process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
+const sequelize = new Sequelize(process.env.MYSQL_DB, process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
   host: process.env.MYSQL_URL,
   dialect: 'mysql',
 });
+
+const {
+  ETHEREUM_HOST,
+  INFURA_PROJECT_ID,
+  POLYGON_VIGIL_KEY
+} = require("./environment.js");
 
 let web3,
   // web3socketProviders,
@@ -48,28 +54,7 @@ const common = Common.forCustomChain(
 );
 
 const loadPromise = (async() => {
-  const asyncGlobal = async() => {
-    let data;
-    try {
-      data = await sequelize.query('SELECT dataKey,dataValue FROM `ENVIRONMENT_DATA`', {type: sequelize.QueryTypes.SELECT});
-    } catch (err) {
-      console.log(err);
-    }
-    return data;
-  };
-  const globalData = await asyncGlobal();
-  let ETHEREUM_HOST;
-  let INFURA_PROJECT_ID;
-  let POLYGON_VIGIL_KEY;
-  for(let i of globalData){
-      if (i.dataKey=="ETHEREUM_HOST")
-      ETHEREUM_HOST= i.dataValue;
-      if (i.dataKey=="INFURA_PROJECT_ID")
-      INFURA_PROJECT_ID= i.dataValue;
-      if (i.dataKey=="POLYGON_VIGIL_KEY")
-      POLYGON_VIGIL_KEY= i.dataValue;
-  }
-
+  
   const asyncAddress = async() => {
     let data;
     try {
@@ -80,13 +65,23 @@ const loadPromise = (async() => {
     return data;
   };
   const addressData = await asyncAddress();
-  let IDENTITY_ADDRESS = addressData[0]['identityValue'];
-  let CURRENCY_ADDRESS = addressData[0]['currencyValue'];
-  let CURRENCYPROXY_ADDRESS = addressData[0]['currencyProxyValue'];
-  let INVENTORY_ADDRESS = addressData[0]['inventoryValue'];
-  let INVENTORYPROXY_ADDRESS = addressData[0]['inventoryProxyValue'];
-  let TRADE_ADDRESS = addressData[0]['tradeValue'];
-
+  
+  let IDENTITY_ADDRESS = "";
+  let CURRENCY_ADDRESS = "";
+  let CURRENCYPROXY_ADDRESS = "";
+  let INVENTORY_ADDRESS = "";
+  let INVENTORYPROXY_ADDRESS = "";
+  let TRADE_ADDRESS = "";
+  if (typeof addressData[0] !== 'undefined')
+  {
+    IDENTITY_ADDRESS = addressData[0]['identityValue'];
+    CURRENCY_ADDRESS = addressData[0]['currencyValue'];
+    CURRENCYPROXY_ADDRESS = addressData[0]['currencyProxyValue'];
+    INVENTORY_ADDRESS = addressData[0]['inventoryValue'];
+    INVENTORYPROXY_ADDRESS = addressData[0]['inventoryProxyValue'];
+    TRADE_ADDRESS = addressData[0]['tradeValue'];
+  }
+  console.log(ETHEREUM_HOST);
   const ethereumHostAddress =  await new Promise((accept, reject) => {
       dns.resolve4(ETHEREUM_HOST, (err, addresses) => {
         if (!err) {

@@ -2,7 +2,7 @@
 const { Sequelize, Model, DataTypes } = require("sequelize");
 const email = process.argv[6];
 console.log("in deploy contract for ",email);
-const sequelize = new Sequelize('dev', process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
+const sequelize = new Sequelize(process.env.MYSQL_DB, process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
   host: process.env.MYSQL_URL,
   dialect: 'mysql',
 });
@@ -29,6 +29,29 @@ const NetworkTypes = {
   development: "development",
 };
 
+const {
+  DEVELOPMENT_SIGNER_ADDRESS,
+  DEVELOPMENT_TREASURY_ADDRESS,
+  MAINNET_SIGNER_ADDRESS,
+  MAINNET_TREASURY_ADDRESS,
+  MAINNET_SIDECHAIN_SIGNER_ADDRESS,
+  MAINNET_SIDECHAIN_TREASURY_ADDRESS,
+  POLYGON_SIGNER_ADDRESS,
+  POLYGON_TREASURY_ADDRESS,
+  TESTNET_POLYGON_SIGNER_ADDRESS,
+  TESTNET_POLYGON_TREASURY_ADDRESS,
+  TESTNET_SIGNER_ADDRESS,
+  TESTNET_TREASURY_ADDRESS,
+  TESTNET_SIDECHAIN_SIGNER_ADDRESS,
+  TESTNET_SIDECHAIN_TREASURY_ADDRESS,
+  COIN_CONTRACT_SYMBOL,
+  CURRENCY_MARKET_CAP,
+  ASSET_CONTRACT_SYMBOL,
+  ASSETS_ARE_MINTABLE,
+  ASSET_BASE_URI,
+  MINTING_FEE
+} = require("../../common/environment.js");
+
 module.exports = async function (deployer) {
   //set network type from run argument.like truffle migrate --reset development
   const networkType = NetworkTypes[process.argv[4]];
@@ -52,78 +75,7 @@ module.exports = async function (deployer) {
   //  return console.error("Contract already deployed for",networkType,"network");
 
   //setup environment variable from DB
-  const asyncGlobal = async() => {
-    let data;
-    try {
-      data = await sequelize.query('SELECT dataKey,dataValue FROM `ENVIRONMENT_DATA`', {type: sequelize.QueryTypes.SELECT});
-    } catch (err) {
-      console.log(err);
-    }
-    return data;
-  };
-  const globalData = await asyncGlobal();
-  let DEVELOPMENT_SIGNER_ADDRESS;
-  let DEVELOPMENT_TREASURY_ADDRESS;
-  let MAINNET_SIGNER_ADDRESS;
-  let MAINNET_TREASURY_ADDRESS;
-  let MAINNET_SIDECHAIN_SIGNER_ADDRESS;
-  let MAINNET_SIDECHAIN_TREASURY_ADDRESS;
-  let POLYGON_SIGNER_ADDRESS;
-  let POLYGON_TREASURY_ADDRESS;
-  let TESTNET_POLYGON_SIGNER_ADDRESS;
-  let TESTNET_POLYGON_TREASURY_ADDRESS;
-  let TESTNET_SIGNER_ADDRESS;
-  let TESTNET_TREASURY_ADDRESS;
-  let TESTNET_SIDECHAIN_SIGNER_ADDRESS;
-  let TESTNET_SIDECHAIN_TREASURY_ADDRESS;
-  let COIN_CONTRACT_SYMBOL;
-  let CURRENCY_MARKET_CAP;
-  let ASSET_CONTRACT_SYMBOL;
-  let ASSETS_ARE_MINTABLE;
-  let ASSET_BASE_URI;
-  let MINTING_FEE;
-  for(let i of globalData){
-    if (i.dataKey=="DEVELOPMENT_SIGNER_ADDRESS")
-      DEVELOPMENT_SIGNER_ADDRESS= i.dataValue;
-    if (i.dataKey=="DEVELOPMENT_TREASURY_ADDRESS")
-      DEVELOPMENT_TREASURY_ADDRESS= i.dataValue;
-    if (i.dataKey=="MAINNET_SIGNER_ADDRESS")
-      MAINNET_SIGNER_ADDRESS= i.dataValue;
-    if (i.dataKey=="MAINNET_TREASURY_ADDRESS")
-      MAINNET_TREASURY_ADDRESS= i.dataValue;
-    if (i.dataKey=="MAINNET_SIDECHAIN_SIGNER_ADDRESS")
-      MAINNET_SIDECHAIN_SIGNER_ADDRESS= i.dataValue;
-    if (i.dataKey=="MAINNET_SIDECHAIN_TREASURY_ADDRESS")
-      MAINNET_SIDECHAIN_TREASURY_ADDRESS= i.dataValue;
-    if (i.dataKey=="POLYGON_SIGNER_ADDRESS")
-      POLYGON_SIGNER_ADDRESS= i.dataValue;
-    if (i.dataKey=="POLYGON_TREASURY_ADDRESS")
-      POLYGON_TREASURY_ADDRESS= i.dataValue;
-    if (i.dataKey=="TESTNET_POLYGON_SIGNER_ADDRESS")
-      TESTNET_POLYGON_SIGNER_ADDRESS= i.dataValue;
-    if (i.dataKey=="TESTNET_POLYGON_TREASURY_ADDRESS")
-      TESTNET_POLYGON_TREASURY_ADDRESS= i.dataValue;
-    if (i.dataKey=="TESTNET_SIGNER_ADDRESS")
-      TESTNET_SIGNER_ADDRESS= i.dataValue;
-    if (i.dataKey=="TESTNET_TREASURY_ADDRESS")
-      TESTNET_TREASURY_ADDRESS= i.dataValue;
-    if (i.dataKey=="TESTNET_SIDECHAIN_SIGNER_ADDRESS")
-      TESTNET_SIDECHAIN_SIGNER_ADDRESS= i.dataValue;
-    if (i.dataKey=="TESTNET_SIDECHAIN_TREASURY_ADDRESS")
-      TESTNET_SIDECHAIN_TREASURY_ADDRESS= i.dataValue;
-    if (i.dataKey=="COIN_CONTRACT_SYMBOL")
-      COIN_CONTRACT_SYMBOL= i.dataValue;
-    if (i.dataKey=="CURRENCY_MARKET_CAP")
-      CURRENCY_MARKET_CAP= i.dataValue;
-    if (i.dataKey=="ASSET_CONTRACT_SYMBOL")
-      ASSET_CONTRACT_SYMBOL= i.dataValue;
-    if (i.dataKey=="ASSETS_ARE_MINTABLE")
-      ASSETS_ARE_MINTABLE= i.dataValue;
-    if (i.dataKey=="ASSET_BASE_URI")
-      ASSET_BASE_URI= i.dataValue;
-    if (i.dataKey=="MINTING_FEE")
-      MINTING_FEE= i.dataValue;
-  }
+  
 
   // Currency
   const CurrencyContractName = "Currency";
@@ -142,7 +94,7 @@ module.exports = async function (deployer) {
     mainnetsidechain: MAINNET_SIDECHAIN_TREASURY_ADDRESS,
     polygon: POLYGON_TREASURY_ADDRESS,
     testnet: TESTNET_TREASURY_ADDRESS,
-    testnetsidechain: TESTNET_SIDECHAIN_SIGNER_ADDRESS,
+    testnetsidechain: TESTNET_SIDECHAIN_TREASURY_ADDRESS,
     testnetpolygon: TESTNET_POLYGON_TREASURY_ADDRESS,
     development: DEVELOPMENT_TREASURY_ADDRESS,
   };

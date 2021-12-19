@@ -29,7 +29,7 @@
  *         - password
  */
 
-module.exports = (sequelize, Sequelize) => sequelize.define('USER_WALLET_DATA', {
+module.exports = (sequelize, Sequelize) => sequelize.define("USER_WALLET_DATA", {
     userId: {
       type: Sequelize.STRING,
       primaryKey: true,

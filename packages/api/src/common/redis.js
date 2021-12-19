@@ -6,8 +6,11 @@ const { makePromise } = require("./utils.js");
 const { ids } = require("./constants.js");
 
 const { Sequelize } = require("sequelize");
+const {
+  REDIS_KEY
+} = require("./environment.js");
 
-const sequelize = new Sequelize('dev', process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
+const sequelize = new Sequelize(process.env.MYSQL_DB, process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
   host: process.env.MYSQL_URL,
   dialect: 'mysql',
 });
@@ -15,22 +18,6 @@ const sequelize = new Sequelize('dev', process.env.MYSQL_USER, process.env.MYSQL
 let redisClient = null;
 let loadPromise = null;
 async function connect(port, host) {
-  const asyncGlobal = async() => {
-    let data;
-    try {
-      data = await sequelize.query('SELECT dataKey,dataValue FROM `ENVIRONMENT_DATA`', {type: sequelize.QueryTypes.SELECT});
-    } catch (err) {
-      console.log(err);
-    }
-    return data;
-  };
-  const globalData = await asyncGlobal();
-  let REDIS_KEY;
-  for(let i of globalData){
-    if (i.dataKey=="REDIS_KEY")
-      REDIS_KEY= i.dataValue;
-  }
-  console.log("in redis",REDIS_KEY);
   if (!loadPromise) {
     loadPromise = new Promise((accept, reject) => {
       redisClient = redis.createClient(port, host);

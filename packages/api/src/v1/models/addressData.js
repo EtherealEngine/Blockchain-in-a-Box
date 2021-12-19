@@ -29,7 +29,7 @@
  *         - password
  */
 
-module.exports = (sequelize, Sequelize) => sequelize.define('ADDRESS_DATA', {
+module.exports = (sequelize, Sequelize) => sequelize.define("ADDRESS_DATA", {
   email : {
     type: Sequelize.STRING,
     primaryKey: true
@@ -40,6 +40,7 @@ module.exports = (sequelize, Sequelize) => sequelize.define('ADDRESS_DATA', {
     },
     identityValue: Sequelize.STRING,
     currencyValue: Sequelize.STRING,
+    inventoryValue: Sequelize.STRING,
     currencyProxyValue: Sequelize.STRING,
     inventoryProxyValue: Sequelize.STRING,
     tradeValue: Sequelize.STRING,

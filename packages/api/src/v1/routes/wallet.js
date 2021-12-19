@@ -13,6 +13,13 @@ const {
   runSidechainWalletBalance
 } = require("../../common/blockchain.js");
 
+const { Sequelize } = require("sequelize");
+
+const sequelize = new Sequelize(process.env.MYSQL_DB, process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
+  host: process.env.MYSQL_URL,
+  dialect: 'mysql',
+});
+
 async function createWalletInternal() {
   
     const userMnemonic = bip39.generateMnemonic();
@@ -81,9 +88,23 @@ async function sendTransactionUserWallet(req, res) {
     let status = true;
     let error = null;
 
-      /*
+    const asyncUserWallet = async() => {
+      let fromData,toData;
       try {
-        const result = await runSidechainWalletTransaction(privateKey, fromUserAddress)(
+        fromData = await sequelize.query('SELECT userMnemonic, userAddress, userPrivateKey FROM `USER_WALLET_DATA` WHERE userId=?', {type: sequelize.QueryTypes.SELECT,replacements: [fromUserId]});
+        toData = await sequelize.query('SELECT userMnemonic, userAddress, userPrivateKey FROM `USER_WALLET_DATA` WHERE userId=?', {type: sequelize.QueryTypes.SELECT,replacements: [toUserId]});
+
+      } catch (err) {
+        console.log(err);
+      }
+      return {"from":fromData,"to":toData};
+    };
+    const asyncUserWalletData = await asyncUserWallet();
+    const {userMnemonic:fromUserMnemonic,userAddress:fromUserAddress,userPrivateKey:fromUserPrivateKey} = asyncUserWalletData.from[0]
+    const {userMnemonic:toUserMnemonic,userAddress:toUserAddress,userPrivateKey:toUserPrivateKey} = asyncUserWalletData.to[0]
+        
+      try {
+        const result = await runSidechainWalletTransaction(fromUserPrivateKey, fromUserAddress)(
           toUserAddress,
           amount
         );
@@ -94,8 +115,8 @@ async function sendTransactionUserWallet(req, res) {
         status = false;
         error = err;
       }
-    */
-    if (status) {
+
+      if (status) {
       return res.json({
         status: ResponseStatus.Success,
         message: "Transferred to " + toUserAddress,

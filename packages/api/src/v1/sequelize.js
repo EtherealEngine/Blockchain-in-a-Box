@@ -9,7 +9,7 @@ const OnboardingDataModel = require('./models/onboardingData');
 const TimerDataModel = require("./models/timerData");
 const UserWalletDataModel = require("./models/userWalletData");
 
-const sequelize = new Sequelize('dev', process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
+const sequelize = new Sequelize(process.env.MYSQL_DB, process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
   host: process.env.MYSQL_URL,
   dialect: 'mysql',
 });
@@ -24,11 +24,9 @@ const UserWalletData = UserWalletDataModel(sequelize, Sequelize);
 
 sequelize.sync().then(() => {
   // eslint-disable-next-line no-console
-  console.log('Users db and user table have been created');
-
-  
+  console.log('Users db and user table have been created 2'); 
 });
 
 
 
-module.exports = { AdminData, AddressData, EnvironmentData, OnBoardingData, UserData, TimerData, UserWalletData };
+module.exports = { AdminData, AddressData, EnvironmentData, OnBoardingData, UserData, TimerData, UserWalletData, sequelize };

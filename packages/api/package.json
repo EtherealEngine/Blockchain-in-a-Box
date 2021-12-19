@@ -4,8 +4,8 @@
   "description": "API Server for Blockchain-in-a-Box",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "node src/index.js",
+    "start": "node src/v1/sequelize.js && node src/index.js",
+    "dev": "node src/v1/sequelize.js && node src/index.js",
     "test": "cross-env NODE_ENV=test jest --testTimeout=10000",
     "deploy-dev": "truffle migrate --network development",
     "deploy-dev-reset": "truffle migrate --network development --reset",

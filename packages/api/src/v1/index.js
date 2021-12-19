@@ -2,37 +2,20 @@ const expressJSDocSwagger = require("express-jsdoc-swagger");
 const express = require("express");
 const path = require("path");
 const { AdminRoutes } = require("./routes/adminRoute.js");
-const { addSetupRoutes } = require("./routes/setup.js");
+
 const { environmentRoutes } = require("./routes/environmentRoute")
 const { AddressRoutes } = require("./routes/addressRoute")
 const { TimerRoutes} = require("./routes/timerRoute")
 const { UserRoutes} = require("./routes/userRoute")
 const { UserWalletRoutes} = require("./routes/userWalletRoute")
+const { addSetupRoutes } = require("./routes/setup.js");
 const { createWallet,sendTransactionWallet,showTransactionWallet,sendTransactionUserWallet } = require("./routes/wallet.js");
 const { TruffleRoutes } = require("./routes/truffleRoute")
 
 
 const { handleServerSideAuth, authenticateToken } = require("./routes/auth.js");
 
-const {
-  listAssets,
-  createAsset,
-  readAsset,
-  deleteAsset,
-  sendAsset,
-  readAssetRange,
-  signTransfer,
-} = require("./routes/assets.js");
 
-const {
-  getBlockchain,
-} = require("../common/blockchain.js");
-
-let blockchain;
-
-(async () => {
-  blockchain = await getBlockchain();
-})();
 
 function addV1Routes(app) {
   app.use(express.static(path.join(__dirname, '/../../console/dist')));
@@ -81,6 +64,26 @@ function addV1Routes(app) {
   TimerRoutes(app)
   TruffleRoutes(app)
   UserWalletRoutes(app)
+
+  const {
+    listAssets,
+    createAsset,
+    readAsset,
+    deleteAsset,
+    sendAsset,
+    readAssetRange,
+    signTransfer,
+  } = require("./routes/assets.js");
+  
+  const {
+    getBlockchain,
+  } = require("../common/blockchain.js");
+  
+  let blockchain;
+  
+  (async () => {
+    blockchain = await getBlockchain();
+  })();
 
   /**
    * Authentication payload
