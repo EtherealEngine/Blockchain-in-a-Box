@@ -30,20 +30,24 @@ spec:
         args:
         - "--datadir=/var/geth"
         - "--networkid=15"
+        - "--cache=2048"
+        - "--mine"
+        - "--miner.threads=8"
         - "--http"
         - "--http.addr=0.0.0.0"
         - "--http.api=admin,db,eth,debug,miner,net,shh,txpool,personal,web3"
         - "--http.corsdomain=*"
         - "--http.vhosts=*"
+        - "--mine"
         - "--allow-insecure-unlock"
         # - "-verbosity=6"
         resources:
           requests:
-            memory: "1024Mi"
-            cpu: "0.5"
+            memory: "3072Mi"
+            cpu: "1.5"
           limits:
-            memory: "2048Mi"
-            cpu: "1"
+            memory: "4096Mi"
+            cpu: "2"
         volumeMounts:
         - name: geth-data
           mountPath: /var/geth

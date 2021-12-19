@@ -5,28 +5,29 @@ metadata:
 data:
   genesis.json: |
     {
-      "config": {
-        "chainId": 33,
-        "homesteadBlock": 0,
-        "eip150Block": 0,
-        "eip150Hash": "0x0000000000000000000000000000000000000000000000000000000000000000",
-        "eip155Block": 0,
-        "eip158Block": 0,
-        "byzantiumBlock": 0,
-        "constantinopleBlock": 0,
-        "petersburgBlock": 0,
-        "istanbulBlock": 0,
-        "londonBlock": 0,
-        "clique": {
-          "period": 15,
-          "epoch": 30000
+    "config": {
+      "chainId": 1337,
+      "homesteadBlock": 0,
+      "eip150Block": 0,
+      "eip150Hash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "eip155Block": 0,
+      "eip158Block": 0,
+      "byzantiumBlock": 0,
+      "constantinopleBlock": 0,
+      "petersburgBlock": 0,
+      "muirglacierBlock": 0,
+      "istanbulBlock": 0,
+      "londonBlock": 0,
+      "clique": {
+        "period": 0,
+        "epoch": 30000
         }
       },
       "nonce": "0x0",
       "timestamp": "0x61121e53",
       "extraData": "0x0000000000000000000000000000000000000000000000000000000000000000f90c251e42367a6387afecba10b95c97eaf3b2870000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
       "gasLimit": "0x47b760",
-      "difficulty": "0x0",
+      "difficulty": "0x1",
       "mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
       "coinbase": "0x0000000000000000000000000000000000000000",
       "alloc": {
@@ -798,11 +799,11 @@ data:
         "00000000000000000000000000000000000000ff": {
           "balance": "0x1"
         },
-        "f90c251e42367a6387afecba10b95c97eaf3b287": {
-          "balance": "2000000000"
+        "aae4b50b15037dacc0783092faf5715b37914833": {
+          "balance": "0x200000000000000000000000000000000000000000000000000000000000000"
         },
-        "0xcaef76d9683b0d5b0f89871afd8a74d41b4363d1": {
-          "balance": "2000000000"
+        "1c065995fe40e957d4266c4797f7a136882cf1b2": {
+          "balance": "0x200000000000000000000000000000000000000000000000000000000000000"
         }
       },
       "number": "0x0",
