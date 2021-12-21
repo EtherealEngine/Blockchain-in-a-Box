@@ -273,14 +273,16 @@ import {
 import useSWR from 'swr'
 import { useAppState } from '../../state'
 import { fetcherMetadata, fetchOwner } from '../../utils/fetchers'
-import { formatPriceEth, METADATA_API, toShort } from '../../utils'
+import { formatPriceEth, METADATA_API, toShort, XRENGINE_API_URL } from '../../utils'
 
+console.log(METADATA_API,XRENGINE_API_URL,process.env.XRENGINE_URL)
 export type TokenProps = {
   id: string
   uri: string
   price: BigNumber
   name: string,
   url?:string,
+  inventoryItemId?:string,
   metadata?:[]
 }
 
@@ -298,6 +300,10 @@ const Token = ({ token, isOnSale, onTransfer, onBuy, onSale }: TokenCompProps) =
   const [address, setAddress] = useState<string>('')
   const [price, setPrice] = useState<string>('')
   const { user, ethPrice, contractDetails, transferToken, buyToken, setTokenSale } = useAppState()
+  let search = window.location.search;
+  let params = new URLSearchParams(search);
+  let name = params.get('data');
+  let tokenData = params.get('token')
 
   const onTransferClick = async (e: FormEvent | MouseEvent) => {
     e.preventDefault()
@@ -307,9 +313,26 @@ const Token = ({ token, isOnSale, onTransfer, onBuy, onSale }: TokenCompProps) =
     }
   }
 
-  const onBuyClick = (e: MouseEvent) => {
+  const onBuyClick = async (e: MouseEvent) => {
     e.preventDefault()
-    onBuy && buyToken(token.id, token.price)
+    onBuy && await buyToken(token.id, token.price)
+    console.log("tokenData ", tokenData,XRENGINE_API_URL);
+    
+    fetch(`${XRENGINE_API_URL}`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${tokenData}`,
+                'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        "userId": name,
+        "inventoryItemId": token.inventoryItemId
+      })
+     }).then((res:any)=>{
+       console.log("res ", res)
+     })
+     .catch((err:any)=>{
+       console.log("err ", err);
+       
+     })
   }
 
   const onSaleClick = async (e: MouseEvent) => {
@@ -326,7 +349,7 @@ const Token = ({ token, isOnSale, onTransfer, onBuy, onSale }: TokenCompProps) =
   const { data: owner } = useSWR(token.id, fetchOwner)
   const { data } = useSWR(`${METADATA_API}?name=Player${token.id}`, fetcherMetadata)
   // const data = token
-  console.log(data)
+  // console.log("params ", params)
   let tokenPriceEth = ""
   if(token.price){
      tokenPriceEth = formatPriceEth(token.price, ethPrice)

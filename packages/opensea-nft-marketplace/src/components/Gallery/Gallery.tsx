@@ -52,6 +52,8 @@ const Gallery = () => {
         pdata["data"].forEach((data: any) => {
 
           let attr = data.metadata;
+          console.log("CATEGORY ", traitobj, pdata["data"]);
+
           attr.forEach((av: any, index: number) => {
             if (traitobj[av['trait_type']] != undefined && traitobj[av['trait_type']] instanceof Array) {
               // if (!traitobj[av['trait_type']].includes(av['value']))
@@ -63,7 +65,6 @@ const Gallery = () => {
           })
           // if(!cat.includes(data.))
         });
-        console.log("CATEGORY ", traitobj, pdata["data"]);
         setTraitCategories(traitobj)
 
       })
@@ -215,8 +216,8 @@ const Gallery = () => {
     console.log(data);
 
     traitcategories[ky][ix].clicked = true;
-    console.log("backUpPData bf",backUpPData);
-    backUpPData = resetData.filter((da:any) => da.metadata.some((x:any) => (x['trait_type']==ky && x['value']==data.value)))
+    console.log("backUpPData bf",resetData);
+    backUpPData = resetData.filter((da:any) => da.metadata?.some((x:any) => (x['trait_type']==ky && x['value']==data.value)))
     setTraitCategories(traitcategories);
     setbackUpPData([...backUpPData])
     console.log("backUpPData af",backUpPData);

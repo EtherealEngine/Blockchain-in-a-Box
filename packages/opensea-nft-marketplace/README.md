@@ -6,7 +6,15 @@ NODE_ENV=development
 
 BROWSER=chrome
 
+# incase you keep NFT data in static file in web
+
 REACT_APP_SERVICE_URL=https://arkh-frontend.s3.us-west-1.amazonaws.com/basket
+
+# incase you keep NFT data in XREngine inventory item API also change in index.ts
+
+REACT_APP_SERVICE_URL=https://127.0.0.1:3030/inventory-item
+
+XRENGINE_URL=https://127.0.0.1:3030/user-inventory
 
 REACT_APP_RPC_URL_1=http://0.0.0.0:7545
 
