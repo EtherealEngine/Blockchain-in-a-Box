@@ -1,0 +1,21 @@
+{
+    "canisters": {
+      "wicp": {
+        "type": "custom",
+        "candid": "src/wicp.did",
+        "wasm": "target/wasm32-unknown-unknown/release/opt.wasm"
+      },
+      "wicp_test": {
+         "type": "custom",
+         "candid": "src/wicp.did",
+         "wasm": "target/wasm32-unknown-unknown/release/opt.wasm"
+      }
+    },
+    "networks": {
+      "local": {
+        "bind": "127.0.0.1:8000",
+        "type": "ephemeral"
+      }
+    },
+    "version": 1
+}
