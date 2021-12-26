@@ -1,0 +1,13 @@
+sudo dfx start --clean --background
+
+sudo dfx deploy cap
+
+sudo dfx deploy nft --argument '(principal "fmkex-6viyx-ddaaz-dahpf-5pyj5-l5ru3-7tc6d-ibwc3-3v4bu-q4dv3-iae", "BSKT", "Basketball game", principal "rrkah-fqaaa-aaaaa-aaaaq-cai")'
+
+sudo icx --pem="/home/syed/.config/dfx/identity/default/identity.pem" update r7inp-6aaaa-aaaaa-aaabq-cai mintDip721 '(principal "hhrcb-xdthr-sdpve-w6p7a-qzpxg-2ihnw-ugagm-svvur-gi2qa-eydso-tqe", vec{} )' --candid=./nft/candid/nft.did
+
+sudo icx --pem="/home/syed/.config/dfx/identity/default/identity.pem" query  r7inp-6aaaa-aaaaa-aaabq-cai totalSupplyDip721  --candid=./nft/candid/nft.did
+
+sudo icx --pem="/home/syed/.config/dfx/identity/default/identity.pem" query  r7inp-6aaaa-aaaaa-aaabq-cai nameDip721  --candid=./nft/candid/nft.did
+
+sudo icx --pem="/home/syed/.config/dfx/identity/default/identity.pem" query  r7inp-6aaaa-aaaaa-aaabq-cai symbolDip721  --candid=./nft/candid/nft.did
