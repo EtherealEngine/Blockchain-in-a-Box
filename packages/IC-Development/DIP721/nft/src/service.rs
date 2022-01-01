@@ -181,7 +181,7 @@ async fn mint_dip721(to: Principal, metadata_desc: MetadataDesc) -> MintReceipt 
 /// 
 #[update(name = "setWicpId")]
 async fn set_wicp_canister(canister_id: Principal) {
-    if !is_fleek(&ic::caller()) {
+    if is_fleek(&ic::caller()) {
         token_level_metadata().payment = Some(canister_id);
     }
 }
@@ -190,8 +190,6 @@ async fn set_wicp_canister(canister_id: Principal) {
 async fn get_wicp() -> Principal {
     wicp_canister_id()
 }
-
-
 
 #[update(name = "buyDip721")]
 async fn buy_dip721(token_id: Nat) -> (WicpTxReceipt,) {
@@ -203,7 +201,8 @@ async fn buy_dip721(token_id: Nat) -> (WicpTxReceipt,) {
                         (method_caller, canister_owner(), Nat::from(1)),
     ).await;
 
-    print(method_caller.to_text());
+    print("check owner");
+    print(canister_owner().to_text());
 
     // if response.is_ok() {
         
@@ -349,7 +348,7 @@ fn restore_data_from_stable_store() {
 
 #[init]
 fn init(owner: Principal, symbol: String, name: String, history: Principal) {
-    ic::store(Fleek(vec![ic::caller()]));
+    ic::store(Fleek(vec![owner, ic::caller()]));
     *token_level_metadata() = TokenLevelMetadata::new(Some(owner), symbol, name, Some(history), Some(history)); // Payment is ID of WICP for now
     handshake(1_000_000_000_000, Some(history));
 }
