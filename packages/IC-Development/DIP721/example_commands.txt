@@ -1,3 +1,21 @@
+1. dfx start --clean --background
+
+2. dfx deploy cap
+
+3. dfx deploy wicp_test --argument=\
+'("data:image/jpeg;base64,$(base64 ./WICP-logo.png)", "wicp_test","WICP_LOCAL", 8:nat8, 10000, principal "YOUR_PRINCIPAL_ID", 0, principal "YOUR_PRINCIPAL_ID", principal "CAP_CANISTER_ID")'
+
+4. dfx deploy
+
+5. dfx canister id wicp_test # Store this somewhere
+
+6. dfx canister id cap # Store this somewhere
+
+7. dfx canister install nft --argument\
+'(principal "YOUR_PRINCIPAL_ID", "YOUR_SYMBOL", "YOUR_NFT_COLLECTION_NAME", principal "CAP_CANISTER_ID", principal "WICP_CANISTER_ID")'
+
+8. dfx canister call nft buyDip721 '(1: nat)'
+
 sudo dfx start --clean --background
 
 sudo dfx deploy cap
@@ -11,3 +29,13 @@ sudo icx --pem="/home/syed/.config/dfx/identity/default/identity.pem" query  r7i
 sudo icx --pem="/home/syed/.config/dfx/identity/default/identity.pem" query  r7inp-6aaaa-aaaaa-aaabq-cai nameDip721  --candid=./nft/candid/nft.did
 
 sudo icx --pem="/home/syed/.config/dfx/identity/default/identity.pem" query  r7inp-6aaaa-aaaaa-aaabq-cai symbolDip721  --candid=./nft/candid/nft.did
+
+al
+gqrhy-ozf7y-rb4nr-g5eix-tbden-2x3lk-rot3p-ybyca-tbjrx-eesge-kqe
+def
+ctwda-agbel-ek5s5-2zxdz-q4ipo-q2hns-x4uyx-qg3kw-2tvye-tlkls-yqe
+
+sudo dfx deploy wicp_test --argument=\
+'("data:image/jpeg;base64,$(base64 ./WICP-logo.png)", "wicp_test","wicp_TST", 8:nat8, 10000, principal "ctwda-agbel-ek5s5-2zxdz-q4ipo-q2hns-x4uyx-qg3kw-2tvye-tlkls-yqe", 0, principal "ctwda-agbel-ek5s5-2zxdz-q4ipo-q2hns-x4uyx-qg3kw-2tvye-tlkls-yqe", principal "r7inp-6aaaa-aaaaa-aaabq-cai")'
+
+

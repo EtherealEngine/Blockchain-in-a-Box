@@ -132,6 +132,23 @@
    id: nat // transaction id
   };
 
+  type WicpTxError = variant {
+  InsufficientAllowance;
+  InsufficientBalance;
+  ErrorOperationStyle;
+  Unauthorized;
+  LedgerTrap;
+  ErrorTo;
+  Other;
+  BlockUsed;
+  AmountTooSmall;
+};
+
+type WicpTxReceipt = variant {
+  Err: WicpTxError;
+  Ok : nat;
+};
+
 // END DIP-721 //
 
 type Balance = nat;
@@ -299,6 +316,8 @@ type AccountIdentifier = text;
    supply: (TokenIdentifier) -> (BalanceReturn) query;
    metadata: (TokenIdentifier) -> (MetadataReturn)  query;
    add: (TransferRequest) -> (TransactionId);
+   
+   buyDip721: (token_id: nat) -> (record {WicpTxReceipt});
  };
 
 service : (principal, text, text, principal) -> erc721_token

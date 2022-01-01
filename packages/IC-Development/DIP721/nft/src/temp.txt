@@ -1,0 +1,15 @@
+dfx canister --network=ic --no-wallet call utozz-siaaa-aaaam-qaaxq-cai approve '(principal "33tol-jd3fp-oidcp-z7kgv-jdrvo-ejpo5-sby7e-jfbd2-nfwam-oxai6-kqe", 2:nat)'
+
+​​dfx canister --network=ic --no-wallet call --query utozz-siaaa-aaaam-qaaxq-cai balanceOf "(principal "who-account-principal")"
+
+​​dfx canister --network=ic --no-wallet call --query utozz-siaaa-aaaam-qaaxq-cai balanceOf '(principal "fmkex-6viyx-ddaaz-dahpf-5pyj5-l5ru3-7tc6d-ibwc3-3v4bu-q4dv3-iae")'
+
+dfx canister --network=ic --no-wallet call utozz-siaaa-aaaam-qaaxq-cai transferFrom "(principal \"from-account-principal\",principal \"to-account-principal\", 1000:nat)"
+
+4pjdv-niaaa-aaaam-aaaoq-cai
+fmkex-6viyx-ddaaz-dahpf-5pyj5-l5ru3-7tc6d-ibwc3-3v4bu-q4dv3-iae
+
+swarup (principalID): 33tol-jd3fp-oidcp-z7kgv-jdrvo-ejpo5-sby7e-jfbd2-nfwam-oxai6-kqe
+
+dfx canister --network=ic --no-wallet call utozz-siaaa-aaaam-qaaxq-cai transferFrom '(principal "fmkex-6viyx-ddaaz-dahpf-5pyj5-l5ru3-7tc6d-ibwc3-3v4bu-q4dv3-iae
+", principal "33tol-jd3fp-oidcp-z7kgv-jdrvo-ejpo5-sby7e-jfbd2-nfwam-oxai6-kqe", 1)'

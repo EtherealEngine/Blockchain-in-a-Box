@@ -3,14 +3,24 @@ use crate::management::Fleek;
 use crate::types::*;
 use crate::utils::*;
 
+use std::str::FromStr;
+
+use ic_kit::Principal;
 use ic_kit::ic;
 use ic_kit::ic::caller;
 use ic_kit::ic::trap;
 use ic_kit::macros::*;
+use ic_kit::ic::call;
+use ic_kit::ic::call_raw;
+use ic_kit::RejectionCode;
+
+use ic_cdk::api::print;
 
 use cap_sdk::handshake;
 use cap_sdk::DetailValue;
 use cap_sdk::IndefiniteEventBuilder;
+
+pub use ic_kit::candid::{candid_method, CandidType, Deserialize, Int, Nat};
 
 /// HEALTH-CHECK ///
 #[query]
@@ -147,6 +157,7 @@ async fn mint_dip721(to: Principal, metadata_desc: MetadataDesc) -> MintReceipt 
     if !is_fleek(&ic::caller()) {
         return Err(ApiError::Unauthorized);
     }
+
     let response = ledger().mintNFT(&to, &metadata_desc).unwrap();
     let event = IndefiniteEventBuilder::new()
         .caller(caller())
@@ -167,6 +178,43 @@ async fn mint_dip721(to: Principal, metadata_desc: MetadataDesc) -> MintReceipt 
 }
 
 /// END DIP-721 ///
+/// 
+#[update(name = "setWicpId")]
+async fn set_wicp_canister(canister_id: Principal) {
+    if !is_fleek(&ic::caller()) {
+        token_level_metadata().payment = Some(canister_id);
+    }
+}
+
+#[query(name = "getWicpId")]
+async fn get_wicp() -> Principal {
+    wicp_canister_id()
+}
+
+
+
+#[update(name = "buyDip721")]
+async fn buy_dip721(token_id: Nat) -> (WicpTxReceipt,) {
+
+    let method_caller : Principal = ic::caller();
+    let response: Result<(WicpTxReceipt,), (RejectionCode, String)> = call(
+                        wicp_canister_id(),
+                        "transferFrom",
+                        (method_caller, canister_owner(), Nat::from(1)),
+    ).await;
+
+    print(method_caller.to_text());
+
+    // if response.is_ok() {
+        
+    // } else {
+
+    // }
+    // _mint_internal(method_caller, vec![]);
+
+    response.unwrap()
+}
+
 
 #[update]
 async fn transfer(transfer_request: TransferRequest) -> TransferResponse {
@@ -301,9 +349,8 @@ fn restore_data_from_stable_store() {
 
 #[init]
 fn init(owner: Principal, symbol: String, name: String, history: Principal) {
-    // ic::store(Fleek(vec![ic::caller()]));
-    ic::store(Fleek(vec![ owner ])); // TODO: Look into dis
-    *token_level_metadata() = TokenLevelMetadata::new(Some(owner), symbol, name, Some(history));
+    ic::store(Fleek(vec![ic::caller()]));
+    *token_level_metadata() = TokenLevelMetadata::new(Some(owner), symbol, name, Some(history), Some(history)); // Payment is ID of WICP for now
     handshake(1_000_000_000_000, Some(history));
 }
 
