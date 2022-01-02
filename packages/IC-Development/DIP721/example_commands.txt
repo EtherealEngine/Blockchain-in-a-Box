@@ -48,7 +48,7 @@ wicp_test
 sudo dfx deploy wicp_test --argument='("data:image/jpeg;base64,$(base64 ./WICP-logo.png)", "wicp_test","WICP_LOCAL", 8:nat8, 100000, principal "ctwda-agbel-ek5s5-2zxdz-q4ipo-q2hns-x4uyx-qg3kw-2tvye-tlkls-yqe", 0, principal "ctwda-agbel-ek5s5-2zxdz-q4ipo-q2hns-x4uyx-qg3kw-2tvye-tlkls-yqe", principal "rrkah-fqaaa-aaaaa-aaaaq-cai")'
 
 nft-reinstall
-sudo dfx  deploy --mode reinstall  nft --argument '(principal "ctwda-agbel-ek5s5-2zxdz-q4ipo-q2hns-x4uyx-qg3kw-2tvye-tlkls-yqe", "BSKT", "Metasports Basketball", principal "rrkah-fqaaa-aaaaa-aaaaq-cai")'
+sudo dfx  deploy --mode reinstall  nft --argument '(principal "ctwda-agbel-ek5s5-2zxdz-q4ipo-q2hns-x4uyx-qg3kw-2tvye-tlkls-yqe", "BSKT", "Metasports Basketball", principal "rrkah-fqaaa-aaaaa-aaaaq-cai", principal "r7inp-6aaaa-aaaaa-aaabq-cai")'
 
 sudo icx --pem="/root/.config/dfx/identity/Alice/identity.pem" update rkp4c-7iaaa-aaaaa-aaaca-cai  buyDip721 '(1 : nat)' --candid=./nft/candid/nft.did
 

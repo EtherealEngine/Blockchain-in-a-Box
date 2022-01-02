@@ -2,16 +2,27 @@ use crate::types::*;
 use crate::utils::*;
 
 use ic_kit::candid::CandidType;
+use ic_cdk::api::print;
+use ic_cdk::api::time;
 
 use serde::Deserialize;
 use std::collections::HashMap;
 use std::convert::Into;
 use std::default::Default;
 
+#[derive(Clone, CandidType, Deserialize)]
+pub struct Listing {
+    pub owner: Principal,
+    pub token_id: TokenIndex,
+    pub price: u64,
+    pub time: i128,
+}
+
 #[derive(CandidType, Clone, Default, Deserialize)]
 pub struct Ledger {
     tokens: HashMap<TokenIndex, TokenMetadata>,
     user_tokens: HashMap<User, Vec<TokenIndex>>,
+    listed: Vec<Listing>,
 }
 
 impl Ledger {
@@ -177,6 +188,77 @@ impl Ledger {
                 .metadata
                 .clone(),
         )
+    }
+
+    /*
+        pub owner: Principal,
+    pub token_id: TokenIndex,
+    pub price: u64,
+    pub time: i128,
+    */ 
+
+    pub async fn list(&mut self, from: Principal, token_identifier: &TokenIdentifier, price: u64) -> Result <bool, String> {
+
+        let token_index = into_token_index(token_identifier);
+
+        let tokenWrapped: Option<&TokenMetadata> = ledger()
+        .tokens
+        .get(&token_index);
+
+        if tokenWrapped.is_some() {
+            let token : &TokenMetadata = tokenWrapped.unwrap();
+
+            if token.principal != from {
+                return Err("Unauthorized, token not owned by caller".to_string());
+            } else if price == 0{
+                return Err("Token can't be listed at zero price".to_string());
+            } else {
+                let is_listed = ledger().listed.iter().position(|x| x.token_id == token_index);
+
+                if is_listed.is_some() {
+                    return Err("Token already listed. Delist and list again if you want to update price.".to_string())
+                } else {
+                    ledger()
+                    .listed
+                    .push(
+                        Listing {
+                            owner:    from,
+                            token_id: token_index,
+                            price:    price,
+                            time:     time() as i128
+                    });
+                    return Ok(true);
+                }
+            }
+        } else {
+            return Err("Invalid token-id/token not found".to_string());
+        }
+    }
+    pub async fn delist(&mut self, from: Principal, token_identifier: &TokenIdentifier) -> Result <bool, String> {
+        let token_index = into_token_index(token_identifier);
+
+        let tokenWrapped: Option<&TokenMetadata> = ledger()
+        .tokens
+        .get(&token_index);
+
+        if tokenWrapped.is_some() {
+            let token : &TokenMetadata = tokenWrapped.unwrap();
+
+            if token.principal != from {
+                return Err("Unauthorized, token not owned by caller".to_string());
+            } else {
+                let is_listed = ledger().listed.iter().position(|x| x.token_id == token_index);
+
+                if is_listed.is_some() {
+                    ledger().listed.remove(is_listed.unwrap());
+                    return Ok(true);
+                } else {
+                    return Err("Token not listed".to_string());
+                }
+            }
+        } else {
+            return Err("Invalid token-id/token not found".to_string());
+        }
     }
 
     #[allow(dead_code)]
