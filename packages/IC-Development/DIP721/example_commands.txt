@@ -52,3 +52,4 @@ sudo dfx  deploy --mode reinstall  nft --argument '(principal "ctwda-agbel-ek5s5
 
 sudo icx --pem="/root/.config/dfx/identity/Alice/identity.pem" update rkp4c-7iaaa-aaaaa-aaaca-cai  buyDip721 '(1 : nat)' --candid=./nft/candid/nft.did
 
+sudo dfx canister --no-wallet call wicp_test approve '(principal "rkp4c-7iaaa-aaaaa-aaaca-cai", 1001)'

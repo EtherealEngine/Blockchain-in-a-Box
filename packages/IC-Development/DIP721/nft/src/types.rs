@@ -357,3 +357,11 @@ pub enum WicpTxError {
 }
 
 pub type WicpTxReceipt = Result<Nat, WicpTxError>;
+
+#[derive(Clone, CandidType, Deserialize)]
+pub struct Listing {
+    pub owner: Principal,
+    pub token_id: TokenIndex,
+    pub price: Nat,
+    pub time: i128,
+}

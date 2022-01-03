@@ -10,14 +10,6 @@ use std::collections::HashMap;
 use std::convert::Into;
 use std::default::Default;
 
-#[derive(Clone, CandidType, Deserialize)]
-pub struct Listing {
-    pub owner: Principal,
-    pub token_id: TokenIndex,
-    pub price: u64,
-    pub time: i128,
-}
-
 #[derive(CandidType, Clone, Default, Deserialize)]
 pub struct Ledger {
     tokens: HashMap<TokenIndex, TokenMetadata>,
@@ -191,14 +183,37 @@ impl Ledger {
     }
 
     /*
-        pub owner: Principal,
+    pub owner: Principal,
     pub token_id: TokenIndex,
     pub price: u64,
     pub time: i128,
-    */ 
+    */
 
-    pub async fn list(&mut self, from: Principal, token_identifier: &TokenIdentifier, price: u64) -> Result <bool, String> {
+    pub async fn is_listed(&mut self, token_identifier: &TokenIdentifier) -> bool {
+        let token_index = into_token_index(token_identifier);
+        
+        ledger().listed.iter().position(|x| x.token_id == token_index).is_some()
+    }
 
+    pub async fn get_listing(&mut self, token_identifier: &TokenIdentifier) -> Option<Listing> {
+        let token_index = into_token_index(token_identifier);
+
+        let listing_pos: Option<usize> = ledger().listed.iter().position(|x| x.token_id == token_index);
+
+        if listing_pos.is_none() {
+            return None;
+        } else {
+            return Some(ledger().listed.get(listing_pos.unwrap()).unwrap().clone());
+        }
+    }
+    
+    pub async fn get_listing_position(&mut self, token_identifier: &TokenIdentifier) -> Option<usize> {
+        let token_index = into_token_index(token_identifier);
+
+        ledger().listed.iter().position(|x| x.token_id == token_index)
+    }
+
+    pub async fn list(&mut self, from: Principal, token_identifier: &TokenIdentifier, price: Nat) -> Result <bool, String> {
         let token_index = into_token_index(token_identifier);
 
         let tokenWrapped: Option<&TokenMetadata> = ledger()
@@ -210,7 +225,7 @@ impl Ledger {
 
             if token.principal != from {
                 return Err("Unauthorized, token not owned by caller".to_string());
-            } else if price == 0{
+            } else if price == 0 {
                 return Err("Token can't be listed at zero price".to_string());
             } else {
                 let is_listed = ledger().listed.iter().position(|x| x.token_id == token_index);

@@ -193,7 +193,7 @@ async fn get_wicp() -> Principal {
 
 
 #[update(name = "listForSale")]
-async fn list_for_sale(token_id: u64, price: u64) -> Result <bool, String> {
+async fn list_for_sale(token_id: u64, price: Nat) -> Result <bool, String> {
     ledger().list(ic_kit::ic::caller(), &token_id.to_string(), price).await
 }
 
@@ -203,26 +203,45 @@ async fn delist_from_sale(token_id: u64) -> Result <bool, String> {
 }
 
 #[update(name = "buyDip721")]
-async fn buy_dip721(token_id: Nat) -> (WicpTxReceipt,) {
+async fn buy_dip721(token_id: u64) -> Result <WicpTxReceipt, String> {
 
-    let method_caller : Principal = ic::caller();
-    let response: Result<(WicpTxReceipt,), (RejectionCode, String)> = call(
-                        wicp_canister_id(),
-                        "transferFrom",
-                        (method_caller, canister_owner(), Nat::from(1)),
-    ).await;
+    let listingResult: Option<Listing> = ledger().get_listing(&token_id.to_string()).await;
+    
+    if listingResult.is_none() {
+        return Err("Token not listed for sale / Token with such ID does not exist".to_string());
+    } else {
+        let listing: Listing = listingResult.unwrap().clone();
 
-    print("check owner");
-    print(canister_owner().to_text());
-
-    // if response.is_ok() {
+        let method_caller: Principal = ic::caller();
         
-    // } else {
+        let response: Result<(WicpTxReceipt,), (RejectionCode, String)> = call(
+                            wicp_canister_id(),
+                            "transferFrom",
+                            (method_caller, listing.owner, listing.price.clone()),
+        ).await;
+        
+        print("wicp is");
+        print(&wicp_canister_id().to_text());
 
-    // }
-    // _mint_internal(method_caller, vec![]);
+        print("caller is");
+        print(&method_caller.to_text());
+        print("price is");
+        print(listing.price.to_string());
+        
+        print("owner is");
+        print(&listing.owner.to_text());
 
-    response.unwrap()
+        print("token id is");
+        print(listing.token_id.to_string());
+        
+        if response.is_ok() {
+            // transfer ownership and delist token
+            return Ok(response.ok().unwrap().0);    
+        } else {
+            print(&response.err().unwrap().1);
+            return Err("Unexpected error occured".to_string());
+        }
+    }
 }
 
 

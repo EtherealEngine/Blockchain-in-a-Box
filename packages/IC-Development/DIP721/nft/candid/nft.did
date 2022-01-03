@@ -293,6 +293,12 @@ type ListResult =
    Ok: bool;
  };
 
+ type BuyResult = 
+  variant {
+    Err: text;
+    Ok: WicpTxReceipt;
+  };
+
 
  type erc721_token =
  service {
@@ -324,8 +330,8 @@ type ListResult =
    metadata: (TokenIdentifier) -> (MetadataReturn)  query;
    add: (TransferRequest) -> (TransactionId);
    
-   buyDip721: (token_id: nat64) -> (record {WicpTxReceipt});
-   listForSale: (token_id: nat64, price: nat64) -> (ListResult);
+   buyDip721: (token_id: nat64) -> (BuyResult);
+   listForSale: (token_id: nat64, price: nat) -> (ListResult);
    delistFromSale: (token_id: nat64) -> (ListResult);
  };
 
