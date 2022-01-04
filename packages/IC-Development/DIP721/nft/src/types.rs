@@ -290,6 +290,7 @@ pub struct TokenLevelMetadata {
     pub symbol: String,
     pub name: String,
     pub history: Option<Principal>,
+    pub payment: Option<Principal>,
 }
 
 #[derive(CandidType, Deserialize)]
@@ -340,4 +341,27 @@ pub struct StableStorage {
     pub ledger: Ledger,
     pub token: TokenLevelMetadata,
     pub fleek: Fleek,
+}
+
+#[derive(CandidType, Debug, Deserialize, PartialEq)]
+pub enum WicpTxError {
+    InsufficientBalance,
+    InsufficientAllowance,
+    Unauthorized,
+    LedgerTrap,
+    AmountTooSmall,
+    BlockUsed,
+    ErrorOperationStyle,
+    ErrorTo,
+    Other,
+}
+
+pub type WicpTxReceipt = Result<Nat, WicpTxError>;
+
+#[derive(Clone, CandidType, Deserialize)]
+pub struct Listing {
+    pub owner: Principal,
+    pub token_id: TokenIndex,
+    pub price: Nat,
+    pub time: i128,
 }

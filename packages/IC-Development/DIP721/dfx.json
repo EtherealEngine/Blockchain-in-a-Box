@@ -13,6 +13,13 @@
       "candid": "cap.did",
       "wasm": "cap.wasm",
       "type": "custom"
+    },
+    "wicp_test": {
+      "build": "echo",
+      "candid": "wicp.did",
+      "wasm": "wicp_local.wasm",
+      "type": "custom"
+      
     }
   },
   "defaults": {

@@ -132,6 +132,23 @@
    id: nat // transaction id
   };
 
+  type WicpTxError = variant {
+  InsufficientAllowance;
+  InsufficientBalance;
+  ErrorOperationStyle;
+  Unauthorized;
+  LedgerTrap;
+  ErrorTo;
+  Other;
+  BlockUsed;
+  AmountTooSmall;
+};
+
+type WicpTxReceipt = variant {
+  Err: WicpTxError;
+  Ok : nat;
+};
+
 // END DIP-721 //
 
 type Balance = nat;
@@ -270,6 +287,19 @@ type AccountIdentifier = text;
    Ok: vec Transaction;
  };
 
+type ListResult =
+ variant {
+   Err: text;
+   Ok: bool;
+ };
+
+ type BuyResult = 
+  variant {
+    Err: text;
+    Ok: WicpTxReceipt;
+  };
+
+
  type erc721_token =
  service {
    // HEALTH-CHECK //
@@ -299,6 +329,10 @@ type AccountIdentifier = text;
    supply: (TokenIdentifier) -> (BalanceReturn) query;
    metadata: (TokenIdentifier) -> (MetadataReturn)  query;
    add: (TransferRequest) -> (TransactionId);
+   
+   buyDip721: (token_id: nat64) -> (BuyResult);
+   listForSale: (token_id: nat64, price: nat) -> (ListResult);
+   delistFromSale: (token_id: nat64) -> (ListResult);
  };
 
-service : (principal, text, text, principal) -> erc721_token
+service : (principal, text, text, principal, principal) -> erc721_token

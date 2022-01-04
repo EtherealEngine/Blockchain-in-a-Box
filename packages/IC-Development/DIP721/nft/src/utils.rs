@@ -13,6 +13,8 @@ use cap_sdk::DetailValue;
 use cap_sdk::IndefiniteEvent;
 use std::convert::TryInto;
 
+use ic_cdk::api::print;
+
 pub fn caller() -> Principal {
     ic_kit::ic::caller()
 }
@@ -31,6 +33,15 @@ pub fn fleek_db<'a>() -> &'a mut Fleek {
 
 pub fn cap_canister_id() -> Principal {
     ic_kit::ic::get_mut::<TokenLevelMetadata>().history.unwrap()
+}
+
+pub fn wicp_canister_id() -> Principal {
+    ic_kit::ic::get_mut::<TokenLevelMetadata>().payment.unwrap()
+}
+
+pub fn canister_owner() -> Principal {
+    let list = &ic_kit::ic::get::<Fleek>().0;
+    list[0]
 }
 
 pub fn expect_caller(input_principal: &Principal) {
