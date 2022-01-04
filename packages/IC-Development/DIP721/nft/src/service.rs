@@ -220,26 +220,31 @@ async fn buy_dip721(token_id: u64) -> Result <WicpTxReceipt, String> {
                             (method_caller, listing.owner, listing.price.clone()),
         ).await;
         
-        print("wicp is");
-        print(&wicp_canister_id().to_text());
 
-        print("caller is");
-        print(&method_caller.to_text());
-        print("price is");
-        print(listing.price.to_string());
-        
-        print("owner is");
-        print(&listing.owner.to_text());
-
-        print("token id is");
-        print(listing.token_id.to_string());
         
         if response.is_ok() {
-            // transfer ownership and delist token
-            return Ok(response.ok().unwrap().0);    
+            match response.ok() {
+                Some(wicpReceipt) => {
+                    // All OK, transfer ownership and delist token
+                    let delisted = ledger().delist(listing.owner, &token_id.to_string()).await;
+
+                    if delisted.is_ok() {
+                        ledger().transfer(&User::principal(listing.owner), &User::principal(method_caller), &token_id.to_string());
+                        return Ok(wicpReceipt.0);
+                    } else {
+                        return Err("Er-1: Unexpected error occured".to_string());
+                    }
+                },
+                None => {
+                    // Ideally funds should be returned at this point
+                    // I doubt code will ever reach this branch of logic though
+                    return Err("Er-2: Unexpected error occured".to_string());
+                }
+            }
+            
         } else {
-            print(&response.err().unwrap().1);
-            return Err("Unexpected error occured".to_string());
+            // print(&response.err().unwrap().1);
+            return Err("Unexpected error occured while calling external canister".to_string());
         }
     }
 }
