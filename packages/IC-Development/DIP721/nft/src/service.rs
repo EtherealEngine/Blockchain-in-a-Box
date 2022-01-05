@@ -220,25 +220,44 @@ async fn buy_dip721(token_id: u64) -> Result <WicpTxReceipt, String> {
                             (method_caller, listing.owner, listing.price.clone()),
         ).await;
         
-
-        
         if response.is_ok() {
-            match response.ok() {
-                Some(wicpReceipt) => {
-                    // All OK, transfer ownership and delist token
-                    let delisted = ledger().delist(listing.owner, &token_id.to_string()).await;
 
-                    if delisted.is_ok() {
-                        ledger().transfer(&User::principal(listing.owner), &User::principal(method_caller), &token_id.to_string());
-                        return Ok(wicpReceipt.0);
+            match response.ok() {
+
+                // Unwrapping WicpTxReciept which is a Result<Nat, WicpTxError>
+                // Only Nat response means success
+                Some(wicpReceiptTuple) => {
+                    // All OK, transfer ownership and delist token
+                    let wicpReceipt: WicpTxReceipt = wicpReceiptTuple.0;
+                    if (wicpReceipt.is_ok()) {
+                        let delisted = ledger().delist(listing.owner, &token_id.to_string()).await;
+
+                        if delisted.is_ok() {
+                            ledger().transfer(&User::principal(listing.owner), &User::principal(method_caller), &token_id.to_string());
+                            return Ok(wicpReceipt);
+                        } else {
+                            return Err("Er-1: Unexpected error occured".to_string());
+                        }
                     } else {
-                        return Err("Er-1: Unexpected error occured".to_string());
+                        return Ok(wicpReceipt);
+                        // In this branch we return the WicpError which can be any of:
+                        /*
+                            InsufficientBalance,
+                            InsufficientAllowance,
+                            Unauthorized,
+                            LedgerTrap,
+                            AmountTooSmall,
+                            BlockUsed,
+                            ErrorOperationStyle,
+                            ErrorTo,
+                            Other,
+                        */
                     }
                 },
                 None => {
                     // Ideally funds should be returned at this point
                     // I doubt code will ever reach this branch of logic though
-                    return Err("Er-2: Unexpected error occured".to_string());
+                    return Err("Er-3: Unexpected error occured".to_string());
                 }
             }
             
