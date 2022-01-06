@@ -1,7 +1,9 @@
-##### prerequisite
+##### Prerequisite
 
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
 source $HOME/.cargo/env
+
 rustup target add wasm32-unknown-unknown
 
 ##### Start dfx
@@ -10,22 +12,26 @@ dfx start --clean --background
 ##### Deploy the cap canister
 dfx deploy cap
 
-Result 
-The UI canister on the "local" network is "ryjl3-tyaaa-aaaaa-aaaba-cai"
-Installing code for canister cap, with canister_id rrkah-fqaaa-aaaaa-aaaaq-cai
+*Result*
+
+*The UI canister on the "local" network is "ryjl3-tyaaa-aaaaa-aaaba-cai"*
+
+*Installing code for canister cap, with canister_id rrkah-fqaaa-aaaaa-aaaaq-cai*
 
 ##### To get the principal
 dfx identity get-principal
 
-Result
-eebku-xrimf-dmsbm-bisjx-yjffv-xwecv-v3bxj-v2brl-sq2l7-e4ng6-4ae
+*Result*
+
+*eebku-xrimf-dmsbm-bisjx-yjffv-xwecv-v3bxj-v2brl-sq2l7-e4ng6-4ae*
 
 ##### Deploy the wicp_test canister
 dfx deploy wicp_test --argument=\
 '("data:image/jpeg;base64,$(base64 ./WICP-logo.png)", "wicp_test","WICP_LOCAL", 8:nat8, 10000, principal "eebku-xrimf-dmsbm-bisjx-yjffv-xwecv-v3bxj-v2brl-sq2l7-e4ng6-4ae", 0, principal "eebku-xrimf-dmsbm-bisjx-yjffv-xwecv-v3bxj-v2brl-sq2l7-e4ng6-4ae", principal "rrkah-fqaaa-aaaaa-aaaaq-cai")'
 
-Result
-Installing code for canister wicp_test, with canister_id r7inp-6aaaa-aaaaa-aaabq-cai
+*Result*
+
+*Installing code for canister wicp_test, with canister_id r7inp-6aaaa-aaaaa-aaabq-cai*
 
 ##### Deploy
 dfx deploy
@@ -33,14 +39,16 @@ dfx deploy
 ##### Check the wicp canister id
 dfx canister id wicp_test # Store this somewhere
 
-Result
-r7inp-6aaaa-aaaaa-aaabq-cai
+*Result*
+
+*r7inp-6aaaa-aaaaa-aaabq-cai*
 
 ##### Check the cap canister id
 dfx canister id cap # Store this somewhere
 
-Result
-rrkah-fqaaa-aaaaa-aaaaq-cai
+*Result*
+
+*rrkah-fqaaa-aaaaa-aaaaq-cai*
 
 ##### Install NFT canister
 dfx canister install nft --argument\
@@ -48,8 +56,9 @@ dfx canister install nft --argument\
 
 dfx canister install nft --argument '(principal "eebku-xrimf-dmsbm-bisjx-yjffv-xwecv-v3bxj-v2brl-sq2l7-e4ng6-4ae", "BSKT", "Basketball game", principal "rrkah-fqaaa-aaaaa-aaaaq-cai", principal "r7inp-6aaaa-aaaaa-aaabq-cai")'
 
-Result
-Installing code for canister nft, with canister_id rkp4c-7iaaa-aaaaa-aaaca-cai
+*Result*
+
+*Installing code for canister nft, with canister_id rkp4c-7iaaa-aaaaa-aaaca-cai*
 
 ##### Minting the token in NFT
 dfx canister call nft mintDip721 '(principal "eebku-xrimf-dmsbm-bisjx-yjffv-xwecv-v3bxj-v2brl-sq2l7-e4ng6-4ae", vec{} )'
@@ -70,9 +79,12 @@ dfx identity use Alice
 ##### This is for create canister for Alice
 dfx canister id nft
 
-Result
-Creating a wallet canister on the local network.
-The wallet canister on the "local" network for user "Alice" is "renrk-eyaaa-aaaaa-aaada-cai"
+*Result*
+
+*Creating a wallet canister on the local network.*
+
+*The wallet canister on the "local" network for user "Alice" is "renrk-eyaaa-aaaaa-aaada-cai"*
+
 rkp4c-7iaaa-aaaaa-aaaca-cai
 
 ##### Approve canister for the spent
@@ -80,6 +92,7 @@ dfx canister --no-wallet call wicp_test approve '(principal "rkp4c-7iaaa-aaaaa-a
 
 ##### Check the ownership
 dfx canister call nft ownerOfDip721 '(token_id: nat64)'
+
 dfx canister call nft ownerOfDip721 '(0:nat64)'
 
 ##### Check Alice balance
@@ -90,6 +103,7 @@ dfx canister call nft buyDip721 '(1: nat64)'
 
 ##### Check the ownership
 dfx canister call nft ownerOfDip721 '(token_id: nat64)'
+
 dfx canister call nft ownerOfDip721 '(0:nat64)'
 
 ##### Check Alice balance
@@ -104,8 +118,9 @@ dfx identity use Alice
 
 dfx identity get-principal
 
-Result
-epo3h-th24s-5d63d-bp6cg-zatzt-se5sb-4tnud-tyqyo-y3jtw-6zhl3-cae
+*Result*
+
+*epo3h-th24s-5d63d-bp6cg-zatzt-se5sb-4tnud-tyqyo-y3jtw-6zhl3-cae*
 
 ##### Go back to default
 
