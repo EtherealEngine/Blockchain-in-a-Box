@@ -9,11 +9,7 @@ const OnboardingDataModel = require('./models/onboardingData');
 const TimerDataModel = require("./models/timerData");
 const UserWalletDataModel = require("./models/userWalletData");
 
-const sequelize = new Sequelize(process.env.MYSQL_DB, process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
-  host: process.env.MYSQL_URL,
-  dialect: 'mysql',
-});
-
+const sequelize = require("../../db")
 const AdminData = AdminModel(sequelize, Sequelize);
 const UserData = UserModel(sequelize, Sequelize);
 const AddressData = AddressDataModel(sequelize, Sequelize);

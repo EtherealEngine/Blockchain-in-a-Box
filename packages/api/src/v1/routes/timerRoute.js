@@ -1,3 +1,4 @@
+const { ResponseStatus } = require("../enums");
 const { TimerData } = require("../sequelize");
 
 async function TimerRoutes(app){
@@ -19,7 +20,7 @@ async function TimerRoutes(app){
             let user = await TimerData.findOne({where : { email : email }})
 
             // Show it to user as response
-            res.end(JSON.stringify({ "status" : "SUCCESS", "startTime": user.dataValues.startTime }))
+            res.status(200).end(JSON.stringify({ "status" : ResponseStatus.Error, "startTime": user.dataValues.startTime }))
         }
         else if (type === "STOP"){
             // Take endtime and email from request body
@@ -47,17 +48,17 @@ async function TimerRoutes(app){
                 let user_response = { "status" : "SUCCESS", ...user.dataValues, "Total" : cost}
 
                 // Send response to the user
-                res.end(JSON.stringify(user_response))
+                res.status(200).end(JSON.stringify(user_response))
               } 
               
               catch (err) {
-                res.end(JSON.stringify(err))
+                res.status(400).end(JSON.stringify(err))
                 }
 
              }else{
 
             // For any error send failed response to the user
-            res.end(JSON.stringify({"status" : "Failed" }))
+            res.status(400).end(JSON.stringify({"status" : "Failed" }))
         }
     })
 

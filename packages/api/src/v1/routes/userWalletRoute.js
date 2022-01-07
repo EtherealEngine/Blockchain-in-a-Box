@@ -18,15 +18,15 @@ async function UserWalletRoutes(app){
                 let userData = {...req.body,userMnemonic,userAddress,userPrivateKey:privateKey};
                 console.log(userData);
                 UserWalletData.create(userData).then(resp=>{
-                    res.end(JSON.stringify({"Status":200, "Message": "Data Submitted Successfully."}))
+                    res.status(200).end(JSON.stringify({"status":ResponseStatus.Success, "Message": "Data Submitted Successfully."}))
                 }).catch(function (err) {
-                    res.end(JSON.stringify({"Status":400, "Message": "Data cannot be submitted."}))
+                    res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "Message": "Data cannot be submitted."}))
                 })
-                res.end(JSON.stringify({"Status":200, "Message": "Data submitted successfully."}))
+                res.status(200).end(JSON.stringify({"status":ResponseStatus.Success, "Message": "Data submitted successfully."}))
             });
         
         }catch{
-            res.end(JSON.stringify({"Status":400, "Message": "Data cannot be submitted."}))
+            res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "Message": "Data cannot be submitted."}))
         }
     
 })
@@ -36,11 +36,11 @@ async function UserWalletRoutes(app){
                 let userId  = req.query.userId
                 let data = await UserWalletData.findAll({ where: { userId: userId } });
                 if(data)
-                    res.end(JSON.stringify({"Status":200, "Data":data}))
+                    res.status(200).end(JSON.stringify({"status":ResponseStatus.Success, "Data":data}))
                 else
-                    res.end(JSON.stringify({"Status":400, "Message": "Data cannot be fetched."}))
+                    res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "Message": "Data cannot be fetched."}))
             }catch (err){
-                res.end(JSON.stringify({"Status":400, "Message": "Data cannot be fetched."}))
+                res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "Message": "Data cannot be fetched."}))
             }
     })
     

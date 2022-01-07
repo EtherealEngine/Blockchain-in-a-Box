@@ -1,4 +1,5 @@
 const { AddressData } = require("../sequelize");
+const { ResponseStatus } = require("../enums")
 
 async function AddressRoutes(app){
 
@@ -9,11 +10,11 @@ async function AddressRoutes(app){
             let email = req.query.email
             let data = await AddressData.findOne({ where: { networkType: networkType, email: email } });
             if(data)
-                res.end(JSON.stringify({"Status":200, "Data":data}))
+                res.status(200).end(JSON.stringify({"status":ResponseStatus.Success, "Data":data}))
             else
-                res.end(JSON.stringify({"Status":400, "Message": "Data cannot be fetched."}))
+                res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "Message": "Data cannot be fetched."}))
         }catch(err){
-            res.end(JSON.stringify({"Status":400, "Message": "Data cannot be fetched."}))
+            res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "Message": "Data cannot be fetched."}))
         }
     })
 
