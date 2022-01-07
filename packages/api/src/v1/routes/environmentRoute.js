@@ -1,4 +1,5 @@
 const { EnvironmentData } = require("../sequelize");
+const { ResponseStatus } = require("../enums");
 
 async function environmentRoutes(app) {
 
@@ -8,10 +9,10 @@ async function environmentRoutes(app) {
         console.log(data_key_value)
             if(data_key_value){
                 let data = await EnvironmentData.findOne({ where: { dataKey: data_key_value } });
-                res.status(200).end(JSON.stringify({"Status":200, "Data":data}))
+                res.status(200).end(JSON.stringify({"status":ResponseStatus.Success, "Data":data}))
             }else{
                 let data = await EnvironmentData.findAll();
-                res.status(200).end(JSON.stringify({"Status":200, "Data":data}))
+                res.status(200).end(JSON.stringify({"status":ResponseStatus.Success, "Data":data}))
             }
     });
 
@@ -22,12 +23,12 @@ async function environmentRoutes(app) {
             EnvironmentData.create({
                 dataKey, dataValue, createdBy
             }).then(resp=>{
-                res.status(200).end(JSON.stringify({"Status":200, "Message": "Data Submitted Successfully."}))
+                res.status(200).end(JSON.stringify({"status":ResponseStatus.Success, "Message": "Data Submitted Successfully."}))
             }).catch(err=>{
-                res.status(400).end(JSON.stringify({"Status":400, "Message": "Data cannot be submitted."}))    
+                res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "Message": "Data cannot be submitted."}))    
             })
         }catch{
-            res.status(400).end(JSON.stringify({"Status":400, "Message": "Data cannot be submitted."}))
+            res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "Message": "Data cannot be submitted."}))
         }
     })
 }
