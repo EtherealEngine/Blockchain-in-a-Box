@@ -14,7 +14,7 @@
     "@types/react-redux": "7.1.18",
     "@types/redux-saga": "0.10.5",
     "axios": "0.21.2",
-    "connected-react-router": "6.9.1",
+    "connected-react-router": "6.9.2",
     "query-string": "7.1.0",
     "react": "17.0.2",
     "react-console-emulator": "5.0.1",
