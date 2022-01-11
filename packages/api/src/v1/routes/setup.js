@@ -39,6 +39,7 @@ async function addSetupRoutes(app) {
         infuraApiKey,
         polygonMaticMnemonic,
         polygonVigilApiKey,
+        email
       } = req.body;
 
       // Verify if email was sent in request body
