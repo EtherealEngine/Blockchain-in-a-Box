@@ -23,12 +23,12 @@ async function environmentRoutes(app) {
             EnvironmentData.create({
                 dataKey, dataValue, createdBy
             }).then(resp=>{
-                res.status(200).end(JSON.stringify({"status":ResponseStatus.Success, "Message": "Data Submitted Successfully."}))
+                res.status(200).end(JSON.stringify({"status":ResponseStatus.Success, "message": "Data Submitted Successfully."}))
             }).catch(err=>{
-                res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "Message": "Data cannot be submitted."}))    
+                res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "message": "Data cannot be submitted."}))    
             })
         }catch{
-            res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "Message": "Data cannot be submitted."}))
+            res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "message": "Data cannot be submitted."}))
         }
     })
 }

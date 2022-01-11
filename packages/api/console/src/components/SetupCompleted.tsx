@@ -121,7 +121,7 @@ const SetupCompleted: React.FunctionComponent = () => {
   useEffect(() => {
     if (notifications) {
       console.log("COMPETE ", result, notifications);
-      if (notifications && notifications['Status'] == 200)
+      if (notifications && notifications['status'] == 200)
       navigate(Routes.DASHBOARD);
     }
 

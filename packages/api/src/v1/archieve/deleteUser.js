@@ -43,7 +43,7 @@ module.exports = (app) => {
       }
       if (info !== undefined) {
         console.error(info.message);
-        res.status(403).send({ "Message": info.message });
+        res.status(403).send({ "message": info.message });
       } else {
         User.destroy({
           where: {
@@ -53,15 +53,15 @@ module.exports = (app) => {
           .then((userInfo) => {
             if (userInfo === 1) {
               console.log({"Message":'user deleted from db'});
-              res.status(200).send({"Message":'user deleted from db'});
+              res.status(200).send({"message":'user deleted from db'});
             } else {
               console.error('user not found in db');
-              res.status(404).send({"Message":'no user with that username to delete'});
+              res.status(404).send({"message":'no user with that username to delete'});
             }
           })
           .catch((error) => {
             console.error('problem communicating with db');
-            res.status(500).send({"Message": error});
+            res.status(500).send({"message": error});
           });
       }
     })(req, res, next);

@@ -97,7 +97,7 @@ async function AdminRoutes(app) {
         let isOnboarded = await OnBoardingData.findOne({ where: { email  } });
         website = `${website_authenticate}?email=${email}&token=${token}&user=no&admin=yes&landing= ${(isOnboarded === null)?'onboarding':'dashboard'}`
       }else{
-        res.status(400).end(JSON.stringify({ error:"Something went wrong! Try again after sometime."}))
+        res.status(400).end({"status":ResponseStatus.Error, "message":"Something went wrong! Try again after sometime."})
       }
 
       
@@ -224,15 +224,15 @@ async function AdminRoutes(app) {
      try{
       OnBoardingData.create(req.body.data).then( (result) => {
         console.log("Result =>",result)
-        res.status(200).end(JSON.stringify({"status":ResponseStatus.Success, "Message": "Data Submitted Successfully."}))
+        res.status(200).end(JSON.stringify({"status":ResponseStatus.Success, "message": "Data Submitted Successfully."}))
       }, (err)=>{
-        res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "Message": "Some error occured!"}))
+        res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "message": "Some error occured!"}))
       })
      }catch{
-      res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "Message": "Some error occured!"}))
+      res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "message": "Some error occured!"}))
      } 
     }catch{
-      res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "Message": "Data cannot be submitted."}))
+      res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "message": "Data cannot be submitted."}))
     }
   })
 
@@ -242,12 +242,12 @@ async function AdminRoutes(app) {
       try{
         let data = await OnBoardingData.findOne({ where: { email : req.query.email } });
         if(data.email){
-          res.status(200).end(JSON.stringify({"status":ResponseStatus.Success,  "User": data}));
+          res.status(200).end(JSON.stringify({"status":ResponseStatus.Success,  "user": data}));
         }else{
-          res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "Message": "Data cannot be fetched."}))
+          res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "message": "Data cannot be fetched."}))
         }
       }catch{
-        res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "Message": "Data cannot be fetched."}))
+        res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "message": "Data cannot be fetched."}))
       }
       
   })

@@ -88,8 +88,7 @@ app.post('/initiate-minting', async (req, res) => {
                     })
             }catch(e){ console.log("ERROR!")}
     }
-    res.status(200).end(JSON.stringify({"Message": "NFT deployed with updated data."}))
-
+    res.status(200).end(JSON.stringify({"status": "Success",  "message": "NFT deployed with updated data."}));
 })
 
 app.listen(port, () => {
