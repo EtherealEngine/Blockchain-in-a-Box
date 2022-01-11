@@ -87,7 +87,7 @@
     "ws": "^8.0.0"
   },
   "devDependencies": {
-    "forever": "4.0.1",
+    "forever": "4.0.2",
     "jest": "27.4.7",
     "nodemon": "2.0.15",
     "supertest": "6.1.6"
