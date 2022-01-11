@@ -3,6 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../App.css'
 import Routes from '../constants/Routes';
+import Endpoints from '../constants/Endpoints';
 
 const useStyles = makeStyles((theme) => ({
   parentBox: {
@@ -57,14 +58,14 @@ const Welcome = () => {
             variant="contained"
             color="secondary"
             size="large"
-            onClick={(e) => openUrl(e, "http://a76ab76cfc49440a594d947189734303-848168955.us-west-1.elb.amazonaws.com")}>
+            onClick={(e) => openUrl(e, Endpoints.ETH_STATS_DASHBOARD_URL)}>
             EthStats Dashboard
           </Button>
           <Button className={classes.button}
             variant="contained"
             color="secondary"
             size="large"
-            onClick={(e) => openUrl(e, "http://a04d1d57d648441d793c178bfae2784e-1027067517.us-west-1.elb.amazonaws.com")}>
+            onClick={(e) => openUrl(e, Endpoints.REMIX_IDE_URL)}>
             Remix IDE
           </Button>
         </Box>

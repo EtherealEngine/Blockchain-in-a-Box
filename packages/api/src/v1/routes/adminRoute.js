@@ -5,7 +5,6 @@ const { setCorsHeaders } = require("../../common/utils");
 const { sendMessage } = require("../../common/sesClient");
 const { CONSOLE_WEB_URL, CONSOLE_WEB_URL_AUTHENTICATE, DEVELOPMENT, AUTH_SECRET_KEY, AUTH_TOKEN_SECRET } = require("../../common/environment");
 const jwt = require("jsonwebtoken");
-const onboardingData = require("../models/onboardingData");
 
 async function AdminRoutes(app) {
   /**
@@ -92,19 +91,13 @@ async function AdminRoutes(app) {
       else if(userObj!== null && adminObj === null){
         await userObj.update({ token })
         website = `${website_authenticate}?email=${email}&token=${token}&user=yes&admin=no&landing=dashboard`
-      }
-      else if(userObj === null && adminObj !== null){
+      } else if(userObj === null && adminObj !== null){
 
         await adminObj.update({ token })
-
-        var isOnboarded = await OnBoardingData.findOne({ where: { email  } });
-        if(isOnboarded === null ){
-          website = `${website_authenticate}?email=${email}&token=${token}&user=no&admin=yes&landing=onboarding`
-        }else{
-          website = `${website_authenticate}?email=${email}&token=${token}&user=no&admin=yes&landing=dashboard`
-        }
+        let isOnboarded = await OnBoardingData.findOne({ where: { email  } });
+        website = `${website_authenticate}?email=${email}&token=${token}&user=no&admin=yes&landing= ${(isOnboarded === null)?'onboarding':'dashboard'}`
       }else{
-        res.status(400).end("Something went wrong! Try again after sometime.")
+        res.status(400).end(JSON.stringify({ error:"Something went wrong! Try again after sometime."}))
       }
 
       
