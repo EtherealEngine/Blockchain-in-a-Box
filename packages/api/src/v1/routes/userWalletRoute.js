@@ -5,7 +5,7 @@ const { setCorsHeaders } = require("../../common/utils.js");
 const crypto = require("crypto");
 const { ResponseStatus } = require("../enums");
 const jwt = require("jsonwebtoken");
-const { sendMessage } = require("../../common/sesClient");
+const { sendmessage } = require("../../common/sesClient");
 const { createWalletInternal } = require("./wallet.js");
 async function UserWalletRoutes(app){
 
@@ -18,15 +18,15 @@ async function UserWalletRoutes(app){
                 let userData = {...req.body,userMnemonic,userAddress,userPrivateKey:privateKey};
                 console.log(userData);
                 UserWalletData.create(userData).then(resp=>{
-                    res.status(200).end(JSON.stringify({"status":ResponseStatus.Success, "Message": "Data Submitted Successfully."}))
+                    res.status(200).end(JSON.stringify({"status":ResponseStatus.Success, "message": "Data Submitted Successfully."}))
                 }).catch(function (err) {
-                    res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "Message": "Data cannot be submitted."}))
+                    res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "message": "Data cannot be submitted."}))
                 })
-                res.status(200).end(JSON.stringify({"status":ResponseStatus.Success, "Message": "Data submitted successfully."}))
+                res.status(200).end(JSON.stringify({"status":ResponseStatus.Success, "message": "Data submitted successfully."}))
             });
         
         }catch{
-            res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "Message": "Data cannot be submitted."}))
+            res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "message": "Data cannot be submitted."}))
         }
     
 })
@@ -36,11 +36,11 @@ async function UserWalletRoutes(app){
                 let userId  = req.query.userId
                 let data = await UserWalletData.findAll({ where: { userId: userId } });
                 if(data)
-                    res.status(200).end(JSON.stringify({"status":ResponseStatus.Success, "Data":data}))
+                    res.status(200).end(JSON.stringify({"status":ResponseStatus.Success, "data":data}))
                 else
-                    res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "Message": "Data cannot be fetched."}))
+                    res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "message": "Data cannot be fetched."}))
             }catch (err){
-                res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "Message": "Data cannot be fetched."}))
+                res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "message": "Data cannot be fetched."}))
             }
     })
     

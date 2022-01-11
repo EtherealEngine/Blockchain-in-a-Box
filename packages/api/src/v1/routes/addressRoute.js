@@ -10,11 +10,11 @@ async function AddressRoutes(app){
             let email = req.query.email
             let data = await AddressData.findOne({ where: { networkType: networkType, email: email } });
             if(data)
-                res.status(200).end(JSON.stringify({"status":ResponseStatus.Success, "Data":data}))
+                res.status(200).end(JSON.stringify({"status":ResponseStatus.Success, "data":data}))
             else
-                res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "Message": "Data cannot be fetched."}))
+                res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "message": "Data cannot be fetched."}))
         }catch(err){
-            res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "Message": "Data cannot be fetched."}))
+            res.status(400).end(JSON.stringify({"status":ResponseStatus.Error, "message": "Data cannot be fetched."}))
         }
     })
 
