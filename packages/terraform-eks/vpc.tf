@@ -20,7 +20,7 @@ resource "random_string" "suffix" {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "2.66.0"
+  version = "2.78.0"
 
   name                 = "blockchain-prod-vpc"
   cidr                 = "10.10.0.0/16"
