@@ -14,7 +14,7 @@ import "../App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/Store";
 import axios from "axios";
-
+import Endpoints from '../constants/Endpoints';
 
 const useStyles = makeStyles((theme) => ({
   parentBox: {
@@ -111,7 +111,7 @@ const SetupSidechain: React.FunctionComponent = () => {
 
   useEffect(() => {
     (async () => {
-      let respn = await axios.post("http://af2fc18b539ee488984fa4e58de37686-1454411376.us-west-1.elb.amazonaws.com/api/v1/authorizeServer", { "authSecretKey": "secret" });
+      let respn = await axios.post(`${Endpoints.HOST}${Endpoints.AUTH_SERVER}`, { "authSecretKey": "secret" });
       let { data } = await respn
       if (data.status === "success") {
         localStorage.setItem("accessToken", data.accessToken);
