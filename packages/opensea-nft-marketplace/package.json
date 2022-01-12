@@ -24,7 +24,7 @@
     "@web3-react/lattice-connector": "6.1.9",
     "@web3-react/ledger-connector": "6.1.9",
     "@web3-react/magic-connector": "6.1.9",
-    "@web3-react/network-connector": "6.1.9",
+    "@web3-react/network-connector": "6.2.9",
     "@web3-react/portis-connector": "6.1.9",
     "@web3-react/torus-connector": "6.1.9",
     "@web3-react/trezor-connector": "6.1.9",
