@@ -9,7 +9,7 @@
     "@material-ui/core": "4.12.3",
     "@material-ui/icons": "4.11.2",
     "@reduxjs/toolkit": "1.7.1",
-    "@types/react-redux": "7.1.21",
+    "@types/react-redux": "7.1.22",
     "@types/redux-saga": "0.10.5",
     "axios": "0.24.0",
     "connected-react-router": "6.9.2",
