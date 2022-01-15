@@ -50,6 +50,10 @@ Everything is in the packages folder. You shouldn't need to change much, beyond 
 The API is what you'll interact with. Generate wallets, mint tokens, etc.
 Additional documentation [here](./packages/api/README.md)
 
+Develper Reference API Server
+
+http://blockchain.xrengine.io/v1/api-docs
+
 ## packages/cache
 The cache server listens to the chain for events and posts them to Redis/Elasticache
 Additional documentation [here](./packages/cache/README.md)
