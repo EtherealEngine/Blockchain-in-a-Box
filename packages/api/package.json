@@ -90,7 +90,7 @@
     "forever": "4.0.2",
     "jest": "27.4.7",
     "nodemon": "2.0.15",
-    "supertest": "6.1.6"
+    "supertest": "6.2.2"
   },
   "jest": {
     "testEnvironment": "node",
