@@ -12,7 +12,7 @@
     "@truffle/hdwallet-provider": "2.0.1",
     "@types/bn.js": "5.1.0",
     "@types/chai": "4.3.0",
-    "@types/mocha": "9.0.0",
+    "@types/mocha": "9.1.0",
     "colors": "1.4.0",
     "dotenv": "10.0.0",
     "ethers": "5.5.3",
