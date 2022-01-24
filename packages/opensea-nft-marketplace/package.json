@@ -28,7 +28,7 @@
     "@web3-react/portis-connector": "6.2.9",
     "@web3-react/torus-connector": "6.1.9",
     "@web3-react/trezor-connector": "6.1.9",
-    "@web3-react/walletconnect-connector": "6.2.8",
+    "@web3-react/walletconnect-connector": "6.2.10",
     "@web3-react/walletlink-connector": "6.2.8",
     "babel-loader": "8.2.3",
     "body-parser": "1.19.1",
