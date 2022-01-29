@@ -10,5 +10,5 @@ ic-kit = "0.4.3"
 ic-cdk = "0.3.3"
 ic-types = "0.3.0"
 hex = {version = "0.4.3", features = ["serde"] }
-serde = { version="1.0.135", features = ["derive"] }
+serde = { version="1.0.136", features = ["derive"] }
 sha2 = "0.10.1"
