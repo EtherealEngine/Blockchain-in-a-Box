@@ -47,7 +47,7 @@
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "discord.js": "^13.0.0",
-    "dotenv": "^10.0.0",
+    "dotenv": "^14.0.0",
     "ethereumjs-testrpc": "^6.0.3",
     "ethereumjs-wallet": "^1.0.1",
     "express": "^4.17.1",
