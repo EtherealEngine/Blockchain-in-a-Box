@@ -355,7 +355,7 @@ version = "0.1.0"
 source = "git+https://github.com/Psychedelic/cap.git?branch=main#caf6e873ab3111f7557a2b45c82b33482dff2665"
 dependencies = [
  "async-std",
- "ic-cdk",
+ "ic-cdk 0.3.3",
  "ic-certified-map",
  "ic-kit",
  "serde",
@@ -372,7 +372,7 @@ dependencies = [
  "async-stream",
  "cap-sdk-core",
  "futures",
- "ic-cdk",
+ "ic-cdk 0.3.3",
  "ic-kit",
  "lazy_static",
  "serde",
@@ -385,7 +385,7 @@ version = "0.1.0-alpha1"
 source = "git+https://github.com/Psychedelic/cap.git?branch=main#caf6e873ab3111f7557a2b45c82b33482dff2665"
 dependencies = [
  "cap-common",
- "ic-cdk",
+ "ic-cdk 0.3.3",
  "ic-kit",
  "serde",
  "thiserror",
@@ -399,7 +399,7 @@ dependencies = [
  "bincode",
  "candid",
  "cap-sdk",
- "ic-cdk",
+ "ic-cdk 0.3.3",
  "num-bigint",
  "serde",
  "thiserror",
@@ -746,13 +746,39 @@ dependencies = [
 ]
 
 [[package]]
+name = "ic-cdk"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0e511d1a019e620d5a3dc43bead7d3c46912bf4f4bfb1d602059046c7a22bb1e"
+dependencies = [
+ "candid",
+ "cfg-if",
+ "serde",
+]
+
+[[package]]
 name = "ic-cdk-macros"
 version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "08bac2578a4779c3ae6d24c766ec7127872d73f29a9e7d70b6607a2fdedd0dde"
 dependencies = [
  "candid",
- "ic-cdk",
+ "ic-cdk 0.3.3",
+ "proc-macro2",
+ "quote",
+ "serde",
+ "serde_tokenstream",
+ "syn",
+]
+
+[[package]]
+name = "ic-cdk-macros"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a59a186745fd7d96ba2e057f3b3e3038578ae1e82dcb548bd96f48e9e4a39129"
+dependencies = [
+ "candid",
+ "ic-cdk 0.4.0",
  "proc-macro2",
  "quote",
  "serde",
@@ -779,8 +805,8 @@ checksum = "2a0d4a05326865a582add1d6bcdec2b5d2af0415a12f6ef2431f3e93e52c347a"
 dependencies = [
  "async-std",
  "futures",
- "ic-cdk",
- "ic-cdk-macros",
+ "ic-cdk 0.3.3",
+ "ic-cdk-macros 0.3.3",
  "serde",
  "serde_bytes",
 ]
@@ -1377,8 +1403,8 @@ dependencies = [
  "candid",
  "cap-sdk",
  "cap-standards",
- "ic-cdk",
- "ic-cdk-macros",
+ "ic-cdk 0.3.3",
+ "ic-cdk-macros 0.4.0",
  "ic-kit",
  "serde",
 ]
