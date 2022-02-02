@@ -40,7 +40,7 @@
     "@slider-captcha/react": "^1.0.0",
     "@types/react-dom": "^17.0.9",
     "axios": "^0.25.0",
-    "dotenv": "^10.0.0",
+    "dotenv": "^15.0.0",
     "ismobilejs": "^1.1.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
