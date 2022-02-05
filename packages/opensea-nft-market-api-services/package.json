@@ -20,7 +20,7 @@
     "@types/node": "10.17.60",
     "fork-ts-checker-webpack-plugin": "7.0.0",
     "prettier": "2.5.1",
-    "serverless-domain-manager": "5.8.0",
+    "serverless-domain-manager": "6.0.0",
     "serverless-offline": "6.9.0",
     "serverless-webpack": "5.6.1",
     "ts-loader": "5.4.5",
