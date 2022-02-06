@@ -469,7 +469,7 @@ dependencies = [
  "assert-panic",
  "async-std",
  "candid",
- "ic-cdk 0.3.2",
+ "ic-cdk 0.4.0",
  "ic-cdk-macros 0.4.0",
  "ic-kit",
  "serde",

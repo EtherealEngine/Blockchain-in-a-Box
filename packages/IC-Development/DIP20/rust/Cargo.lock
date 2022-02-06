@@ -1403,7 +1403,7 @@ dependencies = [
  "candid",
  "cap-sdk",
  "cap-standards",
- "ic-cdk 0.3.3",
+ "ic-cdk 0.4.0",
  "ic-cdk-macros 0.4.0",
  "ic-kit",
  "serde",
