@@ -13,7 +13,7 @@
     "@commitlint/cli": "16.1.0",
     "@commitlint/config-conventional": "16.0.0",
     "@dfinity/candid": "0.10.2",
-    "@types/react": "17.0.38",
+    "@types/react": "17.0.39",
     "@types/react-router-dom": "5.3.3",
     "@typescript-eslint/eslint-plugin": "5.10.2",
     "@typescript-eslint/parser": "5.10.2",
