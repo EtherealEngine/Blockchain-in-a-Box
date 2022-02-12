@@ -29,7 +29,7 @@
     "@web3-react/torus-connector": "6.2.9",
     "@web3-react/trezor-connector": "6.1.9",
     "@web3-react/walletconnect-connector": "6.2.10",
-    "@web3-react/walletlink-connector": "6.2.11",
+    "@web3-react/walletlink-connector": "6.2.12",
     "babel-loader": "8.2.3",
     "body-parser": "1.19.1",
     "dotenv": "16.0.0",
