@@ -13,7 +13,7 @@
     "@reduxjs/toolkit": "1.7.2",
     "@types/react-redux": "7.1.22",
     "@types/redux-saga": "0.10.5",
-    "axios": "0.25.0",
+    "axios": "0.26.0",
     "connected-react-router": "6.9.2",
     "query-string": "7.1.1",
     "react": "17.0.2",
