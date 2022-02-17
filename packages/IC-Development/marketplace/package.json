@@ -12,7 +12,7 @@
   "devDependencies": {
     "@commitlint/cli": "16.2.1",
     "@commitlint/config-conventional": "16.2.1",
-    "@dfinity/candid": "0.10.2",
+    "@dfinity/candid": "0.10.3",
     "@types/react": "17.0.39",
     "@types/react-router-dom": "5.3.3",
     "@typescript-eslint/eslint-plugin": "5.12.0",
