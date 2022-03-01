@@ -40,7 +40,7 @@
     "@openzeppelin/test-helpers": "0.5.15",
     "prettier": "2.5.1",
     "solidity-coverage": "0.7.20",
-    "ts-node": "10.5.0",
+    "ts-node": "10.6.0",
     "typechain": "7.0.0",
     "typescript": "4.6.2"
   },
