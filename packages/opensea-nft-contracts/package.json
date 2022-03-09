@@ -41,7 +41,7 @@
     "prettier": "2.5.1",
     "solidity-coverage": "0.7.20",
     "ts-node": "10.6.0",
-    "typechain": "7.0.0",
+    "typechain": "7.0.1",
     "typescript": "4.6.2"
   },
   "directories": {
