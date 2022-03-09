@@ -9,7 +9,7 @@ edition = "2018"
 ic-cdk-macros = "0.4.0"
 candid = "0.7.12"
 serde = { version = "1.0", features = ["derive"] }
-ic-kit = "0.4.3"
+ic-kit = "0.4.4"
 ic-cdk = "0.4.0"
 assert-panic = "1.0.1"
 ledger-canister = { git="https://github.com/flyq/ic" }
