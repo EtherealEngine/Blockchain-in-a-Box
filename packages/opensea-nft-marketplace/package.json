@@ -33,7 +33,7 @@
     "babel-loader": "8.2.3",
     "body-parser": "1.19.2",
     "dotenv": "16.0.0",
-    "ethers": "5.6.0",
+    "ethers": "5.6.1",
     "jazzicon": "1.5.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
