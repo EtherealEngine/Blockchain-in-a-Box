@@ -30,7 +30,7 @@
     "@web3-react/trezor-connector": "6.1.9",
     "@web3-react/walletconnect-connector": "6.2.13",
     "@web3-react/walletlink-connector": "6.2.13",
-    "babel-loader": "8.2.3",
+    "babel-loader": "8.2.4",
     "body-parser": "1.19.2",
     "dotenv": "16.0.0",
     "ethers": "5.6.1",
@@ -46,7 +46,7 @@
     "zustand": "3.7.1"
   },
   "resolutions": {
-    "babel-loader": "8.2.3"
+    "babel-loader": "8.2.4"
   },
   "scripts": {
     "postinstall": "husky install",
