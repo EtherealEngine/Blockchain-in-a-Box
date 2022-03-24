@@ -14,4 +14,4 @@ ic-cdk = "0.4.0"
 assert-panic = "1.0.1"
 
 [target.'cfg(not(target_family = "wasm"))'.dependencies]
-async-std = { version="1.10.0", features = ["attributes"] }
+async-std = { version="1.11.0", features = ["attributes"] }
