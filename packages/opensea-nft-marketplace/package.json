@@ -90,7 +90,7 @@
     "colors": "1.4.0",
     "create-react-component-folder": "0.3.7",
     "husky": "7.0.4",
-    "prettier": "2.5.1",
+    "prettier": "2.6.1",
     "yargs": "17.4.0"
   }
 }
