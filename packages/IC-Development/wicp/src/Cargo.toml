@@ -7,7 +7,7 @@ edition = "2018"
 
 [dependencies]
 ic-cdk-macros = "0.4.0"
-candid = "0.7.13"
+candid = "0.7.14"
 serde = { version = "1.0", features = ["derive"] }
 ic-kit = "0.4.4"
 ic-cdk = "0.4.0"
