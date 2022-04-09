@@ -10,7 +10,7 @@
     "@sentry/tracing": "6.19.5",
     "@testing-library/jest-dom": "5.16.4",
     "@testing-library/react": "12.1.4",
-    "@testing-library/user-event": "13.5.0",
+    "@testing-library/user-event": "14.0.4",
     "@types/jest": "26.0.24",
     "@types/node": "16.11.17",
     "@types/react": "17.0.43",
