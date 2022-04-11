@@ -9,7 +9,7 @@
     "@sentry/react": "6.19.6",
     "@sentry/tracing": "6.19.6",
     "@testing-library/jest-dom": "5.16.4",
-    "@testing-library/react": "12.1.4",
+    "@testing-library/react": "12.1.5",
     "@testing-library/user-event": "14.0.4",
     "@types/jest": "26.0.24",
     "@types/node": "16.11.17",
