@@ -417,7 +417,7 @@ version = "0.1.0"
 dependencies = [
  "crc32fast",
  "hex",
- "ic-cdk 0.4.0",
+ "ic-cdk 0.5.0",
  "ic-kit",
  "ic-types 0.2.2",
  "serde",
@@ -793,6 +793,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "ic-cdk"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8bf92c1ce281995ec4cecca2a0da8f3420af546ed807dceb46441197642f3c1f"
+dependencies = [
+ "candid",
+ "cfg-if",
+ "serde",
+]
+
+[[package]]
 name = "ic-cdk-macros"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1037,7 +1048,7 @@ dependencies = [
  "cap-standards",
  "common",
  "derive-new",
- "ic-cdk 0.4.0",
+ "ic-cdk 0.5.0",
  "ic-kit",
  "serde",
  "serde_bytes",
