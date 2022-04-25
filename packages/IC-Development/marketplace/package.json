@@ -42,8 +42,8 @@
     "axios": "^0.26.0",
     "dotenv": "^16.0.0",
     "ismobilejs": "^1.1.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
     "react-redux": "^7.2.5",
     "react-router-dom": "^6.0.0"
   },
