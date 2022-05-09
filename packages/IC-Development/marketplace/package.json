@@ -39,7 +39,7 @@
     "@reduxjs/toolkit": "^1.6.2",
     "@slider-captcha/react": "^1.0.0",
     "@types/react-dom": "^17.0.9",
-    "axios": "^0.26.0",
+    "axios": "^0.27.0",
     "dotenv": "^16.0.0",
     "ismobilejs": "^1.1.1",
     "react": "^18.0.0",
