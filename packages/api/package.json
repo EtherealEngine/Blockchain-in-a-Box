@@ -89,7 +89,7 @@
   "devDependencies": {
     "forever": "4.0.3",
     "jest": "27.5.1",
-    "nodemon": "2.0.15",
+    "nodemon": "2.0.16",
     "supertest": "6.2.2"
   },
   "jest": {
