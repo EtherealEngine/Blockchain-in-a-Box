@@ -20,7 +20,7 @@
     "react-console-emulator": "5.0.1",
     "react-dom": "18.0.0",
     "react-redux": "7.2.8",
-    "react-router-dom": "5.3.0",
+    "react-router-dom": "5.3.2",
     "util": "0.12.4",
     "uuid": "8.3.2",
     "yarn": "1.22.18"
