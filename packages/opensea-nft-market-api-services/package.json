@@ -18,7 +18,7 @@
   "devDependencies": {
     "@types/aws-lambda": "8.10.97",
     "@types/node": "10.17.60",
-    "fork-ts-checker-webpack-plugin": "7.2.7",
+    "fork-ts-checker-webpack-plugin": "7.2.11",
     "prettier": "2.6.2",
     "serverless-domain-manager": "6.0.3",
     "serverless-offline": "6.9.0",
