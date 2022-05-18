@@ -10,7 +10,7 @@
   },
   "license": "GNU",
   "devDependencies": {
-    "@commitlint/cli": "16.2.4",
+    "@commitlint/cli": "16.3.0",
     "@commitlint/config-conventional": "16.2.4",
     "@dfinity/candid": "0.11.1",
     "@types/react": "17.0.45",
@@ -18,7 +18,7 @@
     "@typescript-eslint/eslint-plugin": "5.18.0",
     "@typescript-eslint/parser": "5.18.0",
     "clean-webpack-plugin": "4.0.0",
-    "commitlint": "16.2.4",
+    "commitlint": "16.3.0",
     "css-loader": "6.7.1",
     "eslint": "8.15.0",
     "lint-staged": "12.4.1",
