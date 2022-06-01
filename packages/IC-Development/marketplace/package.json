@@ -38,7 +38,7 @@
     "@react-icons/all-files": "^4.1.0",
     "@reduxjs/toolkit": "^1.6.2",
     "@slider-captcha/react": "^1.0.0",
-    "@types/react-dom": "^17.0.9",
+    "@types/react-dom": "^18.0.0",
     "axios": "^0.27.0",
     "dotenv": "^16.0.0",
     "ismobilejs": "^1.1.1",
