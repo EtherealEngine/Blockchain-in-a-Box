@@ -10,7 +10,7 @@ ic-cdk-macros = "0.5.1"
 candid = "0.7.14"
 serde = { version = "1.0", features = ["derive"] }
 ic-kit = "0.4.4"
-ic-cdk = "0.5.1"
+ic-cdk = "0.5.2"
 assert-panic = "1.0.1"
 ledger-canister = { git="https://github.com/flyq/ic" }
 dfn_core = { git="https://github.com/flyq/ic" }
