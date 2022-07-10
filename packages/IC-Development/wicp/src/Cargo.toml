@@ -6,7 +6,7 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-ic-cdk-macros = "0.5.1"
+ic-cdk-macros = "0.5.2"
 candid = "0.7.14"
 serde = { version = "1.0", features = ["derive"] }
 ic-kit = "0.4.4"
