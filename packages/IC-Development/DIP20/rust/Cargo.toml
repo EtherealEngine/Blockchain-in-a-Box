@@ -7,7 +7,7 @@ edition = "2018"
 
 [dependencies]
 ic-cdk-macros = "0.5"
-candid = "0.7.14"
+candid = "0.7.15"
 serde = "1.0"
 ic-kit = "0.4.4"
 ic-cdk = "0.5.2"
