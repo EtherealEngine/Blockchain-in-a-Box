@@ -37,7 +37,7 @@
     "migrate:rinkeby": "truffle migrate --network rinkeby --reset"
   },
   "devDependencies": {
-    "@openzeppelin/test-helpers": "0.5.15",
+    "@openzeppelin/test-helpers": "0.5.16",
     "prettier": "2.6.2",
     "solidity-coverage": "0.7.21",
     "ts-node": "10.8.1",
