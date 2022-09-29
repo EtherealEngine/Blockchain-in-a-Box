@@ -321,7 +321,7 @@ dependencies = [
  "anyhow",
  "binread",
  "byteorder",
- "candid_derive",
+ "candid_derive 0.4.5",
  "codespan-reporting",
  "hex",
  "ic-types",
@@ -340,10 +340,51 @@ dependencies = [
 ]
 
 [[package]]
+name = "candid"
+version = "0.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b26cb1b42af9fc5ff99a6806710e7f83634e533f8ad9b801e6c5e40658da98b6"
+dependencies = [
+ "anyhow",
+ "binread",
+ "byteorder",
+ "candid_derive 0.5.0",
+ "codespan-reporting",
+ "crc32fast",
+ "data-encoding",
+ "hex",
+ "lalrpop",
+ "lalrpop-util",
+ "leb128",
+ "logos",
+ "num-bigint",
+ "num-traits",
+ "num_enum",
+ "paste",
+ "pretty",
+ "serde",
+ "serde_bytes",
+ "sha2 0.10.2",
+ "thiserror",
+]
+
+[[package]]
 name = "candid_derive"
 version = "0.4.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2e02c03c4d547674a3f3f3109538fb49871fbe636216daa019f06a62faca9061"
+dependencies = [
+ "lazy_static",
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "candid_derive"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "58f1f4db7c7d04b87b70b3a35c5dc5c2c9dd73cef8bdf6760e2f18a0d45350dd"
 dependencies = [
  "lazy_static",
  "proc-macro2",
@@ -399,7 +440,7 @@ version = "0.1.0-alpha1"
 source = "git+https://github.com/Psychedelic/cap.git?branch=main#caf6e873ab3111f7557a2b45c82b33482dff2665"
 dependencies = [
  "bincode",
- "candid",
+ "candid 0.7.16",
  "cap-sdk",
  "ic-cdk 0.3.3",
  "num-bigint",
@@ -768,7 +809,7 @@ version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "606276ed1ce363eb9ccaf492e36fb40425417dcd4598f261d47e0ed6a1309faa"
 dependencies = [
- "candid",
+ "candid 0.7.16",
  "cfg-if",
  "serde",
 ]
@@ -779,7 +820,7 @@ version = "0.5.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4ebabbd2e082472e93928ec9725a5aeec4572284e07bf399f3e1eb6a358a4ba6"
 dependencies = [
- "candid",
+ "candid 0.7.16",
  "cfg-if",
  "serde",
 ]
@@ -790,7 +831,7 @@ version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0d2d6181f0a29fefb75493822339591b6244098c5ab9eb67790cc6b805d3a42b"
 dependencies = [
- "candid",
+ "candid 0.7.16",
  "ic-cdk 0.5.6",
  "proc-macro2",
  "quote",
@@ -818,7 +859,7 @@ checksum = "a5f1be26d1d7c53c51e7291475d41773f4d86b7f67599d3beae8fd375e095fa0"
 dependencies = [
  "async-std",
  "bincode",
- "candid",
+ "candid 0.7.16",
  "futures",
  "ic-cdk 0.5.6",
  "ic-kit-macros",
@@ -1441,7 +1482,7 @@ version = "0.1.0"
 dependencies = [
  "assert-panic",
  "async-std",
- "candid",
+ "candid 0.8.0",
  "cap-sdk",
  "cap-standards",
  "ic-cdk 0.5.6",
