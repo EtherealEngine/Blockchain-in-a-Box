@@ -529,7 +529,7 @@ dependencies = [
  "assert-panic",
  "async-std",
  "candid 0.8.2",
- "ic-cdk",
+ "ic-cdk 0.5.6",
  "ic-cdk-macros",
  "ic-kit",
  "serde",
@@ -740,13 +740,24 @@ dependencies = [
 ]
 
 [[package]]
-name = "ic-cdk-macros"
-version = "0.5.0"
+name = "ic-cdk"
+version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0d2d6181f0a29fefb75493822339591b6244098c5ab9eb67790cc6b805d3a42b"
+checksum = "6c9fa78e0f867e55fc149197a9b816d506314c705ea56240f72ae22da1bfdfd6"
 dependencies = [
- "candid 0.7.16",
- "ic-cdk",
+ "candid 0.8.2",
+ "cfg-if",
+ "serde",
+]
+
+[[package]]
+name = "ic-cdk-macros"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d8892fce3ea7890f91a118496070bf501defcb730f98079b50fe137ebdd7a939"
+dependencies = [
+ "candid 0.8.2",
+ "ic-cdk 0.6.0",
  "proc-macro2",
  "quote",
  "serde",
@@ -764,7 +775,7 @@ dependencies = [
  "bincode",
  "candid 0.7.16",
  "futures",
- "ic-cdk",
+ "ic-cdk 0.5.6",
  "ic-kit-macros",
  "serde",
  "serde_bytes",
