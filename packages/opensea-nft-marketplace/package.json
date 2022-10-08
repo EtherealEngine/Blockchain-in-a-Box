@@ -37,7 +37,7 @@
     "jazzicon": "1.5.0",
     "react": "18.1.0",
     "react-dom": "18.1.0",
-    "react-router-dom": "5.3.3",
+    "react-router-dom": "5.3.4",
     "react-scripts": "4.0.3",
     "swr": "0.5.7",
     "theme-ui": "0.14.7",
