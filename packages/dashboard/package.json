@@ -21,7 +21,7 @@
     "react-dom": "18.1.0",
     "react-redux": "7.2.8",
     "react-router-dom": "5.3.4",
-    "util": "0.12.4",
+    "util": "0.12.5",
     "uuid": "8.3.2",
     "yarn": "1.22.19"
   },
