@@ -19,7 +19,7 @@
     "react": "18.1.0",
     "react-console-emulator": "5.0.2",
     "react-dom": "18.1.0",
-    "react-redux": "7.2.8",
+    "react-redux": "7.2.9",
     "react-router-dom": "5.3.4",
     "util": "0.12.5",
     "uuid": "8.3.2",
