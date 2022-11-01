@@ -4,7 +4,7 @@
   "homepage": "https://nft.s2paganini.com",
   "dependencies": {
     "@ethersproject/constants": "5.7.0",
-    "@ethersproject/providers": "5.7.1",
+    "@ethersproject/providers": "5.7.2",
     "@fluuuid/nft-contracts": "silviopaganini/nft-contracts",
     "@sentry/react": "6.19.7",
     "@sentry/tracing": "6.19.7",
