@@ -19,7 +19,7 @@
     "@types/aws-lambda": "8.10.108",
     "@types/node": "10.17.60",
     "fork-ts-checker-webpack-plugin": "7.2.13",
-    "prettier": "2.6.2",
+    "prettier": "2.8.1",
     "serverless-domain-manager": "6.0.3",
     "serverless-offline": "6.9.0",
     "serverless-webpack": "5.7.1",
