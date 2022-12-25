@@ -8,7 +8,7 @@ edition = "2018"
 ic-kit = "0.4.8"
 ic-cdk = "0.6.8"
 common = {path = "../common"}
-serde = { version="1.0.147", features = ["derive"] }
+serde = { version="1.0.151", features = ["derive"] }
 derive-new = "0.5"
 serde_bytes = "0.11.7"
 serde_cbor = "0.11.2"
