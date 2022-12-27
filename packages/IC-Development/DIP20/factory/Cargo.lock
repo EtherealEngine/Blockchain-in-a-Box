@@ -311,9 +311,9 @@ dependencies = [
 
 [[package]]
 name = "candid"
-version = "0.8.3"
+version = "0.8.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0571f3777880555f86d8aaa63080162560a8bf183d7853e0cc561d9a75458bbd"
+checksum = "244005a1917bb7614cd775ca8a5d59efeb5ac74397bb14ba29a19347ebd78591"
 dependencies = [
  "anyhow",
  "binread",
@@ -528,7 +528,7 @@ version = "0.1.0"
 dependencies = [
  "assert-panic",
  "async-std",
- "candid 0.8.3",
+ "candid 0.8.4",
  "ic-cdk 0.6.8",
  "ic-cdk-macros",
  "ic-kit",
@@ -745,7 +745,7 @@ version = "0.6.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e2693ba66f3d54284643713ca2be0b23f91a02cb3ab793a22ffd75f95593305e"
 dependencies = [
- "candid 0.8.3",
+ "candid 0.8.4",
  "cfg-if",
  "ic-cdk-macros",
  "ic0",
@@ -759,7 +759,7 @@ version = "0.6.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cb423dab7c5bf19d4abccabd2ffe35e09b9dde611d478ea3afe0347b50fa727f"
 dependencies = [
- "candid 0.8.3",
+ "candid 0.8.4",
  "proc-macro2",
  "quote",
  "serde",
