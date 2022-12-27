@@ -11,7 +11,7 @@
     "@openzeppelin/truffle-upgrades": "1.17.0",
     "@truffle/hdwallet-provider": "2.1.4",
     "@types/bn.js": "5.1.1",
-    "@types/chai": "4.3.3",
+    "@types/chai": "4.3.4",
     "@types/mocha": "9.1.1",
     "colors": "1.4.0",
     "dotenv": "16.0.3",
