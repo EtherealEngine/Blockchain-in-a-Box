@@ -58,7 +58,7 @@
     "form-urlencoded": "^6.0.0",
     "helmet": "^5.0.0",
     "http-proxy": "^1.18.1",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "lru": "^3.1.0",
     "mime": "^3.0.0",
     "mkdirp": "^1.0.4",
