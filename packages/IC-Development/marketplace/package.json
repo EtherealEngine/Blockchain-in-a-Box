@@ -19,7 +19,7 @@
     "@typescript-eslint/parser": "5.26.0",
     "clean-webpack-plugin": "4.0.0",
     "commitlint": "17.3.0",
-    "css-loader": "6.7.1",
+    "css-loader": "6.7.3",
     "eslint": "8.30.0",
     "lint-staged": "12.5.0",
     "prettier": "2.8.1",
