@@ -387,7 +387,7 @@ dependencies = [
  "hex",
  "ic-cdk 0.6.8",
  "ic-kit",
- "ic-types 0.6.0",
+ "ic-types 0.7.0",
  "serde",
  "sha2",
 ]
@@ -815,15 +815,9 @@ dependencies = [
 
 [[package]]
 name = "ic-types"
-version = "0.6.0"
+version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "55f71819838e87d73ff0bf7baf5dae44ba28e24eec4da68ed072e52ba16750d9"
-dependencies = [
- "hex",
- "serde",
- "serde_bytes",
- "sha2",
-]
+checksum = "95af86c6e40ea8a850c64914024762a0b91a2a6d438b412d8f4a7fc010e72519"
 
 [[package]]
 name = "ic0"
