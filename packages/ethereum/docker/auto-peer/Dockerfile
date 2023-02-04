@@ -1,4 +1,4 @@
-FROM alpine:3.16
+FROM alpine:3.17
 MAINTAINER Kyle Bai(kyle.b@inwinstack.com)
 
 RUN  apk add --no-cache python ca-certificates curl && \
