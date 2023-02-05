@@ -10,7 +10,7 @@ ic-cdk = "0.6.8"
 common = {path = "../common"}
 serde = { version="1.0.152", features = ["derive"] }
 derive-new = "0.5"
-serde_bytes = "0.11.8"
+serde_bytes = "0.11.9"
 serde_cbor = "0.11.2"
 cap-sdk= { git = "https://github.com/Psychedelic/cap", branch = "cap-sdk", package="cap-sdk" }
 cap-std= { git = "https://github.com/Psychedelic/cap", branch = "cap-sdk", package="cap-standards", features = ["alpha-dip721"] }
