@@ -2,7 +2,7 @@
 
 A batteries-included ethereum blockchain for bootstrapping the Metaverse. 🚀🚀🚀
 
-Includes contracts for identity, inventory, currency and trade. Can be extended for any kind of marketplace application, but the goal is fast, free interoperable transfer of all user data from one server-authoratative platform to another. The ideal use case we imagine is a portal between two separate virtual worlds, sharing user data over the blockchain.
+Includes contracts for identity, inventory, currency and trade. Can be extended for any kind of marketplace application, but the goal is fast, free interoperable transfer of all user data from one server-authoritative platform to another. The ideal use case we imagine is a portal between two separate virtual worlds, sharing user data over the blockchain.
 
 ## Docs
 http://blockchain.xrengine.io/v1/api-docs/
@@ -19,7 +19,7 @@ A Node.js-based REST API, Ethereum node, cache service and smart contracts to de
 
 4. Organizations who wish to build blockchains with other organizations and need a standard and conventional way to do so.
 
-Full GUI managment of a Custodial SideChain
+Full GUI management of a Custodial SideChain
 
 What are sidechains? They are either:
 
@@ -53,7 +53,7 @@ Everything is in the packages folder. You shouldn't need to change much, beyond 
 The API is what you'll interact with. Generate wallets, mint tokens, etc.
 Additional documentation [here](./packages/api/README.md)
 
-Develper Reference API Server
+Developer Reference API Server
 
 http://blockchain.xrengine.io/v1/api-docs
 
@@ -83,9 +83,9 @@ Additional documentation [here](./packages/ethereum/README.md)
 In the root folder create a clone of `.env.default` file and name it `.env`. Update the content of `.env` file with your resources. 
 
 ## Setup Pinata Account
-Pinata is allows you to upload and manage files on IPFS. It provides IPFS API through which you can easily perform IPFS pinning service.
+Pinata allows you to upload and manage files on IPFS. It provides IPFS API through which you can easily perform IPFS pinning service.
 
-1. Open https://pinata.cloud/ and sigup/login.
+1. Open https://pinata.cloud/ and signup/login.
 2. Navigate to https://pinata.cloud/keys and create a new key. Make sure to check Admin key switch button in the modal.
 3. Update `.env` file with following entries from generated key.
     ```
@@ -99,7 +99,7 @@ Pinata is allows you to upload and manage files on IPFS. It provides IPFS API th
 Local deployment can be done using Kubectl and Minikube. Full instructions are [here](./packages/ethereum/README.md)
 
 ## Deployment to AWS
-AWS setup and deployment is done via Terraform, but there are also instructions on deploying directly to EKS [here](./packages/ethereum/README.md) and [here](./packages/terraform-eks/README.md)
+AWS setup and deployment are done via Terraform, but there are also instructions on deploying directly to EKS [here](./packages/ethereum/README.md) and [here](./packages/terraform-eks/README.md)
 
 ## Contributing
 Pull requests are gladly accepted!
