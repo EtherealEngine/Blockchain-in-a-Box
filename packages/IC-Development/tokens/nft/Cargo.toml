@@ -6,7 +6,7 @@ edition = "2018"
 
 [dependencies]
 ic-kit = "0.4.8"
-ic-cdk = "0.6.8"
+ic-cdk = "0.7.3"
 common = {path = "../common"}
 serde = { version="1.0.152", features = ["derive"] }
 derive-new = "0.5"

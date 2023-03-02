@@ -385,7 +385,7 @@ version = "0.1.0"
 dependencies = [
  "crc32fast",
  "hex",
- "ic-cdk 0.6.8",
+ "ic-cdk 0.7.3",
  "ic-kit",
  "ic-types 0.7.0",
  "serde",
@@ -742,12 +742,11 @@ dependencies = [
 
 [[package]]
 name = "ic-cdk"
-version = "0.6.8"
+version = "0.7.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e2693ba66f3d54284643713ca2be0b23f91a02cb3ab793a22ffd75f95593305e"
+checksum = "774b653cecdd15b6ae0731cce9e655b9cb2489b88458fd80a5b48aace55dfc1d"
 dependencies = [
  "candid 0.8.3",
- "cfg-if",
  "ic-cdk-macros",
  "ic0",
  "serde",
@@ -821,9 +820,9 @@ checksum = "95af86c6e40ea8a850c64914024762a0b91a2a6d438b412d8f4a7fc010e72519"
 
 [[package]]
 name = "ic0"
-version = "0.18.5"
+version = "0.18.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "98ab1f6b3f5d42461777721a8afc7297a72e64e224202ed1a36cb44ef0f3af31"
+checksum = "978b91fc78de9d2eb0144db717839cde3b35470199ea51aca362cb6310e93dfd"
 
 [[package]]
 name = "indexmap"
@@ -973,7 +972,7 @@ version = "0.1.0"
 dependencies = [
  "common",
  "derive-new",
- "ic-cdk 0.6.8",
+ "ic-cdk 0.7.3",
  "ic-kit",
  "serde",
 ]
