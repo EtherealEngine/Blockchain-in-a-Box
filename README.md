@@ -5,7 +5,7 @@ A batteries-included ethereum blockchain for bootstrapping the Metaverse. ðŸš€ðŸ
 Includes contracts for identity, inventory, currency and trade. Can be extended for any kind of marketplace application, but the goal is fast, free interoperable transfer of all user data from one server-authoritative platform to another. The ideal use case we imagine is a portal between two separate virtual worlds, sharing user data over the blockchain.
 
 ## Docs
-http://blockchain.etherealengine.org/v1/api-docs/
+https://blockchain.etherealengine.org/v1/api-docs/
 
 ## What Is This?
 A Node.js-based REST API, Ethereum node, cache service and smart contracts to deploy your own Ethereum-based sidechain for identity and durable assets. Users can transfer assets created on your platform to the Ethereum or Polygon main networks.
