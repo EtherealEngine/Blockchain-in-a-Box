@@ -5,7 +5,7 @@
   "description": "A batteries-included ethereum blockchain for bootstrapping the Metaverse.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xrfoundation/blockchain-in-a-box.git"
+    "url": "git+https://github.com/etherealengine/blockchain-in-a-box.git"
   },
   "workspaces": [
     "packages/*"
@@ -20,5 +20,5 @@
     "geth"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/xrfoundation/blockchain-in-a-box#readme"
+  "homepage": "https://github.com/etherealengine/blockchain-in-a-box#readme"
 }
