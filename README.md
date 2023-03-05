@@ -55,7 +55,7 @@ Additional documentation [here](./packages/api/README.md)
 
 Developer Reference API Server
 
-http://blockchain.xrengine.io/v1/api-docs
+https://blockchain.etherealengine.org/v1/api-docs/
 
 ## packages/cache
 The cache server listens to the chain for events and posts them to Redis/Elasticache
