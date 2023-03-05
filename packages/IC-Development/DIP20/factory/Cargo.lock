@@ -529,7 +529,7 @@ dependencies = [
  "assert-panic",
  "async-std",
  "candid 0.8.4",
- "ic-cdk 0.6.8",
+ "ic-cdk 0.7.3",
  "ic-cdk-macros",
  "ic-kit",
  "serde",
@@ -741,12 +741,11 @@ dependencies = [
 
 [[package]]
 name = "ic-cdk"
-version = "0.6.8"
+version = "0.7.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e2693ba66f3d54284643713ca2be0b23f91a02cb3ab793a22ffd75f95593305e"
+checksum = "774b653cecdd15b6ae0731cce9e655b9cb2489b88458fd80a5b48aace55dfc1d"
 dependencies = [
  "candid 0.8.4",
- "cfg-if",
  "ic-cdk-macros",
  "ic0",
  "serde",
@@ -814,9 +813,9 @@ dependencies = [
 
 [[package]]
 name = "ic0"
-version = "0.18.5"
+version = "0.18.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "98ab1f6b3f5d42461777721a8afc7297a72e64e224202ed1a36cb44ef0f3af31"
+checksum = "978b91fc78de9d2eb0144db717839cde3b35470199ea51aca362cb6310e93dfd"
 
 [[package]]
 name = "indexmap"
@@ -1240,9 +1239,9 @@ dependencies = [
 
 [[package]]
 name = "serde_bytes"
-version = "0.11.8"
+version = "0.11.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "718dc5fff5b36f99093fc49b280cfc96ce6fc824317783bff5a1fed0c7a64819"
+checksum = "416bda436f9aab92e02c8e10d49a15ddd339cea90b6e340fe51ed97abb548294"
 dependencies = [
  "serde",
 ]

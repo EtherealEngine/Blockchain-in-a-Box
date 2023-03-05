@@ -8,9 +8,9 @@ ic-cdk-macros = "0.6"
 candid = "0.8.4"
 serde = "1.0"
 serde_cbor = "0.11.2"
-serde_bytes = "0.11.8"
+serde_bytes = "0.11.9"
 ic-kit = "0.4.8"
-ic-cdk = "0.6.8"
+ic-cdk = "0.7.3"
 assert-panic = "1.0.1"
 
 [target.'cfg(not(target_family = "wasm"))'.dependencies]
